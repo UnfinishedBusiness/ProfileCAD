@@ -1,7 +1,7 @@
 appname := ProfileCAD
 
 CXX := g++
-CXXFLAGS := -std=c++11
+CXXFLAGS := -std=c++11 -I./inc/
 LDFLAGS := -lSDL2
 srcfiles := $(shell find ./src -name "*.cpp")
 objects  := $(patsubst %.cpp, %.o, $(srcfiles))

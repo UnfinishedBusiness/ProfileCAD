@@ -1,1 +1,2 @@
-main.o: src/main.cpp
+Config.o: src/Config.cpp inc/Config.h inc/application.h
+main.o: src/main.cpp inc/application.h inc/Config.h inc/application.h
