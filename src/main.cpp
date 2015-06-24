@@ -1,13 +1,19 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <math.h>
-
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_opengl.h>
-#include <iostream>
 #include "application.h"
 #include "Config.h"
+#include "Engine.h"
+
+float ViewRatio = 0.10;
+float MouseX, MouseY;
+int ActiveTool;
+//Tools
+#define NoTool 0
+#define LineTool 1
+//LineTool
+int LineClickStep = 0;
+float LineStart[2];
+float LineEnd[2];
+
+Engine *engine=new Engine("/tmp/Test.cad");
 
 void UpdateMouse()
 {
@@ -76,22 +82,28 @@ int main (int argc, char** argv)
 				{
 					if (LineClickStep == 1)
 					{	
-						LineEnd[0] = (MouseX + OriginOffsetX);
-						LineEnd[1] = (-1*(MouseY - OriginOffsetY));
+						//LineEnd[0] = (MouseX + OriginOffsetX);
+						//LineEnd[1] = (-1*(MouseY - OriginOffsetY));
+						LineEnd[0] = MouseX;
+						LineEnd[1] = MouseY;
 						ActiveTool = NoTool;
-						SDL_SetRenderDrawColor( renderer, 0, 0, 0, 0 );
-						SDL_RenderDrawLine(renderer, LineStart[0], LineStart[1], LineEnd[0], LineEnd[1]);
-						printf("\t> Line End ==== x: %lf y: %lf\n", LineEnd[0], LineEnd[1]);
+						
+						//SDL_SetRenderDrawColor( renderer, 0, 0, 0, 0 );
+						//SDL_RenderDrawLine(renderer, LineStart[0], LineStart[1], LineEnd[0], LineEnd[1]);
+						engine->Line(renderer, LineStart, LineEnd);
+						printf("\t> Line End ==== x: %lf y: %lf\n", MouseX, MouseY);
 						LineClickStep = 0;
 						//MouseX = (x - OriginOffsetX);
 						//MouseY = ((y - OriginOffsetY)/-1);
 					}
 					else if (LineClickStep == 0)
 					{
-						LineStart[0] = (MouseX + OriginOffsetX);
-						LineStart[1] = (-1*(MouseY - OriginOffsetY));
+						//LineStart[0] = (MouseX + OriginOffsetX);
+						//LineStart[1] = (-1*(MouseY - OriginOffsetY));
+						LineStart[0] = MouseX;
+						LineStart[1] = MouseY;
 						LineClickStep = 1;
-						printf("\t> Line Start ==== x: %lf y: %lf\n", LineStart[0], LineStart[1]);
+						printf("\t> Line Start ==== x: %lf y: %lf\n", MouseX, MouseY);
 					}
 				}
 				
