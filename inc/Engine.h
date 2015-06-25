@@ -11,10 +11,11 @@ class Engine                // begin declaration of the class
 	float OriginOffsetY;
 	float ViewRatio;
 	char *LineColor;
-
+	int WindowWidth;
+	int WindowHeight;
 	GSList *Entitys;
 
-	Engine(char *File, int WindowWidth, int WindowHeight);     // constructor
+	Engine(char *File, int _WindowWidth, int _WindowHeight);     // constructor
 	const char* GetField(char* line, int num);
 	void GetRealXY(float out[2], float in[2]); //Get Screen Cordinant plane fron Virtual Cordinant plane
 	void GetXY(float out[2], float in[2]); //Get Virtual Cordinant plane from Screen Cordinant plane
@@ -29,6 +30,10 @@ class Engine                // begin declaration of the class
 	void Trash();
 	float ZoomIn();
 	float ZoomOut();
+	void PanIncX(float p);
+	void PanIncY(float p);
+	void PanXY(float pos[2]);
+	void GetDistance(float out, float p1[2], float p2[2]);
 
 };
 

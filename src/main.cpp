@@ -10,9 +10,13 @@ int ActiveTool;
 int LineClickStep = 0;
 float LineStart[2];
 float LineEnd[2];
-
+float TmpPos[2];
 float MousePos[2];
 float RealMousePos[2];
+float LastMouseScrollPos[2];
+float LastRealMousePos[2];
+float PanDistance[2];
+float VirtualOrigin[2]; //0,0 in Real Cordinant plane
 
 Engine *engine=new Engine("/tmp/Test.cad", MainWindowWidth, MainWindowWidth);
 
@@ -60,6 +64,26 @@ int main (int argc, char** argv)
 				if (e.type == SDL_KEYUP)
 				{
 					//quit = true;
+					if (e.key.keysym.scancode == SDL_SCANCODE_UP)
+					{
+							engine->PanIncY(-10);
+							engine->Pull(renderer);
+					}
+					if (e.key.keysym.scancode == SDL_SCANCODE_DOWN)
+					{
+							engine->PanIncY(+10);
+							engine->Pull(renderer);
+					}
+					if (e.key.keysym.scancode == SDL_SCANCODE_LEFT)
+					{
+							engine->PanIncX(-10);
+							engine->Pull(renderer);
+					}
+					if (e.key.keysym.scancode == SDL_SCANCODE_RIGHT)
+					{
+							engine->PanIncX(+10);
+							engine->Pull(renderer);
+					}
 					if (e.key.keysym.scancode == SDL_SCANCODE_S)
 					{
 							engine->Save();
@@ -112,14 +136,14 @@ int main (int argc, char** argv)
 				{
 					if (e.button.button == SDL_BUTTON_X1)
 					{
-						printf("\r> ZoomIn ++ %f\b\b\b\b",engine->ZoomIn());
-						printf("====> Rerendering Screen!\n");
+						//engine->PanXY(RealMousePos);
+						printf("\r> ZoomIn ++ %f\b\b\b\b", engine->ZoomIn());
 						engine->Pull(renderer);
 					}
 					if (e.button.button == SDL_BUTTON_X2)
 					{
-						printf("\r> ZoomOut -- %f\b\b\b\b", engine->ZoomOut());
-						printf("====> Rerendering Screen!\n");
+						//engine->PanXY(RealMousePos);
+						printf("\r> ZoomOut ++ %f\b\b\b\b", engine->ZoomOut());
 						engine->Pull(renderer);
 					}
 					if (e.button.button == SDL_BUTTON_LEFT)

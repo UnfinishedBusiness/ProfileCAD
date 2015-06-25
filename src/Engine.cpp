@@ -1,40 +1,15 @@
 #include "Engine.h"
 
-/*void initDrawing(Drawing *a) {
-  a->Entity = (char**)malloc(sizeof(char*));
-	a->EntityData = (char**)malloc(sizeof(char*));
-  a->EntityCount = 0;
-  a->size = 1;
-}
-
-void insertDrawing(Drawing *a, char *element, char *element_data) {
-  if (a->EntityCount == a->size) {
-    a->size *= 2;
-    a->Entity = (char**)realloc(a->Entity, a->size * sizeof(char *));
-		a->EntityData = (char**)realloc(a->EntityData, a->size * sizeof(char *));
-  }
-	a->EntityCount++;
-  a->Entity[a->EntityCount] = element;
-	a->EntityData[a->EntityCount] = element_data;
-}
-
-void freeDrawing(Drawing *a) {
-  free(a->Entity);
-	free(a->EntityData);
-  a->Entity = NULL;
-	a->EntityData = NULL;
-  a->EntityCount = a->size = 0;
-}*/
-
-Engine::Engine(char *File, int WindowWidth, int WindowHeight)
+Engine::Engine(char *File, int _WindowWidth, int _WindowHeight)
 {
 	//memcpy(Filename, File, sizeof(*File));
 	Entitys = NULL;
 	Filename=File;
 	ViewRatio = 0.05;
-
-	OriginOffsetX = (WindowWidth/2); //Center Origin
-	OriginOffsetY = (WindowHeight/2); //Center Origin
+	WindowWidth = _WindowWidth;
+	WindowHeight = _WindowHeight;
+	OriginOffsetX = (_WindowWidth/2); //Center Origin
+	OriginOffsetY = (_WindowHeight/2); //Center Origin
 
 	LineColor = "White";
 	printf("==> Writing to %s\n", Filename);
@@ -50,6 +25,19 @@ void Engine::GetMousePos(float out[2])
 	in[1] = y;
 	GetXY(out, in);
 }
+void Engine::PanXY(float pos[2])
+{
+	OriginOffsetX = (WindowWidth - pos[0]) / 2; //Center Origin
+	OriginOffsetY = (WindowHeight - pos[1]) / 2; //Center Origin
+}
+void Engine::PanIncX(float p)
+{
+	OriginOffsetX = OriginOffsetX + p;
+}
+void Engine::PanIncY(float p)
+{
+	OriginOffsetY = OriginOffsetY + p;
+}
 float Engine::ZoomIn()
 {
 	ViewRatio = ViewRatio - .001;
@@ -59,6 +47,10 @@ float Engine::ZoomOut()
 {
 	ViewRatio = ViewRatio + .001;
 	return ViewRatio;
+}
+void Engine::GetDistance(float out, float p1[2], float p2[2])
+{
+	out = sqrt(pow((p2[0] - p1[0]), 2) + pow((p2[1] - p1[1]), 2));
 }
 void Engine::GetRealXY(float out[2], float in[2])
 {
