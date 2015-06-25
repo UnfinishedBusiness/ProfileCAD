@@ -2,7 +2,6 @@
 #include "Config.h"
 #include "Engine.h"
 
-float MouseX, MouseY;
 int ActiveTool;
 //Tools
 #define NoTool 0
@@ -12,15 +11,10 @@ int LineClickStep = 0;
 float LineStart[2];
 float LineEnd[2];
 
-Engine *engine=new Engine("/tmp/Test.cad");
 
-void UpdateMouse()
-{
-	int x, y;
-	SDL_GetMouseState(&x, &y);
-	MouseX = (x - OriginOffsetX);
-	MouseY = ((y - OriginOffsetY)/-1);
-}
+
+Engine *engine=new Engine("/tmp/Test.cad", MainWindowWidth, MainWindowWidth);
+
 int main (int argc, char** argv)
 {
     SDL_Window* window = NULL;
@@ -28,9 +22,9 @@ int main (int argc, char** argv)
     (
         WindowTitle, SDL_WINDOWPOS_UNDEFINED,
         SDL_WINDOWPOS_UNDEFINED,
-        WindowWidth,
-        WindowHeight,
-        SDL_WINDOW_SHOWN
+        MainWindowWidth,
+        MainWindowHeight,
+        SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE
     );
 
     // Setup renderer
@@ -52,13 +46,23 @@ int main (int argc, char** argv)
 				{
 					quit = true;
 				}
+				if (e.type == SDL_WINDOWEVENT)
+				{
+					if (e.window.event == SDL_WINDOWEVENT_RESIZED)
+					{
+						float OriginOffsetX = (e.window.data1/2);
+						float OriginOffsetY = (e.window.data2/2);
+						engine->Pull(renderer);
+						SDL_RenderPresent( renderer );
+					}
+				}
 				if (e.type == SDL_KEYUP)
 				{
 					//quit = true;
 					if (e.key.keysym.scancode == SDL_SCANCODE_L)
 					{
 						printf("==> Line Tool\n");
-						ActiveTool = LineTool;
+						ActiveTool = !LineTool;
 					}
 					if (e.key.keysym.scancode == SDL_SCANCODE_TAB)
 					{
@@ -83,40 +87,37 @@ int main (int argc, char** argv)
 				}
 				if (e.type == SDL_MOUSEBUTTONUP)
 				{
-					UpdateMouse();
-					if (ActiveTool == LineTool)
+					if (e.button.button == SDL_BUTTON_X1)
 					{
-						if (LineClickStep == 1)
+						printf("\r> ZoomIn ++ %d\b\b\b\b",engine->ZoomIn());
+					}
+					if (e.button.button == SDL_BUTTON_X2)
+					{
+						printf("\r> ZoomOut -- %d\b\b\b\b", engine->ZoomOut());
+					}
+					if (e.button.button == SDL_BUTTON_LEFT)
+					{
+						if (ActiveTool == LineTool)
 						{
-							//LineEnd[0] = (MouseX + OriginOffsetX);
-							//LineEnd[1] = (-1*(MouseY - OriginOffsetY));
-							LineEnd[0] = MouseX;
-							LineEnd[1] = MouseY;
-							//ActiveTool = NoTool;
-
-							//SDL_SetRenderDrawColor( renderer, 0, 0, 0, 0 );
-							//SDL_RenderDrawLine(renderer, LineStart[0], LineStart[1], LineEnd[0], LineEnd[1]);
-							engine->Line(renderer, LineStart, LineEnd);
-							SDL_RenderPresent( renderer );
-							printf("\t> Line End ==== x: %lf y: %lf\n", MouseX, MouseY);
-							LineClickStep = 0;
-							//MouseX = (x - OriginOffsetX);
-							//MouseY = ((y - OriginOffsetY)/-1);
-						}
-						else if (LineClickStep == 0)
-						{
-							//LineStart[0] = (MouseX + OriginOffsetX);
-							//LineStart[1] = (-1*(MouseY - OriginOffsetY));
-							LineStart[0] = MouseX;
-							LineStart[1] = MouseY;
-							LineClickStep = 1;
-							printf("\t> Line Start ==== x: %lf y: %lf\n", MouseX, MouseY);
+							if (LineClickStep == 1)
+							{
+								engine->GetMousePos(LineEnd);
+								engine->Line(renderer, LineStart, LineEnd);
+								SDL_RenderPresent( renderer );
+								//printf("\t> Line End ==== x: %lf y: %lf\n", engine->GetX(LineStart), engine->GetY(LineEnd));
+								LineClickStep = 0;
+							}
+							else if (LineClickStep == 0)
+							{
+								engine->GetMousePos(LineStart);
+								LineClickStep = 1;
+								//printf("\t> Line Start ==== x: %lf y: %lf\n", (float) engine->GetX(LineStart), (float) engine->GetY(LineEnd));
+							}
 						}
 					}
-
 				}
 			//printf("Physical %s key acting as %s key\n", SDL_GetScancodeName(e.key.keysym.scancode), SDL_GetKeyName(e.key.keysym.sym));
-			}
+		}
       //SDL_RenderPresent( renderer );
 			fflush(stdout);
 		}

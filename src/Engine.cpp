@@ -1,14 +1,53 @@
 #include "Engine.h"
 
-Engine::Engine(char *File)
+Engine::Engine(char *File, int WindowWidth, int WindowHeight)
 {
 	//memcpy(Filename, File, sizeof(*File));
 	Filename=File;
 	FirstWrite = false;
 	ViewRatio = 0.05;
+	OriginOffsetX = (WindowWidth/2);
+	OriginOffsetY = (WindowHeight/2);
 	LineColor = "White";
 	printf("==> Writing to %s\n", Filename);
 }
+void GetMousePos(float out[2])
+{
+	int x, y;
+	SDL_GetMouseState(&x, &y);
+ 	out[0] = (x - OriginOffsetX);
+	out[1] = ((y - OriginOffsetY)/-1);
+}
+float Engine::ZoomIn()
+{
+	return ViewRatio++;
+}
+float Engine::ZoomOut()
+{
+	return ViewRatio--;
+}
+void Engine::GetRealXY(float out[2], float in[2])
+{
+	out[0] = (in[0] + OriginOffsetX);
+	out[1] = (-1*(in[1] - OriginOffsetY));
+}
+void Engine::GetXY(float out[2], float in[2])
+{
+	out[0] = (in[0] - OriginOffsetX);
+	out[1] = ((in[1] - OriginOffsetY)/-1);
+}
+/*float Engine::GetX(float in[2])
+{
+	float out[2];
+	GetXY(out, in);
+	return out[0];
+}
+float Engine::GetY(float in[2])
+{
+	float out[2];
+	GetXY(out, in);
+	return out[1];
+}*/
 void Engine::Trash()
 {
 	FirstWrite = true;
@@ -66,11 +105,9 @@ void Engine::Pull(SDL_Renderer* r)
 
 				float screen_point1[2];
 				float screen_point2[2];
-				screen_point1[0] = (Start[0] + OriginOffsetX);
-				screen_point1[1] = (-1*(Start[1] - OriginOffsetY));
 
-				screen_point2[0] = (End[0] + OriginOffsetX);
-				screen_point2[1] = (-1*(End[1] - OriginOffsetY));
+				GetRealXY(screen_point1, Start);
+				GetRealXY(screen_point2, End);
 
 				config->Color(LineColor);
 				SDL_RenderDrawLine(r, screen_point1[0], screen_point1[1], screen_point2[0], screen_point2[1]);
@@ -92,11 +129,8 @@ void Engine::Line(SDL_Renderer* r, float Start[2], float End[2])
 	float screen_point1[2];
 	float screen_point2[2];
 
-	screen_point1[0] = (Start[0] + OriginOffsetX);
-	screen_point1[1] = (-1*(Start[1] - OriginOffsetY));
-
-	screen_point2[0] = (End[0] + OriginOffsetX);
-	screen_point2[1] = (-1*(End[1] - OriginOffsetY));
+	GetRealXY(screen_point1, Start);
+	GetRealXY(screen_point2, End);
 
 	config->ColorWhite();
 	SDL_RenderDrawLine(r, screen_point1[0], screen_point1[1], screen_point2[0], screen_point2[1]);
