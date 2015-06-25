@@ -6,8 +6,10 @@ Engine::Engine(char *File, int WindowWidth, int WindowHeight)
 	Filename=File;
 	FirstWrite = false;
 	ViewRatio = 0.05;
-	OriginOffsetX = (WindowWidth/2);
-	OriginOffsetY = (WindowHeight/2);
+
+	OriginOffsetX = (WindowWidth/2); //Center Origin
+	OriginOffsetY = (WindowHeight/2); //Center Origin
+
 	LineColor = "White";
 	printf("==> Writing to %s\n", Filename);
 }
@@ -15,26 +17,32 @@ void Engine::GetMousePos(float out[2])
 {
 	int x, y;
 	SDL_GetMouseState(&x, &y);
- 	out[0] = (x - OriginOffsetX);
-	out[1] = ((y - OriginOffsetY)/-1);
+ 	//out[0] = (x - OriginOffsetX);
+	//out[1] = ((y - OriginOffsetY)/-1);
+	float in[2];
+	in[0] = x;
+	in[1] = y;
+	GetXY(out, in);
 }
 float Engine::ZoomIn()
 {
-	return ViewRatio++;
+	ViewRatio = ViewRatio + .005;
+	return ViewRatio;
 }
 float Engine::ZoomOut()
 {
-	return ViewRatio--;
+	ViewRatio = ViewRatio - .005;
+	return ViewRatio;
 }
 void Engine::GetRealXY(float out[2], float in[2])
 {
-	out[0] = (in[0] + OriginOffsetX);
-	out[1] = (-1*(in[1] - OriginOffsetY));
+	out[0] = ((in[0] / ViewRatio) + OriginOffsetX);
+	out[1] = (-1*((in[1] / ViewRatio) - OriginOffsetY));
 }
 void Engine::GetXY(float out[2], float in[2])
 {
-	out[0] = (in[0] - OriginOffsetX);
-	out[1] = ((in[1] - OriginOffsetY)/-1);
+	out[0] = ((in[0] - OriginOffsetX) * ViewRatio);
+	out[1] = (((in[1] - OriginOffsetY)/-1) * ViewRatio);
 }
 float Engine::GetX(float in[2])
 {

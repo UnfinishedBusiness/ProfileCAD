@@ -11,7 +11,8 @@ int LineClickStep = 0;
 float LineStart[2];
 float LineEnd[2];
 
-
+float MousePos[2];
+float RealMousePos[2];
 
 Engine *engine=new Engine("/tmp/Test.cad", MainWindowWidth, MainWindowWidth);
 
@@ -50,8 +51,8 @@ int main (int argc, char** argv)
 				{
 					if (e.window.event == SDL_WINDOWEVENT_RESIZED)
 					{
-						float OriginOffsetX = (e.window.data1/2);
-						float OriginOffsetY = (e.window.data2/2);
+						//float OriginOffsetX = (e.window.data1/2);
+						//float OriginOffsetY = (e.window.data2/2);
 						engine->Pull(renderer);
 						SDL_RenderPresent( renderer );
 					}
@@ -62,7 +63,15 @@ int main (int argc, char** argv)
 					if (e.key.keysym.scancode == SDL_SCANCODE_L)
 					{
 						printf("==> Line Tool\n");
-						ActiveTool = !LineTool;
+						if (ActiveTool == NoTool)
+						{
+								ActiveTool = LineTool;
+						}
+						else
+						{
+							ActiveTool = NoTool;
+						}
+
 					}
 					if (e.key.keysym.scancode == SDL_SCANCODE_TAB)
 					{
@@ -85,18 +94,31 @@ int main (int argc, char** argv)
 						quit = true;
 					}
 				}
+				if (e.type == SDL_MOUSEMOTION)
+				{
+					engine->GetMousePos(MousePos);
+					engine->GetRealXY(RealMousePos, MousePos);
+					printf("\rX: %lf, Y: %lf |||||| rX: %lf, rY: %lf\0", MousePos[0], MousePos[1], RealMousePos[0], RealMousePos[1]);
+				}
 				if (e.type == SDL_MOUSEBUTTONUP)
 				{
 					if (e.button.button == SDL_BUTTON_X1)
 					{
 						printf("\r> ZoomIn ++ %f\b\b\b\b",engine->ZoomIn());
+						printf("====> Rerendering Screen!\n");
+						engine->Pull(renderer);
+						SDL_RenderPresent( renderer );
 					}
 					if (e.button.button == SDL_BUTTON_X2)
 					{
 						printf("\r> ZoomOut -- %f\b\b\b\b", engine->ZoomOut());
+						printf("====> Rerendering Screen!\n");
+						engine->Pull(renderer);
+						SDL_RenderPresent( renderer );
 					}
 					if (e.button.button == SDL_BUTTON_LEFT)
 					{
+						printf("=====> Left Click!\n");
 						if (ActiveTool == LineTool)
 						{
 							if (LineClickStep == 1)

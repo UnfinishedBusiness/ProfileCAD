@@ -15,8 +15,8 @@ class Engine                // begin declaration of the class
 	char *LineColor;
 	Engine(char *File, int WindowWidth, int WindowHeight);     // constructor
 	const char* GetField(char* line, int num);
-	void GetRealXY(float out[2], float in[2]); //Screen Cordinant plane
-	void GetXY(float out[2], float in[2]); //Virtual Cordinant plane
+	void GetRealXY(float out[2], float in[2]); //Get Screen Cordinant plane fron Virtual Cordinant plane
+	void GetXY(float out[2], float in[2]); //Get Virtual Cordinant plane from Screen Cordinant plane
 	float GetX(float in[2]); //GetXY Wrapper Function
 	float GetY(float in[2]); //GetXY Wrapper Function
 	void GetMousePos(float out[2]); //Returns Virtual Cordinant plane
