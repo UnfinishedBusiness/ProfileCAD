@@ -60,6 +60,14 @@ int main (int argc, char** argv)
 				if (e.type == SDL_KEYUP)
 				{
 					//quit = true;
+					if (e.key.keysym.scancode == SDL_SCANCODE_S)
+					{
+							engine->Save();
+					}
+					if (e.key.keysym.scancode == SDL_SCANCODE_O)
+					{
+							engine->Open(renderer);
+					}
 					if (e.key.keysym.scancode == SDL_SCANCODE_L)
 					{
 						printf("==> Line Tool\n");
@@ -107,14 +115,12 @@ int main (int argc, char** argv)
 						printf("\r> ZoomIn ++ %f\b\b\b\b",engine->ZoomIn());
 						printf("====> Rerendering Screen!\n");
 						engine->Pull(renderer);
-						SDL_RenderPresent( renderer );
 					}
 					if (e.button.button == SDL_BUTTON_X2)
 					{
 						printf("\r> ZoomOut -- %f\b\b\b\b", engine->ZoomOut());
 						printf("====> Rerendering Screen!\n");
 						engine->Pull(renderer);
-						SDL_RenderPresent( renderer );
 					}
 					if (e.button.button == SDL_BUTTON_LEFT)
 					{
@@ -125,7 +131,6 @@ int main (int argc, char** argv)
 							{
 								engine->GetMousePos(LineEnd);
 								engine->Line(renderer, LineStart, LineEnd);
-								SDL_RenderPresent( renderer );
 								printf("\t> Line End ==== x: %lf y: %lf\n", engine->GetX(LineStart), engine->GetY(LineEnd));
 								LineClickStep = 0;
 							}

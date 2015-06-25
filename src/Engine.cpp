@@ -1,10 +1,36 @@
 #include "Engine.h"
 
+/*void initDrawing(Drawing *a) {
+  a->Entity = (char**)malloc(sizeof(char*));
+	a->EntityData = (char**)malloc(sizeof(char*));
+  a->EntityCount = 0;
+  a->size = 1;
+}
+
+void insertDrawing(Drawing *a, char *element, char *element_data) {
+  if (a->EntityCount == a->size) {
+    a->size *= 2;
+    a->Entity = (char**)realloc(a->Entity, a->size * sizeof(char *));
+		a->EntityData = (char**)realloc(a->EntityData, a->size * sizeof(char *));
+  }
+	a->EntityCount++;
+  a->Entity[a->EntityCount] = element;
+	a->EntityData[a->EntityCount] = element_data;
+}
+
+void freeDrawing(Drawing *a) {
+  free(a->Entity);
+	free(a->EntityData);
+  a->Entity = NULL;
+	a->EntityData = NULL;
+  a->EntityCount = a->size = 0;
+}*/
+
 Engine::Engine(char *File, int WindowWidth, int WindowHeight)
 {
 	//memcpy(Filename, File, sizeof(*File));
+	Entitys = NULL;
 	Filename=File;
-	FirstWrite = false;
 	ViewRatio = 0.05;
 
 	OriginOffsetX = (WindowWidth/2); //Center Origin
@@ -26,12 +52,12 @@ void Engine::GetMousePos(float out[2])
 }
 float Engine::ZoomIn()
 {
-	ViewRatio = ViewRatio + .005;
+	ViewRatio = ViewRatio - .001;
 	return ViewRatio;
 }
 float Engine::ZoomOut()
 {
-	ViewRatio = ViewRatio - .005;
+	ViewRatio = ViewRatio + .001;
 	return ViewRatio;
 }
 void Engine::GetRealXY(float out[2], float in[2])
@@ -58,36 +84,81 @@ float Engine::GetY(float in[2])
 }
 void Engine::Trash()
 {
-	FirstWrite = true;
+	while (Entitys != NULL)
+	{
+		Entitys = g_slist_next(Entitys);
+	}
 }
-void Engine::Push(char *line)
+void Engine::Save()
 {
 	FILE *fp;
-	if (FirstWrite)
-	{
-		FirstWrite = false;
-		fp = fopen(Filename, "w");
-	}
-	else
-	{
-		fp = fopen(Filename, "a");
-	}
-
+	fp = fopen(Filename, "w");
 	if (fp == NULL)
 	{
 		printf("!!!! ==> Can't open %s\n", Filename);
 	}
 	else
 	{
-		fprintf(fp, "%s\n", line);
+		GSList *tmp = Entitys;
+		char *line;
+		while (tmp != NULL)
+	  {
+			line = (char*) tmp->data;
+	    printf("===> Saving %s\n", line);
+			fprintf(fp, "%s\n", line);
+	    tmp = g_slist_next(tmp);
+		}
 	}
 	fclose(fp);
 }
-void Engine::Pull(SDL_Renderer* r)
+void Engine::Push(char *line)
+{
+	gchar* element = g_strdup(line);
+	Entitys = g_slist_append(Entitys, element);
+}
+void Engine::Pull(SDL_Renderer *r)
 {
 	Config *config = new Config(r);
 	config->ColorBlack();
 	SDL_RenderClear(r);
+	GSList *tmp = Entitys;
+	char *line;
+	while (tmp != NULL)
+  {
+		line = (char*) tmp->data;
+    printf("===> Pulling %s\n", line);
+    tmp = g_slist_next(tmp);
+		//line[strlen(line) - 1] = '\0';
+		if (strcmp(GetField(line, 1), "Line") == 0)
+		{
+			float Start[2];
+			float End[2];
+			Start[0] = atof(GetField(line, 2));
+			Start[1] = atof(GetField(line, 3));
+			End[0] = atof(GetField(line, 4));
+			End[1] = atof(GetField(line, 5));
+			LineColor = (char *)GetField(line, 6);
+			printf("Pulling ===> Line (%lf, %lf) ---- (%lf, %lf) %s\n", Start[0], Start[1], End[0], End[1], LineColor);
+
+			float screen_point1[2];
+			float screen_point2[2];
+
+			GetRealXY(screen_point1, Start);
+			GetRealXY(screen_point2, End);
+
+			config->Color(LineColor);
+			SDL_RenderDrawLine(r, screen_point1[0], screen_point1[1], screen_point2[0], screen_point2[1]);
+			SDL_RenderPresent( r );
+		}
+  }
+}
+void Engine::Open(SDL_Renderer* r)
+{
+	Config *config = new Config(r);
+	config->ColorBlack();
+	SDL_RenderClear(r);
+	Trash();
+
 	char line[2048];
 	FILE *fp;
 	fp = fopen(Filename, "r");
@@ -100,32 +171,11 @@ void Engine::Pull(SDL_Renderer* r)
     while ( fgets ( line, sizeof(line), fp ) != NULL )
     {
 			line[strlen(line) - 1] = '\0';
-			if (strcmp(GetField(line, 1), "Line") == 0)
-			{
-				float Start[2];
-				float End[2];
-				Start[0] = atof(GetField(line, 2));
-				Start[1] = atof(GetField(line, 3));
-				End[0] = atof(GetField(line, 4));
-				End[1] = atof(GetField(line, 5));
-				LineColor = (char *)GetField(line, 6);
-				printf("Pulling ===> Line (%lf, %lf) ---- (%lf, %lf) %s\n", Start[0], Start[1], End[0], End[1], LineColor);
-
-				float screen_point1[2];
-				float screen_point2[2];
-
-				GetRealXY(screen_point1, Start);
-				GetRealXY(screen_point2, End);
-
-				config->Color(LineColor);
-				SDL_RenderDrawLine(r, screen_point1[0], screen_point1[1], screen_point2[0], screen_point2[1]);
-			}
-			//printf(" Pull ===> Read: %s, Field 2: %s\n", line, GetField(line, 2));
+			Push(line);
     }
 	}
 	fclose(fp);
-
-	//SDL_RenderDrawLine(r, 0, 0, 0, 0);
+	Pull(r);
 }
 void Engine::Line(SDL_Renderer* r, float Start[2], float End[2])
 {
@@ -142,6 +192,7 @@ void Engine::Line(SDL_Renderer* r, float Start[2], float End[2])
 
 	config->ColorWhite();
 	SDL_RenderDrawLine(r, screen_point1[0], screen_point1[1], screen_point2[0], screen_point2[1]);
+	SDL_RenderPresent( r );
 }
 const char* Engine::GetField(char* line, int num)
 {

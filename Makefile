@@ -1,9 +1,9 @@
 appname := ProfileCAD
 
 CXX := g++
-CXXFLAGS := -std=c++11 -I./inc/
-LDFLAGS := -lSDL2
-srcfiles := $(shell find ./src -name "*.cpp")
+CXXFLAGS := -std=c++11 -I./inc/ $(shell pkg-config --cflags glib-2.0)
+LDFLAGS := -lSDL2 $(shell pkg-config --libs glib-2.0)
+srcfiles := $(shell find ./src/ -name "*.cpp")
 objects  := $(patsubst %.cpp, %.o, $(srcfiles))
 
 all: $(appname)
