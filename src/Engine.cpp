@@ -11,7 +11,7 @@ Engine::Engine(char *File, int WindowWidth, int WindowHeight)
 	LineColor = "White";
 	printf("==> Writing to %s\n", Filename);
 }
-void GetMousePos(float out[2])
+void Engine::GetMousePos(float out[2])
 {
 	int x, y;
 	SDL_GetMouseState(&x, &y);
@@ -36,7 +36,7 @@ void Engine::GetXY(float out[2], float in[2])
 	out[0] = (in[0] - OriginOffsetX);
 	out[1] = ((in[1] - OriginOffsetY)/-1);
 }
-/*float Engine::GetX(float in[2])
+float Engine::GetX(float in[2])
 {
 	float out[2];
 	GetXY(out, in);
@@ -47,7 +47,7 @@ float Engine::GetY(float in[2])
 	float out[2];
 	GetXY(out, in);
 	return out[1];
-}*/
+}
 void Engine::Trash()
 {
 	FirstWrite = true;

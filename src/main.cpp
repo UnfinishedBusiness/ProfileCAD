@@ -89,11 +89,11 @@ int main (int argc, char** argv)
 				{
 					if (e.button.button == SDL_BUTTON_X1)
 					{
-						printf("\r> ZoomIn ++ %d\b\b\b\b",engine->ZoomIn());
+						printf("\r> ZoomIn ++ %f\b\b\b\b",engine->ZoomIn());
 					}
 					if (e.button.button == SDL_BUTTON_X2)
 					{
-						printf("\r> ZoomOut -- %d\b\b\b\b", engine->ZoomOut());
+						printf("\r> ZoomOut -- %f\b\b\b\b", engine->ZoomOut());
 					}
 					if (e.button.button == SDL_BUTTON_LEFT)
 					{
@@ -104,14 +104,14 @@ int main (int argc, char** argv)
 								engine->GetMousePos(LineEnd);
 								engine->Line(renderer, LineStart, LineEnd);
 								SDL_RenderPresent( renderer );
-								//printf("\t> Line End ==== x: %lf y: %lf\n", engine->GetX(LineStart), engine->GetY(LineEnd));
+								printf("\t> Line End ==== x: %lf y: %lf\n", engine->GetX(LineStart), engine->GetY(LineEnd));
 								LineClickStep = 0;
 							}
 							else if (LineClickStep == 0)
 							{
 								engine->GetMousePos(LineStart);
 								LineClickStep = 1;
-								//printf("\t> Line Start ==== x: %lf y: %lf\n", (float) engine->GetX(LineStart), (float) engine->GetY(LineEnd));
+								printf("\t> Line Start ==== x: %lf y: %lf\n", (float) engine->GetX(LineStart), (float) engine->GetY(LineEnd));
 							}
 						}
 					}

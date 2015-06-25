@@ -1,4 +1,3 @@
 Config.o: src/Config.cpp inc/Config.h inc/application.h
-main.o: src/main.cpp inc/application.h inc/Config.h inc/application.h \
- inc/Engine.h inc/Config.h
 Engine.o: src/Engine.cpp inc/Engine.h inc/application.h inc/Config.h
+main.o: src/main.cpp inc/application.h inc/Config.h inc/Engine.h

@@ -18,7 +18,7 @@ class Engine                // begin declaration of the class
 	void GetRealXY(float out[2], float in[2]); //Screen Cordinant plane
 	void GetXY(float out[2], float in[2]); //Virtual Cordinant plane
 	float GetX(float in[2]); //GetXY Wrapper Function
-	float Gety(float in[2]); //GetXY Wrapper Function
+	float GetY(float in[2]); //GetXY Wrapper Function
 	void GetMousePos(float out[2]); //Returns Virtual Cordinant plane
 	void Line(SDL_Renderer* r, float Start[2], float End[2]);
 	void Push(char *line);
