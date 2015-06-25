@@ -13,11 +13,10 @@
 
 #define WindowTitle "ProfileCAD"
 #define Version "1"
-#define WindowWidth 1280
-#define WindowHeight 800
+#define WindowWidth 800
+#define WindowHeight 640
 
 #define OriginOffsetX (WindowWidth/2)
 #define OriginOffsetY (WindowHeight/2)
 
 #endif
-

@@ -7,7 +7,11 @@
 class Config                 // begin declaration of the class
 {
 	public:                    // begin public section
-	Config();     // constructor
+	SDL_Renderer* renderer;
+	Config(SDL_Renderer* r);     // constructor
+	void ColorBlack();
+	void ColorWhite();
+	void Color(char *color);
 };
 
 

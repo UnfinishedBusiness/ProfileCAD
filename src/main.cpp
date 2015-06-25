@@ -2,7 +2,6 @@
 #include "Config.h"
 #include "Engine.h"
 
-float ViewRatio = 0.10;
 float MouseX, MouseY;
 int ActiveTool;
 //Tools
@@ -36,90 +35,94 @@ int main (int argc, char** argv)
 
     // Setup renderer
     SDL_Renderer* renderer = NULL;
-    renderer =  SDL_CreateRenderer( window, 0, SDL_RENDERER_ACCELERATED);
+		SDL_Renderer* screen = NULL;
+    renderer =  SDL_CreateRenderer( window, 1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
-    // Set render color to red ( background will be rendered in this color )
-    SDL_SetRenderDrawColor( renderer, 0, 0, 0, 0 );
-
-    // Clear winow
-    SDL_RenderClear( renderer );
-
-    // Creat a rect at pos ( 50, 50 ) that's 50 pixels wide and 50 pixels high.
-    //SDL_Rect r;
-    //r.x = 50;
-    //r.y = 50;
-    //r.w = 50;
-    //r.h = 50;
-
-    // Set render color to blue ( rect will be rendered in this color )
-	//SDL_SetRenderDrawColor( renderer, 0, 255, 255, 255 );
-
-    // Render rect
-    //SDL_RenderFillRect( renderer, &r );
-
-    // Render the rect to the screen
-    SDL_RenderPresent(renderer);
-
+		Config *config = new Config(renderer);
+    config->ColorBlack();
+		engine->Pull(renderer);
+		SDL_RenderPresent( renderer );
     SDL_Event e;
-	bool quit = false;
-	while (!quit){
-		while (SDL_PollEvent(&e)){
-			if (e.type == SDL_QUIT){
-				quit = true;
-			}
-			if (e.type == SDL_KEYUP){
-				//quit = true;
-				if (e.key.keysym.scancode == SDL_SCANCODE_L)
-				{
-					printf("==> Line Tool\n");
-					ActiveTool = LineTool;
-				}
-			}
-			if (e.type == SDL_MOUSEBUTTONUP)
+		bool quit = false;
+		while (!quit)
+		{
+			while (SDL_PollEvent(&e))
 			{
-				UpdateMouse();
-				if (ActiveTool == LineTool)
+				if (e.type == SDL_QUIT)
 				{
-					if (LineClickStep == 1)
-					{	
-						//LineEnd[0] = (MouseX + OriginOffsetX);
-						//LineEnd[1] = (-1*(MouseY - OriginOffsetY));
-						LineEnd[0] = MouseX;
-						LineEnd[1] = MouseY;
-						ActiveTool = NoTool;
-						
-						//SDL_SetRenderDrawColor( renderer, 0, 0, 0, 0 );
-						//SDL_RenderDrawLine(renderer, LineStart[0], LineStart[1], LineEnd[0], LineEnd[1]);
-						engine->Line(renderer, LineStart, LineEnd);
-						printf("\t> Line End ==== x: %lf y: %lf\n", MouseX, MouseY);
-						LineClickStep = 0;
-						//MouseX = (x - OriginOffsetX);
-						//MouseY = ((y - OriginOffsetY)/-1);
-					}
-					else if (LineClickStep == 0)
+					quit = true;
+				}
+				if (e.type == SDL_KEYUP)
+				{
+					//quit = true;
+					if (e.key.keysym.scancode == SDL_SCANCODE_L)
 					{
-						//LineStart[0] = (MouseX + OriginOffsetX);
-						//LineStart[1] = (-1*(MouseY - OriginOffsetY));
-						LineStart[0] = MouseX;
-						LineStart[1] = MouseY;
-						LineClickStep = 1;
-						printf("\t> Line Start ==== x: %lf y: %lf\n", MouseX, MouseY);
+						printf("==> Line Tool\n");
+						ActiveTool = LineTool;
+					}
+					if (e.key.keysym.scancode == SDL_SCANCODE_TAB)
+					{
+
+						printf("====> Rerendering Screen!\n");
+						engine->Pull(renderer);
+						SDL_RenderPresent( renderer );
+					}
+					if (e.key.keysym.scancode == SDL_SCANCODE_BACKSPACE)
+					{
+						config->ColorBlack();
+						SDL_RenderClear(renderer);
+						SDL_RenderPresent( renderer );
+						engine->Trash();
+						printf("====> Deleted current changes!\n");
+					}
+					if (e.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
+					{
+						printf("====> Bye!\n");
+						quit = true;
 					}
 				}
-				
-			}
-			//printf("Physical %s key acting as %s key\n", SDL_GetScancodeName(e.key.keysym.scancode), SDL_GetKeyName(e.key.keysym.sym));
-		}
-		//Render the scene
-		//SDL_RenderClear(renderer);
-		//renderTexture(image, renderer, x, y);
-		//UpdateMouse();
-		//printf("\rX: %lf, Y: %lf\b\b\b\b\b\b\b", MouseX, MouseY);
-		SDL_RenderPresent(renderer);
-		
-		fflush(stdout); 
-	}
+				if (e.type == SDL_MOUSEBUTTONUP)
+				{
+					UpdateMouse();
+					if (ActiveTool == LineTool)
+					{
+						if (LineClickStep == 1)
+						{
+							//LineEnd[0] = (MouseX + OriginOffsetX);
+							//LineEnd[1] = (-1*(MouseY - OriginOffsetY));
+							LineEnd[0] = MouseX;
+							LineEnd[1] = MouseY;
+							//ActiveTool = NoTool;
 
+							//SDL_SetRenderDrawColor( renderer, 0, 0, 0, 0 );
+							//SDL_RenderDrawLine(renderer, LineStart[0], LineStart[1], LineEnd[0], LineEnd[1]);
+							engine->Line(renderer, LineStart, LineEnd);
+							SDL_RenderPresent( renderer );
+							printf("\t> Line End ==== x: %lf y: %lf\n", MouseX, MouseY);
+							LineClickStep = 0;
+							//MouseX = (x - OriginOffsetX);
+							//MouseY = ((y - OriginOffsetY)/-1);
+						}
+						else if (LineClickStep == 0)
+						{
+							//LineStart[0] = (MouseX + OriginOffsetX);
+							//LineStart[1] = (-1*(MouseY - OriginOffsetY));
+							LineStart[0] = MouseX;
+							LineStart[1] = MouseY;
+							LineClickStep = 1;
+							printf("\t> Line Start ==== x: %lf y: %lf\n", MouseX, MouseY);
+						}
+					}
+
+				}
+			//printf("Physical %s key acting as %s key\n", SDL_GetScancodeName(e.key.keysym.scancode), SDL_GetKeyName(e.key.keysym.sym));
+			}
+      //SDL_RenderPresent( renderer );
+			fflush(stdout);
+		}
+		SDL_RenderClear(renderer);
+		SDL_RenderClear(screen);
+		SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
 
