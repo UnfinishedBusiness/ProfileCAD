@@ -3,6 +3,7 @@
 Config::Config(SDL_Renderer* r)
 {
     renderer = r;
+    Font = "Fonts/monaco.ttf";
 }
 void Config::ColorBlack()
 {

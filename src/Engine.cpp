@@ -1,18 +1,29 @@
 #include "Engine.h"
 
-Engine::Engine(char *File, int _WindowWidth, int _WindowHeight)
+Engine::Engine(SDL_Renderer* _r, char *File, int _WindowWidth, int _WindowHeight)
 {
 	//memcpy(Filename, File, sizeof(*File));
 	Entitys = NULL;
 	Filename=File;
 	ViewRatio = 0.05;
+	r = _r;
 	WindowWidth = _WindowWidth;
-	WindowHeight = _WindowHeight;
+	WindowHeight = _WindowHeight-150;
 	OriginOffsetX = (_WindowWidth/2); //Center Origin
 	OriginOffsetY = (_WindowHeight/2); //Center Origin
 
 	LineColor = "White";
 	printf("==> Writing to %s\n", Filename);
+}
+void Engine::UpdateWindowSize(int w, int h)
+{
+	WindowWidth = w;
+	WindowHeight = h;
+}
+void Engine::GetWindowSize(int w, int h)
+{
+	w = WindowWidth;
+	w = WindowHeight;
 }
 void Engine::GetMousePos(float out[2])
 {
@@ -108,17 +119,15 @@ void Engine::Push(char *line)
 	gchar* element = g_strdup(line);
 	Entitys = g_slist_append(Entitys, element);
 }
-void Engine::Pull(SDL_Renderer *r)
+void Engine::Pull()
 {
 	Config *config = new Config(r);
-	config->ColorBlack();
-	SDL_RenderClear(r);
 	GSList *tmp = Entitys;
 	char *line;
 	while (tmp != NULL)
   {
 		line = (char*) tmp->data;
-    printf("===> Pulling %s\n", line);
+    //printf("===> Pulling %s\n", line);
     tmp = g_slist_next(tmp);
 		//line[strlen(line) - 1] = '\0';
 		if (strcmp(GetField(line, 1), "Line") == 0)
@@ -130,7 +139,7 @@ void Engine::Pull(SDL_Renderer *r)
 			End[0] = atof(GetField(line, 4));
 			End[1] = atof(GetField(line, 5));
 			LineColor = (char *)GetField(line, 6);
-			printf("Pulling ===> Line (%lf, %lf) ---- (%lf, %lf) %s\n", Start[0], Start[1], End[0], End[1], LineColor);
+			//printf("Pulling ===> Line (%lf, %lf) ---- (%lf, %lf) %s\n", Start[0], Start[1], End[0], End[1], LineColor);
 
 			float screen_point1[2];
 			float screen_point2[2];
@@ -140,11 +149,11 @@ void Engine::Pull(SDL_Renderer *r)
 
 			config->Color(LineColor);
 			SDL_RenderDrawLine(r, screen_point1[0], screen_point1[1], screen_point2[0], screen_point2[1]);
-			SDL_RenderPresent( r );
+			UpdateScreen();
 		}
   }
 }
-void Engine::Open(SDL_Renderer* r)
+void Engine::Open()
 {
 	Config *config = new Config(r);
 	config->ColorBlack();
@@ -167,9 +176,9 @@ void Engine::Open(SDL_Renderer* r)
     }
 	}
 	fclose(fp);
-	Pull(r);
+	Pull();
 }
-void Engine::Line(SDL_Renderer* r, float Start[2], float End[2])
+void Engine::Line(float Start[2], float End[2])
 {
 	Config *config = new Config(r);
 	char str[2048];
@@ -184,7 +193,7 @@ void Engine::Line(SDL_Renderer* r, float Start[2], float End[2])
 
 	config->ColorWhite();
 	SDL_RenderDrawLine(r, screen_point1[0], screen_point1[1], screen_point2[0], screen_point2[1]);
-	SDL_RenderPresent( r );
+	UpdateScreen();
 }
 const char* Engine::GetField(char* line, int num)
 {
@@ -198,4 +207,45 @@ const char* Engine::GetField(char* line, int num)
             return tok;
     }
     return "";
+}
+SDL_Texture* Engine::MakeText(char *Text, int Size)
+{
+	Config *config = new Config(r);
+	TTF_Font *font = TTF_OpenFont(config->Font, Size);
+	if (font == nullptr){
+		printf("Cant open font %s\n", config->Font);
+		return nullptr;
+	}
+	//We need to first render to a surface as that's what TTF_RenderText
+	//returns, then load that surface into a texture
+	SDL_Surface *surf = TTF_RenderText_Blended(font, Text, config->White);
+	if (surf == nullptr){
+		TTF_CloseFont(font);
+		printf("Error rendering text\n");
+		return nullptr;
+	}
+	SDL_Texture *texture = SDL_CreateTextureFromSurface(r, surf);
+	if (texture == nullptr){
+		printf("Error creating surface\n");
+	}
+	//Clean up the surface and font
+	SDL_FreeSurface(surf);
+	TTF_CloseFont(font);
+	return texture;
+}
+void Engine::PutTexture(SDL_Texture *t, float x, float y)
+{
+	SDL_Rect texture_rect;
+	int w, h;
+	SDL_QueryTexture(t, NULL, NULL, &w, &h);
+	texture_rect.x = x;  //the x coordinate
+	texture_rect.y = y; // the y coordinate
+	texture_rect.w = w; //the width of the texture
+	texture_rect.h = h; //the height of the texture
+	SDL_RenderCopy(r, t, NULL, &texture_rect);
+	UpdateScreen();
+}
+void Engine::UpdateScreen()
+{
+	//SDL_RenderPresent( r );
 }

@@ -17,11 +17,20 @@ float LastMouseScrollPos[2];
 float LastRealMousePos[2];
 float PanDistance[2];
 float VirtualOrigin[2]; //0,0 in Real Cordinant plane
-
-Engine *engine=new Engine("/tmp/Test.cad", MainWindowWidth, MainWindowWidth);
+char XYBuff[100];
+char ResizeBuff[100];
+char InputBuff[32];
+std::string inputText = "";
+Engine *engine=NULL;
 
 int main (int argc, char** argv)
 {
+    if (TTF_Init() != 0)
+    {
+      printf("SDL_ttf Error!\n");
+      SDL_Quit();
+      return 1;
+    }
     SDL_Window* window = NULL;
     window = SDL_CreateWindow
     (
@@ -31,20 +40,33 @@ int main (int argc, char** argv)
         MainWindowHeight,
         SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE
     );
-
+    //SDL_SetWindowSize(window, MainWindowWidth, MainWindowHeight);
     // Setup renderer
     SDL_Renderer* renderer = NULL;
-		SDL_Renderer* screen = NULL;
     renderer =  SDL_CreateRenderer( window, 1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    engine = new Engine(renderer, "/tmp/Test.cad", MainWindowWidth, MainWindowWidth);
+    Config *config = new Config(renderer);
 
-		Config *config = new Config(renderer);
-    config->ColorBlack();
-		engine->Pull(renderer);
-		SDL_RenderPresent( renderer );
+		engine->Open();
+
     SDL_Event e;
 		bool quit = false;
 		while (!quit)
 		{
+      config->ColorBlack(); //Background color
+      SDL_RenderClear(renderer);
+      engine->GetMousePos(MousePos);
+      engine->GetRealXY(RealMousePos, MousePos);
+      sprintf(XYBuff, "X: %lf, Y: %lf, rX: %lf, rY: %lf", MousePos[0], MousePos[1], RealMousePos[0], RealMousePos[1]);
+      engine->PutTexture(engine->MakeText(XYBuff, 8), 10, 10);
+      //printf("%d\n", engine->WindowHeight);
+      if (inputText != "")
+      {
+        engine->PutTexture(engine->MakeText((char *)inputText.c_str(), 12), 10, (engine->WindowHeight - 50));
+      }
+
+      SDL_StartTextInput();
+      //SDL_StopTextInput();
 			while (SDL_PollEvent(&e))
 			{
 				if (e.type == SDL_QUIT)
@@ -55,42 +77,73 @@ int main (int argc, char** argv)
 				{
 					if (e.window.event == SDL_WINDOWEVENT_RESIZED)
 					{
-						//float OriginOffsetX = (e.window.data1/2);
-						//float OriginOffsetY = (e.window.data2/2);
-						engine->Pull(renderer);
-						SDL_RenderPresent( renderer );
+						engine->UpdateWindowSize(e.window.data1, e.window.data2);
+            //sprintf(ResizeBuff, "H: %d, W: %d", e.window.data1, e.window.data2);
+            //engine->PutTexture(engine->MakeText(ResizeBuff, 8), 10, 10);
 					}
 				}
-				if (e.type == SDL_KEYUP)
+        if (e.type == SDL_TEXTINPUT)
+        {
+          if( !( ( e.text.text[ 0 ] == 'c' || e.text.text[ 0 ] == 'C' ) && ( e.text.text[ 0 ] == 'v' || e.text.text[ 0 ] == 'V' ) && SDL_GetModState() & KMOD_CTRL ) )
+          {
+                if (inputText == "")
+                {
+                  inputText = ":";
+                }
+                inputText += e.text.text;
+          }
+        }
+				if (e.type == SDL_KEYDOWN)
 				{
-					//quit = true;
-					if (e.key.keysym.scancode == SDL_SCANCODE_UP)
+          if( e.key.keysym.sym == SDLK_BACKSPACE && inputText.length() > 0 )
+          {
+            //lop off character
+            if (inputText != ":")
+            {
+              inputText.pop_back();
+            }
+          }
+          else if( e.key.keysym.sym == SDLK_c && SDL_GetModState() & KMOD_CTRL )
+          {
+            SDL_SetClipboardText( inputText.c_str() );
+          }
+          //Handle paste
+          else if( e.key.keysym.sym == SDLK_v && SDL_GetModState() & KMOD_CTRL )
+          {
+            inputText = SDL_GetClipboardText();
+          }
+          if (e.key.keysym.scancode == SDL_SCANCODE_UP)
 					{
 							engine->PanIncY(-10);
-							engine->Pull(renderer);
+							engine->Pull();
 					}
 					if (e.key.keysym.scancode == SDL_SCANCODE_DOWN)
 					{
 							engine->PanIncY(+10);
-							engine->Pull(renderer);
+							engine->Pull();
 					}
 					if (e.key.keysym.scancode == SDL_SCANCODE_LEFT)
 					{
 							engine->PanIncX(-10);
-							engine->Pull(renderer);
+							engine->Pull();
 					}
 					if (e.key.keysym.scancode == SDL_SCANCODE_RIGHT)
 					{
 							engine->PanIncX(+10);
-							engine->Pull(renderer);
+							engine->Pull();
 					}
-					if (e.key.keysym.scancode == SDL_SCANCODE_S)
+          if (e.key.keysym.scancode == SDL_SCANCODE_RETURN)
+					{
+							printf("Input: %s\n", inputText.c_str());
+              inputText="";
+					}
+					if (e.key.keysym.scancode == SDL_SCANCODE_S && SDL_GetModState() & KMOD_CTRL)
 					{
 							engine->Save();
 					}
-					if (e.key.keysym.scancode == SDL_SCANCODE_O)
+					if (e.key.keysym.scancode == SDL_SCANCODE_O && SDL_GetModState() & KMOD_CTRL)
 					{
-							engine->Open(renderer);
+							engine->Open();
 					}
 					if (e.key.keysym.scancode == SDL_SCANCODE_L)
 					{
@@ -109,10 +162,9 @@ int main (int argc, char** argv)
 					{
 
 						printf("====> Rerendering Screen!\n");
-						engine->Pull(renderer);
-						SDL_RenderPresent( renderer );
+						engine->Pull();
 					}
-					if (e.key.keysym.scancode == SDL_SCANCODE_BACKSPACE)
+					if (e.key.keysym.sym == SDLK_n && SDL_GetModState() & KMOD_CTRL)
 					{
 						config->ColorBlack();
 						SDL_RenderClear(renderer);
@@ -128,23 +180,23 @@ int main (int argc, char** argv)
 				}
 				if (e.type == SDL_MOUSEMOTION)
 				{
-					engine->GetMousePos(MousePos);
-					engine->GetRealXY(RealMousePos, MousePos);
-					printf("\rX: %lf, Y: %lf |||||| rX: %lf, rY: %lf\0", MousePos[0], MousePos[1], RealMousePos[0], RealMousePos[1]);
+
+
+					//printf("\rX: %lf, Y: %lf |||||| rX: %lf, rY: %lf\0", MousePos[0], MousePos[1], RealMousePos[0], RealMousePos[1]);
 				}
 				if (e.type == SDL_MOUSEBUTTONUP)
 				{
 					if (e.button.button == SDL_BUTTON_X1)
 					{
 						//engine->PanXY(RealMousePos);
-						printf("\r> ZoomIn ++ %f\b\b\b\b", engine->ZoomIn());
-						engine->Pull(renderer);
+						printf("> ZoomIn ++ %f\n", engine->ZoomIn());
+						//engine->Pull();
 					}
 					if (e.button.button == SDL_BUTTON_X2)
 					{
 						//engine->PanXY(RealMousePos);
-						printf("\r> ZoomOut ++ %f\b\b\b\b", engine->ZoomOut());
-						engine->Pull(renderer);
+						printf("> ZoomOut ++ %f\n", engine->ZoomOut());
+						//engine->Pull();
 					}
 					if (e.button.button == SDL_BUTTON_LEFT)
 					{
@@ -154,7 +206,7 @@ int main (int argc, char** argv)
 							if (LineClickStep == 1)
 							{
 								engine->GetMousePos(LineEnd);
-								engine->Line(renderer, LineStart, LineEnd);
+								engine->Line(LineStart, LineEnd);
 								printf("\t> Line End ==== x: %lf y: %lf\n", engine->GetX(LineStart), engine->GetY(LineEnd));
 								LineClickStep = 0;
 							}
@@ -169,11 +221,14 @@ int main (int argc, char** argv)
 				}
 			//printf("Physical %s key acting as %s key\n", SDL_GetScancodeName(e.key.keysym.scancode), SDL_GetKeyName(e.key.keysym.sym));
 		}
+    engine->Pull();
+    SDL_RenderPresent( renderer );
+    usleep(400);
       //SDL_RenderPresent( renderer );
-			fflush(stdout);
+			//fflush(stdout);
 		}
 		SDL_RenderClear(renderer);
-		SDL_RenderClear(screen);
+		//SDL_RenderClear(screen);
 		SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
