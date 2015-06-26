@@ -6,17 +6,17 @@
 class Engine                // begin declaration of the class
 {
 	public:                    // begin public section
-	char *Filename;
 	float OriginOffsetX;
 	float OriginOffsetY;
 	float ViewRatio;
-	char *LineColor;
 	int WindowWidth;
 	int WindowHeight;
 	SDL_Renderer* r;
 	GSList *Entitys;
-	GSList *ScreenLayers;
-	Engine(SDL_Renderer* _r, char *File, int _WindowWidth, int _WindowHeight);     // constructor
+	GSList *SelectedEntitys;
+	Config *config;
+
+	Engine(SDL_Renderer* _r, int _WindowWidth, int _WindowHeight);     // constructor
 	const char* GetField(char* line, int num);
 	void UpdateWindowSize(int w, int h);
 	void GetWindowSize(int w, int h);
@@ -38,8 +38,10 @@ class Engine                // begin declaration of the class
 	void PanXY(float pos[2]);
 	void GetDistance(float out, float p1[2], float p2[2]);
 	SDL_Texture* MakeText(char *Text, int Size);
+	SDL_Texture* MakeColorText(SDL_Color Color, char *Text, int Size);
 	void PutTexture(SDL_Texture* t, float x, float y);
 	void UpdateScreen();
+	void UnInit();
 };
 
 

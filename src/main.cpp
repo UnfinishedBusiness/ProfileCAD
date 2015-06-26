@@ -47,25 +47,26 @@ int main (int argc, char** argv)
     // Setup renderer
     SDL_Renderer* renderer = NULL;
     renderer =  SDL_CreateRenderer( window, 1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    engine = new Engine(renderer, "/tmp/Test.cad", MainWindowWidth, MainWindowWidth);
+    engine = new Engine(renderer, MainWindowWidth, MainWindowWidth);
     Config *config = new Config(renderer);
 
-		engine->Open();
+		//engine->Open();
 
     SDL_Event e;
 		bool quit = false;
 		while (!quit)
 		{
-      config->ColorBlack(); //Background color
+      config->Color(config->BackgroundColor); //Background color
       SDL_RenderClear(renderer);
       engine->GetMousePos(MousePos);
       engine->GetRealXY(RealMousePos, MousePos);
       sprintf(XYBuff, "X: %lf, Y: %lf, rX: %lf, rY: %lf", MousePos[0], MousePos[1], RealMousePos[0], RealMousePos[1]);
       engine->PutTexture(engine->MakeText(XYBuff, 8), 10, 10);
 			timer_diff_ms = difftime(time(0), MsgTimer) * 1000.;
-			if (timer_diff_ms < MsgDuration || true)
+			//if (timer_diff_ms < MsgDuration)
+      if (MsgBuff != "")
 			{
-				engine->PutTexture(engine->MakeText((char *)MsgBuff.c_str(), 8), 10, (engine->WindowHeight - 25));
+				engine->PutTexture(engine->MakeColorText(config->ColorGreen, (char *)MsgBuff.c_str(), 8), 10, (engine->WindowHeight - 25));
 			}
       if (inputText != "")
       {
@@ -104,10 +105,14 @@ int main (int argc, char** argv)
 				{
           if( e.key.keysym.sym == SDLK_BACKSPACE && inputText.length() > 0 )
           {
-            //lop off character
+            //lop off character]
             if (inputText != ":")
             {
               inputText.pop_back();
+            }
+            if (inputText == ":")
+            {
+              inputText = "";
             }
           }
           else if( e.key.keysym.sym == SDLK_c && SDL_GetModState() & KMOD_CTRL )
@@ -198,7 +203,7 @@ int main (int argc, char** argv)
 					}
 					if (e.key.keysym.sym == SDLK_n && SDL_GetModState() & KMOD_CTRL)
 					{
-						config->ColorBlack();
+						config->Color("Black");
 						SDL_RenderClear(renderer);
 						SDL_RenderPresent( renderer );
 						engine->Trash();
@@ -210,26 +215,21 @@ int main (int argc, char** argv)
 						quit = true;
 					}
 				}
-				if (e.type == SDL_MOUSEMOTION)
+				if (e.type == SDL_MOUSEWHEEL)
 				{
 
-
+          if (e.wheel.y > 0)
+          {
+              printf("> ZoomIn ++ %f\n", engine->ZoomIn());
+          }
+          else
+          {
+              printf("> ZoomOut ++ %f\n", engine->ZoomOut());
+          }
 					//printf("\rX: %lf, Y: %lf |||||| rX: %lf, rY: %lf\0", MousePos[0], MousePos[1], RealMousePos[0], RealMousePos[1]);
 				}
 				if (e.type == SDL_MOUSEBUTTONUP)
 				{
-					if (e.button.button == SDL_BUTTON_X1)
-					{
-						//engine->PanXY(RealMousePos);
-						printf("> ZoomIn ++ %f\n", engine->ZoomIn());
-						//engine->Pull();
-					}
-					if (e.button.button == SDL_BUTTON_X2)
-					{
-						//engine->PanXY(RealMousePos);
-						printf("> ZoomOut ++ %f\n", engine->ZoomOut());
-						//engine->Pull();
-					}
 					if (e.button.button == SDL_BUTTON_LEFT)
 					{
 						printf("=====> Left Click!\n");
@@ -259,8 +259,9 @@ int main (int argc, char** argv)
       //SDL_RenderPresent( renderer );
 			//fflush(stdout);
 		}
+    config->SaveConfig();
+    engine->UnInit();
 		SDL_RenderClear(renderer);
-		//SDL_RenderClear(screen);
 		SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();

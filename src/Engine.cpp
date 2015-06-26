@@ -1,19 +1,19 @@
 #include "Engine.h"
 
-Engine::Engine(SDL_Renderer* _r, char *File, int _WindowWidth, int _WindowHeight)
+Engine::Engine(SDL_Renderer* _r, int _WindowWidth, int _WindowHeight)
 {
-	//memcpy(Filename, File, sizeof(*File));
+	//memcpy(config->Filename, File, sizeof(*File));
 	Entitys = NULL;
-	Filename=File;
+	SelectedEntitys = NULL;
+
 	ViewRatio = 0.05;
 	r = _r;
 	WindowWidth = _WindowWidth;
 	WindowHeight = _WindowHeight-150;
 	OriginOffsetX = (_WindowWidth/2); //Center Origin
 	OriginOffsetY = (_WindowHeight/2); //Center Origin
-
-	LineColor = "White";
-	printf("==> Writing to %s\n", Filename);
+	config = new Config(r);
+	//printf("==> Writing to %s\n", config->Filename);
 }
 void Engine::UpdateWindowSize(int w, int h)
 {
@@ -95,10 +95,10 @@ void Engine::Trash()
 void Engine::Save()
 {
 	FILE *fp;
-	fp = fopen(Filename, "w");
+	fp = fopen(config->Filename, "w");
 	if (fp == NULL)
 	{
-		printf("!!!! ==> Can't open %s\n", Filename);
+		printf("!!!! ==> Can't write %s\n", config->Filename);
 	}
 	else
 	{
@@ -111,8 +111,8 @@ void Engine::Save()
 			fprintf(fp, "%s\n", line);
 	    tmp = g_slist_next(tmp);
 		}
+		fclose(fp);
 	}
-	fclose(fp);
 }
 void Engine::Push(char *line)
 {
@@ -121,7 +121,6 @@ void Engine::Push(char *line)
 }
 void Engine::Pull()
 {
-	Config *config = new Config(r);
 	GSList *tmp = Entitys;
 	char *line;
 	while (tmp != NULL)
@@ -138,8 +137,8 @@ void Engine::Pull()
 			Start[1] = atof(GetField(line, 3));
 			End[0] = atof(GetField(line, 4));
 			End[1] = atof(GetField(line, 5));
-			LineColor = (char *)GetField(line, 6);
-			//printf("Pulling ===> Line (%lf, %lf) ---- (%lf, %lf) %s\n", Start[0], Start[1], End[0], End[1], LineColor);
+			config->LineColor = (char *)GetField(line, 6);
+			//printf("Pulling ===> Line (%lf, %lf) ---- (%lf, %lf) %s\n", Start[0], Start[1], End[0], End[1], config->LineColor);
 
 			float screen_point1[2];
 			float screen_point2[2];
@@ -147,25 +146,23 @@ void Engine::Pull()
 			GetRealXY(screen_point1, Start);
 			GetRealXY(screen_point2, End);
 
-			config->Color(LineColor);
+			config->Color(config->LineColor);
 			SDL_RenderDrawLine(r, screen_point1[0], screen_point1[1], screen_point2[0], screen_point2[1]);
 			UpdateScreen();
 		}
   }
+	g_slist_free (tmp);
 }
 void Engine::Open()
 {
-	Config *config = new Config(r);
-	config->ColorBlack();
-	SDL_RenderClear(r);
 	Trash();
 
 	char line[2048];
 	FILE *fp;
-	fp = fopen(Filename, "r");
+	fp = fopen(config->Filename, "r");
 	if (fp == NULL)
 	{
-		printf("!!!! ==> Can't open %s\n", Filename);
+		printf("!!!! ==> Can't open %s\n", config->Filename);
 	}
 	else
 	{
@@ -174,15 +171,15 @@ void Engine::Open()
 			line[strlen(line) - 1] = '\0';
 			Push(line);
     }
+		//Pull();
+		fclose(fp);
 	}
-	fclose(fp);
-	Pull();
 }
 void Engine::Line(float Start[2], float End[2])
 {
-	Config *config = new Config(r);
+
 	char str[2048];
-	sprintf(str, "Line:%lf:%lf:%lf:%lf:%s", Start[0], Start[1], End[0], End[1], LineColor);
+	sprintf(str, "Line:%lf:%lf:%lf:%lf:%s", Start[0], Start[1], End[0], End[1], config->LineColor);
 	Push(str);
 
 	float screen_point1[2];
@@ -191,7 +188,7 @@ void Engine::Line(float Start[2], float End[2])
 	GetRealXY(screen_point1, Start);
 	GetRealXY(screen_point2, End);
 
-	config->ColorWhite();
+	config->Color("White");
 	SDL_RenderDrawLine(r, screen_point1[0], screen_point1[1], screen_point2[0], screen_point2[1]);
 	UpdateScreen();
 }
@@ -210,7 +207,12 @@ const char* Engine::GetField(char* line, int num)
 }
 SDL_Texture* Engine::MakeText(char *Text, int Size)
 {
-	Config *config = new Config(r);
+
+	return MakeColorText(config->ColorWhite, Text, Size);
+}
+SDL_Texture* Engine::MakeColorText(SDL_Color Color, char *Text, int Size)
+{
+
 	TTF_Font *font = TTF_OpenFont(config->Font, Size);
 	if (font == nullptr){
 		printf("Cant open font %s\n", config->Font);
@@ -218,7 +220,7 @@ SDL_Texture* Engine::MakeText(char *Text, int Size)
 	}
 	//We need to first render to a surface as that's what TTF_RenderText
 	//returns, then load that surface into a texture
-	SDL_Surface *surf = TTF_RenderText_Blended(font, Text, config->White);
+	SDL_Surface *surf = TTF_RenderText_Blended(font, Text, Color);
 	if (surf == nullptr){
 		TTF_CloseFont(font);
 		printf("Error rendering text\n");
@@ -248,4 +250,9 @@ void Engine::PutTexture(SDL_Texture *t, float x, float y)
 void Engine::UpdateScreen()
 {
 	//SDL_RenderPresent( r );
+}
+void Engine::UnInit()
+{
+	g_slist_free(Entitys);
+	g_slist_free(SelectedEntitys);
 }
