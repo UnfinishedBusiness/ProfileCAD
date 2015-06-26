@@ -3,11 +3,11 @@
 Config::Config(SDL_Renderer* r)
 {
     renderer = r;
-    struct passwd *pw = getpwuid(getuid());
-    homedir = pw->pw_dir;
-    std::string cf(homedir);
-    ConfigFile = "/.config/ProfileCAD/Config";
-    cf.append(ConfigFile);
+    //struct passwd *pw = getpwuid(getuid());
+    //homedir = pw->pw_dir;
+    //std::string cf(homedir);
+    ConfigFile = (char *)"Config.profile";
+    //cf.append(ConfigFile);
     ParseConfig();
 }
 void Config::ParseConfig()
@@ -29,7 +29,7 @@ void Config::ParseConfig()
   fp = fopen(ConfigFile, "r");
   if (fp == NULL)
   {
-    printf("!!!! ==> Can't open %s\nUsing default values!", ConfigFile);
+    printf("!!!! ==> Can't open %s\nUsing default values!\n", ConfigFile);
   }
   else
   {
