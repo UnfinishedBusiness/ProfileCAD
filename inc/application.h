@@ -12,6 +12,8 @@
 #include <glib.h>
 #include <iostream>
 #include <unistd.h>
+#include <time.h>
+#include <ctype.h>
 
 #define WindowTitle "ProfileCAD"
 #define Version "1"

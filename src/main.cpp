@@ -19,9 +19,12 @@ float PanDistance[2];
 float VirtualOrigin[2]; //0,0 in Real Cordinant plane
 char XYBuff[100];
 char ResizeBuff[100];
-char InputBuff[32];
+std::string MsgBuff = "";
 std::string inputText = "";
 Engine *engine=NULL;
+time_t MsgTimer=NULL;
+int MsgDuration = 1500; //ms
+double timer_diff_ms;
 
 int main (int argc, char** argv)
 {
@@ -59,7 +62,11 @@ int main (int argc, char** argv)
       engine->GetRealXY(RealMousePos, MousePos);
       sprintf(XYBuff, "X: %lf, Y: %lf, rX: %lf, rY: %lf", MousePos[0], MousePos[1], RealMousePos[0], RealMousePos[1]);
       engine->PutTexture(engine->MakeText(XYBuff, 8), 10, 10);
-      //printf("%d\n", engine->WindowHeight);
+			timer_diff_ms = difftime(time(0), MsgTimer) * 1000.;
+			if (timer_diff_ms < MsgDuration || true)
+			{
+				engine->PutTexture(engine->MakeText((char *)MsgBuff.c_str(), 8), 10, (engine->WindowHeight - 25));
+			}
       if (inputText != "")
       {
         engine->PutTexture(engine->MakeText((char *)inputText.c_str(), 12), 10, (engine->WindowHeight - 50));
@@ -134,7 +141,45 @@ int main (int argc, char** argv)
 					}
           if (e.key.keysym.scancode == SDL_SCANCODE_RETURN)
 					{
-							printf("Input: %s\n", inputText.c_str());
+							//printf("Input: %s\n", inputText.c_str());
+							if (inputText.find(":l") != std::string::npos)
+							{
+								MsgTimer = time(0);
+								std::size_t FirstX = inputText.find("x");
+								std::size_t FirstY = inputText.find("y");
+								std::size_t LastX = inputText.find("x", FirstX+1);
+								std::size_t LastY = inputText.find("y", FirstY+1);
+								std::string X1 = inputText.substr(FirstX+1, (FirstY-FirstX)-1);
+								std::string Y1 = inputText.substr(FirstY+1, (LastX - FirstY) -1);
+								std::string X2 = inputText.substr(LastX+1, (LastY - LastX)-1);
+								std::string Y2 = inputText.substr(LastY+1, (inputText.length() - LastY)-1);
+
+
+								if (true)
+								{
+									LineStart[0] = atof((char*)X1.c_str());
+									LineStart[1] = atof((char*)Y1.c_str());
+									LineEnd[0] = atof((char*)X2.c_str());
+									LineEnd[1] = atof((char*)Y2.c_str());
+									engine->Line(LineStart, LineEnd);
+									MsgBuff = ">Added Line X1: " + X1 + " Y1: " + Y1 + " X2: " + X2 + " Y2: " + Y2;
+								}
+								else if (true)
+								{
+
+								}
+								else if (ActiveTool == NoTool)
+								{
+										MsgBuff = ">Line Tool Active";
+										ActiveTool = LineTool;
+								}
+								else
+								{
+									MsgBuff = ">Line Tool Inctive";
+									ActiveTool = NoTool;
+								}
+
+							}
               inputText="";
 					}
 					if (e.key.keysym.scancode == SDL_SCANCODE_S && SDL_GetModState() & KMOD_CTRL)
@@ -144,19 +189,6 @@ int main (int argc, char** argv)
 					if (e.key.keysym.scancode == SDL_SCANCODE_O && SDL_GetModState() & KMOD_CTRL)
 					{
 							engine->Open();
-					}
-					if (e.key.keysym.scancode == SDL_SCANCODE_L)
-					{
-						printf("==> Line Tool\n");
-						if (ActiveTool == NoTool)
-						{
-								ActiveTool = LineTool;
-						}
-						else
-						{
-							ActiveTool = NoTool;
-						}
-
 					}
 					if (e.key.keysym.scancode == SDL_SCANCODE_TAB)
 					{
