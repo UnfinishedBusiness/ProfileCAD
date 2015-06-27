@@ -35,6 +35,7 @@ class Engine                // begin declaration of the class
 	SDL_Texture	**EntityArray;
 	char **EntityInstruction;
 	bool EntityRedraw = false;
+	bool PutTextureAndDontFree = false;
 
 	Engine(SDL_Window* w, SDL_Renderer* _r, Config *c, int _WindowWidth, int _WindowHeight);     // constructor
 	const char* GetField(char* line, int num);
@@ -46,6 +47,8 @@ class Engine                // begin declaration of the class
 	float GetY(float in[2]); //GetXY Wrapper Function
 	void GetMousePos(float out[2]); //Returns Virtual Cordinant plane
 	void Line(float Start[2], float End[2]);
+	void ArcByCenter(float x, float y, float Radius);
+	void DrawPixel(SDL_Surface *screen, int x, int y, Uint8 R, Uint8 G, Uint8 B);
 	float ZoomIn();
 	float ZoomOut();
 	void PanIncX(float p);

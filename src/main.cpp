@@ -153,6 +153,19 @@ int main (int argc, char** argv)
 								//engine->Open();
 								//MsgBuff = ">Opened " + file;
 							}
+              if (inputText.find(":ac") != std::string::npos)
+							{
+                MsgTimer = time(0);
+								std::size_t cXp = inputText.find("x");
+								std::size_t cYp = inputText.find("y");
+                std::size_t Rp  = inputText.find("r");
+
+								std::string cX = inputText.substr(cXp+1, (cYp - cXp) -1);
+								std::string cY = inputText.substr(cYp+1, (Rp - cYp)-1);
+								std::string R = inputText.substr(Rp+1, (inputText.length() - Rp)-1);
+                MsgBuff = ">Drew Arc cX: " + cX + " cY: " + cY + " R: " + R;
+                engine->ArcByCenter(atof((char *)cX.c_str()), atof((char *)cY.c_str()), atof((char *)R.c_str()));
+              }
 							if (inputText.find(":l") != std::string::npos)
 							{
 								MsgTimer = time(0);
@@ -173,7 +186,7 @@ int main (int argc, char** argv)
 									LineEnd[0] = atof((char*)X2.c_str());
 									LineEnd[1] = atof((char*)Y2.c_str());
 									engine->Line(LineStart, LineEnd);
-									MsgBuff = ">Added Line X1: " + X1 + " Y1: " + Y1 + " X2: " + X2 + " Y2: " + Y2;
+									MsgBuff = ">Drew Line X1: " + X1 + " Y1: " + Y1 + " X2: " + X2 + " Y2: " + Y2;
 								}
 								else if (X2 == inputText && Y2 == inputText)
 								{
@@ -223,11 +236,13 @@ int main (int argc, char** argv)
 
           if (e.wheel.y > 0)
           {
-              printf("> ZoomIn ++ %f\n", engine->ZoomIn());
+              //printf("> ZoomIn ++ %f\n", engine->ZoomIn());
+              engine->ZoomIn();
           }
           else
           {
-              printf("> ZoomOut ++ %f\n", engine->ZoomOut());
+              //printf("> ZoomOut ++ %f\n", engine->ZoomOut());
+              engine->ZoomOut();
           }
 					//printf("\rX: %lf, Y: %lf |||||| rX: %lf, rY: %lf\0", MousePos[0], MousePos[1], RealMousePos[0], RealMousePos[1]);
 				}
@@ -259,7 +274,7 @@ int main (int argc, char** argv)
     //
     engine->UpdateScreen();
     SDL_RenderPresent( renderer );
-    usleep(400);
+    usleep(100);
       //SDL_RenderPresent( renderer );
 			//fflush(stdout);
 		}
