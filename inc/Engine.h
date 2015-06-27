@@ -1,7 +1,11 @@
 #ifndef _Engine_
 #define _Engine_
 #include "application.h"
+
+
+#ifndef _Config_
 #include "Config.h"
+#endif
 
 class Engine                // begin declaration of the class
 {
@@ -11,12 +15,13 @@ class Engine                // begin declaration of the class
 	float ViewRatio;
 	int WindowWidth;
 	int WindowHeight;
+	SDL_Window* window;
 	SDL_Renderer* r;
 	GSList *Entitys;
 	GSList *SelectedEntitys;
 	Config *config;
 
-	Engine(SDL_Renderer* _r, int _WindowWidth, int _WindowHeight);     // constructor
+	Engine(SDL_Window* w, SDL_Renderer* _r, Config *c, int _WindowWidth, int _WindowHeight);     // constructor
 	const char* GetField(char* line, int num);
 	void UpdateWindowSize(int w, int h);
 	void GetWindowSize(int w, int h);

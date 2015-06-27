@@ -1,8 +1,9 @@
 #include "Config.h"
 
-Config::Config(SDL_Renderer* r)
+Config::Config(SDL_Window* w, SDL_Renderer* r)
 {
     renderer = r;
+    window = w;
     //struct passwd *pw = getpwuid(getuid());
     //homedir = pw->pw_dir;
     //std::string cf(homedir);
@@ -48,9 +49,59 @@ void Config::ParseConfig()
           BackgroundColor = strdup(data.c_str());
           printf("=> Set Background to %s\n", BackgroundColor);
       }
+      key = "WindowHeight";
+      if (line.find(key) != std::string::npos)
+      {
+          start = line.find(key);
+          stop = line.find('\n');
+          data = line.substr(start+key.length()+2, (stop - start));
+          data = trim(data);
+          WindowHeight = atoi(strdup(data.c_str()));
+          printf("=> Set WindowHeight to %d\n", WindowHeight);
+      }
+      key = "WindowWidth";
+      if (line.find(key) != std::string::npos)
+      {
+          start = line.find(key);
+          stop = line.find('\n');
+          data = line.substr(start+key.length()+2, (stop - start));
+          data = trim(data);
+          WindowWidth = atoi(strdup(data.c_str()));
+          printf("=> Set WindowHWidth to %d\n", WindowWidth);
+      }
+      key = "Font";
+      if (line.find(key) != std::string::npos)
+      {
+          start = line.find(key);
+          stop = line.find('\n');
+          data = line.substr(start+key.length()+2, (stop - start));
+          data = trim(data);
+          Font = strdup(data.c_str());
+          printf("=> Set Font to %s\n", Font);
+      }
+      key = "Filename";
+      if (line.find(key) != std::string::npos)
+      {
+          start = line.find(key);
+          stop = line.find('\n');
+          data = line.substr(start+key.length()+2, (stop - start));
+          data = trim(data);
+          Filename = strdup(data.c_str());
+          printf("=> Set Filename to %s\n", Filename);
+      }
     }
     fclose(fp);
   }
+  if (WindowWidth != 0 || WindowHeight != 0)
+  {
+    SDL_SetWindowSize(window, WindowWidth, WindowHeight);
+  }
+}
+void Config::UpdateWindowSize(int w, int h)
+{
+	WindowWidth = w;
+	WindowHeight = h;
+  //printf("Height: %i, Width: %i\n", WindowHeight, WindowWidth );
 }
 void Config::SaveConfig()
 {
@@ -66,8 +117,8 @@ void Config::SaveConfig()
     fprintf(fp, "Filename: %s\n", Filename);
     fprintf(fp, "Font: %s\n", Font);
 		fprintf(fp, "BackgroundColor: %s\n", BackgroundColor);
-    fprintf(fp, "WindowHeight: %d\n", WindowHeight);
-    fprintf(fp, "WindowWidth: %d\n", WindowWidth);
+    fprintf(fp, "WindowHeight: %i\n", WindowHeight);
+    fprintf(fp, "WindowWidth: %i\n", WindowWidth);
 		fclose(fp);
 	}
 }

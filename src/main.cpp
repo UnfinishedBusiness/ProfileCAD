@@ -48,8 +48,8 @@ int main (int argc, char** argv)
     SDL_Renderer* renderer = NULL;
     renderer =  SDL_CreateRenderer( window, 1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
-		engine = new Engine(renderer, MainWindowWidth, MainWindowWidth);
-		config = new Config(renderer);
+		config = new Config(window, renderer);
+		engine = new Engine(window, renderer, config, MainWindowWidth, MainWindowWidth);
 
     SDL_Event e;
 		bool quit = false;
@@ -146,6 +146,13 @@ int main (int argc, char** argv)
           if (e.key.keysym.scancode == SDL_SCANCODE_RETURN)
 					{
 							//printf("Input: %s\n", inputText.c_str());
+							if (inputText.find(":file") != std::string::npos)
+							{
+								std::string file = trim(inputText.substr(5, inputText.length()));
+								config->Filename = strdup(file.c_str());
+								engine->Open();
+								MsgBuff = ">Opened " + file;
+							}
 							if (inputText.find(":l") != std::string::npos)
 							{
 								MsgTimer = time(0);
@@ -264,7 +271,6 @@ int main (int argc, char** argv)
 		}
     config->SaveConfig();
     engine->UnInit();
-		delete config;
 		delete engine;
 		SDL_RenderClear(renderer);
 		SDL_DestroyRenderer(renderer);

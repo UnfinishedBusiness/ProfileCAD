@@ -2,6 +2,8 @@
 #define _Config_
 #include "application.h"
 
+//#define _Engine_
+//#include "Engine.h"
 
 class Config                 // begin declaration of the class
 {
@@ -12,6 +14,7 @@ class Config                 // begin declaration of the class
 	char *BackgroundColor;
 	int WindowWidth;
 	int WindowHeight;
+	SDL_Window* window;
 	char *Filename;
 	SDL_Renderer* renderer;
 	char *Font;
@@ -26,10 +29,11 @@ class Config                 // begin declaration of the class
 	SDL_Color ColorYellow = { 255, 255, 0, 255 };
 	SDL_Color ColorPurple = { 128, 0, 128, 255 };
 
-	Config(SDL_Renderer* r);     // constructor
+	Config(SDL_Window* w, SDL_Renderer* r);     // constructor
 	void Color(char *color);
 	void ParseConfig();
 	void SaveConfig();
+	void UpdateWindowSize(int w, int h);
 };
 
 
