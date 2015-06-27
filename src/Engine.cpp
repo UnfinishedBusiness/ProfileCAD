@@ -185,20 +185,52 @@ void Engine::UpdateScreen()
 	//printf("EntityCount: %d\r", EntityArraySize);
 	//SDL_ScaleSurface(SDL_Surface* Surface, Uint16 Width, Uint16 Height)
 	int x;
-	bool t = false;
-	if (t == true)
+	if (EntityRedraw == true)
 	{
 		EntityRedraw = false;
-		free(EntityArray);
+
 		int EntityInstructionSize = EntityArraySize; //Make copy because when drawing depent on EntityArraySize
+		char **EntityInstructionCopy = (char	**)malloc(sizeof(EntityInstruction));
+
+		for(int i=0;i<EntityArraySize; i++)
+		{
+				EntityInstructionCopy = (char	**)realloc(EntityInstructionCopy, sizeof(char	*)*(i+1));
+				EntityInstructionCopy[i] = strdup(EntityInstruction[i]);
+				free(EntityArray[i]);
+				free(EntityInstruction[i]);
+		}
+		free(EntityArray);
+		free(EntityInstruction);
+
 		EntityArraySize = 0;
 		EntityArray = (SDL_Texture	**)malloc(sizeof(SDL_Texture	*));
+		EntityInstruction = (char	**)malloc(sizeof(char	*));
+
 		for(x = 0; x < EntityInstructionSize; x++)
 		{
-				if (EntityInstruction != NULL)
+				if (EntityInstructionCopy != NULL)
 				{
-						std::string i = std::string(EntityInstruction[x]);
-						printf("===>Entity Instruction: %s\n", i.c_str());
+						std::string i = std::string(EntityInstructionCopy[x]);
+						//printf("===>Entity Instruction: %s\n", i.c_str());
+						if (i.find("l") != std::string::npos)
+						{
+							std::size_t FirstX = i.find("x");
+							std::size_t FirstY = i.find("y");
+							std::size_t LastX = i.find("x", FirstX+1);
+							std::size_t LastY = i.find("y", FirstY+1);
+							std::string X1 = i.substr(FirstX+1, (FirstY-FirstX)-1);
+							std::string Y1 = i.substr(FirstY+1, (LastX - FirstY) -1);
+							std::string X2 = i.substr(LastX+1, (LastY - LastX)-1);
+							std::string Y2 = i.substr(LastY+1, (i.length() - LastY)-1);
+							//std::cout << "\t>Added Line X1: " + X1 + " Y1: " + Y1 + " X2: " + X2 + " Y2: " + Y2 + "\n";
+							float LineStart[2];
+							float LineEnd[2];
+							LineStart[0] = atof((char*)X1.c_str());
+							LineStart[1] = atof((char*)Y1.c_str());
+							LineEnd[0] = atof((char*)X2.c_str());
+							LineEnd[1] = atof((char*)Y2.c_str());
+							Line(LineStart, LineEnd);
+						}
 				}
 				else
 				{
@@ -206,6 +238,11 @@ void Engine::UpdateScreen()
 				}
 				//printf("Puting Texture: %d\n", x);
 		}
+		for(int i=0;i<EntityInstructionSize; i++)
+		{
+				free(EntityInstructionCopy[i]);
+		}
+		free(EntityInstructionCopy);
 	}
 	else
 	{
@@ -229,9 +266,12 @@ void Engine::UnInit()
 {
 	//g_slist_free(Entitys);
 	//g_slist_free(SelectedEntitys);
-	int i;
-	/*for(i=0;i<EntityArraySize; i++)
-  	free(EntityArray[i]);
-	free(EntityArray);*/
+	for(int i=0;i<EntityArraySize; i++)
+	{
+			free(EntityArray[i]);
+			free(EntityInstruction[i]);
+	}
+	free(EntityArray);
+	free(EntityInstruction);
 	delete config;
 }
