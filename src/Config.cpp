@@ -161,4 +161,9 @@ void Config::Color(char *color)
       tmp = ColorPurple;
       SDL_SetRenderDrawColor( renderer, tmp.r, tmp.g, tmp.b, tmp.a );
   }
+  if (strcmp(color, "Clear") == 0)
+  {
+      tmp = ColorClear;
+      SDL_SetRenderDrawColor( renderer, tmp.r, tmp.g, tmp.b, tmp.a );
+  }
 }

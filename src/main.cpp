@@ -46,7 +46,7 @@ int main (int argc, char** argv)
     );
 
     SDL_Renderer* renderer = NULL;
-    renderer =  SDL_CreateRenderer( window, 1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    renderer =  SDL_CreateRenderer( window, 1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_TARGETTEXTURE);
 
 		config = new Config(window, renderer);
 		engine = new Engine(window, renderer, config, MainWindowWidth, MainWindowWidth);

@@ -28,6 +28,7 @@ class Config                 // begin declaration of the class
 	SDL_Color ColorBlue = { 0, 0, 255, 255 };
 	SDL_Color ColorYellow = { 255, 255, 0, 255 };
 	SDL_Color ColorPurple = { 128, 0, 128, 255 };
+	SDL_Color ColorClear = { 0, 0, 0, 0 };
 
 	Config(SDL_Window* w, SDL_Renderer* r);     // constructor
 	void Color(char *color);

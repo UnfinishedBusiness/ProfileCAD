@@ -4,7 +4,7 @@ Engine::Engine(SDL_Window* w, SDL_Renderer* _r, Config *c, int _WindowWidth, int
 {
 	//memcpy(config->Filename, File, sizeof(*File));
 	EntityArraySize = 0;
-	EntityArray = (SDL_Texture	**)malloc(sizeof(SDL_Texture	**));
+	EntityArray = (SDL_Texture	**)malloc(sizeof(SDL_Texture	*));
 
 	ViewRatio = 0.05;
 	r = _r;
@@ -96,24 +96,23 @@ void Engine::Line(float Start[2], float End[2])
 	GetRealXY(screen_point1, Start);
 	GetRealXY(screen_point2, End);
 
-	config->Color((char*)"White");
-
-	SDL_Surface *surf = SDL_CreateRGBSurface(0, WindowWidth, WindowWidth, 32, rmask, gmask, bmask, amask);
-	if (surf == nullptr){
-		printf("Line ==> Error rendering text\n");
-		return;
-	}
-	SDL_Texture *texture = SDL_CreateTextureFromSurface(r, surf);
-	if (texture == nullptr){
-		printf("Line ==> Error creating surface\n");
-	}
+	SDL_Texture *texture = SDL_CreateTexture(r, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, WindowWidth, WindowHeight);
+	SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
+	SDL_SetTextureAlphaMod(texture, 255); //Make texture clear
 	SDL_SetRenderTarget( r, texture );
+	SDL_SetRenderDrawColor( r, 0, 0, 0, 0 ); //Make texture clear
+	SDL_RenderClear(r);
+	config->Color((char*)config->LineColor);
 	SDL_RenderDrawLine(r, screen_point1[0], screen_point1[1], screen_point2[0], screen_point2[1]);
+	SDL_RenderPresent( r );
 	SDL_SetRenderTarget( r, NULL );
 	//EntityArray[EntityArraySize] = (SDL_Texture	*)malloc(sizeof(SDL_Texture	*));
-	EntityArraySize++;
-	EntityArray = (SDL_Texture	**)realloc(EntityArray, sizeof(SDL_Texture	*)*(EntityArraySize+1));
+	if (EntityArraySize > 0)
+	{
+			EntityArray = (SDL_Texture	**)realloc(EntityArray, sizeof(SDL_Texture	*)*(EntityArraySize+1));
+	}
 	EntityArray[EntityArraySize] = texture;
+	EntityArraySize++;
 }
 const char* Engine::GetField(char* line, int num)
 {
@@ -175,19 +174,27 @@ void Engine::UpdateScreen()
 {
 	printf("EntityCount: %d\r", EntityArraySize);
 	int x;
-	if (EntityArraySize > 0)
+	for(x = 0; x < EntityArraySize; x++)
 	{
-				for(x = 0; x < EntityArraySize; x++)
-				{
-					SDL_Texture *t = EntityArray[x];
-					PutTexture(t, 0, 0);
-					//printf("Puting Texture: %d\n", x);
-				}
+			if (EntityArray[x] != NULL)
+			{
+				SDL_Texture *t = EntityArray[x];
+				PutTexture(t, 0, 0);
+			}
+			else
+			{
+				printf("\t====> Entity %d is corrupt\n", x);
+			}
+			//printf("Puting Texture: %d\n", x);
 	}
 }
 void Engine::UnInit()
 {
 	//g_slist_free(Entitys);
 	//g_slist_free(SelectedEntitys);
+	int i;
+	/*for(i=0;i<EntityArraySize; i++)
+  	free(EntityArray[i]);
+	free(EntityArray);*/
 	delete config;
 }

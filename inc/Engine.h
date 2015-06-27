@@ -53,7 +53,6 @@ class Engine                // begin declaration of the class
 	SDL_Texture* MakeText(char *Text, int Size);
 	SDL_Texture* MakeColorText(SDL_Color Color, char *Text, int Size);
 	void PutTexture(SDL_Texture* t, float x, float y);
-	void AddEntity(SDL_Texture	*t);
 	void UpdateScreen();
 	void UnInit();
 };
