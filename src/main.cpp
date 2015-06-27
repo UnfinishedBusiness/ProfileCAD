@@ -150,8 +150,8 @@ int main (int argc, char** argv)
 							{
 								std::string file = trim(inputText.substr(5, inputText.length()));
 								config->Filename = strdup(file.c_str());
-								engine->Open();
-								MsgBuff = ">Opened " + file;
+								//engine->Open();
+								//MsgBuff = ">Opened " + file;
 							}
 							if (inputText.find(":l") != std::string::npos)
 							{
@@ -199,24 +199,18 @@ int main (int argc, char** argv)
 					}
 					if (e.key.keysym.scancode == SDL_SCANCODE_S && SDL_GetModState() & KMOD_CTRL)
 					{
-							engine->Save();
+							//engine->Save();
 					}
 					if (e.key.keysym.scancode == SDL_SCANCODE_O && SDL_GetModState() & KMOD_CTRL)
 					{
-							engine->Open();
-					}
-					if (e.key.keysym.scancode == SDL_SCANCODE_TAB)
-					{
-
-						printf("====> Rerendering Screen!\n");
-
+							//engine->Open();
 					}
 					if (e.key.keysym.sym == SDLK_n && SDL_GetModState() & KMOD_CTRL)
 					{
-						config->Color((char *)"Black");
-						SDL_RenderClear(renderer);
-						engine->Trash();
-						printf("====> Deleted current changes!\n");
+						//config->Color((char *)"Black");
+						//SDL_RenderClear(renderer);
+						//engine->Trash();
+						//printf("====> Deleted current changes!\n");
 					}
 					if (e.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
 					{

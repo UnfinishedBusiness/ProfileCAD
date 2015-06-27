@@ -29,7 +29,6 @@ class Engine                // begin declaration of the class
 	int WindowHeight;
 	SDL_Window* window;
 	SDL_Renderer* r;
-	GSList *SelectedEntitys;
 	Config *config;
 
 	int EntityArraySize;
@@ -45,7 +44,6 @@ class Engine                // begin declaration of the class
 	float GetY(float in[2]); //GetXY Wrapper Function
 	void GetMousePos(float out[2]); //Returns Virtual Cordinant plane
 	void Line(float Start[2], float End[2]);
-	void Trash();
 	float ZoomIn();
 	float ZoomOut();
 	void PanIncX(float p);

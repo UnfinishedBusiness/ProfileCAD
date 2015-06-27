@@ -6,9 +6,6 @@ Engine::Engine(SDL_Window* w, SDL_Renderer* _r, Config *c, int _WindowWidth, int
 	EntityArraySize = 0;
 	EntityArray = (SDL_Texture	**)malloc(sizeof(SDL_Texture	**));
 
-	Entitys = NULL;
-	SelectedEntitys = NULL;
-
 	ViewRatio = 0.05;
 	r = _r;
 	window = w;
@@ -91,109 +88,8 @@ float Engine::GetY(float in[2])
 	GetXY(out, in);
 	return out[1];
 }
-void Engine::Trash()
-{
-	while (Entitys != NULL)
-	{
-		Entitys = g_slist_next(Entitys);
-	}
-}
-void Engine::Save()
-{
-	FILE *fp;
-	fp = fopen(config->Filename, "w");
-	if (fp == NULL)
-	{
-		printf("!!!! ==> Can't write %s\n", config->Filename);
-	}
-	else
-	{
-		GSList *tmp = Entitys;
-		char *line;
-		while (tmp != NULL)
-	  {
-			line = (char*) tmp->data;
-	    printf("===> Saving %s\n", line);
-			fprintf(fp, "%s\n", line);
-	    tmp = g_slist_next(tmp);
-		}
-		fclose(fp);
-	}
-}
-void Engine::Pull()
-{
-	/*GSList *tmp = Entitys;
-	char *line;
-	while (tmp != NULL)
-  {
-		line = (char*) tmp->data;
-    //printf("===> Pulling %s\n", line);
-    tmp = g_slist_next(tmp);
-		//line[strlen(line) - 1] = '\0';
-		if (strcmp(GetField(line, 1), "Line") == 0)
-		{
-			float Start[2];
-			float End[2];
-			Start[0] = atof(GetField(line, 2));
-			Start[1] = atof(GetField(line, 3));
-			End[0] = atof(GetField(line, 4));
-			End[1] = atof(GetField(line, 5));
-			config->LineColor = (char *)GetField(line, 6);
-			//printf("Pulling ===> Line (%lf, %lf) ---- (%lf, %lf) %s\n", Start[0], Start[1], End[0], End[1], config->LineColor);
-
-			float screen_point1[2];
-			float screen_point2[2];
-
-			GetRealXY(screen_point1, Start);
-			GetRealXY(screen_point2, End);
-
-			config->Color(config->LineColor);
-			SDL_RenderDrawLine(r, screen_point1[0], screen_point1[1], screen_point2[0], screen_point2[1]);
-
-		}
-  }
-	g_slist_free (tmp);*/
-	int x;
-	if (EntityArraySize > 0)
-	{
-				SDL_Texture *t;
-				for(x = 0; x < EntityArraySize; x++)
-				{
-					t = EntityArray[x];
-					PutTexture(t, 0, 0);
-					//printf("Puting Texture: %d\n", x);
-				}
-	}
-}
-void Engine::Open()
-{
-	Trash();
-
-	char line[2048];
-	FILE *fp;
-	fp = fopen(config->Filename, "r");
-	if (fp == NULL)
-	{
-		printf("!!!! ==> Can't open %s\n", config->Filename);
-	}
-	else
-	{
-    while ( fgets ( line, sizeof(line), fp ) != NULL )
-    {
-			line[strlen(line) - 1] = '\0';
-			Push(line);
-    }
-		//Pull();
-		fclose(fp);
-	}
-}
 void Engine::Line(float Start[2], float End[2])
 {
-
-	char str[2048];
-	sprintf(str, "Line:%lf:%lf:%lf:%lf:%s", Start[0], Start[1], End[0], End[1], config->LineColor);
-	//Push(str);
-
 	float screen_point1[2];
 	float screen_point2[2];
 
@@ -214,11 +110,10 @@ void Engine::Line(float Start[2], float End[2])
 	SDL_SetRenderTarget( r, texture );
 	SDL_RenderDrawLine(r, screen_point1[0], screen_point1[1], screen_point2[0], screen_point2[1]);
 	SDL_SetRenderTarget( r, NULL );
+	//EntityArray[EntityArraySize] = (SDL_Texture	*)malloc(sizeof(SDL_Texture	*));
 	EntityArraySize++;
-	EntityArray[EntityArraySize] = (SDL_Texture	*)malloc(sizeof(SDL_Texture	*));
+	EntityArray = (SDL_Texture	**)realloc(EntityArray, sizeof(SDL_Texture	*)*(EntityArraySize+1));
 	EntityArray[EntityArraySize] = texture;
-
-
 }
 const char* Engine::GetField(char* line, int num)
 {
@@ -282,13 +177,10 @@ void Engine::UpdateScreen()
 	int x;
 	if (EntityArraySize > 0)
 	{
-				SDL_Texture *t;
 				for(x = 0; x < EntityArraySize; x++)
 				{
-					t = (SDL_Texture *)malloc(sizeof(EntityArray[x]));
-					memcpy(t, EntityArray[x], sizeof(EntityArray[x]));
+					SDL_Texture *t = EntityArray[x];
 					PutTexture(t, 0, 0);
-					free(t);
 					//printf("Puting Texture: %d\n", x);
 				}
 	}
