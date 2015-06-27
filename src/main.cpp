@@ -126,22 +126,22 @@ int main (int argc, char** argv)
           if (e.key.keysym.scancode == SDL_SCANCODE_UP)
 					{
 							engine->PanIncY(-10);
-							engine->Pull();
+
 					}
 					if (e.key.keysym.scancode == SDL_SCANCODE_DOWN)
 					{
 							engine->PanIncY(+10);
-							engine->Pull();
+
 					}
 					if (e.key.keysym.scancode == SDL_SCANCODE_LEFT)
 					{
 							engine->PanIncX(-10);
-							engine->Pull();
+
 					}
 					if (e.key.keysym.scancode == SDL_SCANCODE_RIGHT)
 					{
 							engine->PanIncX(+10);
-							engine->Pull();
+
 					}
           if (e.key.keysym.scancode == SDL_SCANCODE_RETURN)
 					{
@@ -209,13 +209,12 @@ int main (int argc, char** argv)
 					{
 
 						printf("====> Rerendering Screen!\n");
-						engine->Pull();
+
 					}
 					if (e.key.keysym.sym == SDLK_n && SDL_GetModState() & KMOD_CTRL)
 					{
 						config->Color((char *)"Black");
 						SDL_RenderClear(renderer);
-						SDL_RenderPresent( renderer );
 						engine->Trash();
 						printf("====> Deleted current changes!\n");
 					}
@@ -263,13 +262,14 @@ int main (int argc, char** argv)
 				}
 			//printf("Physical %s key acting as %s key\n", SDL_GetScancodeName(e.key.keysym.scancode), SDL_GetKeyName(e.key.keysym.sym));
 		}
-    engine->Pull();
+    //
+    engine->UpdateScreen();
     SDL_RenderPresent( renderer );
     usleep(400);
       //SDL_RenderPresent( renderer );
 			//fflush(stdout);
 		}
-    config->SaveConfig();
+    //config->SaveConfig();
     engine->UnInit();
 		delete engine;
 		SDL_RenderClear(renderer);

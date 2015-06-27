@@ -3,6 +3,9 @@
 Engine::Engine(SDL_Window* w, SDL_Renderer* _r, Config *c, int _WindowWidth, int _WindowHeight)
 {
 	//memcpy(config->Filename, File, sizeof(*File));
+	EntityArraySize = 0;
+	EntityArray = (SDL_Texture	**)malloc(sizeof(SDL_Texture	**));
+
 	Entitys = NULL;
 	SelectedEntitys = NULL;
 
@@ -117,14 +120,9 @@ void Engine::Save()
 		fclose(fp);
 	}
 }
-void Engine::Push(char *line)
-{
-	gchar* element = g_strdup(line);
-	Entitys = g_slist_append(Entitys, element);
-}
 void Engine::Pull()
 {
-	GSList *tmp = Entitys;
+	/*GSList *tmp = Entitys;
 	char *line;
 	while (tmp != NULL)
   {
@@ -151,10 +149,21 @@ void Engine::Pull()
 
 			config->Color(config->LineColor);
 			SDL_RenderDrawLine(r, screen_point1[0], screen_point1[1], screen_point2[0], screen_point2[1]);
-			UpdateScreen();
+
 		}
   }
-	g_slist_free (tmp);
+	g_slist_free (tmp);*/
+	int x;
+	if (EntityArraySize > 0)
+	{
+				SDL_Texture *t;
+				for(x = 0; x < EntityArraySize; x++)
+				{
+					t = EntityArray[x];
+					PutTexture(t, 0, 0);
+					//printf("Puting Texture: %d\n", x);
+				}
+	}
 }
 void Engine::Open()
 {
@@ -183,7 +192,7 @@ void Engine::Line(float Start[2], float End[2])
 
 	char str[2048];
 	sprintf(str, "Line:%lf:%lf:%lf:%lf:%s", Start[0], Start[1], End[0], End[1], config->LineColor);
-	Push(str);
+	//Push(str);
 
 	float screen_point1[2];
 	float screen_point2[2];
@@ -192,8 +201,24 @@ void Engine::Line(float Start[2], float End[2])
 	GetRealXY(screen_point2, End);
 
 	config->Color((char*)"White");
+
+	SDL_Surface *surf = SDL_CreateRGBSurface(0, WindowWidth, WindowWidth, 32, rmask, gmask, bmask, amask);
+	if (surf == nullptr){
+		printf("Line ==> Error rendering text\n");
+		return;
+	}
+	SDL_Texture *texture = SDL_CreateTextureFromSurface(r, surf);
+	if (texture == nullptr){
+		printf("Line ==> Error creating surface\n");
+	}
+	SDL_SetRenderTarget( r, texture );
 	SDL_RenderDrawLine(r, screen_point1[0], screen_point1[1], screen_point2[0], screen_point2[1]);
-	UpdateScreen();
+	SDL_SetRenderTarget( r, NULL );
+	EntityArraySize++;
+	EntityArray[EntityArraySize] = (SDL_Texture	*)malloc(sizeof(SDL_Texture	*));
+	EntityArray[EntityArraySize] = texture;
+
+
 }
 const char* Engine::GetField(char* line, int num)
 {
@@ -249,15 +274,28 @@ void Engine::PutTexture(SDL_Texture *t, float x, float y)
 	texture_rect.w = w; //the width of the texture
 	texture_rect.h = h; //the height of the texture
 	SDL_RenderCopy(r, t, NULL, &texture_rect);
-	UpdateScreen();
+
 }
 void Engine::UpdateScreen()
 {
-	//SDL_RenderPresent( r );
+	printf("EntityCount: %d\r", EntityArraySize);
+	int x;
+	if (EntityArraySize > 0)
+	{
+				SDL_Texture *t;
+				for(x = 0; x < EntityArraySize; x++)
+				{
+					t = (SDL_Texture *)malloc(sizeof(EntityArray[x]));
+					memcpy(t, EntityArray[x], sizeof(EntityArray[x]));
+					PutTexture(t, 0, 0);
+					free(t);
+					//printf("Puting Texture: %d\n", x);
+				}
+	}
 }
 void Engine::UnInit()
 {
-	g_slist_free(Entitys);
-	g_slist_free(SelectedEntitys);
+	//g_slist_free(Entitys);
+	//g_slist_free(SelectedEntitys);
 	delete config;
 }

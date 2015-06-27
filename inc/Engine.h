@@ -9,6 +9,18 @@
 
 class Engine                // begin declaration of the class
 {
+	private:
+	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+	    Uint32 rmask = 0xff000000;
+	    Uint32 gmask = 0x00ff0000;
+	    Uint32 bmask = 0x0000ff00;
+	    Uint32 amask = 0x000000ff;
+	#else
+	    Uint32 rmask = 0x000000ff;
+	    Uint32 gmask = 0x0000ff00;
+	    Uint32 bmask = 0x00ff0000;
+	    Uint32 amask = 0xff000000;
+	#endif
 	public:                    // begin public section
 	float OriginOffsetX;
 	float OriginOffsetY;
@@ -17,9 +29,11 @@ class Engine                // begin declaration of the class
 	int WindowHeight;
 	SDL_Window* window;
 	SDL_Renderer* r;
-	GSList *Entitys;
 	GSList *SelectedEntitys;
 	Config *config;
+
+	int EntityArraySize;
+	SDL_Texture	**EntityArray;
 
 	Engine(SDL_Window* w, SDL_Renderer* _r, Config *c, int _WindowWidth, int _WindowHeight);     // constructor
 	const char* GetField(char* line, int num);
@@ -31,10 +45,6 @@ class Engine                // begin declaration of the class
 	float GetY(float in[2]); //GetXY Wrapper Function
 	void GetMousePos(float out[2]); //Returns Virtual Cordinant plane
 	void Line(float Start[2], float End[2]);
-	void Push(char *line); //Pushes Entitys to memmory
-	void Pull(); //Pulls entitys from memory
-	void Save(); //Copys entitys from memory to file
-	void Open(); //Copys entitys from file to memory and updates screen
 	void Trash();
 	float ZoomIn();
 	float ZoomOut();
@@ -45,6 +55,7 @@ class Engine                // begin declaration of the class
 	SDL_Texture* MakeText(char *Text, int Size);
 	SDL_Texture* MakeColorText(SDL_Color Color, char *Text, int Size);
 	void PutTexture(SDL_Texture* t, float x, float y);
+	void AddEntity(SDL_Texture	*t);
 	void UpdateScreen();
 	void UnInit();
 };
