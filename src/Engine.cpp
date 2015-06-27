@@ -118,6 +118,7 @@ void Engine::Push(char *line)
 {
 	gchar* element = g_strdup(line);
 	Entitys = g_slist_append(Entitys, element);
+	g_free(element);
 }
 void Engine::Pull()
 {
@@ -188,7 +189,7 @@ void Engine::Line(float Start[2], float End[2])
 	GetRealXY(screen_point1, Start);
 	GetRealXY(screen_point2, End);
 
-	config->Color("White");
+	config->Color((char*)"White");
 	SDL_RenderDrawLine(r, screen_point1[0], screen_point1[1], screen_point2[0], screen_point2[1]);
 	UpdateScreen();
 }
@@ -196,18 +197,19 @@ const char* Engine::GetField(char* line, int num)
 {
     const char* tok;
 		char *str = strdup(line);
-    for (tok = strtok(str, ":");
-            tok && *tok;
-            tok = strtok(NULL, ":\n"))
+    for (tok = strtok(str, ":"); tok && *tok; tok = strtok(NULL, ":\n"))
     {
         if (!--num)
-            return tok;
+				{
+					free(str);
+					return tok;
+				}
     }
+		free(str);
     return "";
 }
 SDL_Texture* Engine::MakeText(char *Text, int Size)
 {
-
 	return MakeColorText(config->ColorWhite, Text, Size);
 }
 SDL_Texture* Engine::MakeColorText(SDL_Color Color, char *Text, int Size)
@@ -255,4 +257,5 @@ void Engine::UnInit()
 {
 	g_slist_free(Entitys);
 	g_slist_free(SelectedEntitys);
+	delete config;
 }

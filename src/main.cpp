@@ -43,14 +43,12 @@ int main (int argc, char** argv)
         MainWindowHeight,
         SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE
     );
-    //SDL_SetWindowSize(window, MainWindowWidth, MainWindowHeight);
-    // Setup renderer
+
     SDL_Renderer* renderer = NULL;
     renderer =  SDL_CreateRenderer( window, 1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     engine = new Engine(renderer, MainWindowWidth, MainWindowWidth);
     Config *config = new Config(renderer);
 
-		//engine->Open();
 
     SDL_Event e;
 		bool quit = false;
@@ -203,7 +201,7 @@ int main (int argc, char** argv)
 					}
 					if (e.key.keysym.sym == SDLK_n && SDL_GetModState() & KMOD_CTRL)
 					{
-						config->Color("Black");
+						config->Color((char *)"Black");
 						SDL_RenderClear(renderer);
 						SDL_RenderPresent( renderer );
 						engine->Trash();
@@ -261,6 +259,8 @@ int main (int argc, char** argv)
 		}
     config->SaveConfig();
     engine->UnInit();
+		delete config;
+		delete engine;
 		SDL_RenderClear(renderer);
 		SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);

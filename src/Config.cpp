@@ -42,9 +42,10 @@ void Config::ParseConfig()
       if (line.find(key) != std::string::npos)
       {
           start = line.find(key);
-          stop = line.find("\n");
-          data = line.substr(start+key.length(), (stop - start));
-          BackgroundColor = (char *)data.c_str();
+          stop = line.find('\n');
+          data = line.substr(start+key.length()+2, (stop - start));
+          data = trim(data);
+          BackgroundColor = strdup(data.c_str());
           printf("=> Set Background to %s\n", BackgroundColor);
       }
     }
