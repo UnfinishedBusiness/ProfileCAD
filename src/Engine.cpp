@@ -118,7 +118,6 @@ void Engine::Push(char *line)
 {
 	gchar* element = g_strdup(line);
 	Entitys = g_slist_append(Entitys, element);
-	g_free(element);
 }
 void Engine::Pull()
 {
