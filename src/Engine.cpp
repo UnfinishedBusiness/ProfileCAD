@@ -5,6 +5,7 @@ Engine::Engine(SDL_Window* w, SDL_Renderer* _r, Config *c, int _WindowWidth, int
 	//memcpy(config->Filename, File, sizeof(*File));
 	EntityArraySize = 0;
 	EntityArray = (SDL_Texture	**)malloc(sizeof(SDL_Texture	*));
+	EntityInstruction = (char	**)malloc(sizeof(char	*));
 
 	ViewRatio = 0.05;
 	r = _r;
@@ -47,19 +48,23 @@ void Engine::PanXY(float pos[2])
 void Engine::PanIncX(float p)
 {
 	OriginOffsetX = OriginOffsetX + p;
+	EntityRedraw = true;
 }
 void Engine::PanIncY(float p)
 {
 	OriginOffsetY = OriginOffsetY + p;
+	EntityRedraw = true;
 }
 float Engine::ZoomIn()
 {
 	ViewRatio = ViewRatio - .001;
+	EntityRedraw = true;
 	return ViewRatio;
 }
 float Engine::ZoomOut()
 {
 	ViewRatio = ViewRatio + .001;
+	EntityRedraw = true;
 	return ViewRatio;
 }
 void Engine::GetDistance(float out, float p1[2], float p2[2])
@@ -110,8 +115,13 @@ void Engine::Line(float Start[2], float End[2])
 	if (EntityArraySize > 0)
 	{
 			EntityArray = (SDL_Texture	**)realloc(EntityArray, sizeof(SDL_Texture	*)*(EntityArraySize+1));
+			EntityInstruction = (char	**)realloc(EntityInstruction, sizeof(char	*)*(EntityArraySize+1));
 	}
 	EntityArray[EntityArraySize] = texture;
+
+	std::string Instruction = "lx" + std::to_string(Start[0]) + "y" + std::to_string(Start[1]) + "x" + std::to_string(End[0]) + "y" + std::to_string(End[1]);
+	EntityInstruction[EntityArraySize] = strdup(Instruction.c_str());
+	//printf("Added Instruction: %s\n", EntityInstruction[EntityArraySize]);
 	EntityArraySize++;
 }
 const char* Engine::GetField(char* line, int num)
@@ -172,20 +182,47 @@ void Engine::PutTexture(SDL_Texture *t, float x, float y)
 }
 void Engine::UpdateScreen()
 {
-	printf("EntityCount: %d\r", EntityArraySize);
+	//printf("EntityCount: %d\r", EntityArraySize);
+	//SDL_ScaleSurface(SDL_Surface* Surface, Uint16 Width, Uint16 Height)
 	int x;
-	for(x = 0; x < EntityArraySize; x++)
+	bool t = false;
+	if (t == true)
 	{
-			if (EntityArray[x] != NULL)
-			{
-				SDL_Texture *t = EntityArray[x];
-				PutTexture(t, 0, 0);
-			}
-			else
-			{
-				printf("\t====> Entity %d is corrupt\n", x);
-			}
-			//printf("Puting Texture: %d\n", x);
+		EntityRedraw = false;
+		free(EntityArray);
+		int EntityInstructionSize = EntityArraySize; //Make copy because when drawing depent on EntityArraySize
+		EntityArraySize = 0;
+		EntityArray = (SDL_Texture	**)malloc(sizeof(SDL_Texture	*));
+		for(x = 0; x < EntityInstructionSize; x++)
+		{
+				if (EntityInstruction != NULL)
+				{
+						std::string i = std::string(EntityInstruction[x]);
+						printf("===>Entity Instruction: %s\n", i.c_str());
+				}
+				else
+				{
+					printf("\t====> Entity %d is corrupt\n", x);
+				}
+				//printf("Puting Texture: %d\n", x);
+		}
+	}
+	else
+	{
+		for(x = 0; x < EntityArraySize; x++)
+		{
+				if (EntityArray[x] != NULL)
+				{
+					SDL_Texture *t = EntityArray[x];
+
+					PutTexture(t, 0, 0);
+				}
+				else
+				{
+					printf("\t====> Entity %d is corrupt\n", x);
+				}
+				//printf("Puting Texture: %d\n", x);
+		}
 	}
 }
 void Engine::UnInit()

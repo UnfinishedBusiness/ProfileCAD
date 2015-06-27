@@ -33,6 +33,8 @@ class Engine                // begin declaration of the class
 
 	int EntityArraySize;
 	SDL_Texture	**EntityArray;
+	char **EntityInstruction;
+	bool EntityRedraw = false;
 
 	Engine(SDL_Window* w, SDL_Renderer* _r, Config *c, int _WindowWidth, int _WindowHeight);     // constructor
 	const char* GetField(char* line, int num);
