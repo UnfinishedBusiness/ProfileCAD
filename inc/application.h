@@ -15,6 +15,7 @@
 #include <time.h>
 #include <ctype.h>
 #include <pwd.h>
+#include <algorithm>
 
 #define WindowTitle "ProfileCAD"
 #define Version "1"
