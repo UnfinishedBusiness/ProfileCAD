@@ -118,7 +118,6 @@ void Engine::Line(float Start[2], float End[2])
 			EntityInstruction = (char	**)realloc(EntityInstruction, sizeof(char	*)*(EntityArraySize+1));
 	}
 	EntityArray[EntityArraySize] = texture;
-
 	std::string Instruction = "lx" + std::to_string(Start[0]) + "y" + std::to_string(Start[1]) + "x" + std::to_string(End[0]) + "y" + std::to_string(End[1]);
 	EntityInstruction[EntityArraySize] = strdup(Instruction.c_str());
 	//printf("Added Instruction: %s\n", EntityInstruction[EntityArraySize]);
@@ -178,7 +177,6 @@ void Engine::PutTexture(SDL_Texture *t, float x, float y)
 	texture_rect.w = w; //the width of the texture
 	texture_rect.h = h; //the height of the texture
 	SDL_RenderCopy(r, t, NULL, &texture_rect);
-
 }
 void Engine::UpdateScreen()
 {
@@ -196,7 +194,7 @@ void Engine::UpdateScreen()
 		{
 				EntityInstructionCopy = (char	**)realloc(EntityInstructionCopy, sizeof(char	*)*(i+1));
 				EntityInstructionCopy[i] = strdup(EntityInstruction[i]);
-				free(EntityArray[i]);
+				SDL_DestroyTexture(EntityArray[i]);
 				free(EntityInstruction[i]);
 		}
 		free(EntityArray);
@@ -251,14 +249,12 @@ void Engine::UpdateScreen()
 				if (EntityArray[x] != NULL)
 				{
 					SDL_Texture *t = EntityArray[x];
-
 					PutTexture(t, 0, 0);
 				}
 				else
 				{
 					printf("\t====> Entity %d is corrupt\n", x);
 				}
-				//printf("Puting Texture: %d\n", x);
 		}
 	}
 }
@@ -268,7 +264,7 @@ void Engine::UnInit()
 	//g_slist_free(SelectedEntitys);
 	for(int i=0;i<EntityArraySize; i++)
 	{
-			free(EntityArray[i]);
+			SDL_DestroyTexture(EntityArray[i]);
 			free(EntityInstruction[i]);
 	}
 	free(EntityArray);
