@@ -73,7 +73,8 @@ Config.o: src//Config.cpp inc/Config.h inc/application.h \
   /usr/local/Cellar/glib/2.42.2/include/glib-2.0/glib/deprecated/gcompletion.h \
   /usr/local/Cellar/glib/2.42.2/include/glib-2.0/glib/deprecated/gmain.h \
   /usr/local/Cellar/glib/2.42.2/include/glib-2.0/glib/deprecated/grel.h \
-  /usr/local/Cellar/glib/2.42.2/include/glib-2.0/glib/deprecated/gthread.h
+  /usr/local/Cellar/glib/2.42.2/include/glib-2.0/glib/deprecated/gthread.h \
+  inc/Engine.h
 Engine.o: src//Engine.cpp inc/Engine.h inc/application.h \
   /usr/local/Cellar/glib/2.42.2/include/glib-2.0/glib.h \
   /usr/local/Cellar/glib/2.42.2/include/glib-2.0/glib/galloca.h \

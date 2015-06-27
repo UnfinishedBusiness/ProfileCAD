@@ -22,6 +22,7 @@ char ResizeBuff[100];
 std::string MsgBuff = "";
 std::string inputText = "";
 Engine *engine=NULL;
+Config *config=NULL;
 time_t MsgTimer=NULL;
 int MsgDuration = 1500; //ms
 double timer_diff_ms;
@@ -46,9 +47,9 @@ int main (int argc, char** argv)
 
     SDL_Renderer* renderer = NULL;
     renderer =  SDL_CreateRenderer( window, 1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    engine = new Engine(renderer, MainWindowWidth, MainWindowWidth);
-    Config *config = new Config(renderer);
 
+		engine = new Engine(renderer, MainWindowWidth, MainWindowWidth);
+		config = new Config(renderer);
 
     SDL_Event e;
 		bool quit = false;
@@ -158,7 +159,7 @@ int main (int argc, char** argv)
 								std::string Y2 = inputText.substr(LastY+1, (inputText.length() - LastY)-1);
 
 
-								if (true)
+								if (X1 != inputText && X2 != inputText && Y1 != inputText && Y2 != inputText)
 								{
 									LineStart[0] = atof((char*)X1.c_str());
 									LineStart[1] = atof((char*)Y1.c_str());
@@ -167,9 +168,13 @@ int main (int argc, char** argv)
 									engine->Line(LineStart, LineEnd);
 									MsgBuff = ">Added Line X1: " + X1 + " Y1: " + Y1 + " X2: " + X2 + " Y2: " + Y2;
 								}
-								else if (true)
+								else if (X2 == inputText && Y2 == inputText)
 								{
-
+									LineStart[0] = atof((char*)X1.c_str());
+									LineStart[1] = atof((char*)Y1.c_str());
+									LineClickStep = 1;
+									ActiveTool = LineTool;
+									MsgBuff = ">Added Line X1: " + X1 + " Y1: " + Y1 + " => Click at Endpoint";
 								}
 								else if (ActiveTool == NoTool)
 								{

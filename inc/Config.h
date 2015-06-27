@@ -3,7 +3,6 @@
 #include "application.h"
 
 
-
 class Config                 // begin declaration of the class
 {
 	public:                    // begin public section
@@ -16,6 +15,7 @@ class Config                 // begin declaration of the class
 	char *Filename;
 	SDL_Renderer* renderer;
 	char *Font;
+	//Engine *Engine;
 
 	char *LineColor;
 	SDL_Color ColorWhite = { 255, 255, 255, 255 };
