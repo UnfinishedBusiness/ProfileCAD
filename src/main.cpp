@@ -55,22 +55,9 @@ int main (int argc, char** argv)
 		bool quit = false;
 		while (!quit)
 		{
-      config->Color(config->BackgroundColor); //Background color
-      SDL_RenderClear(renderer);
       engine->GetMousePos(MousePos);
       engine->GetRealXY(RealMousePos, MousePos);
       sprintf(XYBuff, "X: %lf, Y: %lf, rX: %lf, rY: %lf", MousePos[0], MousePos[1], RealMousePos[0], RealMousePos[1]);
-      engine->PutTexture(engine->MakeText(XYBuff, 8), 10, 10);
-			timer_diff_ms = difftime(time(0), MsgTimer) * 1000.;
-			//if (timer_diff_ms < MsgDuration)
-      if (MsgBuff != "")
-			{
-				engine->PutTexture(engine->MakeColorText(config->ColorGreen, (char *)MsgBuff.c_str(), 8), 10, (engine->WindowHeight - 25));
-			}
-      if (inputText != "")
-      {
-        engine->PutTexture(engine->MakeText((char *)inputText.c_str(), 12), 10, (engine->WindowHeight - 50));
-      }
 
       SDL_StartTextInput();
       //SDL_StopTextInput();
@@ -271,10 +258,24 @@ int main (int argc, char** argv)
 				}
 			//printf("Physical %s key acting as %s key\n", SDL_GetScancodeName(e.key.keysym.scancode), SDL_GetKeyName(e.key.keysym.sym));
 		}
-    //
+    //Begin Render -- quick in, quick out!
+    config->Color(config->BackgroundColor); //Background color
+    SDL_RenderClear(renderer);
+    engine->PutTexture(engine->MakeText(XYBuff, 8), 10, 10);
+    timer_diff_ms = difftime(time(0), MsgTimer) * 1000.;
+    //if (timer_diff_ms < MsgDuration)
+    if (MsgBuff != "")
+    {
+      engine->PutTexture(engine->MakeColorText(config->ColorGreen, (char *)MsgBuff.c_str(), 8), 10, (engine->WindowHeight - 25));
+    }
+    if (inputText != "")
+    {
+      engine->PutTexture(engine->MakeText((char *)inputText.c_str(), 12), 10, (engine->WindowHeight - 50));
+    }
     engine->UpdateScreen();
     SDL_RenderPresent( renderer );
-    usleep(100);
+    //usleep(10);
+    //End Render
       //SDL_RenderPresent( renderer );
 			//fflush(stdout);
 		}

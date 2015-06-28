@@ -2,9 +2,6 @@
 #define _Config_
 #include "application.h"
 
-//#define _Engine_
-//#include "Engine.h"
-
 class Config                 // begin declaration of the class
 {
 	public:                    // begin public section
