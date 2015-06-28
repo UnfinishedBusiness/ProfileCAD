@@ -46,6 +46,7 @@ int main (int argc, char** argv)
     );
 
     SDL_Renderer* renderer = NULL;
+    SDL_Renderer* screen = NULL;
     renderer =  SDL_CreateRenderer( window, 1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_TARGETTEXTURE);
 
 		config = new Config(window, renderer);

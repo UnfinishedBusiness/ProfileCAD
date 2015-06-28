@@ -2,10 +2,8 @@
 
 Engine::Engine(SDL_Window* w, SDL_Renderer* _r, Config *c, int _WindowWidth, int _WindowHeight)
 {
-	//memcpy(config->Filename, File, sizeof(*File));
-	EntityArraySize = 0;
-	EntityArray = (SDL_Texture	**)malloc(sizeof(SDL_Texture	*)+1);
-	EntityInstruction = (char	**)malloc(sizeof(char	*)+1);
+	InitEntityArray();
+	InitInstructionArray();
 
 	ViewRatio = 0.05;
 	r = _r;
@@ -17,6 +15,54 @@ Engine::Engine(SDL_Window* w, SDL_Renderer* _r, Config *c, int _WindowWidth, int
 	config = c;
 	config->UpdateWindowSize(WindowWidth, WindowHeight);
 	//printf("==> Writing to %s\n", config->Filename);
+}
+void Engine::InitEntityArray()
+{
+	EntityArraySize = 0;
+	EntityArray = (SDL_Texture	**)malloc(sizeof(SDL_Texture	*)+1);
+}
+void Engine::InitInstructionArray()
+{
+	EntityInstructionSize = 0;
+	EntityInstruction = (char	**)malloc(sizeof(char	*)+1);
+}
+void Engine::AppendEntityArray(SDL_Texture	*t)
+{
+	if (EntityArraySize > 0) //Zero has already been allocated by InitInstructionArray()
+	{
+			EntityArray = (SDL_Texture	**)realloc(EntityArray, sizeof(SDL_Texture	*)*(EntityArraySize+1));
+	}
+	//printf("AppendEntityArray->sizeof(t) - %d\n", sizeof(t));
+	EntityArray[EntityArraySize] = (SDL_Texture	*)malloc(sizeof(t)+1);
+	EntityArray[EntityArraySize] = t;
+	EntityArraySize++;
+}
+void Engine::AppendInstructionArray(char *i)
+{
+	if (EntityInstructionSize > 0) //Zero has already been allocated by InitInstructionArray()
+	{
+			EntityInstruction = (char	**)realloc(EntityInstruction, sizeof(char *)*(EntityInstructionSize+1));
+	}
+	//printf("AppendInstructionArray->strlen(t) - %d\n", strlen(i));
+	//EntityInstruction[EntityInstructionSize] = (char	*)malloc(strlen(t)+1);
+	EntityInstruction[EntityInstructionSize] = strdup(i);
+	EntityInstructionSize++;
+}
+void Engine::FreeEntityArray()
+{
+	for(int i=0;i<EntityArraySize; i++)
+	{
+			SDL_DestroyTexture(EntityArray[i]);
+	}
+	free(EntityArray);
+}
+void Engine::FreeInstructionArray()
+{
+	for(int i=0;i<EntityArraySize; i++)
+	{
+			free(EntityInstruction[i]);
+	}
+	free(EntityInstruction);
 }
 void Engine::UpdateWindowSize(int w, int h)
 {
@@ -106,24 +152,18 @@ void Engine::Line(float Start[2], float End[2])
 	SDL_SetTextureAlphaMod(texture, 255); //Make texture clear
 	SDL_SetRenderTarget( r, texture );
 	SDL_SetRenderDrawColor( r, 0, 0, 0, 0 ); //Make texture clear
-	SDL_RenderClear(r);
+	//SDL_RenderClear(r);
 	config->Color((char*)config->LineColor);
 	SDL_RenderDrawLine(r, screen_point1[0], screen_point1[1], screen_point2[0], screen_point2[1]);
 	SDL_RenderPresent( r );
 	SDL_SetRenderTarget( r, NULL );
-	//EntityArray[EntityArraySize] = (SDL_Texture	*)malloc(sizeof(SDL_Texture	*));
-	if (EntityArraySize > 0)
+
+	AppendEntityArray(texture);
+	if (EntityRedrawWithoutNewInstructions == false)
 	{
-			EntityArray = (SDL_Texture	**)realloc(EntityArray, sizeof(SDL_Texture	*)*(EntityArraySize+1));
-			EntityInstruction = (char	**)realloc(EntityInstruction, sizeof(char	*)*(EntityArraySize+1));
+		std::string Instruction = "lx" + std::to_string(Start[0]) + "y" + std::to_string(Start[1]) + "x" + std::to_string(End[0]) + "y" + std::to_string(End[1]);
+		AppendInstructionArray((char *)Instruction.c_str());
 	}
-	EntityArray[EntityArraySize] = texture;
-	std::string Instruction = "lx" + std::to_string(Start[0]) + "y" + std::to_string(Start[1]) + "x" + std::to_string(End[0]) + "y" + std::to_string(End[1]);
-	//EntityInstruction[EntityArraySize] = strdup(Instruction.c_str());
-	EntityInstruction[EntityArraySize] = (char	*)malloc(strlen(Instruction.c_str())+1);
-	memcpy(EntityInstruction[EntityArraySize], Instruction.c_str(), strlen(Instruction.c_str()));
-	//printf("Added Instruction: %s\n", EntityInstruction[EntityArraySize]);
-	EntityArraySize++;
 }
 void Engine::ArcByCenter(float x, float y, float Radius)
 {
@@ -139,7 +179,7 @@ void Engine::ArcByCenter(float x, float y, float Radius)
 	SDL_SetTextureAlphaMod(texture, 255); //Make texture clear
 	SDL_SetRenderTarget( r, texture );
 	SDL_SetRenderDrawColor( r, 0, 0, 0, 0 ); //Make texture clear
-	SDL_RenderClear(r);
+	//SDL_RenderClear(r);
 	config->Color((char*)config->LineColor);
 
 	for(float angle=0.0f; angle<= two_pi;angle+=angle_inc)
@@ -155,18 +195,13 @@ void Engine::ArcByCenter(float x, float y, float Radius)
 	}
 	SDL_RenderPresent( r );
 	SDL_SetRenderTarget( r, NULL );
-	EntityArray[EntityArraySize] = (SDL_Texture	*)malloc(sizeof(SDL_Texture	*)+1);
-	if (EntityArraySize > 0)
+
+	AppendEntityArray(texture);
+	if (EntityRedrawWithoutNewInstructions == false)
 	{
-			EntityArray = (SDL_Texture	**)realloc(EntityArray, sizeof(SDL_Texture	*)*(EntityArraySize+1));
-			EntityInstruction = (char	**)realloc(EntityInstruction, sizeof(char	*)*(EntityArraySize+1));
+		std::string Instruction = "acx" + std::to_string(x) + "y" + std::to_string(y) + "r" + std::to_string(Radius);
+		AppendInstructionArray((char *)Instruction.c_str());
 	}
-	EntityArray[EntityArraySize] = texture;
-	std::string Instruction = "acx" + std::to_string(x) + "y" + std::to_string(y) + "r" + std::to_string(Radius);
-	EntityInstruction[EntityArraySize] = (char	*)malloc(strlen(Instruction.c_str())+1);
-	memcpy(EntityInstruction[EntityArraySize], Instruction.c_str(), strlen(Instruction.c_str()));
-	//printf("Added Instruction: %s\n", EntityInstruction[EntityArraySize]);
-	EntityArraySize++;
 }
 const char* Engine::GetField(char* line, int num)
 {
@@ -239,28 +274,14 @@ void Engine::UpdateScreen()
 	if (EntityRedraw == true)
 	{
 		EntityRedraw = false;
-
-		int EntityInstructionSize = EntityArraySize; //Make copy because when drawing depent on EntityArraySize
-		char **EntityInstructionCopy = (char	**)malloc(sizeof(char *)*EntityInstructionSize+1);
-		for(int i=0;i<EntityArraySize; i++)
-		{
-				EntityInstructionCopy[i] = (char	*)malloc(strlen(EntityInstruction[i])+1);
-				memcpy(EntityInstructionCopy[i], EntityInstruction[i], strlen(EntityInstruction[i]));
-				SDL_DestroyTexture(EntityArray[i]);
-				free(EntityInstruction[i]);
-		}
-		free(EntityArray);
-		free(EntityInstruction);
-
-		EntityArraySize = 0;
-		EntityArray = (SDL_Texture	**)malloc(sizeof(SDL_Texture	*)+1);
-		EntityInstruction = (char	**)malloc(sizeof(char	*)+1);
-
+		FreeEntityArray();
+		InitEntityArray();
+		EntityRedrawWithoutNewInstructions = true;
 		for(x = 0; x < EntityInstructionSize; x++)
 		{
-				if (EntityInstructionCopy != NULL)
+				if (EntityInstruction != NULL)
 				{
-						std::string i = std::string(EntityInstructionCopy[x]);
+						std::string i = std::string(EntityInstruction[x]);
 						//printf("===>Entity Instruction: %s\n", i.c_str());
 						if (i.find("ac") != std::string::npos)
 						{
@@ -299,11 +320,7 @@ void Engine::UpdateScreen()
 				}
 				//printf("Puting Texture: %d\n", x);
 		}
-		for(int i=0;i<EntityInstructionSize; i++)
-		{
-				free(EntityInstructionCopy[i]);
-		}
-		free(EntityInstructionCopy);
+		EntityRedrawWithoutNewInstructions = false;
 	}
 	else
 	{
@@ -371,12 +388,7 @@ void Engine::UnInit()
 {
 	//g_slist_free(Entitys);
 	//g_slist_free(SelectedEntitys);
-	for(int i=0;i<EntityArraySize; i++)
-	{
-			SDL_DestroyTexture(EntityArray[i]);
-			free(EntityInstruction[i]);
-	}
-	free(EntityArray);
-	free(EntityInstruction);
+	FreeEntityArray();
+	FreeInstructionArray();
 	delete config;
 }

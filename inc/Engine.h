@@ -34,11 +34,20 @@ class Engine                // begin declaration of the class
 	int EntityArraySize;
 	SDL_Texture	**EntityArray;
 	char **EntityInstruction;
+	int EntityInstructionSize;
+
 	bool EntityRedraw = false;
+	bool EntityRedrawWithoutNewInstructions = false;
 	bool PutTextureAndDontFree = false;
 
 	Engine(SDL_Window* w, SDL_Renderer* _r, Config *c, int _WindowWidth, int _WindowHeight);     // constructor
 	const char* GetField(char* line, int num);
+	void AppendEntityArray(SDL_Texture	*t);
+	void AppendInstructionArray(char *i);
+	void InitEntityArray();
+	void InitInstructionArray();
+	void FreeEntityArray();
+	void FreeInstructionArray();
 	void UpdateWindowSize(int w, int h);
 	void GetWindowSize(int w, int h);
 	void GetRealXY(float out[2], float in[2]); //Get Screen Cordinant plane fron Virtual Cordinant plane
