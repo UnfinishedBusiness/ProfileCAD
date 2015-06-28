@@ -21,7 +21,20 @@ class Engine                // begin declaration of the class
 	    Uint32 bmask = 0x00ff0000;
 	    Uint32 amask = 0xff000000;
 	#endif
-	public:                    // begin public section
+	public:
+	#define LINE 0
+	#define CIRCLE	 1
+	struct _EntityCurserStructure
+	{
+		int EntityType;
+	  int LineWidthMax;
+		int LineWidthMin;
+	  int LineHeightMax;
+		int LineHeightMin;
+		int *CirclePoints;
+	};
+	typedef struct _EntityCurserStructure *EntityCurserStructure;
+	// begin public section
 	float OriginOffsetX;
 	float OriginOffsetY;
 	float ViewRatio;
@@ -31,10 +44,18 @@ class Engine                // begin declaration of the class
 	SDL_Renderer* r;
 	Config *config;
 
-	int EntityArraySize;
+	int MaxEntities = 500;
+
+	int InitialEntityArraySize;
+	int EntityArrayLength;
 	SDL_Texture	**EntityArray;
+
 	char **EntityInstruction;
-	int EntityInstructionSize;
+	int InitialEntityInstructionSize;
+	int EntityInstructionLength;
+
+	EntityCurserStructure **EntityCurserPoints;
+	int EntityCurserPointsSize;
 
 	bool EntityRedraw = false;
 	bool EntityRedrawWithoutNewInstructions = false;
@@ -42,12 +63,20 @@ class Engine                // begin declaration of the class
 
 	Engine(SDL_Window* w, SDL_Renderer* _r, Config *c, int _WindowWidth, int _WindowHeight);     // constructor
 	const char* GetField(char* line, int num);
-	void AppendEntityArray(SDL_Texture	*t);
-	void AppendInstructionArray(char *i);
+
 	void InitEntityArray();
-	void InitInstructionArray();
+	void AppendEntityArray(SDL_Texture	*t);
 	void FreeEntityArray();
+
+	void InitInstructionArray();
+	void AppendInstructionArray(char *i);
 	void FreeInstructionArray();
+
+	void InitEntityCurserPoints();
+	void AppentLineCurserPoints(int maxw, int minw, int maxh, int minh);
+	void AppendCicrleCurserPoints(int *points);
+	void FreeEntityCurserPoints();
+
 	void UpdateWindowSize(int w, int h);
 	void GetWindowSize(int w, int h);
 	void GetRealXY(float out[2], float in[2]); //Get Screen Cordinant plane fron Virtual Cordinant plane

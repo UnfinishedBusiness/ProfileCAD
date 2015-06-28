@@ -4,6 +4,7 @@ Engine::Engine(SDL_Window* w, SDL_Renderer* _r, Config *c, int _WindowWidth, int
 {
 	InitEntityArray();
 	InitInstructionArray();
+	//InitEntityCurserPoints();
 
 	ViewRatio = 0.05;
 	r = _r;
@@ -16,54 +17,104 @@ Engine::Engine(SDL_Window* w, SDL_Renderer* _r, Config *c, int _WindowWidth, int
 	config->UpdateWindowSize(WindowWidth, WindowHeight);
 	//printf("==> Writing to %s\n", config->Filename);
 }
+
+/********** EntityCurserPoints ************/
+void Engine::InitEntityCurserPoints()
+{
+	EntityCurserPointsSize = 0;
+	EntityCurserPoints = (EntityCurserStructure	**)malloc(sizeof(EntityCurserStructure	*)+1);
+}
+void Engine::AppentLineCurserPoints(int maxw, int minw, int maxh, int minh)
+{
+	if (EntityCurserPointsSize > 0) //Zero has already been allocated by InitInstructionArray()
+	{
+			EntityCurserPoints = (EntityCurserStructure	**)realloc(EntityCurserPoints, sizeof(EntityCurserStructure	*)*(EntityCurserPointsSize+1));
+	}
+	//printf("AppendEntityArray->sizeof(t) - %d\n", sizeof(t));
+	EntityCurserStructure	p;
+	p->EntityType=CIRCLE;
+	p->LineWidthMax=maxw;
+	p->LineWidthMin=minw;
+	p->LineHeightMax=maxh;
+	p->LineHeightMin=minh;
+	p->CirclePoints=NULL;
+
+	EntityCurserPoints[EntityCurserPointsSize] = (EntityCurserStructure	*)malloc(sizeof(p)+1);
+	//EntityCurserPoints[EntityCurserPointsSize].EntityType=CIRCLE;
+	memcpy(EntityCurserPoints[EntityCurserPointsSize], p, sizeof(p));
+	EntityCurserPointsSize++;
+}
+
+void Engine::FreeEntityCurserPoints()
+{
+	for(int i=0;i<EntityCurserPointsSize; i++)
+	{
+			free(EntityCurserPoints[i]);
+	}
+	free(EntityCurserPoints);
+}
+/********** EntityCurserPoints ************/
+
+/********** EntityArray ************/
 void Engine::InitEntityArray()
 {
-	EntityArraySize = 0;
-	EntityArray = (SDL_Texture	**)malloc(sizeof(SDL_Texture	*)+1);
-}
-void Engine::InitInstructionArray()
-{
-	EntityInstructionSize = 0;
-	EntityInstruction = (char	**)malloc(sizeof(char	*)+1);
+	InitialEntityArraySize = MaxEntities;
+	EntityArrayLength = 0;
+	EntityArray = (SDL_Texture	**)malloc(sizeof(SDL_Texture	**) * InitialEntityArraySize);
 }
 void Engine::AppendEntityArray(SDL_Texture	*t)
 {
-	if (EntityArraySize > 0) //Zero has already been allocated by InitInstructionArray()
+	if (EntityArrayLength > InitialEntityArraySize) //Realocate another page!
 	{
-			EntityArray = (SDL_Texture	**)realloc(EntityArray, sizeof(SDL_Texture	*)*(EntityArraySize+1));
+			printf("Maximum Entities (todo realloc by factor)!\n");
+			//EntityArray = (SDL_Texture	**)realloc(EntityArray, sizeof(SDL_Texture	**) * (EntityArraySize+1));
 	}
-	//printf("AppendEntityArray->sizeof(t) - %d\n", sizeof(t));
-	EntityArray[EntityArraySize] = (SDL_Texture	*)malloc(sizeof(t)+1);
-	EntityArray[EntityArraySize] = t;
-	EntityArraySize++;
-}
-void Engine::AppendInstructionArray(char *i)
-{
-	if (EntityInstructionSize > 0) //Zero has already been allocated by InitInstructionArray()
+	else
 	{
-			EntityInstruction = (char	**)realloc(EntityInstruction, sizeof(char *)*(EntityInstructionSize+1));
+		EntityArray[EntityArrayLength] = (SDL_Texture	*)malloc(sizeof(t));
+		EntityArray[EntityArrayLength] = t;
+		EntityArrayLength++;
 	}
-	//printf("AppendInstructionArray->strlen(t) - %d\n", strlen(i));
-	//EntityInstruction[EntityInstructionSize] = (char	*)malloc(strlen(t)+1);
-	EntityInstruction[EntityInstructionSize] = strdup(i);
-	EntityInstructionSize++;
 }
 void Engine::FreeEntityArray()
 {
-	for(int i=0;i<EntityArraySize; i++)
+	for(int i=0;i<EntityArrayLength; i++)
 	{
 			SDL_DestroyTexture(EntityArray[i]);
 	}
 	free(EntityArray);
 }
+/********** EntityArray ************/
+
+/********** EntityInstructionArray ************/
+void Engine::InitInstructionArray()
+{
+	InitialEntityInstructionSize = MaxEntities;
+	EntityInstructionLength = 0;
+	EntityInstruction = (char	**)malloc(sizeof(char	**) * InitialEntityInstructionSize);
+}
+void Engine::AppendInstructionArray(char *i)
+{
+	if (EntityInstructionLength > InitialEntityInstructionSize) //Zero has already been allocated by InitInstructionArray()
+	{
+			//EntityInstruction = (char	**)realloc(EntityInstruction, sizeof(char **)*(EntityInstructionSize+1));
+	}
+	else
+	{
+		EntityInstruction[EntityInstructionLength] = strdup(i);
+		EntityInstructionLength++;
+	}
+}
 void Engine::FreeInstructionArray()
 {
-	for(int i=0;i<EntityArraySize; i++)
+	for(int i=0;i<EntityInstructionLength; i++)
 	{
 			free(EntityInstruction[i]);
 	}
 	free(EntityInstruction);
 }
+/********** EntityInstructionArray ************/
+
 void Engine::UpdateWindowSize(int w, int h)
 {
 	WindowWidth = w;
@@ -277,7 +328,7 @@ void Engine::UpdateScreen()
 		FreeEntityArray();
 		InitEntityArray();
 		EntityRedrawWithoutNewInstructions = true;
-		for(x = 0; x < EntityInstructionSize; x++)
+		for(x = 0; x < EntityInstructionLength; x++)
 		{
 				if (EntityInstruction != NULL)
 				{
@@ -324,7 +375,7 @@ void Engine::UpdateScreen()
 	}
 	else
 	{
-		for(x = 0; x < EntityArraySize; x++)
+		for(x = 0; x < EntityArrayLength; x++)
 		{
 				if (EntityArray[x] != NULL)
 				{
@@ -388,6 +439,7 @@ void Engine::UnInit()
 {
 	//g_slist_free(Entitys);
 	//g_slist_free(SelectedEntitys);
+	//FreeEntityCurserPoints();
 	FreeEntityArray();
 	FreeInstructionArray();
 	delete config;
