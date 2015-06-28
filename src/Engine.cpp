@@ -4,8 +4,8 @@ Engine::Engine(SDL_Window* w, SDL_Renderer* _r, Config *c, int _WindowWidth, int
 {
 	//memcpy(config->Filename, File, sizeof(*File));
 	EntityArraySize = 0;
-	EntityArray = (SDL_Texture	**)malloc(sizeof(SDL_Texture	*));
-	EntityInstruction = (char	**)malloc(sizeof(char	*));
+	EntityArray = (SDL_Texture	**)malloc(sizeof(SDL_Texture	*)+1);
+	EntityInstruction = (char	**)malloc(sizeof(char	*)+1);
 
 	ViewRatio = 0.05;
 	r = _r;
@@ -119,7 +119,9 @@ void Engine::Line(float Start[2], float End[2])
 	}
 	EntityArray[EntityArraySize] = texture;
 	std::string Instruction = "lx" + std::to_string(Start[0]) + "y" + std::to_string(Start[1]) + "x" + std::to_string(End[0]) + "y" + std::to_string(End[1]);
-	EntityInstruction[EntityArraySize] = strdup(Instruction.c_str());
+	//EntityInstruction[EntityArraySize] = strdup(Instruction.c_str());
+	EntityInstruction[EntityArraySize] = (char	*)malloc(strlen(Instruction.c_str())+1);
+	memcpy(EntityInstruction[EntityArraySize], Instruction.c_str(), strlen(Instruction.c_str()));
 	//printf("Added Instruction: %s\n", EntityInstruction[EntityArraySize]);
 	EntityArraySize++;
 }
@@ -153,7 +155,7 @@ void Engine::ArcByCenter(float x, float y, float Radius)
 	}
 	SDL_RenderPresent( r );
 	SDL_SetRenderTarget( r, NULL );
-	EntityArray[EntityArraySize] = (SDL_Texture	*)malloc(sizeof(SDL_Texture	*));
+	EntityArray[EntityArraySize] = (SDL_Texture	*)malloc(sizeof(SDL_Texture	*)+1);
 	if (EntityArraySize > 0)
 	{
 			EntityArray = (SDL_Texture	**)realloc(EntityArray, sizeof(SDL_Texture	*)*(EntityArraySize+1));
@@ -161,7 +163,8 @@ void Engine::ArcByCenter(float x, float y, float Radius)
 	}
 	EntityArray[EntityArraySize] = texture;
 	std::string Instruction = "acx" + std::to_string(x) + "y" + std::to_string(y) + "r" + std::to_string(Radius);
-	EntityInstruction[EntityArraySize] = strdup(Instruction.c_str());
+	EntityInstruction[EntityArraySize] = (char	*)malloc(strlen(Instruction.c_str())+1);
+	memcpy(EntityInstruction[EntityArraySize], Instruction.c_str(), strlen(Instruction.c_str()));
 	//printf("Added Instruction: %s\n", EntityInstruction[EntityArraySize]);
 	EntityArraySize++;
 }
@@ -238,12 +241,11 @@ void Engine::UpdateScreen()
 		EntityRedraw = false;
 
 		int EntityInstructionSize = EntityArraySize; //Make copy because when drawing depent on EntityArraySize
-		char **EntityInstructionCopy = (char	**)malloc(sizeof(EntityInstruction));
-
+		char **EntityInstructionCopy = (char	**)malloc(sizeof(char *)*EntityInstructionSize+1);
 		for(int i=0;i<EntityArraySize; i++)
 		{
-				EntityInstructionCopy = (char	**)realloc(EntityInstructionCopy, sizeof(char	*)*(i+1));
-				EntityInstructionCopy[i] = strdup(EntityInstruction[i]);
+				EntityInstructionCopy[i] = (char	*)malloc(strlen(EntityInstruction[i])+1);
+				memcpy(EntityInstructionCopy[i], EntityInstruction[i], strlen(EntityInstruction[i]));
 				SDL_DestroyTexture(EntityArray[i]);
 				free(EntityInstruction[i]);
 		}
@@ -251,8 +253,8 @@ void Engine::UpdateScreen()
 		free(EntityInstruction);
 
 		EntityArraySize = 0;
-		EntityArray = (SDL_Texture	**)malloc(sizeof(SDL_Texture	*));
-		EntityInstruction = (char	**)malloc(sizeof(char	*));
+		EntityArray = (SDL_Texture	**)malloc(sizeof(SDL_Texture	*)+1);
+		EntityInstruction = (char	**)malloc(sizeof(char	*)+1);
 
 		for(x = 0; x < EntityInstructionSize; x++)
 		{

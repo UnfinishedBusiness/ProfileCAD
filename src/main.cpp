@@ -279,7 +279,7 @@ int main (int argc, char** argv)
       //SDL_RenderPresent( renderer );
 			//fflush(stdout);
 		}
-    //config->SaveConfig();
+    config->SaveConfig();
     engine->UnInit();
 		delete engine;
 		SDL_RenderClear(renderer);
