@@ -278,16 +278,19 @@ void Engine::Line(float Start[2], float End[2])
 	x = screen_point1[0];
 	y = screen_point1[1];
 
+	int pointsX[(int)length+1]; //for CurserPoints!
+	int pointsY[(int)length+1]; //for CurserPoints!
 	for(double i = 0; i < length; i += 1)
 	{
-	  //SetPixel( (int)x, (int)y, your_color );
 		SDL_RenderDrawPoint(r, (int)x, (int)y);
+		pointsX[(int)i] = (int)x;
+		pointsY[(int)i] = (int)y;
 	  x += addx;
 	  y += addy;
 	}
-
 	SDL_RenderPresent( r );
 	SDL_SetRenderTarget( r, NULL );
+	AppendCurserPoints(pointsX, pointsY, length);
 	AppendEntityArray(texture);
 	if (EntityRedrawWithoutNewInstructions == false)
 	{
