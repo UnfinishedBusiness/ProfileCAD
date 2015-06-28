@@ -1,6 +1,6 @@
 #include "Engine.h"
 
-Engine::Engine(SDL_Window* w, SDL_Renderer* _r, Config *c, int _WindowWidth, int _WindowHeight)
+Engine::Engine(SDL_Window* w, SDL_Renderer* _r, Config *c)
 {
 	InitEntityArray();
 	InitInstructionArray();
@@ -14,12 +14,12 @@ Engine::Engine(SDL_Window* w, SDL_Renderer* _r, Config *c, int _WindowWidth, int
 	ViewRatio = 0.05;
 	r = _r;
 	window = w;
-	WindowWidth = _WindowWidth;
-	WindowHeight = _WindowHeight-150;
-	OriginOffsetX = (_WindowWidth/2); //Center Origin
-	OriginOffsetY = (_WindowHeight/2); //Center Origin
+	//WindowWidth = _WindowWidth;
+	//WindowHeight = _WindowHeight-150;
 	config = c;
-	config->UpdateWindowSize(WindowWidth, WindowHeight);
+	OriginOffsetX = (config->GetWindowWidth()/2); //Center Origin
+	OriginOffsetY = ((config->GetWindowHeight())/2); //Center Origin
+	//config->UpdateWindowSize(WindowWidth, WindowHeight);
 	//printf("==> Writing to %s\n", config->Filename);
 }
 

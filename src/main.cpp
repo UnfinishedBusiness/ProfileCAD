@@ -40,8 +40,8 @@ int main (int argc, char** argv)
     (
         WindowTitle, SDL_WINDOWPOS_UNDEFINED,
         SDL_WINDOWPOS_UNDEFINED,
-        MainWindowWidth,
-        MainWindowHeight,
+        DefaultWindowWidth,
+        DefaultWindowHeight,
         SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE
     );
 
@@ -50,7 +50,7 @@ int main (int argc, char** argv)
     renderer =  SDL_CreateRenderer( window, 1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_TARGETTEXTURE);
 
 		config = new Config(window, renderer);
-		engine = new Engine(window, renderer, config, MainWindowWidth, MainWindowWidth);
+		engine = new Engine(window, renderer, config);
 
     SDL_Event e;
 		bool quit = false;

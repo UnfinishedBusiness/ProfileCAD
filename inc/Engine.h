@@ -53,7 +53,7 @@ class Engine                // begin declaration of the class
 	bool EntityRedrawWithoutNewInstructions = false;
 	bool PutTextureAndDontFree = false;
 
-	Engine(SDL_Window* w, SDL_Renderer* _r, Config *c, int _WindowWidth, int _WindowHeight);     // constructor
+	Engine(SDL_Window* w, SDL_Renderer* _r, Config *c);     // constructor
 	const char* GetField(char* line, int num);
 
 	void InitEntityArray();

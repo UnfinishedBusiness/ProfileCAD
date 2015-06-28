@@ -28,8 +28,8 @@
 
 #define WindowTitle "ProfileCAD"
 #define Version "1"
-#define MainWindowWidth 800
-#define MainWindowHeight 640
+#define DefaultWindowWidth 800
+#define DefaultWindowHeight 640
 
 inline std::string trim(const std::string &s)
 {

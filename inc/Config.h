@@ -32,6 +32,8 @@ class Config                 // begin declaration of the class
 	void ParseConfig();
 	void SaveConfig();
 	void UpdateWindowSize(int w, int h);
+	int GetWindowWidth();
+	int GetWindowHeight();
 };
 
 

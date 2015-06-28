@@ -7,9 +7,19 @@ Config::Config(SDL_Window* w, SDL_Renderer* r)
     //struct passwd *pw = getpwuid(getuid());
     //homedir = pw->pw_dir;
     //std::string cf(homedir);
+    WindowWidth = DefaultWindowWidth;
+    WindowHeight = DefaultWindowHeight;
     ConfigFile = (char *)"Config.profile";
     //cf.append(ConfigFile);
     ParseConfig();
+}
+int Config::GetWindowWidth()
+{
+  return WindowWidth;
+}
+int Config::GetWindowHeight()
+{
+  return WindowHeight;
 }
 void Config::ParseConfig()
 {
@@ -67,7 +77,7 @@ void Config::ParseConfig()
           data = line.substr(start+key.length()+2, (stop - start));
           data = trim(data);
           WindowWidth = atoi(strdup(data.c_str()));
-          printf("=> Set WindowHWidth to %d\n", WindowWidth);
+          printf("=> Set WindowWidth to %d\n", WindowWidth);
       }
       key = "Font";
       if (line.find(key) != std::string::npos)
@@ -94,7 +104,7 @@ void Config::ParseConfig()
   }
   if (WindowWidth != 0 || WindowHeight != 0)
   {
-    SDL_SetWindowSize(window, WindowWidth, WindowHeight);
+    SDL_SetWindowSize(window, WindowWidth, WindowHeight+150);
   }
 }
 void Config::UpdateWindowSize(int w, int h)
