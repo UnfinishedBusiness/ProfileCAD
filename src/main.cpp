@@ -239,6 +239,11 @@ int main (int argc, char** argv)
 					if (e.button.button == SDL_BUTTON_LEFT)
 					{
 						printf("=====> Left Click!\n");
+            int id = engine->GetCurserOverId(); //Remember that this resets the id buffer!
+            if (id != -1)
+            {
+              printf("Clicked on Entity with ID: %d\n", id);
+            }
 						if (ActiveTool == LineTool)
 						{
 							if (LineClickStep == 1)

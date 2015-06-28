@@ -17,6 +17,15 @@
 #include <pwd.h>
 #include <algorithm>
 
+#define ZERO 1e-10
+#define SMALL 1e-4
+#define DELTA 1e-10
+#define isZero(A) ( (A < ZERO) && (A > -ZERO) )
+#define isSmall(A) ( (A < SMALL) && (A > -SMALL) )
+#define isSame(A, B) ( ((A-B) < ZERO) && ((A-B) > -ZERO) )
+#define isSimilar(A, B) ( ((A-B) < SMALL) && ((A-B) > -SMALL) )
+#define isBetween(A, B, C) ( ((A-B) > -ZERO) && ((A-C) < ZERO) )
+
 #define WindowTitle "ProfileCAD"
 #define Version "1"
 #define MainWindowWidth 800

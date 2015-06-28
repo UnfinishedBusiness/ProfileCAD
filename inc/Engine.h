@@ -32,6 +32,7 @@ class Engine                // begin declaration of the class
 	SDL_Renderer* r;
 	Config *config;
 
+	int CurserOverEntityId;
 	int MaxEntities = 100;
 	int EntityCurserRange = 10;
 
@@ -67,6 +68,7 @@ class Engine                // begin declaration of the class
 	void AppendCurserPoints(int *px, int *py, int n);
 	void FreeEntityCurserPoints();
 
+	int GetCurserOverId();
 	void UpdateWindowSize(int w, int h);
 	void GetWindowSize(int w, int h);
 	void GetRealXY(float out[2], float in[2]); //Get Screen Cordinant plane fron Virtual Cordinant plane

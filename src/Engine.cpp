@@ -10,6 +10,7 @@ Engine::Engine(SDL_Window* w, SDL_Renderer* _r, Config *c, int _WindowWidth, int
 	//MouseY = 0;
 	//RealMouseX = 0;
 	//RealMouseY = 0;
+	CurserOverEntityId = -1;
 	ViewRatio = 0.05;
 	r = _r;
 	window = w;
@@ -134,7 +135,13 @@ void Engine::FreeInstructionArray()
 	free(EntityInstruction);
 }
 /********** EntityInstructionArray ************/
-
+int Engine::GetCurserOverId()
+{
+	int x = CurserOverEntityId;
+	//memcpy( (void*) &x, (void*) &CurserOverEntityId, sizeof(int) );
+	CurserOverEntityId = -1;
+	return x;
+}
 void Engine::UpdateWindowSize(int w, int h)
 {
 	WindowWidth = w;
@@ -216,7 +223,8 @@ float Engine::ZoomOut()
 }
 void Engine::GetDistance(float out, float p1[2], float p2[2])
 {
-	out = sqrt(pow((p2[0] - p1[0]), 2) + pow((p2[1] - p1[1]), 2));
+	//out = sqrt(pow((p2[0] - p1[0]), 2) + pow((p2[1] - p1[1]), 2)); //dont work!
+	out = sqrtf((p2[0] - p1[0])*(p2[0] - p1[0]) + (p2[1] - p1[1])*(p2[1] - p1[1])); //probably doesnt work, at least didnt idfk
 }
 void Engine::GetRealXY(float out[2], float in[2])
 {
@@ -405,10 +413,12 @@ void Engine::UpdateScreen()
 {
 	//printf("EntityCount: %d\r", EntityArraySize);
 	//SDL_ScaleSurface(SDL_Surface* Surface, Uint16 Width, Uint16 Height)
+	bool CurserOverEntity = false;
+	int TmpCurserOverEntityId = -1;
 	int mX, mY;
-	SDL_GetMouseState(&mX, &mY);
 
 	int x;
+
 	if (EntityRedraw == true)
 	{
 		EntityRedraw = false;
@@ -466,19 +476,43 @@ void Engine::UpdateScreen()
 	}
 	else
 	{
+		float distance;
+		float p1[2];
+		float p2[2];
+		SDL_GetMouseState(&mX, &mY);
 		for(x = 0; x < EntityArrayLength; x++)
 		{
 				if (EntityArray[x] != NULL)
 				{
+					SDL_Texture *t = EntityArray[x];
 					//First Element is number of points
 					for(int a = 1; a < EntityCurserPointsX[x][0]; a++)
 					{
-						//printf("points %d, %d\n", EntityCurserPointsX[x][a], EntityCurserPointsY[x][a]);
-					}
+						if (isBetween(EntityCurserPointsX[x][a], mX+EntityCurserRange, mX-EntityCurserRange) && isBetween(EntityCurserPointsY[x][a], mY+EntityCurserRange, mY-EntityCurserRange))
+						{
+							CurserOverEntity = true;
+						 	TmpCurserOverEntityId = x;
+						}
+						else
+						{
+							//SDL_SetTextureColorMod(t, 255, 255, 255);
+						}
 
-					SDL_Texture *t = EntityArray[x];
+					}
+					if (CurserOverEntity == true)
+					{
+						CurserOverEntity = false;
+						SDL_SetTextureColorMod(t, 0, 255, 0);
+
+					}
+					else
+					{
+							//CurserOverEntityId = -1;
+							SDL_SetTextureColorMod(t, 255, 255, 255);
+					}
 					PutTextureAndDontFree = true;
 					PutTexture(t, 0, 0);
+
 				}
 				else
 				{
@@ -486,6 +520,7 @@ void Engine::UpdateScreen()
 				}
 		}
 	}
+	CurserOverEntityId = TmpCurserOverEntityId;
 }
 void Engine::DrawPixel(SDL_Surface *screen, int x, int y, Uint8 R, Uint8 G, Uint8 B)
 {
