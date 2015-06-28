@@ -4,8 +4,12 @@ Engine::Engine(SDL_Window* w, SDL_Renderer* _r, Config *c, int _WindowWidth, int
 {
 	InitEntityArray();
 	InitInstructionArray();
-	//InitEntityCurserPoints();
+	InitEntityCurserPoints();
 
+	//MouseX = 0;
+	//MouseY = 0;
+	//RealMouseX = 0;
+	//RealMouseY = 0;
 	ViewRatio = 0.05;
 	r = _r;
 	window = w;
@@ -21,37 +25,53 @@ Engine::Engine(SDL_Window* w, SDL_Renderer* _r, Config *c, int _WindowWidth, int
 /********** EntityCurserPoints ************/
 void Engine::InitEntityCurserPoints()
 {
-	EntityCurserPointsSize = 0;
-	EntityCurserPoints = (EntityCurserStructure	**)malloc(sizeof(EntityCurserStructure	*)+1);
+	InitialEntityCurserSize = MaxEntities;
+	EntityCurserPointsLength = 0;
+	EntityCurserPointsX = (int	**)malloc(sizeof(int	**) * InitialEntityCurserSize);
+	EntityCurserPointsY = (int	**)malloc(sizeof(int	**) * InitialEntityCurserSize);
 }
-void Engine::AppentLineCurserPoints(int maxw, int minw, int maxh, int minh)
+void Engine::AppendCurserPoints(int *px, int *py, int n)
 {
-	if (EntityCurserPointsSize > 0) //Zero has already been allocated by InitInstructionArray()
+	if (EntityCurserPointsLength > InitialEntityArraySize) //Zero has already been allocated by InitInstructionArray()
 	{
-			EntityCurserPoints = (EntityCurserStructure	**)realloc(EntityCurserPoints, sizeof(EntityCurserStructure	*)*(EntityCurserPointsSize+1));
+			//EntityCurserPoints = (EntityCurserStructure	**)realloc(EntityCurserPoints, sizeof(EntityCurserStructure	*)*(EntityCurserPointsSize+1));
 	}
-	//printf("AppendEntityArray->sizeof(t) - %d\n", sizeof(t));
-	EntityCurserStructure	p;
-	p->EntityType=CIRCLE;
-	p->LineWidthMax=maxw;
-	p->LineWidthMin=minw;
-	p->LineHeightMax=maxh;
-	p->LineHeightMin=minh;
-	p->CirclePoints=NULL;
-
-	EntityCurserPoints[EntityCurserPointsSize] = (EntityCurserStructure	*)malloc(sizeof(p)+1);
-	//EntityCurserPoints[EntityCurserPointsSize].EntityType=CIRCLE;
-	memcpy(EntityCurserPoints[EntityCurserPointsSize], p, sizeof(p));
-	EntityCurserPointsSize++;
+	else
+	{
+		EntityCurserPointsX[EntityCurserPointsLength] = (int	*)malloc(sizeof(int) * n);
+		EntityCurserPointsY[EntityCurserPointsLength] = (int	*)malloc(sizeof(int) * n);
+		//EntityCurserNumberOfPoints[EntityCurserPointsLength] = (int)malloc(sizeof(int));
+		EntityCurserPointsX[EntityCurserPointsLength][0] = n; //First Element is number of points!
+		EntityCurserPointsY[EntityCurserPointsLength][0] = n;
+		for(int a = 1; a < n; a++)
+		{
+			//printf("appending points %d, %d\n", px[a], py[a]);
+			EntityCurserPointsX[EntityCurserPointsLength][a] = px[a];
+			EntityCurserPointsY[EntityCurserPointsLength][a] = py[a];
+		}
+		//memcpy(EntityCurserPointsX[EntityCurserPointsLength], px, sizeof(px) / sizeof(int));
+		//EntityCurserPointsX[EntityCurserPointsLength] = px;
+		//memcpy(EntityCurserPointsX[EntityCurserPointsLength], py, sizeof(py) / sizeof(int));
+		//EntityCurserPointsY[EntityCurserPointsLength] = py;
+		EntityCurserPointsLength++;
+	}
 }
 
 void Engine::FreeEntityCurserPoints()
 {
-	for(int i=0;i<EntityCurserPointsSize; i++)
+	for(int i=0;i<EntityCurserPointsLength; i++)
 	{
-			free(EntityCurserPoints[i]);
+			/*for(int j=0;j<EntityCurserNumberOfPoints[i]; j++)
+			{
+				free(EntityCurserPointsX[i][j]);
+				free(EntityCurserPointsY[i][j]);
+			}*/
+			free(EntityCurserPointsX[i]);
+			free(EntityCurserPointsY[i]);
+			//free(EntityCurserNumberOfPoints[i]);
 	}
-	free(EntityCurserPoints);
+	free(EntityCurserPointsX);
+	free(EntityCurserPointsY);
 }
 /********** EntityCurserPoints ************/
 
@@ -132,10 +152,14 @@ void Engine::GetMousePos(float out[2])
 	SDL_GetMouseState(&x, &y);
  	//out[0] = (x - OriginOffsetX);
 	//out[1] = ((y - OriginOffsetY)/-1);
+	//RealMouseX = x;
+	//RealMouseY = y;
 	float in[2];
 	in[0] = x;
 	in[1] = y;
 	GetXY(out, in);
+	//MouseX = out[0];
+	//MouseY = out[1];
 }
 void Engine::PanXY(float pos[2])
 {
@@ -154,13 +178,39 @@ void Engine::PanIncY(float p)
 }
 float Engine::ZoomIn()
 {
-	ViewRatio = ViewRatio - .001;
-	EntityRedraw = true;
+	float ZoomInc;
+	if (ViewRatio < 0.005)
+	{
+		ZoomInc = 0.0002;
+	}
+	else
+	{
+		ZoomInc = 0.001;
+	}
+	if (ViewRatio > 0.0001)
+	{
+		ViewRatio = ViewRatio - ZoomInc;
+		EntityRedraw = true;
+	}
+	else
+	{
+		ViewRatio = .0001;
+		EntityRedraw = true;
+	}
 	return ViewRatio;
 }
 float Engine::ZoomOut()
 {
-	ViewRatio = ViewRatio + .001;
+	float ZoomInc;
+	if (ViewRatio < 0.005)
+	{
+		ZoomInc = 0.0002;
+	}
+	else
+	{
+		ZoomInc = 0.001;
+	}
+	ViewRatio = ViewRatio + ZoomInc;
 	EntityRedraw = true;
 	return ViewRatio;
 }
@@ -205,10 +255,31 @@ void Engine::Line(float Start[2], float End[2])
 	SDL_SetRenderDrawColor( r, 0, 0, 0, 0 ); //Make texture clear
 	//SDL_RenderClear(r);
 	config->Color((char*)config->LineColor);
-	SDL_RenderDrawLine(r, screen_point1[0], screen_point1[1], screen_point2[0], screen_point2[1]);
+
+	//SDL_RenderDrawLine(r, screen_point1[0], screen_point1[1], screen_point2[0], screen_point2[1]); //But we need actual points
+
+	//double x = x2 - x1;
+	//double y = y2 - y1;
+	double x = screen_point2[0] - screen_point1[0];
+	double y = screen_point2[1] - screen_point1[1];
+
+	double length = sqrt( x*x + y*y );
+	double addx = x / length;
+	double addy = y / length;
+
+	x = screen_point1[0];
+	y = screen_point1[1];
+
+	for(double i = 0; i < length; i += 1)
+	{
+	  //SetPixel( (int)x, (int)y, your_color );
+		SDL_RenderDrawPoint(r, (int)x, (int)y);
+	  x += addx;
+	  y += addy;
+	}
+
 	SDL_RenderPresent( r );
 	SDL_SetRenderTarget( r, NULL );
-
 	AppendEntityArray(texture);
 	if (EntityRedrawWithoutNewInstructions == false)
 	{
@@ -223,7 +294,14 @@ void Engine::ArcByCenter(float x, float y, float Radius)
 	int centrex=x,centrey=y;// centre of circle in pixel coords
 	float ypos, xpos;
 	float two_pi=6.283f;
-	float angle_inc=0.01f/Radius;
+	float angle_inc=0.001f/Radius;
+	int NumberOfPoints=0;
+	for(float angle=0.0f; angle<= two_pi;angle+=angle_inc)
+	{
+		NumberOfPoints++;
+	}
+	int pointsX[NumberOfPoints];
+	int pointsY[NumberOfPoints];
 	//SDL_Surface *surface = SDL_CreateRGBSurface(0, WindowWidth, WindowHeight, 32, 0, 0, 0, 0);
 	SDL_Texture *texture = SDL_CreateTexture(r, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, WindowWidth, WindowHeight);
 	SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
@@ -233,6 +311,7 @@ void Engine::ArcByCenter(float x, float y, float Radius)
 	//SDL_RenderClear(r);
 	config->Color((char*)config->LineColor);
 
+	int count = 0;
 	for(float angle=0.0f; angle<= two_pi;angle+=angle_inc)
 	{
 	    xpos=centrex+Radius*cos(angle);
@@ -242,12 +321,17 @@ void Engine::ArcByCenter(float x, float y, float Radius)
 	    GetRealXY(r_pos, pos);
 			//printf("Circle point: %d, %d\n", (int)r_pos[0], (int)r_pos[1]);
 			//SDL_RenderDrawLine(r, r_pos[0], r_pos[1], r_pos[0]+1, r_pos[1]+1);
+			pointsX[count] = r_pos[0];
+			pointsY[count] = r_pos[1];
+
 			SDL_RenderDrawPoint(r, r_pos[0], r_pos[1]);
+			count++;
 	}
 	SDL_RenderPresent( r );
 	SDL_SetRenderTarget( r, NULL );
 
 	AppendEntityArray(texture);
+	AppendCurserPoints(pointsX, pointsY, NumberOfPoints);
 	if (EntityRedrawWithoutNewInstructions == false)
 	{
 		std::string Instruction = "acx" + std::to_string(x) + "y" + std::to_string(y) + "r" + std::to_string(Radius);
@@ -321,12 +405,19 @@ void Engine::UpdateScreen()
 {
 	//printf("EntityCount: %d\r", EntityArraySize);
 	//SDL_ScaleSurface(SDL_Surface* Surface, Uint16 Width, Uint16 Height)
+	int mX, mY;
+	SDL_GetMouseState(&mX, &mY);
+
 	int x;
 	if (EntityRedraw == true)
 	{
 		EntityRedraw = false;
 		FreeEntityArray();
 		InitEntityArray();
+
+		FreeEntityCurserPoints();
+		InitEntityCurserPoints();
+
 		EntityRedrawWithoutNewInstructions = true;
 		for(x = 0; x < EntityInstructionLength; x++)
 		{
@@ -379,6 +470,12 @@ void Engine::UpdateScreen()
 		{
 				if (EntityArray[x] != NULL)
 				{
+					//First Element is number of points
+					for(int a = 1; a < EntityCurserPointsX[x][0]; a++)
+					{
+						//printf("points %d, %d\n", EntityCurserPointsX[x][a], EntityCurserPointsY[x][a]);
+					}
+
 					SDL_Texture *t = EntityArray[x];
 					PutTextureAndDontFree = true;
 					PutTexture(t, 0, 0);
@@ -439,7 +536,7 @@ void Engine::UnInit()
 {
 	//g_slist_free(Entitys);
 	//g_slist_free(SelectedEntitys);
-	//FreeEntityCurserPoints();
+	FreeEntityCurserPoints();
 	FreeEntityArray();
 	FreeInstructionArray();
 	delete config;

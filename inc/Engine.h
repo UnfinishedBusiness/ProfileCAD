@@ -22,19 +22,7 @@ class Engine                // begin declaration of the class
 	    Uint32 amask = 0xff000000;
 	#endif
 	public:
-	#define LINE 0
-	#define CIRCLE	 1
-	struct _EntityCurserStructure
-	{
-		int EntityType;
-	  int LineWidthMax;
-		int LineWidthMin;
-	  int LineHeightMax;
-		int LineHeightMin;
-		int *CirclePoints;
-	};
-	typedef struct _EntityCurserStructure *EntityCurserStructure;
-	// begin public section
+
 	float OriginOffsetX;
 	float OriginOffsetY;
 	float ViewRatio;
@@ -44,7 +32,8 @@ class Engine                // begin declaration of the class
 	SDL_Renderer* r;
 	Config *config;
 
-	int MaxEntities = 500;
+	int MaxEntities = 100;
+	int EntityCurserRange = 10;
 
 	int InitialEntityArraySize;
 	int EntityArrayLength;
@@ -54,8 +43,10 @@ class Engine                // begin declaration of the class
 	int InitialEntityInstructionSize;
 	int EntityInstructionLength;
 
-	EntityCurserStructure **EntityCurserPoints;
-	int EntityCurserPointsSize;
+	int **EntityCurserPointsX;
+	int **EntityCurserPointsY;
+	int InitialEntityCurserSize;
+	int EntityCurserPointsLength;
 
 	bool EntityRedraw = false;
 	bool EntityRedrawWithoutNewInstructions = false;
@@ -73,8 +64,7 @@ class Engine                // begin declaration of the class
 	void FreeInstructionArray();
 
 	void InitEntityCurserPoints();
-	void AppentLineCurserPoints(int maxw, int minw, int maxh, int minh);
-	void AppendCicrleCurserPoints(int *points);
+	void AppendCurserPoints(int *px, int *py, int n);
 	void FreeEntityCurserPoints();
 
 	void UpdateWindowSize(int w, int h);
