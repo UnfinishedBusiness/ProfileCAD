@@ -68,6 +68,10 @@ class Engine                // begin declaration of the class
 	void AppendCurserPoints(int *px, int *py, int n);
 	void FreeEntityCurserPoints();
 
+	/*Standard Instruction Parsing*/
+ 	float *ParseLineInstruction(std::string i);
+
+	/*Standard Instruction Parsing*/
 	int GetCurserOverId();
 	void UpdateWindowSize(int w, int h);
 	void GetWindowSize(int w, int h);

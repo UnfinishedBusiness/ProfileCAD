@@ -7,6 +7,7 @@ int ActiveTool;
 #define NoTool 0
 #define LineTool 1
 //LineTool
+int LastEntityClicked = 0;
 int LineClickStep = 0;
 float LineStart[2];
 float LineEnd[2];
@@ -154,7 +155,26 @@ int main (int argc, char** argv)
                 MsgBuff = ">Drew Arc cX: " + cX + " cY: " + cY + " R: " + R;
                 engine->ArcByCenter(atof((char *)cX.c_str()), atof((char *)cY.c_str()), atof((char *)R.c_str()));
               }
-							if (inputText.find(":l") != std::string::npos)
+              if (inputText.find(":lp") != std::string::npos && std::string::npos && inputText.find("d"))
+							{
+                std::size_t posD = inputText.find("d");
+                std::string Distance = inputText.substr(posD+1, (inputText.length() - posD)-1);
+                MsgBuff = ">Draw line parallel to line# " + std::to_string(LastEntityClicked) + " with distance " + Distance;
+
+                std::string Entity = std::string(engine->EntityInstruction[LastEntityClicked]);
+                //MsgBuff = Entity;
+                float *p = engine->ParseLineInstruction(Entity);
+                //MsgBuff = ">Parse: " + std::to_string(p[0]) + " Y1: " + std::to_string(p[1]) + " X2: " + std::to_string(p[2]) + " Y2: " + std::to_string(p[3]);
+              }
+              if (inputText.find(":lh") != std::string::npos)
+							{
+                MsgBuff = ">Line Horizontal: ";
+              }
+              if (inputText.find(":lv") != std::string::npos)
+							{
+                MsgBuff = ">Line verticle: ";
+              }
+							if (inputText.find(":l") != std::string::npos && inputText.find("x") != std::string::npos && inputText.find("y") != std::string::npos)
 							{
 								MsgTimer = time(0);
 								std::size_t FirstX = inputText.find("x");
@@ -242,7 +262,8 @@ int main (int argc, char** argv)
             int id = engine->GetCurserOverId(); //Remember that this resets the id buffer!
             if (id != -1)
             {
-              printf("Clicked on Entity with ID: %d\n", id);
+              MsgBuff = ">Operate on entity id# " + std::to_string(id);
+              LastEntityClicked = id;
             }
 						if (ActiveTool == LineTool)
 						{

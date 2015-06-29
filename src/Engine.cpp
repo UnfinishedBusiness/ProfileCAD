@@ -135,6 +135,27 @@ void Engine::FreeInstructionArray()
 	free(EntityInstruction);
 }
 /********** EntityInstructionArray ************/
+
+/********** Standard instruction parsing *******/
+float *Engine::ParseLineInstruction(std::string i)
+{
+	float *p = (float	*)malloc(sizeof(float *) * 4);
+	std::size_t FirstX = i.find("x");
+	std::size_t FirstY = i.find("y");
+	std::size_t LastX = i.find("x", FirstX+1);
+	std::size_t LastY = i.find("y", FirstY+1);
+	std::string X1s = i.substr(FirstX+1, (FirstY-FirstX)-1);
+	std::string Y1s = i.substr(FirstY+1, (LastX - FirstY) -1);
+	std::string X2s = i.substr(LastX+1, (LastY - LastX)-1);
+	std::string Y2s = i.substr(LastY+1, (i.length() - LastY)-1);
+	p[0] = atof((char*)X1s.c_str());
+	p[1] = atof((char*)Y1s.c_str());
+	p[2] = atof((char*)X2s.c_str());
+	p[3] = atof((char*)Y2s.c_str());
+	//printf("x%f, y%f x%f, y%f\n", X1, Y1, X2, Y2);
+	return p;
+}
+/********** Standard instruction parsing *******/
 int Engine::GetCurserOverId()
 {
 	int x = CurserOverEntityId;
