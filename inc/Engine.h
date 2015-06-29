@@ -79,6 +79,8 @@ class Engine                // begin declaration of the class
 	void GetXY(float out[2], float in[2]); //Get Virtual Cordinant plane from Screen Cordinant plane
 	float GetX(float in[2]); //GetXY Wrapper Function
 	float GetY(float in[2]); //GetXY Wrapper Function
+	float GetX(float x); //GetXY Wrapper Function
+	float GetY(float y); //GetXY Wrapper Function
 	void GetMousePos(float out[2]); //Returns Virtual Cordinant plane
 	void Line(float Start[2], float End[2]);
 	void ArcByCenter(float x, float y, float Radius);
@@ -88,7 +90,7 @@ class Engine                // begin declaration of the class
 	void PanIncX(float p);
 	void PanIncY(float p);
 	void PanXY(float pos[2]);
-	void GetDistance(float out, float p1[2], float p2[2]);
+	float GetDistance(float x1, float y1, float x2, float y2);
 	SDL_Texture* MakeText(char *Text, int Size);
 	SDL_Texture* MakeColorText(SDL_Color Color, char *Text, int Size);
 	void PutTexture(SDL_Texture* t, float x, float y);

@@ -156,7 +156,21 @@ int main (int argc, char** argv)
                 std::string Entity = std::string(engine->EntityInstruction[LastEntityClicked]);
                 //MsgBuff = Entity;
                 float *p = engine->ParseLineInstruction(Entity);
-                //MsgBuff = ">Parse: " + std::to_string(p[0]) + " Y1: " + std::to_string(p[1]) + " X2: " + std::to_string(p[2]) + " Y2: " + std::to_string(p[3]);
+
+                float slope = (p[3] - p[1]) / (p[2] - p[0]);
+
+                //float LineLength = engine->GetDistance(p[0], p[1], p[2], p[3]);
+
+                //MsgBuff = ">Line Length: " + std::to_string(LineLength);
+                float Start[2];
+                Start[0] = engine->GetX(engine->EntityCurserPointsX[LastEntityClicked][1]) * (slope + atof((char *)Distance.c_str()));
+                Start[1] = engine->GetX(engine->EntityCurserPointsY[LastEntityClicked][1]) * (slope + atof((char *)Distance.c_str()));
+                float End[2];
+                End[0] = engine->GetX(engine->EntityCurserPointsX[LastEntityClicked][engine->EntityCurserPointsX[LastEntityClicked][0]-2]) * (slope + atof((char *)Distance.c_str()));
+                End[1] = engine->GetX(engine->EntityCurserPointsY[LastEntityClicked][engine->EntityCurserPointsY[LastEntityClicked][0]-2]) * (slope + atof((char *)Distance.c_str()));
+
+                engine->Line(Start, End);
+                MsgBuff = ">Line X1" + std::to_string(Start[0]) + " Y1: " + std::to_string(Start[1]) + " X2: " + std::to_string(End[0]) + " Y2: " + std::to_string(End[1]);
               }
               if (inputText.find(":lh") != std::string::npos)
 							{

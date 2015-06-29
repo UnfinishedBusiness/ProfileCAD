@@ -258,10 +258,9 @@ float Engine::ZoomOut()
 	EntityRedraw = true;
 	return ViewRatio;
 }
-void Engine::GetDistance(float out, float p1[2], float p2[2])
+float Engine::GetDistance(float x1, float y1, float x2, float y2)
 {
-	//out = sqrt(pow((p2[0] - p1[0]), 2) + pow((p2[1] - p1[1]), 2)); //dont work!
-	out = sqrtf((p2[0] - p1[0])*(p2[0] - p1[0]) + (p2[1] - p1[1])*(p2[1] - p1[1])); //probably doesnt work, at least didnt idfk
+	return sqrtf((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1));
 }
 void Engine::GetRealXY(float out[2], float in[2])
 {
@@ -281,6 +280,24 @@ float Engine::GetX(float in[2])
 }
 float Engine::GetY(float in[2])
 {
+	float out[2];
+	GetXY(out, in);
+	return out[1];
+}
+float Engine::GetX(float x)
+{
+	float in[2];
+	in[0] = x;
+	in[1] = 0;
+	float out[2];
+	GetXY(out, in);
+	return out[0];
+}
+float Engine::GetY(float y)
+{
+	float in[2];
+	in[0] = 0;
+	in[1] = y;
 	float out[2];
 	GetXY(out, in);
 	return out[1];
