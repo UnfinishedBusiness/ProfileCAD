@@ -416,6 +416,47 @@ float *Engine::GetPointAlong45Line(float x, float y, float len, int dir)
 	p[1] = y;
 	return p;
 }
+float *Engine::GetPointAlongSlope(float x, float y, float rise, float run, float len, int dir)
+{
+	float StartX = x;
+	float StartY = y;
+	float *p = (float	*)malloc(sizeof(float *) * 2);
+	float rise_inc = rise*0.0005f;
+	float run_inc = run*0.0005f;
+
+	float i = 0.0000f;
+	while(i += 0.0005f)
+	{
+		if (GetDistance(StartX, StartY, x, y) >= len)
+		{
+			break;
+		}
+		if (dir == 2)
+		{
+			x += run_inc;
+			y += rise_inc;
+		}
+		if (dir == 4)
+		{
+			x -= run_inc;
+			y -= rise_inc;
+		}
+		if (dir == 1)
+		{
+			x += run_inc;
+			y -= rise_inc;
+		}
+		if (dir == 3)
+		{
+			x -= run_inc;
+			y += rise_inc;
+		}
+		//printf("%f\n", i);
+	}
+	p[0] = x;
+	p[1] = y;
+	return p;
+}
 void Engine::ArcByCenter(float x, float y, float Radius)
 {
 	float pos[2];

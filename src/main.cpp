@@ -268,29 +268,41 @@ int main (int argc, char** argv)
                     float *PerpEnd = engine->GetPointAlongLine(Xmidpoint, Ymidpoint, NewX, NewY, fabs(real_d));
                     Start[0] = Xmidpoint;
                     Start[1] = Ymidpoint;
-                    //float End[2];
-                    //engine->Line(Start, PerpEnd);
                     float *NewEnd = engine->GetPointAlong45Line(PerpEnd[0], PerpEnd[1], (line_length/2), 1);
                     float *NewStart = engine->GetPointAlong45Line(PerpEnd[0], PerpEnd[1], (line_length/2), 3);
                     engine->Line(NewStart, NewEnd);
                   }
                   else
                   {
-                    printf("Xmidpoint=%f, Ymidpoint=%f, b=%f slope=%f, slopeInverse=%f\n",Xmidpoint, Ymidpoint, b, slope, slopeInverse);
-                    NewX = (Ymidpoint-b)/slopeInverse;
-                    NewY = (slopeInverse*Xmidpoint) + b;
-                    float *PerpEnd = engine->GetPointAlongLine(Xmidpoint, Ymidpoint, NewX, NewY, fabs(real_d));
-                    //float End[2];
-                    //float pX = ((PerpEnd[1] - b)/slope);
-                    printf("x: %f, y: %f\n", PerpEnd[0], PerpEnd[1]);
-                    //b = (((slope*PerpEnd[0])-PerpEnd[1])/-1);
-                    //printf("b=%f\n", b);
-                    float pY = slope*(-1*(PerpEnd[0]))+PerpEnd[1];
-                    //printf("pX: %f, pY: %f\n", pX, pY);
-                    line_length = engine->GetDistance(x1, y1, x2, y2);
-                    float *finalLineStart = engine->GetPointAlongLine(PerpEnd[0], PerpEnd[1], 0, pY, (line_length/2));
-
-                    engine->Line(finalLineStart, PerpEnd);
+                    //printf("Xmidpoint=%f, Ymidpoint=%f, b=%f slope=%f, slopeInverse=%f\n",Xmidpoint, Ymidpoint, b, slope, slopeInverse);
+                    //NewX = (Ymidpoint-b)/slopeInverse;
+                    //NewY = (slopeInverse*Xmidpoint) + b;
+                    float *PerpEnd;
+                    if (y1 > 0 || y2 > 0)
+                    {
+                      if (real_d > 0)
+                      {
+                        PerpEnd = engine->GetPointAlongSlope(Xmidpoint, Ymidpoint, (x2 - x1), (y2 - y1), fabs(real_d), 1);
+                      }
+                      else
+                      {
+                        PerpEnd = engine->GetPointAlongSlope(Xmidpoint, Ymidpoint, (x2 - x1), (y2 - y1), fabs(real_d), 3);
+                      }
+                    }
+                    else
+                    {
+                      if (real_d > 0)
+                      {
+                        PerpEnd = engine->GetPointAlongSlope(Xmidpoint, Ymidpoint, (x2 - x1), (y2 - y1), fabs(real_d), 3);
+                      }
+                      else
+                      {
+                        PerpEnd = engine->GetPointAlongSlope(Xmidpoint, Ymidpoint, (x2 - x1), (y2 - y1), fabs(real_d), 1);
+                      }
+                    }
+                    float *finalLineStart = engine->GetPointAlongSlope(PerpEnd[0], PerpEnd[1], (y2 - y1), (x2 - x1), (line_length/2), 2);
+                    float *finalLineEnd = engine->GetPointAlongSlope(PerpEnd[0], PerpEnd[1], (y2 - y1), (x2 - x1), (line_length/2), 4);
+                    engine->Line(finalLineStart, finalLineEnd);
                   }
                 }
                 //MsgBuff = ">Line X1" + std::to_string(Start[0]) + " Y1: " + std::to_string(Start[1]) + " X2: " + std::to_string(End[0]) + " Y2: " + std::to_string(End[1]);
