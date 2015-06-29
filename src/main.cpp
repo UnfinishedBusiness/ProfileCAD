@@ -130,7 +130,6 @@ int main (int argc, char** argv)
 					if (e.key.keysym.scancode == SDL_SCANCODE_RIGHT)
 					{
 							engine->PanIncX(+10);
-
 					}
           if (e.key.keysym.scancode == SDL_SCANCODE_RETURN)
 					{
@@ -144,16 +143,9 @@ int main (int argc, char** argv)
 							}
               if (inputText.find(":ac") != std::string::npos)
 							{
-                MsgTimer = time(0);
-								std::size_t cXp = inputText.find("x");
-								std::size_t cYp = inputText.find("y");
-                std::size_t Rp  = inputText.find("r");
-
-								std::string cX = inputText.substr(cXp+1, (cYp - cXp) -1);
-								std::string cY = inputText.substr(cYp+1, (Rp - cYp)-1);
-								std::string R = inputText.substr(Rp+1, (inputText.length() - Rp)-1);
-                MsgBuff = ">Drew Arc cX: " + cX + " cY: " + cY + " R: " + R;
-                engine->ArcByCenter(atof((char *)cX.c_str()), atof((char *)cY.c_str()), atof((char *)R.c_str()));
+                float *p = engine->ParseArcByCenterInstruction(inputText.erase(0, 1));
+                MsgBuff = ">Drew Arc cX: " + std::to_string(p[0]) + " cY: " + std::to_string(p[1]) + " R: " + std::to_string(p[2]);
+                engine->ArcByCenter(p[0], p[1], p[2]);
               }
               if (inputText.find(":lp") != std::string::npos && std::string::npos && inputText.find("d"))
 							{
@@ -176,16 +168,11 @@ int main (int argc, char** argv)
               }
 							if (inputText.find(":l") != std::string::npos && inputText.find("x") != std::string::npos && inputText.find("y") != std::string::npos)
 							{
-								MsgTimer = time(0);
-								std::size_t FirstX = inputText.find("x");
-								std::size_t FirstY = inputText.find("y");
-								std::size_t LastX = inputText.find("x", FirstX+1);
-								std::size_t LastY = inputText.find("y", FirstY+1);
-								std::string X1 = inputText.substr(FirstX+1, (FirstY-FirstX)-1);
-								std::string Y1 = inputText.substr(FirstY+1, (LastX - FirstY) -1);
-								std::string X2 = inputText.substr(LastX+1, (LastY - LastX)-1);
-								std::string Y2 = inputText.substr(LastY+1, (inputText.length() - LastY)-1);
-
+                float *p = engine->ParseLineInstruction(inputText.erase(0, 1)); //Erase dirty ':'
+								std::string X1 = std::to_string(p[0]);
+								std::string Y1 = std::to_string(p[1]);
+								std::string X2 = std::to_string(p[2]);
+								std::string Y2 = std::to_string(p[3]);
 
 								if (X1 != inputText && X2 != inputText && Y1 != inputText && Y2 != inputText)
 								{

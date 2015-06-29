@@ -155,6 +155,22 @@ float *Engine::ParseLineInstruction(std::string i)
 	//printf("x%f, y%f x%f, y%f\n", X1, Y1, X2, Y2);
 	return p;
 }
+float *Engine::ParseArcByCenterInstruction(std::string i)
+{
+	float *p = (float	*)malloc(sizeof(float *) * 3);
+	std::size_t cXp = i.find("x");
+	std::size_t cYp = i.find("y");
+	std::size_t Rp  = i.find("r");
+
+	std::string cX = i.substr(cXp+1, (cYp - cXp) -1);
+	std::string cY = i.substr(cYp+1, (Rp - cYp)-1);
+	std::string R = i.substr(Rp+1, (i.length() - Rp)-1);
+
+	p[0] = atof((char*)cX.c_str());
+	p[1] = atof((char*)cY.c_str());
+	p[2] = atof((char*)R.c_str());
+	return p;
+}
 /********** Standard instruction parsing *******/
 int Engine::GetCurserOverId()
 {
@@ -461,32 +477,19 @@ void Engine::UpdateScreen()
 						//printf("===>Entity Instruction: %s\n", i.c_str());
 						if (i.find("ac") != std::string::npos)
 						{
-							std::size_t cXp = i.find("x");
-							std::size_t cYp = i.find("y");
-							std::size_t Rp  = i.find("r");
-
-							std::string cX = i.substr(cXp+1, (cYp - cXp) -1);
-							std::string cY = i.substr(cYp+1, (Rp - cYp)-1);
-							std::string R = i.substr(Rp+1, (i.length() - Rp)-1);
-							ArcByCenter(atof((char *)cX.c_str()), atof((char *)cY.c_str()), atof((char *)R.c_str()));
+							float *p = ParseArcByCenterInstruction(i);
+							ArcByCenter(p[0], p[1], p[2]);
 						}
 						if (i.find("l") != std::string::npos)
 						{
-							std::size_t FirstX = i.find("x");
-							std::size_t FirstY = i.find("y");
-							std::size_t LastX = i.find("x", FirstX+1);
-							std::size_t LastY = i.find("y", FirstY+1);
-							std::string X1 = i.substr(FirstX+1, (FirstY-FirstX)-1);
-							std::string Y1 = i.substr(FirstY+1, (LastX - FirstY) -1);
-							std::string X2 = i.substr(LastX+1, (LastY - LastX)-1);
-							std::string Y2 = i.substr(LastY+1, (i.length() - LastY)-1);
+							float *p = ParseLineInstruction(i);
 							//std::cout << "\t>Added Line X1: " + X1 + " Y1: " + Y1 + " X2: " + X2 + " Y2: " + Y2 + "\n";
 							float LineStart[2];
 							float LineEnd[2];
-							LineStart[0] = atof((char*)X1.c_str());
-							LineStart[1] = atof((char*)Y1.c_str());
-							LineEnd[0] = atof((char*)X2.c_str());
-							LineEnd[1] = atof((char*)Y2.c_str());
+							LineStart[0] = p[0];
+							LineStart[1] = p[1];
+							LineEnd[0] = p[2];
+							LineEnd[1] = p[3];
 							Line(LineStart, LineEnd);
 						}
 				}

@@ -70,7 +70,7 @@ class Engine                // begin declaration of the class
 
 	/*Standard Instruction Parsing*/
  	float *ParseLineInstruction(std::string i);
-
+	float *ParseArcByCenterInstruction(std::string i);
 	/*Standard Instruction Parsing*/
 	int GetCurserOverId();
 	void UpdateWindowSize(int w, int h);
