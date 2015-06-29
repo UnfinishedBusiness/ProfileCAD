@@ -83,6 +83,8 @@ class Engine                // begin declaration of the class
 	float GetY(float y); //GetXY Wrapper Function
 	void GetMousePos(float out[2]); //Returns Virtual Cordinant plane
 	void Line(float Start[2], float End[2]);
+	float *GetPointAlongLine(float x1, float y1, float x2, float y2, float len);
+	float *GetPointAlong45Line(float x1, float y1, float len, int dir);
 	void ArcByCenter(float x, float y, float Radius);
 	void DrawPixel(SDL_Surface *screen, int x, int y, Uint8 R, Uint8 G, Uint8 B);
 	float ZoomIn();

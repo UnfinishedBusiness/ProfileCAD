@@ -352,6 +352,70 @@ void Engine::Line(float Start[2], float End[2])
 		AppendInstructionArray((char *)Instruction.c_str());
 	}
 }
+float *Engine::GetPointAlongLine(float x1, float y1, float x2, float y2, float len)
+{
+	float *p = (float	*)malloc(sizeof(float *) * 2);
+
+	float x = x2 - x1;
+	float y = y2 - y1;
+
+	float inc = 0.0005f;
+
+	float length = sqrt( x*x + y*y );
+	float addx = (x / length) * inc;
+	float addy = (y / length) * inc;
+
+	x = x1;
+	y = y1;
+
+	for(float i = 0.000f; i < len; i += inc)
+	{
+	  x += addx;
+	  y += addy;
+		//printf("%f - %f,%f\n", i, x, y);
+	}
+	p[0] = x;
+	p[1] = y;
+	return p;
+}
+float *Engine::GetPointAlong45Line(float x, float y, float len, int dir)
+{
+	float StartX = x;
+	float StartY = y;
+	float *p = (float	*)malloc(sizeof(float *) * 2);
+	float i = 0.0000f;
+	while(i += 0.0005f)
+	{
+		if (GetDistance(StartX, StartY, x, y) >= len)
+		{
+			break;
+		}
+		if (dir == 2)
+		{
+			x += 0.0005f;
+			y += 0.0005f;
+		}
+		if (dir == 4)
+		{
+			x -= 0.0005f;
+			y -= 0.0005f;
+		}
+		if (dir == 1)
+		{
+			x += 0.0005f;
+			y -= 0.0005f;
+		}
+		if (dir == 3)
+		{
+			x -= 0.0005f;
+			y += 0.0005f;
+		}
+		//printf("%f\n", i);
+	}
+	p[0] = x;
+	p[1] = y;
+	return p;
+}
 void Engine::ArcByCenter(float x, float y, float Radius)
 {
 	float pos[2];

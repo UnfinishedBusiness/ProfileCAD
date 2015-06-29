@@ -141,6 +141,13 @@ int main (int argc, char** argv)
 								//engine->Open();
 								//MsgBuff = ">Opened " + file;
 							}
+              if (inputText.find(":gll") != std::string::npos)
+							{
+                std::string Entity = std::string(engine->EntityInstruction[LastEntityClicked]);
+                float *p = engine->ParseLineInstruction(Entity);
+                MsgBuff = "> Line is " + std::to_string(engine->GetDistance(p[0], p[1], p[2], p[3])) + " units long";
+
+              }
               if (inputText.find(":ac") != std::string::npos)
 							{
                 float *p = engine->ParseArcByCenterInstruction(inputText.erase(0, 1));
@@ -156,39 +163,134 @@ int main (int argc, char** argv)
                 std::string Entity = std::string(engine->EntityInstruction[LastEntityClicked]);
                 //MsgBuff = Entity;
                 float *p = engine->ParseLineInstruction(Entity);
-                //MsgBuff = "Slope is " + std::to_string((p[3]-p[1])) + "/" + std::to_string((p[2] - p[0]));
-
-                float slope = (p[3] - p[1]) / (p[2] - p[0]);
-                float slopeInverse =  (p[2] - p[0]) / (p[3] - p[1]);
-                //float LineLength = engine->GetDistance(p[0], p[1], p[2], p[3]);
-
-                //MsgBuff = ">Line Length: " + std::to_string(LineLength);
-                //float InstructionX1 = engine->GetX(engine->EntityCurserPointsX[LastEntityClicked][1]);
-                //float InstructionY1 = engine->GetX(engine->EntityCurserPointsY[LastEntityClicked][1]);
-                //float InstructionX2 = engine->GetX(engine->EntityCurserPointsX[LastEntityClicked][engine->EntityCurserPointsX[LastEntityClicked][0]-1]);
-                //float InstructionY2 = engine->GetX(engine->EntityCurserPointsY[LastEntityClicked][engine->EntityCurserPointsY[LastEntityClicked][0]-1]);
-
                 float real_d = atof((char*)Distance.c_str());
-                float d = (real_d / sqrtf(1 + ((slopeInverse) * (slopeInverse))));
-                float b;
-                b = (((slopeInverse*p[0])-p[1])/-1);
-                float X1intercept = ((p[1]-(b+d)/slopeInverse));
-                float Y1intercept = (slopeInverse*p[0]+(b+d));
-
-                b = (((slopeInverse*p[2])-p[3])/-1);
-                float X2intercept = ((p[3]-(b+d))/slopeInverse);
-                float Y2intercept = (slopeInverse*p[2]+(b+d));
-
+                //MsgBuff = "Slope is " + std::to_string((p[3]-p[1])) + "/" + std::to_string((p[2] - p[0]));
+                float x1, y1, x2, y2, b, x, y, NewX, NewY;
+                x1 = p[0];
+                y1 = p[1];
+                x2 = p[2];
+                y2 = p[3];
+                float slope = ((y2 - y1) / (x2 - x1));
+                float slopeInverse =  ((x2 - x1) / (y2 - y1));
                 float Start[2];
-                Start[0] = X1intercept;
-                Start[1] = Y1intercept;
-
-
                 float End[2];
-                End[0] = X2intercept;
-                End[1] = Y2intercept;
 
-                engine->Line(Start, End);
+                //float d = (real_d / sqrtf(1 + ((slopeInverse) * (slopeInverse))));
+                if (x1 == x2)
+                {
+                  Start[0] = x1 + real_d;
+                  Start[1] = y1;
+                  End[0] = x2 + real_d;
+                  End[1] = y2;
+                  engine->Line(Start, End);
+                }
+                else if (y1 == y2)
+                {
+                  Start[0] = x1;
+                  Start[1] = y1 + real_d;
+                  End[0] = x2;
+                  End[1] = y2 + real_d;
+                  engine->Line(Start, End);
+                }
+                else
+                {
+                  float line_length = engine->GetDistance(x1, y1, x2, y2);
+                  float Xmidpoint = ((x1+x2)/2);
+                  float Ymidpoint = ((y1+y2)/2);
+                  b = ((slopeInverse*Xmidpoint)-Ymidpoint);
+                  if (slopeInverse == 1)
+                  {
+                    printf("Slope is 1, using alt method, Distance: %f, Length: %f\n", real_d, line_length);
+                    if (y1 > 0 || y2 > 0)
+                    {
+                      if (real_d > 0)
+                      {
+                        NewX = (Xmidpoint) - (Xmidpoint);
+                        NewY = (Ymidpoint) + (Ymidpoint);
+                      }
+                      else
+                      {
+                        NewX = (Xmidpoint) + (Xmidpoint);
+                        NewY = (Ymidpoint) - (Ymidpoint);
+                      }
+                    }
+                    else
+                    {
+                      if (real_d > 0)
+                      {
+                        NewX = (Xmidpoint) + (Xmidpoint);
+                        NewY = (Ymidpoint) - (Ymidpoint);
+                      }
+                      else
+                      {
+                        NewX = (Xmidpoint) - (Xmidpoint);
+                        NewY = (Ymidpoint) + (Ymidpoint);
+                      }
+                    }
+                    float *PerpEnd = engine->GetPointAlongLine(Xmidpoint, Ymidpoint, NewX, NewY, fabs(real_d));
+                    Start[0] = Xmidpoint;
+                    Start[1] = Ymidpoint;
+                    //float End[2];
+                    //engine->Line(Start, PerpEnd);
+                    float *NewEnd = engine->GetPointAlong45Line(PerpEnd[0], PerpEnd[1], (line_length/2), 2);
+                    float *NewStart = engine->GetPointAlong45Line(PerpEnd[0], PerpEnd[1], (line_length/2), 4);
+                    engine->Line(NewStart, NewEnd);
+                  }
+                  else if(slopeInverse == -1)
+                  {
+                    printf("Slope is -1, using alt method, Distance: %f, Length: %f\n", real_d, line_length);
+                    if (y1 > 0 || y2 > 0)
+                    {
+                      if (real_d < 0)
+                      {
+                        NewX = (Xmidpoint) + (Xmidpoint);
+                        NewY = (Ymidpoint) - (Ymidpoint);
+                      }
+                      else
+                      {
+                        NewX = (Xmidpoint) - (Xmidpoint);
+                        NewY = (Ymidpoint) + (Ymidpoint);
+                      }
+                    }
+                    else
+                    {
+                      if (real_d < 0)
+                      {
+                        NewX = (Xmidpoint) - (Xmidpoint);
+                        NewY = (Ymidpoint) + (Ymidpoint);
+                      }
+                      else
+                      {
+                        NewX = (Xmidpoint) + (Xmidpoint);
+                        NewY = (Ymidpoint) - (Ymidpoint);
+                      }
+                    }
+                    float *PerpEnd = engine->GetPointAlongLine(Xmidpoint, Ymidpoint, NewX, NewY, fabs(real_d));
+                    Start[0] = Xmidpoint;
+                    Start[1] = Ymidpoint;
+                    //float End[2];
+                    //engine->Line(Start, PerpEnd);
+                    float *NewEnd = engine->GetPointAlong45Line(PerpEnd[0], PerpEnd[1], (line_length/2), 1);
+                    float *NewStart = engine->GetPointAlong45Line(PerpEnd[0], PerpEnd[1], (line_length/2), 3);
+                    engine->Line(NewStart, NewEnd);
+                  }
+                  else
+                  {
+                    printf("Xmidpoint=%f, Ymidpoint=%f, b=%f slopeInverse=%f\n",Xmidpoint, Ymidpoint, b, slopeInverse);
+                    NewX = (Ymidpoint-b)/slopeInverse;
+                    NewY = (slopeInverse*Xmidpoint) + b;
+                    Start[0] = Xmidpoint;
+                    Start[1] = Ymidpoint;
+                    //float End[2];
+                    End[0] = NewX;
+                    End[1] = NewY;
+                    engine->Line(Start, End);
+                  }
+
+
+                  //float Start[2];
+
+                }
                 //MsgBuff = ">Line X1" + std::to_string(Start[0]) + " Y1: " + std::to_string(Start[1]) + " X2: " + std::to_string(End[0]) + " Y2: " + std::to_string(End[1]);
               }
               if (inputText.find(":lh") != std::string::npos)
