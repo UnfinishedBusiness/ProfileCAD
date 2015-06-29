@@ -156,21 +156,40 @@ int main (int argc, char** argv)
                 std::string Entity = std::string(engine->EntityInstruction[LastEntityClicked]);
                 //MsgBuff = Entity;
                 float *p = engine->ParseLineInstruction(Entity);
+                //MsgBuff = "Slope is " + std::to_string((p[3]-p[1])) + "/" + std::to_string((p[2] - p[0]));
 
                 float slope = (p[3] - p[1]) / (p[2] - p[0]);
-
+                float slopeInverse =  (p[2] - p[0]) / (p[3] - p[1]);
                 //float LineLength = engine->GetDistance(p[0], p[1], p[2], p[3]);
 
                 //MsgBuff = ">Line Length: " + std::to_string(LineLength);
+                //float InstructionX1 = engine->GetX(engine->EntityCurserPointsX[LastEntityClicked][1]);
+                //float InstructionY1 = engine->GetX(engine->EntityCurserPointsY[LastEntityClicked][1]);
+                //float InstructionX2 = engine->GetX(engine->EntityCurserPointsX[LastEntityClicked][engine->EntityCurserPointsX[LastEntityClicked][0]-1]);
+                //float InstructionY2 = engine->GetX(engine->EntityCurserPointsY[LastEntityClicked][engine->EntityCurserPointsY[LastEntityClicked][0]-1]);
+
+                float real_d = atof((char*)Distance.c_str());
+                float d = (real_d / sqrtf(1 + ((slopeInverse) * (slopeInverse))));
+                float b;
+                b = (((slopeInverse*p[0])-p[1])/-1);
+                float X1intercept = ((p[1]-(b+d)/slopeInverse));
+                float Y1intercept = (slopeInverse*p[0]+(b+d));
+
+                b = (((slopeInverse*p[2])-p[3])/-1);
+                float X2intercept = ((p[3]-(b+d))/slopeInverse);
+                float Y2intercept = (slopeInverse*p[2]+(b+d));
+
                 float Start[2];
-                Start[0] = engine->GetX(engine->EntityCurserPointsX[LastEntityClicked][1]) * (slope + atof((char *)Distance.c_str()));
-                Start[1] = engine->GetX(engine->EntityCurserPointsY[LastEntityClicked][1]) * (slope + atof((char *)Distance.c_str()));
+                Start[0] = X1intercept;
+                Start[1] = Y1intercept;
+
+
                 float End[2];
-                End[0] = engine->GetX(engine->EntityCurserPointsX[LastEntityClicked][engine->EntityCurserPointsX[LastEntityClicked][0]-2]) * (slope + atof((char *)Distance.c_str()));
-                End[1] = engine->GetX(engine->EntityCurserPointsY[LastEntityClicked][engine->EntityCurserPointsY[LastEntityClicked][0]-2]) * (slope + atof((char *)Distance.c_str()));
+                End[0] = X2intercept;
+                End[1] = Y2intercept;
 
                 engine->Line(Start, End);
-                MsgBuff = ">Line X1" + std::to_string(Start[0]) + " Y1: " + std::to_string(Start[1]) + " X2: " + std::to_string(End[0]) + " Y2: " + std::to_string(End[1]);
+                //MsgBuff = ">Line X1" + std::to_string(Start[0]) + " Y1: " + std::to_string(Start[1]) + " X2: " + std::to_string(End[0]) + " Y2: " + std::to_string(End[1]);
               }
               if (inputText.find(":lh") != std::string::npos)
 							{
@@ -263,7 +282,7 @@ int main (int argc, char** argv)
             int id = engine->GetCurserOverId(); //Remember that this resets the id buffer!
             if (id != -1)
             {
-              MsgBuff = ">Operate on entity id# " + std::to_string(id);
+              MsgBuff = ">Operate on entity id# " + std::to_string(id) + " with instruction " + std::string(engine->EntityInstruction[id]);
               LastEntityClicked = id;
             }
 						if (ActiveTool == LineTool)

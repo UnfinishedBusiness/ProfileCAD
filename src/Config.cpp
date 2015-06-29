@@ -127,7 +127,7 @@ void Config::SaveConfig()
     fprintf(fp, "Filename: %s\n", Filename);
     fprintf(fp, "Font: %s\n", Font);
 		fprintf(fp, "BackgroundColor: %s\n", BackgroundColor);
-    fprintf(fp, "WindowHeight: %i\n", WindowHeight);
+    fprintf(fp, "WindowHeight: %i\n", WindowHeight-150);
     fprintf(fp, "WindowWidth: %i\n", WindowWidth);
 		fclose(fp);
 	}
