@@ -134,13 +134,29 @@ int main (int argc, char** argv)
           if (e.key.keysym.scancode == SDL_SCANCODE_RETURN)
 					{
 							//printf("Input: %s\n", inputText.c_str());
+              if (inputText.find(":save") != std::string::npos)
+							{
+								engine->Save();
+								MsgBuff = ">Saving " + std::string(config->Filename);
+							}
+              if (inputText.find(":open") != std::string::npos)
+							{
+								engine->Open();
+								MsgBuff = ">Opening " + std::string(config->Filename);
+							}
 							if (inputText.find(":file") != std::string::npos)
 							{
 								std::string file = trim(inputText.substr(5, inputText.length()));
 								config->Filename = strdup(file.c_str());
-								//engine->Open();
-								//MsgBuff = ">Opened " + file;
+								engine->Open();
+								MsgBuff = ">Opened " + file;
 							}
+              if (inputText.find(":rm") != std::string::npos)
+							{
+                engine->EntityInstruction[LastEntityClicked][0] = '\0';
+                MsgBuff = "> Removed Entity ID#" + std::to_string(LastEntityClicked);
+                engine->EntityRedraw = true;
+              }
               if (inputText.find(":gll") != std::string::npos)
 							{
                 std::string Entity = std::string(engine->EntityInstruction[LastEntityClicked]);

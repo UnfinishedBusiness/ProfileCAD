@@ -72,6 +72,9 @@ class Engine                // begin declaration of the class
  	float *ParseLineInstruction(std::string i);
 	float *ParseArcByCenterInstruction(std::string i);
 	/*Standard Instruction Parsing*/
+	int Open();
+	int Save();
+
 	int GetCurserOverId();
 	void UpdateWindowSize(int w, int h);
 	void GetWindowSize(int w, int h);

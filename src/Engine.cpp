@@ -194,16 +194,10 @@ void Engine::GetMousePos(float out[2])
 {
 	int x, y;
 	SDL_GetMouseState(&x, &y);
- 	//out[0] = (x - OriginOffsetX);
-	//out[1] = ((y - OriginOffsetY)/-1);
-	//RealMouseX = x;
-	//RealMouseY = y;
 	float in[2];
 	in[0] = x;
 	in[1] = y;
 	GetXY(out, in);
-	//MouseX = out[0];
-	//MouseY = out[1];
 }
 void Engine::PanXY(float pos[2])
 {
@@ -231,16 +225,17 @@ float Engine::ZoomIn()
 	{
 		ZoomInc = 0.001;
 	}
-	if (ViewRatio > 0.0001)
+	if (ViewRatio > 0.0005)
 	{
 		ViewRatio = ViewRatio - ZoomInc;
 		EntityRedraw = true;
 	}
 	else
 	{
-		ViewRatio = .0001;
+		ViewRatio = .0005;
 		EntityRedraw = true;
 	}
+	//printf("Zoom: %f\n", ViewRatio);
 	return ViewRatio;
 }
 float Engine::ZoomOut()
@@ -315,13 +310,8 @@ void Engine::Line(float Start[2], float End[2])
 	SDL_SetTextureAlphaMod(texture, 255); //Make texture clear
 	SDL_SetRenderTarget( r, texture );
 	SDL_SetRenderDrawColor( r, 0, 0, 0, 0 ); //Make texture clear
-	//SDL_RenderClear(r);
 	config->Color((char*)config->LineColor);
 
-	//SDL_RenderDrawLine(r, screen_point1[0], screen_point1[1], screen_point2[0], screen_point2[1]); //But we need actual points
-
-	//double x = x2 - x1;
-	//double y = y2 - y1;
 	double x = screen_point2[0] - screen_point1[0];
 	double y = screen_point2[1] - screen_point1[1];
 
@@ -715,7 +705,69 @@ void Engine::DrawPixel(SDL_Surface *screen, int x, int y, Uint8 R, Uint8 G, Uint
       break;
   }
 }
-
+int Engine::Open()
+{
+	FILE *fp;
+	fp = fopen(config->Filename, "r");
+	if (fp == NULL)
+	{
+	  fprintf(stderr, "!!> Cant\'t open file: %s\n", config->Filename);
+	  return 1;
+	}
+	FreeInstructionArray();
+	InitInstructionArray();
+	char buf[2048];
+  while (fgets (buf, sizeof(buf), fp))
+	{
+			std::string i = std::string(buf);
+			//printf("===>Entity Instruction: %s\n", i.c_str());
+			if (i.find("ac") != std::string::npos)
+			{
+				float *p = ParseArcByCenterInstruction(i);
+				ArcByCenter(p[0], p[1], p[2]);
+			}
+			if (i.find("l") != std::string::npos)
+			{
+				float *p = ParseLineInstruction(i);
+				//std::cout << "\t>Added Line X1: " + X1 + " Y1: " + Y1 + " X2: " + X2 + " Y2: " + Y2 + "\n";
+				float LineStart[2];
+				float LineEnd[2];
+				LineStart[0] = p[0];
+				LineStart[1] = p[1];
+				LineEnd[0] = p[2];
+				LineEnd[1] = p[3];
+				Line(LineStart, LineEnd);
+			}
+  }
+	EntityRedraw=true;
+	fclose(fp);
+	return 0;
+}
+int Engine::Save()
+{
+	FILE *fp;
+	fp = fopen(config->Filename, "w");
+	if (fp == NULL)
+	{
+	  fprintf(stderr, "!!> Cant\'t write file: %s\n", config->Filename);
+	  return 1;
+	}
+	for(int x = 0; x < EntityInstructionLength; x++)
+	{
+		std::string i = std::string(EntityInstruction[x]);
+		//Only save valid entities
+		if (i.find("ac") != std::string::npos)
+		{
+			fprintf(fp, "%s\n", (char*)i.c_str());
+		}
+		if (i.find("l") != std::string::npos)
+		{
+			fprintf(fp, "%s\n", (char*)i.c_str());
+		}
+	}
+	fclose(fp);
+	return 0;
+}
 void Engine::UnInit()
 {
 	//g_slist_free(Entitys);
