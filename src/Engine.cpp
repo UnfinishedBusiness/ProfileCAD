@@ -368,151 +368,117 @@ void Engine::Line(float Start[2], float End[2])
 		AppendInstructionArray((char *)Instruction.c_str());
 	}
 }
-void Engine::ArcByCenter(float x, float y, float Radius)
+void Engine::Arc(arc data)
 {
-	float pos[2];
-	float r_pos[2];
-	int centrex=x,centrey=y;// centre of circle in pixel coords
-	float ypos, xpos;
-	float two_pi=6.283f;
-	float angle_inc=0.001f/Radius;
-	int NumberOfPoints=0;
-	for(float angle=0.0f; angle<= two_pi;angle+=angle_inc)
+	if (data.type == CIRCLE)
 	{
-		NumberOfPoints++;
-	}
-	int pointsX[NumberOfPoints];
-	int pointsY[NumberOfPoints];
-	//SDL_Surface *surface = SDL_CreateRGBSurface(0, WindowWidth, WindowHeight, 32, 0, 0, 0, 0);
-	SDL_Texture *texture = SDL_CreateTexture(r, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, WindowWidth, WindowHeight);
-	SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
-	SDL_SetTextureAlphaMod(texture, 255); //Make texture clear
-	SDL_SetRenderTarget( r, texture );
-	SDL_SetRenderDrawColor( r, 0, 0, 0, 0 ); //Make texture clear
-	//SDL_RenderClear(r);
-	config->Color((char*)config->LineColor);
+		float pos[2];
+		float r_pos[2];
+		int centrex=data.center.x;
+		int centrey=data.center.y;// centre of circle in pixel coords
+		int x = centrex;
+		int y = centrey;
+		float Radius = data.radius;
+		float ypos, xpos;
+		float two_pi=6.283f;
+		float angle_inc=0.001f/Radius;
+		int NumberOfPoints=0;
+		for(float angle=0.0f; angle<= two_pi;angle+=angle_inc)
+		{
+			NumberOfPoints++;
+		}
+		int pointsX[NumberOfPoints];
+		int pointsY[NumberOfPoints];
+		//SDL_Surface *surface = SDL_CreateRGBSurface(0, WindowWidth, WindowHeight, 32, 0, 0, 0, 0);
+		SDL_Texture *texture = SDL_CreateTexture(r, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, WindowWidth, WindowHeight);
+		SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
+		SDL_SetTextureAlphaMod(texture, 255); //Make texture clear
+		SDL_SetRenderTarget( r, texture );
+		SDL_SetRenderDrawColor( r, 0, 0, 0, 0 ); //Make texture clear
+		//SDL_RenderClear(r);
+		config->Color((char*)config->LineColor);
 
-	int count = 0;
-	for(float angle=0.0f; angle<= two_pi;angle+=angle_inc)
-	{
-	    xpos=centrex+Radius*cos(angle);
-	    ypos=centrey+Radius*sin(angle);
-			pos[0] = xpos;
-			pos[1] = ypos;
-	    GetRealXY(r_pos, pos);
-			//printf("Circle point: %d, %d\n", (int)r_pos[0], (int)r_pos[1]);
-			//SDL_RenderDrawLine(r, r_pos[0], r_pos[1], r_pos[0]+1, r_pos[1]+1);
-			pointsX[count] = r_pos[0];
-			pointsY[count] = r_pos[1];
+		int count = 0;
+		for(float angle=0.0f; angle<= two_pi;angle+=angle_inc)
+		{
+		    xpos=centrex+Radius*cos(angle);
+		    ypos=centrey+Radius*sin(angle);
+				pos[0] = xpos;
+				pos[1] = ypos;
+		    GetRealXY(r_pos, pos);
+				//printf("Circle point: %d, %d\n", (int)r_pos[0], (int)r_pos[1]);
+				//SDL_RenderDrawLine(r, r_pos[0], r_pos[1], r_pos[0]+1, r_pos[1]+1);
+				pointsX[count] = r_pos[0];
+				pointsY[count] = r_pos[1];
 
-			SDL_RenderDrawPoint(r, r_pos[0], r_pos[1]);
-			count++;
-	}
-	SDL_RenderPresent( r );
-	SDL_SetRenderTarget( r, NULL );
+				SDL_RenderDrawPoint(r, r_pos[0], r_pos[1]);
+				count++;
+		}
+		SDL_RenderPresent( r );
+		SDL_SetRenderTarget( r, NULL );
 
-	AppendEntityArray(texture);
-	AppendCurserPoints(pointsX, pointsY, NumberOfPoints);
-	if (EntityRedrawWithoutNewInstructions == false)
-	{
-		std::string Instruction = "acx" + std::to_string(x) + "y" + std::to_string(y) + "r" + std::to_string(Radius);
-		AppendInstructionArray((char *)Instruction.c_str());
+		AppendEntityArray(texture);
+		AppendCurserPoints(pointsX, pointsY, NumberOfPoints);
+		if (EntityRedrawWithoutNewInstructions == false)
+		{
+			std::string Instruction = "acx" + std::to_string(x) + "y" + std::to_string(y) + "r" + std::to_string(Radius);
+			AppendInstructionArray((char *)Instruction.c_str());
+		}
 	}
 }
-void Engine::ArcByStartEndRadius(float Start[2], float End[2], float Radius, int dir)
-{
-	//Direction: -1 cw, 1 ccw
-	/*float pos[2];
-	float r_pos[2];
-	int centrex=x,centrey=y;// centre of circle in pixel coords
-	float ypos, xpos;
-	float two_pi=6.283f;
-	float angle_inc=0.001f/Radius;
-
-	//SDL_Surface *surface = SDL_CreateRGBSurface(0, WindowWidth, WindowHeight, 32, 0, 0, 0, 0);
-	SDL_Texture *texture = SDL_CreateTexture(r, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, WindowWidth, WindowHeight);
-	SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
-	SDL_SetTextureAlphaMod(texture, 255); //Make texture clear
-	SDL_SetRenderTarget( r, texture );
-	SDL_SetRenderDrawColor( r, 0, 0, 0, 0 ); //Make texture clear
-	//SDL_RenderClear(r);
-	config->Color((char*)config->LineColor);
-
-	int count = 0;
-	for(float angle=0.0f; angle<= two_pi;angle+=angle_inc)
-	{
-			xpos=centrex+Radius*cos(angle);
-			ypos=centrey+Radius*sin(angle);
-			pos[0] = xpos;
-			pos[1] = ypos;
-			GetRealXY(r_pos, pos);
-
-			SDL_RenderDrawPoint(r, r_pos[0], r_pos[1]);
-			count++;
-	}
-	SDL_RenderPresent( r );
-	SDL_SetRenderTarget( r, NULL );
-
-	AppendEntityArray(texture);
-	//AppendCurserPoints(pointsX, pointsY, NumberOfPoints);
-	if (EntityRedrawWithoutNewInstructions == false)
-	{
-		std::string Instruction = "ax" + std::to_string(x) + "y" + std::to_string(y) + "r" + std::to_string(Radius);
-		AppendInstructionArray((char *)Instruction.c_str());
-	}*/
-}
-circle *Engine::GetCircleCenters(point p1,point p2,float radius)
+circle Engine::GetCircleCenters(point p1,point p2,float radius)
 {
 	float separation = GetDistance(p1,p2),mirrorDistance;
+	circle circles;
 	if(separation == 0.0)
 	{
 		if(radius == 0.0)
 		{
 			printf("No circles can be drawn through (%.4f,%.4f)\n",p1.x,p1.y);
-			return NULL;
+			circles.possible = 0;
+			return circles;
 		}
 		else
 		{
 				printf("Infinitely many circles can be drawn through (%.4f,%.4f)\n",p1.x,p1.y);
-				return NULL;
+				circles.possible = -1;
+				return circles;
 		}
 	}
 	else if(separation == 2*radius)
 	{
-		circle *circles = (circle	*)malloc(sizeof(circle *) * 2);
-		circles->possible = 1;
-		circles->start.x = p1.x;
-		circles->start.y = p1.y;
-		circles->end.x = p2.x;
-		circles->end.y = p2.y;
-		circles->center1.x = (p1.x+p2.x)/2;
-		circles->center1.y = (p1.y+p2.y)/2;
-		circles->radius = radius;
+		circles.possible = 1;
+		circles.start.x = p1.x;
+		circles.start.y = p1.y;
+		circles.end.x = p2.x;
+		circles.end.y = p2.y;
+		circles.center1.x = (p1.x+p2.x)/2;
+		circles.center1.y = (p1.y+p2.y)/2;
+		circles.radius = radius;
 		printf("Given points are opposite ends of a diameter of the circle with center (%.4f,%.4f) and radius %.4f\n",(p1.x+p2.x)/2,(p1.y+p2.y)/2,radius);
 		return circles;
 	}
 	else if(separation > 2*radius)
 	{
 		printf("Given points are farther away from each other than a diameter of a circle with radius %.4f\n",radius);
-		return NULL;
+		circles.possible = 0;
+		return circles;
 	}
 	else
 	{
-		circle *circles = (circle *)malloc(sizeof(circle *) * 2);
-		circles->possible = 2;
-		return circles;
+		circles.possible = 2;
 		mirrorDistance =sqrt(pow(radius,2) - pow(separation/2,2));
 		printf("Two circles are possible.\n");
 		printf("Circle C1 with center (%.4f,%.4f), radius %.4f and Circle C2 with center (%.4f,%.4f), radius %.4f\n",(p1.x+p2.x)/2 + mirrorDistance*(p1.y-p2.y)/separation,(p1.y+p2.y)/2 + mirrorDistance*(p2.x-p1.x)/separation,radius,(p1.x+p2.x)/2 - mirrorDistance*(p1.y-p2.y)/separation,(p1.y+p2.y)/2 - mirrorDistance*(p2.x-p1.x)/separation,radius);
-		circles->start.x = p1.x;
-		circles->start.y = p1.y;
-		circles->end.x = p2.x;
-		circles->end.y = p2.y;
-		circles->center1.x = (p1.x+p2.x)/2 + mirrorDistance*(p1.y-p2.y)/separation;
-		circles->center1.y = (p1.y+p2.y)/2 + mirrorDistance*(p2.x-p1.x)/separation;
-		circles->center2.x = (p1.x+p2.x)/2 - mirrorDistance*(p1.y-p2.y)/separation;
-		circles->center2.y = (p1.y+p2.y)/2 - mirrorDistance*(p2.x-p1.x)/separation;
-		circles->radius = radius;
+		circles.start.x = p1.x;
+		circles.start.y = p1.y;
+		circles.end.x = p2.x;
+		circles.end.y = p2.y;
+		circles.center1.x = (p1.x+p2.x)/2 + mirrorDistance*(p1.y-p2.y)/separation;
+		circles.center1.y = (p1.y+p2.y)/2 + mirrorDistance*(p2.x-p1.x)/separation;
+		circles.center2.x = (p1.x+p2.x)/2 - mirrorDistance*(p1.y-p2.y)/separation;
+		circles.center2.y = (p1.y+p2.y)/2 - mirrorDistance*(p2.x-p1.x)/separation;
+		circles.radius = radius;
 		return circles;
 
 	}
@@ -714,7 +680,12 @@ void Engine::UpdateScreen()
 						if (i.find("ac") != std::string::npos)
 						{
 							float *p = ParseArcByCenterInstruction(i);
-							ArcByCenter(p[0], p[1], p[2]);
+							arc circle;
+							circle.center.x = p[0];
+							circle.center.y = p[1];
+							circle.radius = p[2];
+							circle.type = CIRCLE;
+							Arc(circle);
 						}
 						if (i.find("l") != std::string::npos)
 						{
@@ -848,7 +819,12 @@ int Engine::Open()
 			if (i.find("ac") != std::string::npos)
 			{
 				float *p = ParseArcByCenterInstruction(i);
-				ArcByCenter(p[0], p[1], p[2]);
+				arc circle;
+				circle.center.x = p[0];
+				circle.center.y = p[1];
+				circle.radius = p[2];
+				circle.type = CIRCLE;
+				Arc(circle);
 			}
 			if (i.find("l") != std::string::npos)
 			{

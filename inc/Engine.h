@@ -19,6 +19,16 @@ typedef struct{
 		int possible;
 }circle;
 
+#define CIRCLE true
+#define ARC false
+typedef struct{
+		point start;
+		point end;
+		point center;
+		float radius;
+	  bool type;
+}arc;
+
 class Engine                // begin declaration of the class
 {
 	private:
@@ -100,8 +110,7 @@ class Engine                // begin declaration of the class
 
 	/********* Draw to renderer functions ************/
 	void Line(float Start[2], float End[2]);
-	void ArcByCenter(float x, float y, float Radius);
-	void ArcByStartEndRadius(float Start[2], float End[2], float Radius, int dir);
+	void Arc(arc data);
 	/********* Draw to renderer functions ************/
 	float *GetPointAlongLine(float x1, float y1, float x2, float y2, float len);
 	float *GetPointAlong45Line(float x1, float y1, float len, int dir);
@@ -115,7 +124,7 @@ class Engine                // begin declaration of the class
 
 	float GetDistance(float x1, float y1, float x2, float y2);
 	float GetDistance(point p1, point p2);
-	circle *GetCircleCenters(point p1, point p2, float radius);
+	circle GetCircleCenters(point p1, point p2, float radius);
 
 	SDL_Texture* MakeText(char *Text, int Size);
 	SDL_Texture* MakeColorText(SDL_Color Color, char *Text, int Size);

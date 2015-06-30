@@ -25,7 +25,7 @@ std::string MsgBuff = "";
 std::string inputText = "";
 Engine *engine=NULL;
 Config *config=NULL;
-time_t MsgTimer=NULL;
+time_t MsgTimer;
 int MsgDuration = 1500; //ms
 double timer_diff_ms;
 
@@ -178,7 +178,12 @@ int main (int argc, char** argv)
 							{
                 float *p = engine->ParseArcByCenterInstruction(inputText.erase(0, 1));
                 MsgBuff = ">Drew Arc cX: " + std::to_string(p[0]) + " cY: " + std::to_string(p[1]) + " R: " + std::to_string(p[2]);
-                engine->ArcByCenter(p[0], p[1], p[2]);
+                arc Circle;
+                Circle.type = CIRCLE;
+                Circle.center.x = p[0];
+                Circle.center.y = p[1];
+                Circle.radius = p[2];
+                engine->Arc(Circle);
               }
               if (inputText.find(":a") != std::string::npos)
               {
@@ -188,8 +193,22 @@ int main (int argc, char** argv)
                 start.y = p[1];
                 end.x = p[2];
                 end.y = p[3];
-                MsgBuff = ">Drew Arc X1: " + std::to_string(start.x) + " Y1: " + std::to_string(start.y) + " X2: " + std::to_string(end.x) + " Y2: " + std::to_string(end.y) + " R: " + std::to_string(p[4]);
-                circle *circles = engine->GetCircleCenters(start, end, p[4]);
+                float radius = p[4];
+                //MsgBuff = ">Drew Arc X1: " + std::to_string(start.x) + " Y1: " + std::to_string(start.y) + " X2: " + std::to_string(end.x) + " Y2: " + std::to_string(end.y) + " R: " + std::to_string(p[4]);
+                circle circles = engine->GetCircleCenters(start, end, p[4]);
+                if (circles.possible == 0)
+                {
+                  MsgBuff = "> No possable arc with start(" + std::to_string(start.x) + ", " + std::to_string(start.y)  + ") end(" + std::to_string(end.x); + ", " + std::to_string(end.y) + ") and Radius " + std::to_string(radius);
+                }
+                else if (circles.possible == 1)
+                {
+                  MsgBuff = ">Drew Arc X1: " + std::to_string(start.x) + " Y1: " + std::to_string(start.y) + " X2: " + std::to_string(end.x) + " Y2: " + std::to_string(end.y) + " R: " + std::to_string(radius);
+                }
+                else if (circles.possible == 2)
+                {
+                  MsgBuff = ">Two arcs possible, Drawing both, so delete the one you dont want!";
+                }
+
                 //free(circles);
               }
               if (inputText.find(":lp") != std::string::npos && std::string::npos && inputText.find("d"))
