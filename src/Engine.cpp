@@ -342,6 +342,108 @@ void Engine::Line(float Start[2], float End[2])
 		AppendInstructionArray((char *)Instruction.c_str());
 	}
 }
+void Engine::ArcByCenter(float x, float y, float Radius)
+{
+	float pos[2];
+	float r_pos[2];
+	int centrex=x,centrey=y;// centre of circle in pixel coords
+	float ypos, xpos;
+	float two_pi=6.283f;
+	float angle_inc=0.001f/Radius;
+	int NumberOfPoints=0;
+	for(float angle=0.0f; angle<= two_pi;angle+=angle_inc)
+	{
+		NumberOfPoints++;
+	}
+	int pointsX[NumberOfPoints];
+	int pointsY[NumberOfPoints];
+	//SDL_Surface *surface = SDL_CreateRGBSurface(0, WindowWidth, WindowHeight, 32, 0, 0, 0, 0);
+	SDL_Texture *texture = SDL_CreateTexture(r, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, WindowWidth, WindowHeight);
+	SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
+	SDL_SetTextureAlphaMod(texture, 255); //Make texture clear
+	SDL_SetRenderTarget( r, texture );
+	SDL_SetRenderDrawColor( r, 0, 0, 0, 0 ); //Make texture clear
+	//SDL_RenderClear(r);
+	config->Color((char*)config->LineColor);
+
+	int count = 0;
+	for(float angle=0.0f; angle<= two_pi;angle+=angle_inc)
+	{
+	    xpos=centrex+Radius*cos(angle);
+	    ypos=centrey+Radius*sin(angle);
+			pos[0] = xpos;
+			pos[1] = ypos;
+	    GetRealXY(r_pos, pos);
+			//printf("Circle point: %d, %d\n", (int)r_pos[0], (int)r_pos[1]);
+			//SDL_RenderDrawLine(r, r_pos[0], r_pos[1], r_pos[0]+1, r_pos[1]+1);
+			pointsX[count] = r_pos[0];
+			pointsY[count] = r_pos[1];
+
+			SDL_RenderDrawPoint(r, r_pos[0], r_pos[1]);
+			count++;
+	}
+	SDL_RenderPresent( r );
+	SDL_SetRenderTarget( r, NULL );
+
+	AppendEntityArray(texture);
+	AppendCurserPoints(pointsX, pointsY, NumberOfPoints);
+	if (EntityRedrawWithoutNewInstructions == false)
+	{
+		std::string Instruction = "acx" + std::to_string(x) + "y" + std::to_string(y) + "r" + std::to_string(Radius);
+		AppendInstructionArray((char *)Instruction.c_str());
+	}
+}
+void Engine::ArcByStartEndRadius(float Start[2], float End[2], float Radius, int dir)
+{
+	/*float pos[2];
+	float r_pos[2];
+	int centrex=x,centrey=y;// centre of circle in pixel coords
+	float ypos, xpos;
+	float two_pi=6.283f;
+	float angle_inc=0.001f/Radius;
+	int NumberOfPoints=0;
+	for(float angle=0.0f; angle<= two_pi;angle+=angle_inc)
+	{
+		NumberOfPoints++;
+	}
+	int pointsX[NumberOfPoints];
+	int pointsY[NumberOfPoints];
+	//SDL_Surface *surface = SDL_CreateRGBSurface(0, WindowWidth, WindowHeight, 32, 0, 0, 0, 0);
+	SDL_Texture *texture = SDL_CreateTexture(r, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, WindowWidth, WindowHeight);
+	SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
+	SDL_SetTextureAlphaMod(texture, 255); //Make texture clear
+	SDL_SetRenderTarget( r, texture );
+	SDL_SetRenderDrawColor( r, 0, 0, 0, 0 ); //Make texture clear
+	//SDL_RenderClear(r);
+	config->Color((char*)config->LineColor);
+
+	int count = 0;
+	for(float angle=0.0f; angle<= two_pi;angle+=angle_inc)
+	{
+			xpos=centrex+Radius*cos(angle);
+			ypos=centrey+Radius*sin(angle);
+			pos[0] = xpos;
+			pos[1] = ypos;
+			GetRealXY(r_pos, pos);
+			//printf("Circle point: %d, %d\n", (int)r_pos[0], (int)r_pos[1]);
+			//SDL_RenderDrawLine(r, r_pos[0], r_pos[1], r_pos[0]+1, r_pos[1]+1);
+			pointsX[count] = r_pos[0];
+			pointsY[count] = r_pos[1];
+
+			SDL_RenderDrawPoint(r, r_pos[0], r_pos[1]);
+			count++;
+	}
+	SDL_RenderPresent( r );
+	SDL_SetRenderTarget( r, NULL );
+
+	AppendEntityArray(texture);
+	AppendCurserPoints(pointsX, pointsY, NumberOfPoints);
+	if (EntityRedrawWithoutNewInstructions == false)
+	{
+		std::string Instruction = "ax" + std::to_string(x) + "y" + std::to_string(y) + "r" + std::to_string(Radius);
+		AppendInstructionArray((char *)Instruction.c_str());
+	}*/
+}
 float *Engine::GetPointAlongLine(float x1, float y1, float x2, float y2, float len)
 {
 	float *p = (float	*)malloc(sizeof(float *) * 2);
@@ -446,57 +548,6 @@ float *Engine::GetPointAlongSlope(float x, float y, float rise, float run, float
 	p[0] = x;
 	p[1] = y;
 	return p;
-}
-void Engine::ArcByCenter(float x, float y, float Radius)
-{
-	float pos[2];
-	float r_pos[2];
-	int centrex=x,centrey=y;// centre of circle in pixel coords
-	float ypos, xpos;
-	float two_pi=6.283f;
-	float angle_inc=0.001f/Radius;
-	int NumberOfPoints=0;
-	for(float angle=0.0f; angle<= two_pi;angle+=angle_inc)
-	{
-		NumberOfPoints++;
-	}
-	int pointsX[NumberOfPoints];
-	int pointsY[NumberOfPoints];
-	//SDL_Surface *surface = SDL_CreateRGBSurface(0, WindowWidth, WindowHeight, 32, 0, 0, 0, 0);
-	SDL_Texture *texture = SDL_CreateTexture(r, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, WindowWidth, WindowHeight);
-	SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
-	SDL_SetTextureAlphaMod(texture, 255); //Make texture clear
-	SDL_SetRenderTarget( r, texture );
-	SDL_SetRenderDrawColor( r, 0, 0, 0, 0 ); //Make texture clear
-	//SDL_RenderClear(r);
-	config->Color((char*)config->LineColor);
-
-	int count = 0;
-	for(float angle=0.0f; angle<= two_pi;angle+=angle_inc)
-	{
-	    xpos=centrex+Radius*cos(angle);
-	    ypos=centrey+Radius*sin(angle);
-			pos[0] = xpos;
-			pos[1] = ypos;
-	    GetRealXY(r_pos, pos);
-			//printf("Circle point: %d, %d\n", (int)r_pos[0], (int)r_pos[1]);
-			//SDL_RenderDrawLine(r, r_pos[0], r_pos[1], r_pos[0]+1, r_pos[1]+1);
-			pointsX[count] = r_pos[0];
-			pointsY[count] = r_pos[1];
-
-			SDL_RenderDrawPoint(r, r_pos[0], r_pos[1]);
-			count++;
-	}
-	SDL_RenderPresent( r );
-	SDL_SetRenderTarget( r, NULL );
-
-	AppendEntityArray(texture);
-	AppendCurserPoints(pointsX, pointsY, NumberOfPoints);
-	if (EntityRedrawWithoutNewInstructions == false)
-	{
-		std::string Instruction = "acx" + std::to_string(x) + "y" + std::to_string(y) + "r" + std::to_string(Radius);
-		AppendInstructionArray((char *)Instruction.c_str());
-	}
 }
 const char* Engine::GetField(char* line, int num)
 {

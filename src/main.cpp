@@ -7,6 +7,7 @@ int ActiveTool;
 #define NoTool 0
 #define LineTool 1
 //LineTool
+int LastLastEntityClicked = 0;
 int LastEntityClicked = 0;
 int LineClickStep = 0;
 float LineStart[2];
@@ -74,8 +75,6 @@ int main (int argc, char** argv)
 					if (e.window.event == SDL_WINDOWEVENT_RESIZED)
 					{
 						engine->UpdateWindowSize(e.window.data1, e.window.data2);
-            //sprintf(ResizeBuff, "H: %d, W: %d", e.window.data1, e.window.data2);
-            //engine->PutTexture(engine->MakeText(ResizeBuff, 8), 10, 10);
 					}
 				}
         if (e.type == SDL_TEXTINPUT)
@@ -153,7 +152,7 @@ int main (int argc, char** argv)
 							}
               if (inputText.find(":rm") != std::string::npos)
 							{
-                engine->EntityInstruction[LastEntityClicked][0] = '\0';
+                engine->EntityInstruction[LastEntityClicked] = strdup("Void");
                 MsgBuff = "> Removed Entity ID#" + std::to_string(LastEntityClicked);
                 engine->EntityRedraw = true;
               }
@@ -162,7 +161,18 @@ int main (int argc, char** argv)
                 std::string Entity = std::string(engine->EntityInstruction[LastEntityClicked]);
                 float *p = engine->ParseLineInstruction(Entity);
                 MsgBuff = "> Line is " + std::to_string(engine->GetDistance(p[0], p[1], p[2], p[3])) + " units long";
-
+              }
+              if (inputText.find(":dbl") != std::string::npos)
+              {
+                std::string Entity1 = std::string(engine->EntityInstruction[LastLastEntityClicked]);
+                float *i1 = engine->ParseLineInstruction(Entity1);
+                std::string Entity2 = std::string(engine->EntityInstruction[LastEntityClicked]);
+                float *i2 = engine->ParseLineInstruction(Entity2);
+                float i1xm = ((i1[0]+i1[1])/2);
+                float i1ym = ((i1[2]+i1[3])/2);
+                float i2xm = ((i2[0]+i2[1])/2);
+                float i2ym = ((i2[2]+i2[3])/2);
+                MsgBuff = "> Lines are " + std::to_string(engine->GetDistance(i1xm, i1ym, i2xm, i2ym)) + " units apart";
               }
               if (inputText.find(":ac") != std::string::npos)
 							{
@@ -414,6 +424,7 @@ int main (int argc, char** argv)
             int id = engine->GetCurserOverId(); //Remember that this resets the id buffer!
             if (id != -1)
             {
+              LastLastEntityClicked = LastEntityClicked;
               MsgBuff = ">Operate on entity id# " + std::to_string(id) + " with instruction " + std::string(engine->EntityInstruction[id]);
               LastEntityClicked = id;
             }
