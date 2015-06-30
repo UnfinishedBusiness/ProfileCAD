@@ -21,11 +21,14 @@ typedef struct{
 
 #define CIRCLE true
 #define ARC false
+#define ARC_CCW true
+#define ARC_CW false
 typedef struct{
 		point start;
 		point end;
 		point center;
 		float radius;
+		bool direction;
 	  bool type;
 }arc;
 
@@ -100,7 +103,10 @@ class Engine                // begin declaration of the class
 	int GetCurserOverId();
 	void UpdateWindowSize(int w, int h);
 	void GetWindowSize(int w, int h);
+
 	void GetRealXY(float out[2], float in[2]); //Get Screen Cordinant plane fron Virtual Cordinant plane
+	point GetRealXY(point in); //Wrapper function for point structure
+
 	void GetXY(float out[2], float in[2]); //Get Virtual Cordinant plane from Screen Cordinant plane
 	float GetX(float in[2]); //GetXY Wrapper Function
 	float GetY(float in[2]); //GetXY Wrapper Function

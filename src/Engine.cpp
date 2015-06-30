@@ -6,21 +6,14 @@ Engine::Engine(SDL_Window* w, SDL_Renderer* _r, Config *c)
 	InitInstructionArray();
 	InitEntityCurserPoints();
 
-	//MouseX = 0;
-	//MouseY = 0;
-	//RealMouseX = 0;
-	//RealMouseY = 0;
 	CurserOverEntityId = -1;
 	ViewRatio = 0.05;
 	r = _r;
 	window = w;
-	//WindowWidth = _WindowWidth;
-	//WindowHeight = _WindowHeight-150;
 	config = c;
 	OriginOffsetX = (config->GetWindowWidth()/2); //Center Origin
 	OriginOffsetY = ((config->GetWindowHeight())/2); //Center Origin
-	//config->UpdateWindowSize(WindowWidth, WindowHeight);
-	//printf("==> Writing to %s\n", config->Filename);
+
 }
 
 /********** EntityCurserPoints ************/
@@ -41,19 +34,13 @@ void Engine::AppendCurserPoints(int *px, int *py, int n)
 	{
 		EntityCurserPointsX[EntityCurserPointsLength] = (int	*)malloc(sizeof(int) * n);
 		EntityCurserPointsY[EntityCurserPointsLength] = (int	*)malloc(sizeof(int) * n);
-		//EntityCurserNumberOfPoints[EntityCurserPointsLength] = (int)malloc(sizeof(int));
 		EntityCurserPointsX[EntityCurserPointsLength][0] = n; //First Element is number of points!
 		EntityCurserPointsY[EntityCurserPointsLength][0] = n;
 		for(int a = 1; a < n; a++)
 		{
-			//printf("appending points %d, %d\n", px[a], py[a]);
 			EntityCurserPointsX[EntityCurserPointsLength][a] = px[a];
 			EntityCurserPointsY[EntityCurserPointsLength][a] = py[a];
 		}
-		//memcpy(EntityCurserPointsX[EntityCurserPointsLength], px, sizeof(px) / sizeof(int));
-		//EntityCurserPointsX[EntityCurserPointsLength] = px;
-		//memcpy(EntityCurserPointsX[EntityCurserPointsLength], py, sizeof(py) / sizeof(int));
-		//EntityCurserPointsY[EntityCurserPointsLength] = py;
 		EntityCurserPointsLength++;
 	}
 }
@@ -62,11 +49,6 @@ void Engine::FreeEntityCurserPoints()
 {
 	for(int i=0;i<EntityCurserPointsLength; i++)
 	{
-			/*for(int j=0;j<EntityCurserNumberOfPoints[i]; j++)
-			{
-				free(EntityCurserPointsX[i][j]);
-				free(EntityCurserPointsY[i][j]);
-			}*/
 			free(EntityCurserPointsX[i]);
 			free(EntityCurserPointsY[i]);
 			//free(EntityCurserNumberOfPoints[i]);
@@ -163,18 +145,20 @@ float *Engine::ParseArcInstruction(std::string i)
 	std::size_t X2p = i.find("x", X1p+1);
 	std::size_t Y2p = i.find("y", Y1p+1);
 	std::size_t Rp  = i.find("r");
+	std::size_t Dp  = i.find("d");
 
 	std::string X1 = i.substr(X1p+1, (Y1p-X1p)-1);
 	std::string Y1 = i.substr(Y1p+1, (X2p - Y1p) -1);
 	std::string X2 = i.substr(X2p+1, (Y2p - X2p)-1);
 	std::string Y2 = i.substr(Y2p+1, (Rp - Y2p)-1);
-	std::string R = i.substr(Rp+1, (i.length() - Rp)-1);
-
+	std::string R = i.substr(Rp+1, (Dp - Rp)-1);
+	std::string D = i.substr(Dp+1, (i.length() - Dp)-1);
 	p[0] = atof((char*)X1.c_str());
 	p[1] = atof((char*)Y1.c_str());
 	p[2] = atof((char*)X2.c_str());
 	p[3] = atof((char*)Y2.c_str());
 	p[4] = atof((char*)R.c_str());
+	p[5] = atof((char*)D.c_str());
 	return p;
 }
 float *Engine::ParseArcByCenterInstruction(std::string i)
@@ -287,6 +271,18 @@ void Engine::GetRealXY(float out[2], float in[2])
 {
 	out[0] = ((in[0] / ViewRatio) + OriginOffsetX);
 	out[1] = (-1*((in[1] / ViewRatio) - OriginOffsetY));
+}
+point Engine::GetRealXY(point in)
+{
+	float input[2];
+	input[0] = in.x;
+	input[1] = in.y;
+	float output[2];
+	GetRealXY(output, input);
+	point out;
+	out.x = output[0];
+	out.y = output[1];
+	return out;
 }
 void Engine::GetXY(float out[2], float in[2])
 {
@@ -425,6 +421,104 @@ void Engine::Arc(arc data)
 			AppendInstructionArray((char *)Instruction.c_str());
 		}
 	}
+	else if (data.type == ARC)
+	{
+		//printf("(ARC) --start: %f, %f --stop: %f, %f --radius: %f\n", data.start.x, data.start.y, data.end.x, data.end.y, data.radius);
+		point real_point;
+		point screen_point;
+
+		float two_pi;
+		float angle_inc;
+
+		int NumberOfPoints=0;
+		for(float angle=0.0f; angle<= two_pi;angle+=angle_inc)
+		{
+			NumberOfPoints++;
+		}
+		int pointsX[NumberOfPoints];
+		int pointsY[NumberOfPoints];
+
+		SDL_Texture *texture = SDL_CreateTexture(r, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, WindowWidth, WindowHeight);
+		SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
+		SDL_SetTextureAlphaMod(texture, 255);
+		SDL_SetRenderTarget( r, texture );
+		SDL_SetRenderDrawColor( r, 0, 0, 0, 0 );
+
+		config->Color((char*)config->LineColor);
+
+		int count = 0;
+		bool FoundStartPoint = false;
+		bool FoundEndPoint = false;
+
+		angle_inc = 0.001f/data.radius;
+		two_pi = 6.283f;
+
+		if (data.direction == ARC_CW)
+		{
+			printf("(Arc) Going Clockwise\n");
+			for(float angle=6.283f; angle>=0; angle-=angle_inc)
+			{
+					real_point.x=data.center.x+data.radius*cos(angle);
+					real_point.y=data.center.y+data.radius*sin(angle);
+					if (isSimilar(real_point.x, data.start.x) && isSimilar(real_point.y, data.start.y))
+					{
+						printf("(Arc CW) Found Start point at point# %d!\n", count);
+						FoundStartPoint = true;
+					}
+					if (FoundStartPoint == true && isSimilar(real_point.x, data.end.x) && isSimilar(real_point.y, data.end.y))
+					{
+						printf("(Arc CW) Found End point at point# %d!\n", count);
+						FoundEndPoint = true;
+					}
+					if (FoundStartPoint == true && FoundEndPoint == false)
+					{
+							screen_point = GetRealXY(real_point);
+							pointsX[count] = screen_point.x;
+							pointsY[count] = screen_point.y;
+							SDL_RenderDrawPoint(r, screen_point.x, screen_point.y);
+							//printf("%f, %f\n", screen_point.x, screen_point.y);
+					}
+					count++;
+			}
+		}
+		else
+		{
+			printf("(Arc) Going CounterClockwise\n");
+			for(float angle=0; angle<=two_pi; angle+=angle_inc)
+			{
+					real_point.x=data.center.x+data.radius*cos(angle);
+					real_point.y=data.center.y+data.radius*sin(angle);
+					if (isSimilar(real_point.x, data.start.x) && isSimilar(real_point.y, data.start.y))
+					{
+						printf("(Arc CW) Found Start point at point# %d!\n", count);
+						FoundStartPoint = true;
+					}
+					if (FoundStartPoint == true && isSimilar(real_point.x, data.end.x) && isSimilar(real_point.y, data.end.y))
+					{
+						printf("(Arc CW) Found End point at point# %d!\n", count);
+						FoundEndPoint = true;
+					}
+					if (FoundStartPoint == true && FoundEndPoint == false)
+					{
+							screen_point = GetRealXY(real_point);
+							pointsX[count] = screen_point.x;
+							pointsY[count] = screen_point.y;
+							SDL_RenderDrawPoint(r, screen_point.x, screen_point.y);
+							//printf("%f, %f\n", screen_point.x, screen_point.y);
+					}
+					count++;
+			}
+		}
+		SDL_RenderPresent( r );
+		SDL_SetRenderTarget( r, NULL );
+		AppendEntityArray(texture);
+		AppendCurserPoints(pointsX, pointsY, NumberOfPoints);
+		if (EntityRedrawWithoutNewInstructions == false)
+		{
+			std::string Instruction = "ax" + std::to_string(data.start.x) + "y" + std::to_string(data.start.y) + "x" + std::to_string(data.end.x) + "y" + std::to_string(data.end.y) + "r" + std::to_string(data.radius) + "d" + std::to_string(data.direction);
+			AppendInstructionArray((char *)Instruction.c_str());
+		}
+	}
 }
 circle Engine::GetCircleCenters(point p1,point p2,float radius)
 {
@@ -434,13 +528,13 @@ circle Engine::GetCircleCenters(point p1,point p2,float radius)
 	{
 		if(radius == 0.0)
 		{
-			printf("No circles can be drawn through (%.4f,%.4f)\n",p1.x,p1.y);
+			//printf("No circles can be drawn through (%.4f,%.4f)\n",p1.x,p1.y);
 			circles.possible = 0;
 			return circles;
 		}
 		else
 		{
-				printf("Infinitely many circles can be drawn through (%.4f,%.4f)\n",p1.x,p1.y);
+				//printf("Infinitely many circles can be drawn through (%.4f,%.4f)\n",p1.x,p1.y);
 				circles.possible = -1;
 				return circles;
 		}
@@ -455,12 +549,12 @@ circle Engine::GetCircleCenters(point p1,point p2,float radius)
 		circles.center1.x = (p1.x+p2.x)/2;
 		circles.center1.y = (p1.y+p2.y)/2;
 		circles.radius = radius;
-		printf("Given points are opposite ends of a diameter of the circle with center (%.4f,%.4f) and radius %.4f\n",(p1.x+p2.x)/2,(p1.y+p2.y)/2,radius);
+		//printf("Given points are opposite ends of a diameter of the circle with center (%.4f,%.4f) and radius %.4f\n",(p1.x+p2.x)/2,(p1.y+p2.y)/2,radius);
 		return circles;
 	}
 	else if(separation > 2*radius)
 	{
-		printf("Given points are farther away from each other than a diameter of a circle with radius %.4f\n",radius);
+		//printf("Given points are farther away from each other than a diameter of a circle with radius %.4f\n",radius);
 		circles.possible = 0;
 		return circles;
 	}
@@ -468,8 +562,8 @@ circle Engine::GetCircleCenters(point p1,point p2,float radius)
 	{
 		circles.possible = 2;
 		mirrorDistance =sqrt(pow(radius,2) - pow(separation/2,2));
-		printf("Two circles are possible.\n");
-		printf("Circle C1 with center (%.4f,%.4f), radius %.4f and Circle C2 with center (%.4f,%.4f), radius %.4f\n",(p1.x+p2.x)/2 + mirrorDistance*(p1.y-p2.y)/separation,(p1.y+p2.y)/2 + mirrorDistance*(p2.x-p1.x)/separation,radius,(p1.x+p2.x)/2 - mirrorDistance*(p1.y-p2.y)/separation,(p1.y+p2.y)/2 - mirrorDistance*(p2.x-p1.x)/separation,radius);
+		//printf("Two circles are possible.\n");
+		//printf("Circle C1 with center (%.4f,%.4f), radius %.4f and Circle C2 with center (%.4f,%.4f), radius %.4f\n",(p1.x+p2.x)/2 + mirrorDistance*(p1.y-p2.y)/separation,(p1.y+p2.y)/2 + mirrorDistance*(p2.x-p1.x)/separation,radius,(p1.x+p2.x)/2 - mirrorDistance*(p1.y-p2.y)/separation,(p1.y+p2.y)/2 - mirrorDistance*(p2.x-p1.x)/separation,radius);
 		circles.start.x = p1.x;
 		circles.start.y = p1.y;
 		circles.end.x = p2.x;
@@ -677,7 +771,29 @@ void Engine::UpdateScreen()
 				{
 						std::string i = std::string(EntityInstruction[x]);
 						//printf("===>Entity Instruction: %s\n", i.c_str());
-						if (i.find("ac") != std::string::npos)
+						if (i.find("ax") != std::string::npos)
+						{
+							float *p = ParseArcInstruction(i);
+							point start, end;
+							start.x = p[0];
+							start.y = p[1];
+							end.x = p[2];
+							end.y = p[3];
+							float radius = p[4];
+							circle circles = GetCircleCenters(start, end, p[4]);
+							if (circles.possible > 0)
+							{
+								arc arc1;
+								arc1.center = circles.center1;
+								arc1.start = start;
+								arc1.end = end;
+								arc1.direction = p[5];
+								arc1.radius = radius;
+								arc1.type = ARC;
+								Arc(arc1);
+							}
+						}
+						else if (i.find("ac") != std::string::npos)
 						{
 							float *p = ParseArcByCenterInstruction(i);
 							arc circle;
@@ -687,7 +803,7 @@ void Engine::UpdateScreen()
 							circle.type = CIRCLE;
 							Arc(circle);
 						}
-						if (i.find("l") != std::string::npos)
+						else if (i.find("l") != std::string::npos)
 						{
 							float *p = ParseLineInstruction(i);
 							//std::cout << "\t>Added Line X1: " + X1 + " Y1: " + Y1 + " X2: " + X2 + " Y2: " + Y2 + "\n";
@@ -826,7 +942,27 @@ int Engine::Open()
 				circle.type = CIRCLE;
 				Arc(circle);
 			}
-			if (i.find("l") != std::string::npos)
+			else if(i.find("ax") != std::string::npos)
+			{
+					float *p = ParseArcInstruction(i);
+					point start, end;
+					start.x = p[0];
+					start.y = p[1];
+					end.x = p[2];
+					end.y = p[3];
+					float radius = p[4];
+					circle circles = GetCircleCenters(start, end, radius);
+					arc arc1;
+					arc1.center = circles.center1;
+					arc1.start = start;
+					arc1.end = end;
+					arc1.radius = radius;
+					arc1.direction = p[5];
+					//printf("direction: %f\n", p[5]);
+					arc1.type = ARC;
+					Arc(arc1);
+			}
+			else if (i.find("l") != std::string::npos)
 			{
 				float *p = ParseLineInstruction(i);
 				//std::cout << "\t>Added Line X1: " + X1 + " Y1: " + Y1 + " X2: " + X2 + " Y2: " + Y2 + "\n";
@@ -856,7 +992,7 @@ int Engine::Save()
 	{
 		std::string i = std::string(EntityInstruction[x]);
 		//Only save valid entities
-		if (i.find("ac") != std::string::npos)
+		if (i.find("a") != std::string::npos) //Includes all arcs
 		{
 			fprintf(fp, "%s\n", (char*)i.c_str());
 		}

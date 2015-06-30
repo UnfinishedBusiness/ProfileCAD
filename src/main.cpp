@@ -198,15 +198,40 @@ int main (int argc, char** argv)
                 circle circles = engine->GetCircleCenters(start, end, p[4]);
                 if (circles.possible == 0)
                 {
-                  MsgBuff = "> No possable arc with start(" + std::to_string(start.x) + ", " + std::to_string(start.y)  + ") end(" + std::to_string(end.x); + ", " + std::to_string(end.y) + ") and Radius " + std::to_string(radius);
+                  //MsgBuff = "> No possable arc with start (" + std::to_string(start.x) + ", " + std::to_string(start.y)  + ") end (" + std::to_string(end.x); + ", " + std::to_string(end.y) + ") and Radius " + std::to_string(radius);
+                  MsgBuff = "> No possable arc";
                 }
                 else if (circles.possible == 1)
                 {
-                  MsgBuff = ">Drew Arc X1: " + std::to_string(start.x) + " Y1: " + std::to_string(start.y) + " X2: " + std::to_string(end.x) + " Y2: " + std::to_string(end.y) + " R: " + std::to_string(radius);
+                  arc arc1;
+                  arc1.center = circles.center1;
+                  arc1.start = start;
+                  arc1.end = end;
+                  arc1.radius = radius;
+                  arc1.direction = p[5];
+                  arc1.type = ARC;
+                  //MsgBuff = ">Drew Arc X1: " + std::to_string(start.x) + " Y1: " + std::to_string(start.y) + " X2: " + std::to_string(end.x) + " Y2: " + std::to_string(end.y) + " R: " + std::to_string(radius);
+                  MsgBuff = "> Drew arc";
+                  engine->Arc(arc1);
                 }
                 else if (circles.possible == 2)
                 {
-                  MsgBuff = ">Two arcs possible, Drawing both, so delete the one you dont want!";
+                  //MsgBuff = ">Two arcs possible, Drawing both, so delete the one you dont want!";
+                  arc arc1;
+                  arc1.center = circles.center1;
+                  arc1.start = start;
+                  arc1.end = end;
+                  arc1.radius = radius;
+                  arc1.direction = p[5];
+                  arc1.type = ARC;
+                  engine->Arc(arc1);
+                  //arc2.center = circles.center2;
+                  //arc2.start = start;
+                  //arc2.end = end;
+                  //arc2.radius = radius;
+                  //arc2.type = ARC;
+                  //engine->Arc(arc2);
+                  MsgBuff = "> Drew arc";
                 }
 
                 //free(circles);
