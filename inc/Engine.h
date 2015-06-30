@@ -6,6 +6,18 @@
 #ifndef _Config_
 #include "Config.h"
 #endif
+typedef struct{
+		float x,y;
+}point;
+
+typedef struct{
+		point start;
+		point end;
+		point center1;
+		point center2;
+		float radius;
+		int possible;
+}circle;
 
 class Engine                // begin declaration of the class
 {
@@ -22,7 +34,6 @@ class Engine                // begin declaration of the class
 	    Uint32 amask = 0xff000000;
 	#endif
 	public:
-
 	float OriginOffsetX;
 	float OriginOffsetY;
 	float ViewRatio;
@@ -70,6 +81,7 @@ class Engine                // begin declaration of the class
 
 	/*Standard Instruction Parsing*/
  	float *ParseLineInstruction(std::string i);
+	float *ParseArcInstruction(std::string i);
 	float *ParseArcByCenterInstruction(std::string i);
 	/*Standard Instruction Parsing*/
 	int Open();
@@ -100,7 +112,11 @@ class Engine                // begin declaration of the class
 	void PanIncX(float p);
 	void PanIncY(float p);
 	void PanXY(float pos[2]);
+
 	float GetDistance(float x1, float y1, float x2, float y2);
+	float GetDistance(point p1, point p2);
+	circle *GetCircleCenters(point p1, point p2, float radius);
+
 	SDL_Texture* MakeText(char *Text, int Size);
 	SDL_Texture* MakeColorText(SDL_Color Color, char *Text, int Size);
 	void PutTexture(SDL_Texture* t, float x, float y);

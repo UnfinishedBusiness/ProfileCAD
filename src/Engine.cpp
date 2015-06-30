@@ -155,6 +155,28 @@ float *Engine::ParseLineInstruction(std::string i)
 	//printf("x%f, y%f x%f, y%f\n", X1, Y1, X2, Y2);
 	return p;
 }
+float *Engine::ParseArcInstruction(std::string i)
+{
+	float *p = (float	*)malloc(sizeof(float *) * 5);
+	std::size_t X1p = i.find("x");
+	std::size_t Y1p = i.find("y");
+	std::size_t X2p = i.find("x", X1p+1);
+	std::size_t Y2p = i.find("y", Y1p+1);
+	std::size_t Rp  = i.find("r");
+
+	std::string X1 = i.substr(X1p+1, (Y1p-X1p)-1);
+	std::string Y1 = i.substr(Y1p+1, (X2p - Y1p) -1);
+	std::string X2 = i.substr(X2p+1, (Y2p - X2p)-1);
+	std::string Y2 = i.substr(Y2p+1, (Rp - Y2p)-1);
+	std::string R = i.substr(Rp+1, (i.length() - Rp)-1);
+
+	p[0] = atof((char*)X1.c_str());
+	p[1] = atof((char*)Y1.c_str());
+	p[2] = atof((char*)X2.c_str());
+	p[3] = atof((char*)Y2.c_str());
+	p[4] = atof((char*)R.c_str());
+	return p;
+}
 float *Engine::ParseArcByCenterInstruction(std::string i)
 {
 	float *p = (float	*)malloc(sizeof(float *) * 3);
@@ -256,6 +278,10 @@ float Engine::ZoomOut()
 float Engine::GetDistance(float x1, float y1, float x2, float y2)
 {
 	return sqrtf((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1));
+}
+float Engine::GetDistance(point p1,point p2)
+{
+	return sqrt((p1.x-p2.x)*(p1.x-p2.x)+(p1.y-p2.y)*(p1.y-p2.y));
 }
 void Engine::GetRealXY(float out[2], float in[2])
 {
@@ -395,19 +421,14 @@ void Engine::ArcByCenter(float x, float y, float Radius)
 }
 void Engine::ArcByStartEndRadius(float Start[2], float End[2], float Radius, int dir)
 {
+	//Direction: -1 cw, 1 ccw
 	/*float pos[2];
 	float r_pos[2];
 	int centrex=x,centrey=y;// centre of circle in pixel coords
 	float ypos, xpos;
 	float two_pi=6.283f;
 	float angle_inc=0.001f/Radius;
-	int NumberOfPoints=0;
-	for(float angle=0.0f; angle<= two_pi;angle+=angle_inc)
-	{
-		NumberOfPoints++;
-	}
-	int pointsX[NumberOfPoints];
-	int pointsY[NumberOfPoints];
+
 	//SDL_Surface *surface = SDL_CreateRGBSurface(0, WindowWidth, WindowHeight, 32, 0, 0, 0, 0);
 	SDL_Texture *texture = SDL_CreateTexture(r, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, WindowWidth, WindowHeight);
 	SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
@@ -425,10 +446,6 @@ void Engine::ArcByStartEndRadius(float Start[2], float End[2], float Radius, int
 			pos[0] = xpos;
 			pos[1] = ypos;
 			GetRealXY(r_pos, pos);
-			//printf("Circle point: %d, %d\n", (int)r_pos[0], (int)r_pos[1]);
-			//SDL_RenderDrawLine(r, r_pos[0], r_pos[1], r_pos[0]+1, r_pos[1]+1);
-			pointsX[count] = r_pos[0];
-			pointsY[count] = r_pos[1];
 
 			SDL_RenderDrawPoint(r, r_pos[0], r_pos[1]);
 			count++;
@@ -437,12 +454,68 @@ void Engine::ArcByStartEndRadius(float Start[2], float End[2], float Radius, int
 	SDL_SetRenderTarget( r, NULL );
 
 	AppendEntityArray(texture);
-	AppendCurserPoints(pointsX, pointsY, NumberOfPoints);
+	//AppendCurserPoints(pointsX, pointsY, NumberOfPoints);
 	if (EntityRedrawWithoutNewInstructions == false)
 	{
 		std::string Instruction = "ax" + std::to_string(x) + "y" + std::to_string(y) + "r" + std::to_string(Radius);
 		AppendInstructionArray((char *)Instruction.c_str());
 	}*/
+}
+circle *Engine::GetCircleCenters(point p1,point p2,float radius)
+{
+	float separation = GetDistance(p1,p2),mirrorDistance;
+	if(separation == 0.0)
+	{
+		if(radius == 0.0)
+		{
+			printf("No circles can be drawn through (%.4f,%.4f)\n",p1.x,p1.y);
+			return NULL;
+		}
+		else
+		{
+				printf("Infinitely many circles can be drawn through (%.4f,%.4f)\n",p1.x,p1.y);
+				return NULL;
+		}
+	}
+	else if(separation == 2*radius)
+	{
+		circle *circles = (circle	*)malloc(sizeof(circle *) * 2);
+		circles->possible = 1;
+		circles->start.x = p1.x;
+		circles->start.y = p1.y;
+		circles->end.x = p2.x;
+		circles->end.y = p2.y;
+		circles->center1.x = (p1.x+p2.x)/2;
+		circles->center1.y = (p1.y+p2.y)/2;
+		circles->radius = radius;
+		printf("Given points are opposite ends of a diameter of the circle with center (%.4f,%.4f) and radius %.4f\n",(p1.x+p2.x)/2,(p1.y+p2.y)/2,radius);
+		return circles;
+	}
+	else if(separation > 2*radius)
+	{
+		printf("Given points are farther away from each other than a diameter of a circle with radius %.4f\n",radius);
+		return NULL;
+	}
+	else
+	{
+		circle *circles = (circle *)malloc(sizeof(circle *) * 2);
+		circles->possible = 2;
+		return circles;
+		mirrorDistance =sqrt(pow(radius,2) - pow(separation/2,2));
+		printf("Two circles are possible.\n");
+		printf("Circle C1 with center (%.4f,%.4f), radius %.4f and Circle C2 with center (%.4f,%.4f), radius %.4f\n",(p1.x+p2.x)/2 + mirrorDistance*(p1.y-p2.y)/separation,(p1.y+p2.y)/2 + mirrorDistance*(p2.x-p1.x)/separation,radius,(p1.x+p2.x)/2 - mirrorDistance*(p1.y-p2.y)/separation,(p1.y+p2.y)/2 - mirrorDistance*(p2.x-p1.x)/separation,radius);
+		circles->start.x = p1.x;
+		circles->start.y = p1.y;
+		circles->end.x = p2.x;
+		circles->end.y = p2.y;
+		circles->center1.x = (p1.x+p2.x)/2 + mirrorDistance*(p1.y-p2.y)/separation;
+		circles->center1.y = (p1.y+p2.y)/2 + mirrorDistance*(p2.x-p1.x)/separation;
+		circles->center2.x = (p1.x+p2.x)/2 - mirrorDistance*(p1.y-p2.y)/separation;
+		circles->center2.y = (p1.y+p2.y)/2 - mirrorDistance*(p2.x-p1.x)/separation;
+		circles->radius = radius;
+		return circles;
+
+	}
 }
 float *Engine::GetPointAlongLine(float x1, float y1, float x2, float y2, float len)
 {

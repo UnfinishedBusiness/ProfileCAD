@@ -162,7 +162,7 @@ int main (int argc, char** argv)
                 float *p = engine->ParseLineInstruction(Entity);
                 MsgBuff = "> Line is " + std::to_string(engine->GetDistance(p[0], p[1], p[2], p[3])) + " units long";
               }
-              if (inputText.find(":dbl") != std::string::npos)
+              if (inputText.find(":mbl") != std::string::npos)
               {
                 std::string Entity1 = std::string(engine->EntityInstruction[LastLastEntityClicked]);
                 float *i1 = engine->ParseLineInstruction(Entity1);
@@ -172,13 +172,25 @@ int main (int argc, char** argv)
                 float i1ym = ((i1[2]+i1[3])/2);
                 float i2xm = ((i2[0]+i2[1])/2);
                 float i2ym = ((i2[2]+i2[3])/2);
-                MsgBuff = "> Lines are " + std::to_string(engine->GetDistance(i1xm, i1ym, i2xm, i2ym)) + " units apart";
+                MsgBuff = "> Line " + std::to_string(LastLastEntityClicked) + " and " + std::to_string(LastEntityClicked) + " are " + std::to_string(engine->GetDistance(i1xm, i1ym, i2xm, i2ym)) + " units apart";
               }
               if (inputText.find(":ac") != std::string::npos)
 							{
                 float *p = engine->ParseArcByCenterInstruction(inputText.erase(0, 1));
                 MsgBuff = ">Drew Arc cX: " + std::to_string(p[0]) + " cY: " + std::to_string(p[1]) + " R: " + std::to_string(p[2]);
                 engine->ArcByCenter(p[0], p[1], p[2]);
+              }
+              if (inputText.find(":a") != std::string::npos)
+              {
+                float *p = engine->ParseArcInstruction(inputText.erase(0, 1));
+                point start, end;
+                start.x = p[0];
+                start.y = p[1];
+                end.x = p[2];
+                end.y = p[3];
+                MsgBuff = ">Drew Arc X1: " + std::to_string(start.x) + " Y1: " + std::to_string(start.y) + " X2: " + std::to_string(end.x) + " Y2: " + std::to_string(end.y) + " R: " + std::to_string(p[4]);
+                circle *circles = engine->GetCircleCenters(start, end, p[4]);
+                //free(circles);
               }
               if (inputText.find(":lp") != std::string::npos && std::string::npos && inputText.find("d"))
 							{
