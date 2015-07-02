@@ -263,7 +263,7 @@ float Engine::GetDistance(float x1, float y1, float x2, float y2)
 {
 	return sqrtf((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1));
 }
-float Engine::GetDistance(point p1,point p2)
+float Engine::GetDistance(Point p1,Point p2)
 {
 	return sqrt((p1.x-p2.x)*(p1.x-p2.x)+(p1.y-p2.y)*(p1.y-p2.y));
 }
@@ -272,14 +272,14 @@ void Engine::GetRealXY(float out[2], float in[2])
 	out[0] = ((in[0] / ViewRatio) + OriginOffsetX);
 	out[1] = (-1*((in[1] / ViewRatio) - OriginOffsetY));
 }
-point Engine::GetRealXY(point in)
+Point Engine::GetRealXY(Point in)
 {
 	float input[2];
 	input[0] = in.x;
 	input[1] = in.y;
 	float output[2];
 	GetRealXY(output, input);
-	point out;
+	Point out;
 	out.x = output[0];
 	out.y = output[1];
 	return out;
@@ -319,7 +319,7 @@ float Engine::GetY(float y)
 	GetXY(out, in);
 	return out[1];
 }
-void Engine::Line(float Start[2], float End[2])
+void Engine::DrawLine(float Start[2], float End[2])
 {
 	float screen_point1[2];
 	float screen_point2[2];
@@ -364,7 +364,7 @@ void Engine::Line(float Start[2], float End[2])
 		AppendInstructionArray((char *)Instruction.c_str());
 	}
 }
-void Engine::Arc(arc data)
+void Engine::DrawArc(ArcData data)
 {
 	if (data.type == CIRCLE)
 	{
@@ -402,8 +402,8 @@ void Engine::Arc(arc data)
 				pos[0] = xpos;
 				pos[1] = ypos;
 		    GetRealXY(r_pos, pos);
-				//printf("Circle point: %d, %d\n", (int)r_pos[0], (int)r_pos[1]);
-				//SDL_RenderDrawLine(r, r_pos[0], r_pos[1], r_pos[0]+1, r_pos[1]+1);
+				//printf("Circle Point: %d, %d\n", (int)r_pos[0], (int)r_pos[1]);
+				//SDL_RenderDrawDrawLine(r, r_pos[0], r_pos[1], r_pos[0]+1, r_pos[1]+1);
 				pointsX[count] = r_pos[0];
 				pointsY[count] = r_pos[1];
 
@@ -424,9 +424,9 @@ void Engine::Arc(arc data)
 	else if (data.type == ARC)
 	{
 		//printf("(ARC) --start: %f, %f --stop: %f, %f --radius: %f\n", data.start.x, data.start.y, data.end.x, data.end.y, data.radius);
-		point real_point;
-		point screen_point;
-		circle circles = GetCircleCenters(data.start, data.end, data.radius);
+		Point real_point;
+		Point screen_point;
+		CircleData circles = GetCircleCenters(data.start, data.end, data.radius);
 
 		float angle_inc = 0.001f/data.radius;
 		float two_pi = 6.283f;
@@ -451,7 +451,7 @@ void Engine::Arc(arc data)
 		bool FoundStartPoint = false;
 		bool FoundEndPoint = false;
 
-		point ArcCenter;
+		Point ArcCenter;
 		ArcCenter = circles.center1;
 		/*if (data.direction == ARC_CW || circles.possible == 1)
 		{
@@ -478,12 +478,12 @@ void Engine::Arc(arc data)
 				}
 				if (isSimilar(real_point.x, data.start.x) && isSimilar(real_point.y, data.start.y))
 				{
-					printf("Found Start point at point# %d!\n", count);
+					printf("Found Start Point at Point# %d!\n", count);
 					FoundStartPoint = true;
 				}
 				if (FoundStartPoint == true && isSimilar(real_point.x, data.end.x) && isSimilar(real_point.y, data.end.y))
 				{
-					printf("Found End point at point# %d!\n", count);
+					printf("Found End Point at Point# %d!\n", count);
 					FoundEndPoint = true;
 				}
 				if (FoundStartPoint == true && FoundEndPoint == false)
@@ -507,10 +507,10 @@ void Engine::Arc(arc data)
 		}
 	}
 }
-circle Engine::GetCircleCenters(point p1,point p2,float radius)
+CircleData Engine::GetCircleCenters(Point p1,Point p2,float radius)
 {
 	float separation = GetDistance(p1,p2),mirrorDistance;
-	circle circles;
+	CircleData circles;
 	if(separation == 0.0)
 	{
 		if(radius == 0.0)
@@ -536,12 +536,12 @@ circle Engine::GetCircleCenters(point p1,point p2,float radius)
 		circles.center1.x = (p1.x+p2.x)/2;
 		circles.center1.y = (p1.y+p2.y)/2;
 		circles.radius = radius;
-		//printf("Given points are opposite ends of a diameter of the circle with center (%.4f,%.4f) and radius %.4f\n",(p1.x+p2.x)/2,(p1.y+p2.y)/2,radius);
+		//printf("Given points are opposite ends of a diameter of the CircleData with center (%.4f,%.4f) and radius %.4f\n",(p1.x+p2.x)/2,(p1.y+p2.y)/2,radius);
 		return circles;
 	}
 	else if(separation > 2*radius)
 	{
-		//printf("Given points are farther away from each other than a diameter of a circle with radius %.4f\n",radius);
+		//printf("Given points are farther away from each other than a diameter of a CircleData with radius %.4f\n",radius);
 		circles.possible = 0;
 		return circles;
 	}
@@ -912,30 +912,30 @@ void Engine::ParseAndExecuteInstructions(std::string i)
 	if (i.find("ac") != std::string::npos)
 	{
 		float *p = ParseArcByCenterInstruction(i);
-		arc circle;
+		ArcData circle;
 		circle.center.x = p[0];
 		circle.center.y = p[1];
 		circle.radius = p[2];
 		circle.type = CIRCLE;
-		Arc(circle);
+		DrawArc(circle);
 	}
 	else if(i.find("ax") != std::string::npos)
 	{
 			float *p = ParseArcInstruction(i);
-			point start, end;
+			Point start, end;
 			start.x = p[0];
 			start.y = p[1];
 			end.x = p[2];
 			end.y = p[3];
 			float radius = p[4];
 
-			arc arc1;
+			ArcData arc1;
 			arc1.start = start;
 			arc1.end = end;
 			arc1.radius = radius;
 			arc1.direction = p[5];
 			arc1.type = ARC;
-			Arc(arc1);
+			DrawArc(arc1);
 	}
 	else if (i.find("l") != std::string::npos)
 	{
@@ -947,6 +947,6 @@ void Engine::ParseAndExecuteInstructions(std::string i)
 		LineStart[1] = p[1];
 		LineEnd[0] = p[2];
 		LineEnd[1] = p[3];
-		Line(LineStart, LineEnd);
+		DrawLine(LineStart, LineEnd);
 	}
 }

@@ -8,29 +8,29 @@
 #endif
 typedef struct{
 		float x,y;
-}point;
+}Point;
 
 typedef struct{
-		point start;
-		point end;
-		point center1;
-		point center2;
+		Point start;
+		Point end;
+		Point center1;
+		Point center2;
 		float radius;
 		int possible;
-}circle;
+}CircleData;
 
 #define CIRCLE true
 #define ARC false
 #define ARC_CCW -1
 #define ARC_CW 1
 typedef struct{
-		point start;
-		point end;
-		point center;
+		Point start;
+		Point end;
+		Point center;
 		float radius;
 		int direction;
 	  bool type;
-}arc;
+}ArcData;
 
 class Engine                // begin declaration of the class
 {
@@ -108,7 +108,7 @@ class Engine                // begin declaration of the class
 	void GetWindowSize(int w, int h);
 
 	void GetRealXY(float out[2], float in[2]); //Get Screen Cordinant plane fron Virtual Cordinant plane
-	point GetRealXY(point in); //Wrapper function for point structure
+	Point GetRealXY(Point in); //Wrapper function for Point structure
 
 	void GetXY(float out[2], float in[2]); //Get Virtual Cordinant plane from Screen Cordinant plane
 	float GetX(float in[2]); //GetXY Wrapper Function
@@ -118,13 +118,13 @@ class Engine                // begin declaration of the class
 	void GetMousePos(float out[2]); //Returns Virtual Cordinant plane
 
 	/********* Draw to renderer functions ************/
-	void Line(float Start[2], float End[2]);
-	void Arc(arc data);
+	void DrawLine(float Start[2], float End[2]);
+	void DrawArc(ArcData data);
+	void DrawPixel(SDL_Surface *screen, int x, int y, Uint8 R, Uint8 G, Uint8 B);
 	/********* Draw to renderer functions ************/
 	float *GetPointAlongLine(float x1, float y1, float x2, float y2, float len);
 	float *GetPointAlong45Line(float x1, float y1, float len, int dir);
 	float *GetPointAlongSlope(float x, float y, float rise, float run, float len, int dir);
-	void DrawPixel(SDL_Surface *screen, int x, int y, Uint8 R, Uint8 G, Uint8 B);
 	float ZoomIn();
 	float ZoomOut();
 	void PanIncX(float p);
@@ -132,8 +132,8 @@ class Engine                // begin declaration of the class
 	void PanXY(float pos[2]);
 
 	float GetDistance(float x1, float y1, float x2, float y2);
-	float GetDistance(point p1, point p2);
-	circle GetCircleCenters(point p1, point p2, float radius);
+	float GetDistance(Point p1, Point p2);
+	CircleData GetCircleCenters(Point p1, Point p2, float radius);
 
 	SDL_Texture* MakeText(char *Text, int Size);
 	SDL_Texture* MakeColorText(SDL_Color Color, char *Text, int Size);

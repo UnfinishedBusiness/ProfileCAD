@@ -180,32 +180,32 @@ int main (int argc, char** argv)
 							{
                 float *p = engine->ParseArcByCenterInstruction(inputText.erase(0, 1));
                 MsgBuff = ">Drew Arc cX: " + std::to_string(p[0]) + " cY: " + std::to_string(p[1]) + " R: " + std::to_string(p[2]);
-                arc Circle;
+                ArcData Circle;
                 Circle.type = CIRCLE;
                 Circle.center.x = p[0];
                 Circle.center.y = p[1];
                 Circle.radius = p[2];
-                engine->Arc(Circle);
+                engine->DrawArc(Circle);
               }
               if (inputText.find(":a") != std::string::npos)
               {
                 float *p = engine->ParseArcInstruction(inputText.erase(0, 1));
-                point start, end;
+                Point start, end;
                 start.x = p[0];
                 start.y = p[1];
                 end.x = p[2];
                 end.y = p[3];
                 float radius = p[4];
                 //MsgBuff = ">Drew Arc X1: " + std::to_string(start.x) + " Y1: " + std::to_string(start.y) + " X2: " + std::to_string(end.x) + " Y2: " + std::to_string(end.y) + " R: " + std::to_string(p[4]);
-                circle circles = engine->GetCircleCenters(start, end, p[4]);
+                CircleData circles = engine->GetCircleCenters(start, end, p[4]);
                 if (circles.possible == 0)
                 {
-                  //MsgBuff = "> No possable arc with start (" + std::to_string(start.x) + ", " + std::to_string(start.y)  + ") end (" + std::to_string(end.x); + ", " + std::to_string(end.y) + ") and Radius " + std::to_string(radius);
+                  //MsgBuff = "> No possable ArcData with start (" + std::to_string(start.x) + ", " + std::to_string(start.y)  + ") end (" + std::to_string(end.x); + ", " + std::to_string(end.y) + ") and Radius " + std::to_string(radius);
                   MsgBuff = "> No possable arc";
                 }
                 else if (circles.possible == 1)
                 {
-                  arc arc1;
+                  ArcData arc1;
                   arc1.center = circles.center1;
                   arc1.start = start;
                   arc1.end = end;
@@ -214,25 +214,25 @@ int main (int argc, char** argv)
                   arc1.type = ARC;
                   //MsgBuff = ">Drew Arc X1: " + std::to_string(start.x) + " Y1: " + std::to_string(start.y) + " X2: " + std::to_string(end.x) + " Y2: " + std::to_string(end.y) + " R: " + std::to_string(radius);
                   MsgBuff = "> Drew arc";
-                  engine->Arc(arc1);
+                  engine->DrawArc(arc1);
                 }
                 else if (circles.possible == 2)
                 {
                   //MsgBuff = ">Two arcs possible, Drawing both, so delete the one you dont want!";
-                  arc arc1;
+                  ArcData arc1;
                   arc1.center = circles.center1;
                   arc1.start = start;
                   arc1.end = end;
                   arc1.radius = radius;
                   arc1.direction = p[5];
                   arc1.type = ARC;
-                  engine->Arc(arc1);
+                  engine->DrawArc(arc1);
                   //arc2.center = circles.center2;
                   //arc2.start = start;
                   //arc2.end = end;
                   //arc2.radius = radius;
                   //arc2.type = ARC;
-                  //engine->Arc(arc2);
+                  //engine->DrawArc(arc2);
                   MsgBuff = "> Drew arc";
                 }
 
@@ -266,7 +266,7 @@ int main (int argc, char** argv)
                   Start[1] = y1;
                   End[0] = x2 + real_d;
                   End[1] = y2;
-                  engine->Line(Start, End);
+                  engine->DrawLine(Start, End);
                 }
                 else if (y1 == y2)
                 {
@@ -274,7 +274,7 @@ int main (int argc, char** argv)
                   Start[1] = y1 + real_d;
                   End[0] = x2;
                   End[1] = y2 + real_d;
-                  engine->Line(Start, End);
+                  engine->DrawLine(Start, End);
                 }
                 else
                 {
@@ -315,10 +315,10 @@ int main (int argc, char** argv)
                     Start[0] = Xmidpoint;
                     Start[1] = Ymidpoint;
                     //float End[2];
-                    //engine->Line(Start, PerpEnd);
+                    //engine->DrawLine(Start, PerpEnd);
                     float *NewEnd = engine->GetPointAlong45Line(PerpEnd[0], PerpEnd[1], (line_length/2), 2);
                     float *NewStart = engine->GetPointAlong45Line(PerpEnd[0], PerpEnd[1], (line_length/2), 4);
-                    engine->Line(NewStart, NewEnd);
+                    engine->DrawLine(NewStart, NewEnd);
                   }
                   else if(slopeInverse == -1)
                   {
@@ -354,7 +354,7 @@ int main (int argc, char** argv)
                     Start[1] = Ymidpoint;
                     float *NewEnd = engine->GetPointAlong45Line(PerpEnd[0], PerpEnd[1], (line_length/2), 1);
                     float *NewStart = engine->GetPointAlong45Line(PerpEnd[0], PerpEnd[1], (line_length/2), 3);
-                    engine->Line(NewStart, NewEnd);
+                    engine->DrawLine(NewStart, NewEnd);
                   }
                   else
                   {
@@ -386,7 +386,7 @@ int main (int argc, char** argv)
                     }
                     float *finalLineStart = engine->GetPointAlongSlope(PerpEnd[0], PerpEnd[1], (y2 - y1), (x2 - x1), (line_length/2), 2);
                     float *finalLineEnd = engine->GetPointAlongSlope(PerpEnd[0], PerpEnd[1], (y2 - y1), (x2 - x1), (line_length/2), 4);
-                    engine->Line(finalLineStart, finalLineEnd);
+                    engine->DrawLine(finalLineStart, finalLineEnd);
                   }
                 }
                 //MsgBuff = ">Line X1" + std::to_string(Start[0]) + " Y1: " + std::to_string(Start[1]) + " X2: " + std::to_string(End[0]) + " Y2: " + std::to_string(End[1]);
@@ -413,7 +413,7 @@ int main (int argc, char** argv)
 									LineStart[1] = atof((char*)Y1.c_str());
 									LineEnd[0] = atof((char*)X2.c_str());
 									LineEnd[1] = atof((char*)Y2.c_str());
-									engine->Line(LineStart, LineEnd);
+									engine->DrawLine(LineStart, LineEnd);
 									MsgBuff = ">Drew Line X1: " + X1 + " Y1: " + Y1 + " X2: " + X2 + " Y2: " + Y2;
 								}
 								else if (X2 == inputText && Y2 == inputText)
@@ -491,7 +491,7 @@ int main (int argc, char** argv)
 							if (LineClickStep == 1)
 							{
 								engine->GetMousePos(LineEnd);
-								engine->Line(LineStart, LineEnd);
+								engine->DrawLine(LineStart, LineEnd);
 								printf("\t> Line End ==== x: %lf y: %lf\n", engine->GetX(LineStart), engine->GetY(LineEnd));
 								LineClickStep = 0;
 							}
