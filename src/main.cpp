@@ -54,6 +54,8 @@ int main (int argc, char** argv)
 		config = new Config(window, renderer);
 		engine = new Engine(window, renderer, config);
 
+    SDL_MaximizeWindow(window);
+
     SDL_Event e;
 		bool quit = false;
 		while (!quit)

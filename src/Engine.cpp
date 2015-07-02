@@ -426,10 +426,8 @@ void Engine::Arc(arc data)
 		//printf("(ARC) --start: %f, %f --stop: %f, %f --radius: %f\n", data.start.x, data.start.y, data.end.x, data.end.y, data.radius);
 		point real_point;
 		point screen_point;
-
-		float two_pi;
-		float angle_inc;
-
+		float angle_inc = 0.001f/data.radius;
+		float two_pi = 6.283f;
 		int NumberOfPoints=0;
 		for(float angle=0.0f; angle<= two_pi;angle+=angle_inc)
 		{
@@ -449,9 +447,6 @@ void Engine::Arc(arc data)
 		int count = 0;
 		bool FoundStartPoint = false;
 		bool FoundEndPoint = false;
-
-		angle_inc = 0.001f/data.radius;
-		two_pi = 6.283f;
 
 		if (data.direction == ARC_CW)
 		{
@@ -490,12 +485,12 @@ void Engine::Arc(arc data)
 					real_point.y=data.center.y+data.radius*sin(angle);
 					if (isSimilar(real_point.x, data.start.x) && isSimilar(real_point.y, data.start.y))
 					{
-						printf("(Arc CW) Found Start point at point# %d!\n", count);
+						printf("(Arc CCW) Found Start point at point# %d!\n", count);
 						FoundStartPoint = true;
 					}
 					if (FoundStartPoint == true && isSimilar(real_point.x, data.end.x) && isSimilar(real_point.y, data.end.y))
 					{
-						printf("(Arc CW) Found End point at point# %d!\n", count);
+						printf("(Arc CCW) Found End point at point# %d!\n", count);
 						FoundEndPoint = true;
 					}
 					if (FoundStartPoint == true && FoundEndPoint == false)
