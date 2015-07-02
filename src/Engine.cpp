@@ -426,9 +426,12 @@ void Engine::Arc(arc data)
 		//printf("(ARC) --start: %f, %f --stop: %f, %f --radius: %f\n", data.start.x, data.start.y, data.end.x, data.end.y, data.radius);
 		point real_point;
 		point screen_point;
+		circle circles = GetCircleCenters(data.start, data.end, data.radius);
+
 		float angle_inc = 0.001f/data.radius;
 		float two_pi = 6.283f;
 		int NumberOfPoints=0;
+
 		for(float angle=0.0f; angle<= two_pi;angle+=angle_inc)
 		{
 			NumberOfPoints++;
@@ -448,61 +451,50 @@ void Engine::Arc(arc data)
 		bool FoundStartPoint = false;
 		bool FoundEndPoint = false;
 
-		if (data.direction == ARC_CW)
+		point ArcCenter;
+		ArcCenter = circles.center1;
+		/*if (data.direction == ARC_CW || circles.possible == 1)
 		{
 			printf("(Arc) Going Clockwise\n");
-			for(float angle=6.283f; angle>=0; angle-=angle_inc)
-			{
-					real_point.x=data.center.x+data.radius*cos(angle);
-					real_point.y=data.center.y+data.radius*sin(angle);
-					if (isSimilar(real_point.x, data.start.x) && isSimilar(real_point.y, data.start.y))
-					{
-						printf("(Arc CW) Found Start point at point# %d!\n", count);
-						FoundStartPoint = true;
-					}
-					if (FoundStartPoint == true && isSimilar(real_point.x, data.end.x) && isSimilar(real_point.y, data.end.y))
-					{
-						printf("(Arc CW) Found End point at point# %d!\n", count);
-						FoundEndPoint = true;
-					}
-					if (FoundStartPoint == true && FoundEndPoint == false)
-					{
-							screen_point = GetRealXY(real_point);
-							pointsX[count] = screen_point.x;
-							pointsY[count] = screen_point.y;
-							SDL_RenderDrawPoint(r, screen_point.x, screen_point.y);
-							//printf("%f, %f\n", screen_point.x, screen_point.y);
-					}
-					count++;
-			}
+			ArcCenter = circles.center1;
 		}
 		else
 		{
+			ArcCenter = circles.center2;
+			ArcCenter = circles.center2;
 			printf("(Arc) Going CounterClockwise\n");
-			for(float angle=0; angle<=two_pi; angle+=angle_inc)
-			{
-					real_point.x=data.center.x+data.radius*cos(angle);
-					real_point.y=data.center.y+data.radius*sin(angle);
-					if (isSimilar(real_point.x, data.start.x) && isSimilar(real_point.y, data.start.y))
-					{
-						printf("(Arc CCW) Found Start point at point# %d!\n", count);
-						FoundStartPoint = true;
-					}
-					if (FoundStartPoint == true && isSimilar(real_point.x, data.end.x) && isSimilar(real_point.y, data.end.y))
-					{
-						printf("(Arc CCW) Found End point at point# %d!\n", count);
-						FoundEndPoint = true;
-					}
-					if (FoundStartPoint == true && FoundEndPoint == false)
-					{
-							screen_point = GetRealXY(real_point);
-							pointsX[count] = screen_point.x;
-							pointsY[count] = screen_point.y;
-							SDL_RenderDrawPoint(r, screen_point.x, screen_point.y);
-							//printf("%f, %f\n", screen_point.x, screen_point.y);
-					}
-					count++;
-			}
+		}*/
+		for(float angle=0; angle<=two_pi; angle+=angle_inc)
+		{
+				if (data.direction == ARC_CW)
+				{
+					real_point.x=ArcCenter.x+data.radius*cos(angle);
+					real_point.y=ArcCenter.y+data.radius*sin(angle);
+				}
+				else
+				{
+					real_point.x=ArcCenter.x-data.radius*cos(angle);
+					real_point.y=ArcCenter.y-data.radius*sin(angle);
+				}
+				if (isSimilar(real_point.x, data.start.x) && isSimilar(real_point.y, data.start.y))
+				{
+					printf("Found Start point at point# %d!\n", count);
+					FoundStartPoint = true;
+				}
+				if (FoundStartPoint == true && isSimilar(real_point.x, data.end.x) && isSimilar(real_point.y, data.end.y))
+				{
+					printf("Found End point at point# %d!\n", count);
+					FoundEndPoint = true;
+				}
+				if (FoundStartPoint == true && FoundEndPoint == false)
+				{
+						screen_point = GetRealXY(real_point);
+						pointsX[count] = screen_point.x;
+						pointsY[count] = screen_point.y;
+						SDL_RenderDrawPoint(r, screen_point.x, screen_point.y);
+						//printf("%f, %f\n", screen_point.x, screen_point.y);
+				}
+				count++;
 		}
 		SDL_RenderPresent( r );
 		SDL_SetRenderTarget( r, NULL );
@@ -765,51 +757,7 @@ void Engine::UpdateScreen()
 				if (EntityInstruction != NULL)
 				{
 						std::string i = std::string(EntityInstruction[x]);
-						//printf("===>Entity Instruction: %s\n", i.c_str());
-						if (i.find("ax") != std::string::npos)
-						{
-							float *p = ParseArcInstruction(i);
-							point start, end;
-							start.x = p[0];
-							start.y = p[1];
-							end.x = p[2];
-							end.y = p[3];
-							float radius = p[4];
-							circle circles = GetCircleCenters(start, end, p[4]);
-							if (circles.possible > 0)
-							{
-								arc arc1;
-								arc1.center = circles.center1;
-								arc1.start = start;
-								arc1.end = end;
-								arc1.direction = p[5];
-								arc1.radius = radius;
-								arc1.type = ARC;
-								Arc(arc1);
-							}
-						}
-						else if (i.find("ac") != std::string::npos)
-						{
-							float *p = ParseArcByCenterInstruction(i);
-							arc circle;
-							circle.center.x = p[0];
-							circle.center.y = p[1];
-							circle.radius = p[2];
-							circle.type = CIRCLE;
-							Arc(circle);
-						}
-						else if (i.find("l") != std::string::npos)
-						{
-							float *p = ParseLineInstruction(i);
-							//std::cout << "\t>Added Line X1: " + X1 + " Y1: " + Y1 + " X2: " + X2 + " Y2: " + Y2 + "\n";
-							float LineStart[2];
-							float LineEnd[2];
-							LineStart[0] = p[0];
-							LineStart[1] = p[1];
-							LineEnd[0] = p[2];
-							LineEnd[1] = p[3];
-							Line(LineStart, LineEnd);
-						}
+						ParseAndExecuteInstructions(i);
 				}
 				else
 				{
@@ -926,49 +874,8 @@ int Engine::Open()
   while (fgets (buf, sizeof(buf), fp))
 	{
 			std::string i = std::string(buf);
+			ParseAndExecuteInstructions(i);
 			//printf("===>Entity Instruction: %s\n", i.c_str());
-			if (i.find("ac") != std::string::npos)
-			{
-				float *p = ParseArcByCenterInstruction(i);
-				arc circle;
-				circle.center.x = p[0];
-				circle.center.y = p[1];
-				circle.radius = p[2];
-				circle.type = CIRCLE;
-				Arc(circle);
-			}
-			else if(i.find("ax") != std::string::npos)
-			{
-					float *p = ParseArcInstruction(i);
-					point start, end;
-					start.x = p[0];
-					start.y = p[1];
-					end.x = p[2];
-					end.y = p[3];
-					float radius = p[4];
-					circle circles = GetCircleCenters(start, end, radius);
-					arc arc1;
-					arc1.center = circles.center1;
-					arc1.start = start;
-					arc1.end = end;
-					arc1.radius = radius;
-					arc1.direction = p[5];
-					//printf("direction: %f\n", p[5]);
-					arc1.type = ARC;
-					Arc(arc1);
-			}
-			else if (i.find("l") != std::string::npos)
-			{
-				float *p = ParseLineInstruction(i);
-				//std::cout << "\t>Added Line X1: " + X1 + " Y1: " + Y1 + " X2: " + X2 + " Y2: " + Y2 + "\n";
-				float LineStart[2];
-				float LineEnd[2];
-				LineStart[0] = p[0];
-				LineStart[1] = p[1];
-				LineEnd[0] = p[2];
-				LineEnd[1] = p[3];
-				Line(LineStart, LineEnd);
-			}
   }
 	EntityRedraw=true;
 	fclose(fp);
@@ -986,15 +893,7 @@ int Engine::Save()
 	for(int x = 0; x < EntityInstructionLength; x++)
 	{
 		std::string i = std::string(EntityInstruction[x]);
-		//Only save valid entities
-		if (i.find("a") != std::string::npos) //Includes all arcs
-		{
-			fprintf(fp, "%s\n", (char*)i.c_str());
-		}
-		if (i.find("l") != std::string::npos)
-		{
-			fprintf(fp, "%s\n", (char*)i.c_str());
-		}
+		fprintf(fp, "%s\n", (char*)i.c_str());
 	}
 	fclose(fp);
 	return 0;
@@ -1007,4 +906,47 @@ void Engine::UnInit()
 	FreeEntityArray();
 	FreeInstructionArray();
 	delete config;
+}
+void Engine::ParseAndExecuteInstructions(std::string i)
+{
+	if (i.find("ac") != std::string::npos)
+	{
+		float *p = ParseArcByCenterInstruction(i);
+		arc circle;
+		circle.center.x = p[0];
+		circle.center.y = p[1];
+		circle.radius = p[2];
+		circle.type = CIRCLE;
+		Arc(circle);
+	}
+	else if(i.find("ax") != std::string::npos)
+	{
+			float *p = ParseArcInstruction(i);
+			point start, end;
+			start.x = p[0];
+			start.y = p[1];
+			end.x = p[2];
+			end.y = p[3];
+			float radius = p[4];
+
+			arc arc1;
+			arc1.start = start;
+			arc1.end = end;
+			arc1.radius = radius;
+			arc1.direction = p[5];
+			arc1.type = ARC;
+			Arc(arc1);
+	}
+	else if (i.find("l") != std::string::npos)
+	{
+		float *p = ParseLineInstruction(i);
+		//std::cout << "\t>Added Line X1: " + X1 + " Y1: " + Y1 + " X2: " + X2 + " Y2: " + Y2 + "\n";
+		float LineStart[2];
+		float LineEnd[2];
+		LineStart[0] = p[0];
+		LineStart[1] = p[1];
+		LineEnd[0] = p[2];
+		LineEnd[1] = p[3];
+		Line(LineStart, LineEnd);
+	}
 }

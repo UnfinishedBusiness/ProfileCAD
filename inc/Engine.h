@@ -21,14 +21,14 @@ typedef struct{
 
 #define CIRCLE true
 #define ARC false
-#define ARC_CCW true
-#define ARC_CW false
+#define ARC_CCW -1
+#define ARC_CW 1
 typedef struct{
 		point start;
 		point end;
 		point center;
 		float radius;
-		bool direction;
+		int direction;
 	  bool type;
 }arc;
 
@@ -97,6 +97,9 @@ class Engine                // begin declaration of the class
 	float *ParseArcInstruction(std::string i);
 	float *ParseArcByCenterInstruction(std::string i);
 	/*Standard Instruction Parsing*/
+
+	void ParseAndExecuteInstructions(std::string i);
+
 	int Open();
 	int Save();
 
