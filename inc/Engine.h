@@ -32,6 +32,18 @@ typedef struct{
 	  bool type;
 }ArcData;
 
+typedef struct{
+		Point start;
+		Point end;
+		char *color;
+}LineData;
+
+struct Entity{
+	LineData Line;
+	ArcData Arc;
+	int Tag;
+};
+
 class Engine                // begin declaration of the class
 {
 	private:
