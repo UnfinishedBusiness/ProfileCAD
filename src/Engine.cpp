@@ -502,7 +502,7 @@ void Engine::DrawArc(ArcData data)
 		AppendCurserPoints(pointsX, pointsY, NumberOfPoints);
 		if (EntityRedrawWithoutNewInstructions == false)
 		{
-			std::string Instruction = "ax" + std::to_string(data.start.x) + "y" + std::to_string(data.start.y) + "x" + std::to_string(data.end.x) + "y" + std::to_string(data.end.y) + "r" + std::to_string(data.radius) + "d" + std::to_string(data.direction);
+			std::string Instruction = "ac" + std::to_string(data.start.x) + "y" + std::to_string(data.start.y) + "x" + std::to_string(data.end.x) + "y" + std::to_string(data.end.y) + "r" + std::to_string(data.radius) + "d" + std::to_string(data.direction);
 			AppendInstructionArray((char *)Instruction.c_str());
 		}
 	}
