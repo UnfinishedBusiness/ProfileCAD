@@ -1,2 +1,0 @@
-# ProfileCAD
-CAD/CAM Software
