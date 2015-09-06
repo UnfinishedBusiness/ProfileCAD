@@ -57,214 +57,150 @@ include CMakeFiles/ProfileCAD.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/ProfileCAD.dir/flags.make
 
-CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.o: CMakeFiles/ProfileCAD.dir/flags.make
-CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.o: /home/travis/Projects/ProfileCAD/src/ProfileCAD.cxx
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/travis/Projects/ProfileCAD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.o -c /home/travis/Projects/ProfileCAD/src/ProfileCAD.cxx
+CMakeFiles/ProfileCAD.dir/main.cpp.o: CMakeFiles/ProfileCAD.dir/flags.make
+CMakeFiles/ProfileCAD.dir/main.cpp.o: /home/travis/Projects/ProfileCAD/src/main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/travis/Projects/ProfileCAD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/ProfileCAD.dir/main.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/ProfileCAD.dir/main.cpp.o -c /home/travis/Projects/ProfileCAD/src/main.cpp
 
-CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/travis/Projects/ProfileCAD/src/ProfileCAD.cxx > CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.i
+CMakeFiles/ProfileCAD.dir/main.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ProfileCAD.dir/main.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/travis/Projects/ProfileCAD/src/main.cpp > CMakeFiles/ProfileCAD.dir/main.cpp.i
 
-CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/travis/Projects/ProfileCAD/src/ProfileCAD.cxx -o CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.s
+CMakeFiles/ProfileCAD.dir/main.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ProfileCAD.dir/main.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/travis/Projects/ProfileCAD/src/main.cpp -o CMakeFiles/ProfileCAD.dir/main.cpp.s
 
-CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.o.requires:
+CMakeFiles/ProfileCAD.dir/main.cpp.o.requires:
 
-.PHONY : CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.o.requires
+.PHONY : CMakeFiles/ProfileCAD.dir/main.cpp.o.requires
 
-CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.o.provides: CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.o.requires
-	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.o.provides.build
-.PHONY : CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.o.provides
+CMakeFiles/ProfileCAD.dir/main.cpp.o.provides: CMakeFiles/ProfileCAD.dir/main.cpp.o.requires
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/main.cpp.o.provides.build
+.PHONY : CMakeFiles/ProfileCAD.dir/main.cpp.o.provides
 
-CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.o.provides.build: CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.o
+CMakeFiles/ProfileCAD.dir/main.cpp.o.provides.build: CMakeFiles/ProfileCAD.dir/main.cpp.o
+
+
+CMakeFiles/ProfileCAD.dir/Scene.cpp.o: CMakeFiles/ProfileCAD.dir/flags.make
+CMakeFiles/ProfileCAD.dir/Scene.cpp.o: /home/travis/Projects/ProfileCAD/src/Scene.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/travis/Projects/ProfileCAD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/ProfileCAD.dir/Scene.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/ProfileCAD.dir/Scene.cpp.o -c /home/travis/Projects/ProfileCAD/src/Scene.cpp
+
+CMakeFiles/ProfileCAD.dir/Scene.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ProfileCAD.dir/Scene.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/travis/Projects/ProfileCAD/src/Scene.cpp > CMakeFiles/ProfileCAD.dir/Scene.cpp.i
+
+CMakeFiles/ProfileCAD.dir/Scene.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ProfileCAD.dir/Scene.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/travis/Projects/ProfileCAD/src/Scene.cpp -o CMakeFiles/ProfileCAD.dir/Scene.cpp.s
+
+CMakeFiles/ProfileCAD.dir/Scene.cpp.o.requires:
+
+.PHONY : CMakeFiles/ProfileCAD.dir/Scene.cpp.o.requires
+
+CMakeFiles/ProfileCAD.dir/Scene.cpp.o.provides: CMakeFiles/ProfileCAD.dir/Scene.cpp.o.requires
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/Scene.cpp.o.provides.build
+.PHONY : CMakeFiles/ProfileCAD.dir/Scene.cpp.o.provides
+
+CMakeFiles/ProfileCAD.dir/Scene.cpp.o.provides.build: CMakeFiles/ProfileCAD.dir/Scene.cpp.o
+
+
+CMakeFiles/ProfileCAD.dir/Keyboard.cpp.o: CMakeFiles/ProfileCAD.dir/flags.make
+CMakeFiles/ProfileCAD.dir/Keyboard.cpp.o: /home/travis/Projects/ProfileCAD/src/Keyboard.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/travis/Projects/ProfileCAD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/ProfileCAD.dir/Keyboard.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/ProfileCAD.dir/Keyboard.cpp.o -c /home/travis/Projects/ProfileCAD/src/Keyboard.cpp
+
+CMakeFiles/ProfileCAD.dir/Keyboard.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ProfileCAD.dir/Keyboard.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/travis/Projects/ProfileCAD/src/Keyboard.cpp > CMakeFiles/ProfileCAD.dir/Keyboard.cpp.i
+
+CMakeFiles/ProfileCAD.dir/Keyboard.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ProfileCAD.dir/Keyboard.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/travis/Projects/ProfileCAD/src/Keyboard.cpp -o CMakeFiles/ProfileCAD.dir/Keyboard.cpp.s
+
+CMakeFiles/ProfileCAD.dir/Keyboard.cpp.o.requires:
+
+.PHONY : CMakeFiles/ProfileCAD.dir/Keyboard.cpp.o.requires
+
+CMakeFiles/ProfileCAD.dir/Keyboard.cpp.o.provides: CMakeFiles/ProfileCAD.dir/Keyboard.cpp.o.requires
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/Keyboard.cpp.o.provides.build
+.PHONY : CMakeFiles/ProfileCAD.dir/Keyboard.cpp.o.provides
+
+CMakeFiles/ProfileCAD.dir/Keyboard.cpp.o.provides.build: CMakeFiles/ProfileCAD.dir/Keyboard.cpp.o
+
+
+CMakeFiles/ProfileCAD.dir/Menu.cpp.o: CMakeFiles/ProfileCAD.dir/flags.make
+CMakeFiles/ProfileCAD.dir/Menu.cpp.o: /home/travis/Projects/ProfileCAD/src/Menu.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/travis/Projects/ProfileCAD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/ProfileCAD.dir/Menu.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/ProfileCAD.dir/Menu.cpp.o -c /home/travis/Projects/ProfileCAD/src/Menu.cpp
+
+CMakeFiles/ProfileCAD.dir/Menu.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ProfileCAD.dir/Menu.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/travis/Projects/ProfileCAD/src/Menu.cpp > CMakeFiles/ProfileCAD.dir/Menu.cpp.i
+
+CMakeFiles/ProfileCAD.dir/Menu.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ProfileCAD.dir/Menu.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/travis/Projects/ProfileCAD/src/Menu.cpp -o CMakeFiles/ProfileCAD.dir/Menu.cpp.s
+
+CMakeFiles/ProfileCAD.dir/Menu.cpp.o.requires:
+
+.PHONY : CMakeFiles/ProfileCAD.dir/Menu.cpp.o.requires
+
+CMakeFiles/ProfileCAD.dir/Menu.cpp.o.provides: CMakeFiles/ProfileCAD.dir/Menu.cpp.o.requires
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/Menu.cpp.o.provides.build
+.PHONY : CMakeFiles/ProfileCAD.dir/Menu.cpp.o.provides
+
+CMakeFiles/ProfileCAD.dir/Menu.cpp.o.provides.build: CMakeFiles/ProfileCAD.dir/Menu.cpp.o
+
+
+CMakeFiles/ProfileCAD.dir/Window.cpp.o: CMakeFiles/ProfileCAD.dir/flags.make
+CMakeFiles/ProfileCAD.dir/Window.cpp.o: /home/travis/Projects/ProfileCAD/src/Window.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/travis/Projects/ProfileCAD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/ProfileCAD.dir/Window.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/ProfileCAD.dir/Window.cpp.o -c /home/travis/Projects/ProfileCAD/src/Window.cpp
+
+CMakeFiles/ProfileCAD.dir/Window.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ProfileCAD.dir/Window.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/travis/Projects/ProfileCAD/src/Window.cpp > CMakeFiles/ProfileCAD.dir/Window.cpp.i
+
+CMakeFiles/ProfileCAD.dir/Window.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ProfileCAD.dir/Window.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/travis/Projects/ProfileCAD/src/Window.cpp -o CMakeFiles/ProfileCAD.dir/Window.cpp.s
+
+CMakeFiles/ProfileCAD.dir/Window.cpp.o.requires:
+
+.PHONY : CMakeFiles/ProfileCAD.dir/Window.cpp.o.requires
+
+CMakeFiles/ProfileCAD.dir/Window.cpp.o.provides: CMakeFiles/ProfileCAD.dir/Window.cpp.o.requires
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/Window.cpp.o.provides.build
+.PHONY : CMakeFiles/ProfileCAD.dir/Window.cpp.o.provides
+
+CMakeFiles/ProfileCAD.dir/Window.cpp.o.provides.build: CMakeFiles/ProfileCAD.dir/Window.cpp.o
 
 
 # Object files for target ProfileCAD
 ProfileCAD_OBJECTS = \
-"CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.o"
+"CMakeFiles/ProfileCAD.dir/main.cpp.o" \
+"CMakeFiles/ProfileCAD.dir/Scene.cpp.o" \
+"CMakeFiles/ProfileCAD.dir/Keyboard.cpp.o" \
+"CMakeFiles/ProfileCAD.dir/Menu.cpp.o" \
+"CMakeFiles/ProfileCAD.dir/Window.cpp.o"
 
 # External object files for target ProfileCAD
 ProfileCAD_EXTERNAL_OBJECTS =
 
-ProfileCAD: CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.o
+ProfileCAD: CMakeFiles/ProfileCAD.dir/main.cpp.o
+ProfileCAD: CMakeFiles/ProfileCAD.dir/Scene.cpp.o
+ProfileCAD: CMakeFiles/ProfileCAD.dir/Keyboard.cpp.o
+ProfileCAD: CMakeFiles/ProfileCAD.dir/Menu.cpp.o
+ProfileCAD: CMakeFiles/ProfileCAD.dir/Window.cpp.o
 ProfileCAD: CMakeFiles/ProfileCAD.dir/build.make
-ProfileCAD: /usr/lib64/libhdf5.so
-ProfileCAD: /usr/lib64/libhdf5_hl.so
-ProfileCAD: /usr/lib64/libpthread.so
-ProfileCAD: /usr/lib64/libz.so
-ProfileCAD: /usr/lib64/libdl.so
-ProfileCAD: /usr/lib64/libm.so
-ProfileCAD: /usr/lib64/libjsoncpp.so
-ProfileCAD: /usr/lib64/libexpat.so
-ProfileCAD: /usr/lib64/libjpeg.so
-ProfileCAD: /usr/lib64/libpng.so
-ProfileCAD: /usr/lib64/libtiff.so
-ProfileCAD: /usr/lib64/libfreetype.so
-ProfileCAD: /usr/lib/libvtkIOXdmf2-6.1.so.1
-ProfileCAD: /usr/lib/libvtkxdmf2-6.1.so.1
-ProfileCAD: /usr/lib64/libxml2.so
-ProfileCAD: /usr/lib/libvtkIOGDAL-6.1.so.1
-ProfileCAD: /usr/lib/libvtkImagingMath-6.1.so.1
-ProfileCAD: /usr/lib/libvtkGUISupportQtWebkit-6.1.so.1
-ProfileCAD: /usr/lib/libvtkViewsQt-6.1.so.1
-ProfileCAD: /usr/lib/libvtkWrappingPython27Core-6.1.so.1
-ProfileCAD: /usr/lib/libpython2.7.so
-ProfileCAD: /usr/lib/libvtkWrappingTools-6.1.a
-ProfileCAD: /usr/lib/libvtkIOMINC-6.1.so.1
-ProfileCAD: /usr/lib/libvtkGUISupportQtOpenGL-6.1.so.1
-ProfileCAD: /usr/lib/libvtkRenderingVolumeOpenGL-6.1.so.1
-ProfileCAD: /usr/lib/libvtkRenderingVolumeAMR-6.1.so.1
-ProfileCAD: /usr/lib/libvtkFiltersParallelMPI-6.1.so.1
-ProfileCAD: /usr/lib/libvtkFiltersParallelGeometry-6.1.so.1
-ProfileCAD: /usr/lib/libvtkRenderingParallelLIC-6.1.so.1
-ProfileCAD: /usr/lib/libvtkRenderingLIC-6.1.so.1
-ProfileCAD: /usr/lib/libvtkIOVPIC-6.1.so.1
-ProfileCAD: /usr/lib/libvtkImagingStencil-6.1.so.1
-ProfileCAD: /usr/lib/libvtkFiltersParallelStatistics-6.1.so.1
-ProfileCAD: /usr/lib/libvtkIOEnSight-6.1.so.1
-ProfileCAD: /usr/lib/libvtkInfovisBoostGraphAlgorithms-6.1.so.1
-ProfileCAD: /usr/lib/libvtkViewsGeovis-6.1.so.1
-ProfileCAD: /usr/lib/libvtkIOMySQL-6.1.so.1
-ProfileCAD: /usr/lib/libvtkIOInfovis-6.1.so.1
-ProfileCAD: /usr/lib/libvtkIOParallelNetCDF-6.1.so.1
-ProfileCAD: /usr/lib/libvtkInteractionImage-6.1.so.1
-ProfileCAD: /usr/lib/libvtkIOFFMPEG-6.1.so.1
-ProfileCAD: /usr/lib/libvtkIOMovie-6.1.so.1
-ProfileCAD: /usr/lib64/libtheoraenc.so
-ProfileCAD: /usr/lib64/libtheoradec.so
-ProfileCAD: /usr/lib64/libogg.so
-ProfileCAD: /usr/lib/libvtkIOMPIImage-6.1.so.1
-ProfileCAD: /usr/lib/libvtkTestingIOSQL-6.1.so.1
-ProfileCAD: /usr/lib/libvtkFiltersReebGraph-6.1.so.1
-ProfileCAD: /usr/lib/libvtkIOAMR-6.1.so.1
-ProfileCAD: /usr/lib/libvtkRenderingFreeTypeOpenGL-6.1.so.1
-ProfileCAD: /usr/lib/libvtkFiltersHyperTree-6.1.so.1
-ProfileCAD: /usr/lib/libvtkFiltersParallelFlowPaths-6.1.so.1
-ProfileCAD: /usr/lib/libvtkFiltersParallelImaging-6.1.so.1
-ProfileCAD: /usr/lib/libvtkTestingGenericBridge-6.1.so.1
-ProfileCAD: /usr/lib/libvtkFiltersGeneric-6.1.so.1
-ProfileCAD: /usr/lib/libvtkFiltersVerdict-6.1.so.1
-ProfileCAD: /usr/lib/libvtkLocalExample-6.1.so.1
-ProfileCAD: /usr/lib/libvtkIOMPIParallel-6.1.so.1
-ProfileCAD: /usr/lib/libvtkRenderingParallel-6.1.so.1
-ProfileCAD: /usr/lib/libvtkDomainsChemistry-6.1.so.1
-ProfileCAD: /usr/lib/libvtkIOExport-6.1.so.1
-ProfileCAD: /usr/lib/libvtkWrappingJava-6.1.so.1
-ProfileCAD: /usr/lib/libvtkIOPLY-6.1.so.1
-ProfileCAD: /usr/lib/libvtkRenderingFreeTypeFontConfig-6.1.so.1
-ProfileCAD: /usr/lib/libvtkImagingMorphological-6.1.so.1
-ProfileCAD: /usr/lib/libvtkTestingRendering-6.1.so.1
-ProfileCAD: /usr/lib/libvtkRenderingLOD-6.1.so.1
-ProfileCAD: /usr/lib/libvtkFiltersSelection-6.1.so.1
-ProfileCAD: /usr/lib/libvtkViewsContext2D-6.1.so.1
-ProfileCAD: /usr/lib/libvtkIOParallelExodus-6.1.so.1
-ProfileCAD: /usr/lib/libvtkIOGeoJSON-6.1.so.1
-ProfileCAD: /usr/lib/libvtkFiltersSMP-6.1.so.1
-ProfileCAD: /usr/lib/libvtkGUISupportQtSQL-6.1.so.1
-ProfileCAD: /usr/lib/libvtkRenderingMatplotlib-6.1.so.1
-ProfileCAD: /usr/lib/libvtkIOPostgreSQL-6.1.so.1
-ProfileCAD: /usr/lib/libvtkRenderingImage-6.1.so.1
-ProfileCAD: /usr/lib/libvtkIOParallel-6.1.so.1
-ProfileCAD: /usr/lib/libvtkImagingStatistics-6.1.so.1
-ProfileCAD: /usr/lib/libvtkIOParallelLSDyna-6.1.so.1
-ProfileCAD: /usr/lib/libvtkRenderingQt-6.1.so.1
-ProfileCAD: /usr/lib/libvtkIOODBC-6.1.so.1
-ProfileCAD: /usr/lib/libvtkIOImport-6.1.so.1
-ProfileCAD: /usr/lib/libvtkIOVideo-6.1.so.1
-ProfileCAD: /usr/lib/libvtkFiltersProgrammable-6.1.so.1
-ProfileCAD: /usr/lib/libvtkVPIC-6.1.so.1
-ProfileCAD: /usr/lib/libvtkGeovisCore-6.1.so.1
-ProfileCAD: /usr/lib/libvtkproj4-6.1.so.1
-ProfileCAD: /usr/lib/libvtkViewsInfovis-6.1.so.1
-ProfileCAD: /usr/lib/libvtkInfovisLayout-6.1.so.1
-ProfileCAD: /usr/lib/libvtkChartsCore-6.1.so.1
-ProfileCAD: /usr/lib/libvtkCommonColor-6.1.so.1
-ProfileCAD: /usr/lib/libvtkInfovisCore-6.1.so.1
-ProfileCAD: /usr/lib/libvtkFiltersAMR-6.1.so.1
-ProfileCAD: /usr/lib/libvtkFiltersFlowPaths-6.1.so.1
-ProfileCAD: /usr/lib/libvtkFiltersImaging-6.1.so.1
-ProfileCAD: /usr/lib/libvtkverdict-6.1.so.1
-ProfileCAD: /usr/lib/libvtkParallelMPI-6.1.so.1
-ProfileCAD: /usr/lib/libvtkRenderingGL2PS-6.1.so.1
-ProfileCAD: /usr/lib/libvtkgl2ps-6.1.so.1
-ProfileCAD: /usr/lib64/libpng.so
-ProfileCAD: /usr/lib/libvtkViewsCore-6.1.so.1
-ProfileCAD: /usr/lib/libvtkInteractionWidgets-6.1.so.1
-ProfileCAD: /usr/lib/libvtkFiltersHybrid-6.1.so.1
-ProfileCAD: /usr/lib/libvtkImagingGeneral-6.1.so.1
-ProfileCAD: /usr/lib/libvtkImagingSources-6.1.so.1
-ProfileCAD: /usr/lib/libvtkRenderingAnnotation-6.1.so.1
-ProfileCAD: /usr/lib/libvtkImagingColor-6.1.so.1
-ProfileCAD: /usr/lib/libvtkRenderingVolume-6.1.so.1
-ProfileCAD: /usr/lib/libvtkRenderingContext2D-6.1.so.1
-ProfileCAD: /usr/lib/libvtkIOExodus-6.1.so.1
-ProfileCAD: /usr/lib/libvtkPythonInterpreter-6.1.so.1
-ProfileCAD: /usr/lib/libpython2.7.so
-ProfileCAD: /usr/lib/libvtkFiltersParallel-6.1.so.1
-ProfileCAD: /usr/lib/libvtkFiltersModeling-6.1.so.1
-ProfileCAD: /usr/lib/libvtkexoIIc-6.1.so.1
-ProfileCAD: /usr/lib/libvtkIONetCDF-6.1.so.1
-ProfileCAD: /usr/lib/libvtkNetCDF_cxx-6.1.so.1
-ProfileCAD: /usr/lib/libvtkNetCDF-6.1.so.1
-ProfileCAD: /usr/lib64/libhdf5.so
-ProfileCAD: /usr/lib64/libhdf5_hl.so
-ProfileCAD: /usr/lib64/libpthread.so
-ProfileCAD: /usr/lib64/libdl.so
-ProfileCAD: /usr/lib64/libm.so
-ProfileCAD: /usr/lib/libvtkParallelCore-6.1.so.1
-ProfileCAD: /usr/lib/libvtkIOLegacy-6.1.so.1
-ProfileCAD: /usr/lib/libvtkIOLSDyna-6.1.so.1
-ProfileCAD: /usr/lib/libvtkIOXML-6.1.so.1
-ProfileCAD: /usr/lib/libvtkIOGeometry-6.1.so.1
-ProfileCAD: /usr/lib/libvtkIOXMLParser-6.1.so.1
-ProfileCAD: /usr/lib/libvtkGUISupportQt-6.1.so.1
-ProfileCAD: /usr/lib/libvtkInteractionStyle-6.1.so.1
-ProfileCAD: /usr/lib/libvtkRenderingOpenGL-6.1.so.1
-ProfileCAD: /usr/lib/libvtkImagingHybrid-6.1.so.1
-ProfileCAD: /usr/lib/libvtkIOImage-6.1.so.1
-ProfileCAD: /usr/lib/libvtkDICOMParser-6.1.so.1
-ProfileCAD: /usr/lib/libvtkmetaio-6.1.so.1
-ProfileCAD: /usr/lib64/libz.so
-ProfileCAD: /usr/lib64/libSM.so
-ProfileCAD: /usr/lib64/libICE.so
-ProfileCAD: /usr/lib64/libX11.so
-ProfileCAD: /usr/lib64/libXext.so
-ProfileCAD: /usr/lib64/libXt.so
-ProfileCAD: /usr/lib64/libQtGui.so
-ProfileCAD: /usr/lib64/libQtNetwork.so
-ProfileCAD: /usr/lib64/libQtCore.so
-ProfileCAD: /usr/lib/libvtkRenderingLabel-6.1.so.1
-ProfileCAD: /usr/lib/libvtkRenderingFreeType-6.1.so.1
-ProfileCAD: /usr/lib/libvtkftgl-6.1.so.1
-ProfileCAD: /usr/lib64/libfreetype.so
+ProfileCAD: /usr/lib64/libGLU.so
 ProfileCAD: /usr/lib64/libGL.so
-ProfileCAD: /usr/lib/libvtkFiltersTexture-6.1.so.1
-ProfileCAD: /usr/lib/libvtkIOSQL-6.1.so.1
-ProfileCAD: /usr/lib/libvtkIOCore-6.1.so.1
-ProfileCAD: /usr/lib/libvtksqlite-6.1.so.1
-ProfileCAD: /usr/lib/libvtkRenderingCore-6.1.so.1
-ProfileCAD: /usr/lib/libvtkFiltersSources-6.1.so.1
-ProfileCAD: /usr/lib/libvtkFiltersExtraction-6.1.so.1
-ProfileCAD: /usr/lib/libvtkFiltersGeneral-6.1.so.1
-ProfileCAD: /usr/lib/libvtkCommonComputationalGeometry-6.1.so.1
-ProfileCAD: /usr/lib/libvtkFiltersStatistics-6.1.so.1
-ProfileCAD: /usr/lib/libvtkImagingFourier-6.1.so.1
-ProfileCAD: /usr/lib/libvtkImagingCore-6.1.so.1
-ProfileCAD: /usr/lib/libvtkalglib-6.1.so.1
-ProfileCAD: /usr/lib/libvtkFiltersGeometry-6.1.so.1
-ProfileCAD: /usr/lib/libvtkFiltersCore-6.1.so.1
-ProfileCAD: /usr/lib/libvtkCommonExecutionModel-6.1.so.1
-ProfileCAD: /usr/lib/libvtkCommonDataModel-6.1.so.1
-ProfileCAD: /usr/lib/libvtkCommonMisc-6.1.so.1
-ProfileCAD: /usr/lib/libvtkCommonSystem-6.1.so.1
-ProfileCAD: /usr/lib/libvtksys-6.1.so.1
-ProfileCAD: /usr/lib/libvtkCommonTransforms-6.1.so.1
-ProfileCAD: /usr/lib/libvtkCommonMath-6.1.so.1
-ProfileCAD: /usr/lib/libvtkCommonCore-6.1.so.1
+ProfileCAD: /usr/lib64/libglut.so
+ProfileCAD: /usr/lib64/libXmu.so
+ProfileCAD: /usr/lib64/libXi.so
 ProfileCAD: CMakeFiles/ProfileCAD.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/travis/Projects/ProfileCAD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable ProfileCAD"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/travis/Projects/ProfileCAD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable ProfileCAD"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/ProfileCAD.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -272,7 +208,11 @@ CMakeFiles/ProfileCAD.dir/build: ProfileCAD
 
 .PHONY : CMakeFiles/ProfileCAD.dir/build
 
-CMakeFiles/ProfileCAD.dir/requires: CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.o.requires
+CMakeFiles/ProfileCAD.dir/requires: CMakeFiles/ProfileCAD.dir/main.cpp.o.requires
+CMakeFiles/ProfileCAD.dir/requires: CMakeFiles/ProfileCAD.dir/Scene.cpp.o.requires
+CMakeFiles/ProfileCAD.dir/requires: CMakeFiles/ProfileCAD.dir/Keyboard.cpp.o.requires
+CMakeFiles/ProfileCAD.dir/requires: CMakeFiles/ProfileCAD.dir/Menu.cpp.o.requires
+CMakeFiles/ProfileCAD.dir/requires: CMakeFiles/ProfileCAD.dir/Window.cpp.o.requires
 
 .PHONY : CMakeFiles/ProfileCAD.dir/requires
 

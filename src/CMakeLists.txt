@@ -1,15 +1,36 @@
-
 cmake_minimum_required(VERSION 2.8)
-
+# Project Name
 PROJECT(ProfileCAD)
 
-find_package(VTK REQUIRED)
-include(${VTK_USE_FILE})
+#########################################################
+# FIND GLUT
+#########################################################
+find_package(GLUT REQUIRED)
+include_directories(${GLUT_INCLUDE_DIRS})
+link_directories(${GLUT_LIBRARY_DIRS})
+add_definitions(${GLUT_DEFINITIONS})
+if(NOT GLUT_FOUND)
+    message(ERROR " GLUT not found!")
+endif(NOT GLUT_FOUND)
+#########################################################
+# FIND OPENGL
+#########################################################
+find_package(OpenGL REQUIRED)
+include_directories(${OpenGL_INCLUDE_DIRS})
+link_directories(${OpenGL_LIBRARY_DIRS})
+add_definitions(${OpenGL_DEFINITIONS})
+if(NOT OPENGL_FOUND)
+    message(ERROR " OPENGL not found!")
+endif(NOT OPENGL_FOUND)
+#########################################################
+# Include Files
+#########################################################
 
-add_executable(ProfileCAD MACOSX_BUNDLE ProfileCAD)
+add_executable(ProfileCAD MACOSX_BUNDLE main Scene Keyboard Menu Window)
+include_directories(../inc)
+########################################################
+# Linking & stuff
+#########################################################
 
-if(VTK_LIBRARIES)
-  target_link_libraries(ProfileCAD ${VTK_LIBRARIES})
-else()
-  target_link_libraries(ProfileCAD vtkHybrid vtkWidgets)
-endif()
+  # create the program "ProfileCAD"
+  target_link_libraries(ProfileCAD ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} )
