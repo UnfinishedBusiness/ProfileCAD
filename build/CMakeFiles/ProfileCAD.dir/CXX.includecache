@@ -11,7 +11,11 @@ vtkPolyDataMapper.h
 -
 vtkActor.h
 -
+vtkProperty.h
+-
 vtkSmartPointer.h
+-
+vtkLineSource.h
 -
 vtkRenderWindow.h
 -
@@ -346,6 +350,12 @@ vtkDataArray.h
 vtkDataArrayTemplate.h
 /usr/include/vtk-6.1/vtkDataArrayTemplate.h
 
+/usr/include/vtk-6.1/vtkLineSource.h
+vtkFiltersSourcesModule.h
+/usr/include/vtk-6.1/vtkFiltersSourcesModule.h
+vtkPolyDataAlgorithm.h
+/usr/include/vtk-6.1/vtkPolyDataAlgorithm.h
+
 /usr/include/vtk-6.1/vtkMappedDataArray.h
 vtkTypedDataArray.h
 /usr/include/vtk-6.1/vtkTypedDataArray.h
@@ -463,6 +473,12 @@ vtkCollection.h
 /usr/include/vtk-6.1/vtkCollection.h
 vtkProp.h
 /usr/include/vtk-6.1/vtkProp.h
+
+/usr/include/vtk-6.1/vtkProperty.h
+vtkRenderingCoreModule.h
+/usr/include/vtk-6.1/vtkRenderingCoreModule.h
+vtkObject.h
+/usr/include/vtk-6.1/vtkObject.h
 
 /usr/include/vtk-6.1/vtkRenderWindow.h
 vtkRenderingCoreModule.h

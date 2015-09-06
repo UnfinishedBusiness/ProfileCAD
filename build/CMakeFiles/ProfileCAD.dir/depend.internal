@@ -46,6 +46,7 @@ CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.o
  /usr/include/vtk-6.1/vtkInformationKey.h
  /usr/include/vtk-6.1/vtkInformationVector.h
  /usr/include/vtk-6.1/vtkIntArray.h
+ /usr/include/vtk-6.1/vtkLineSource.h
  /usr/include/vtk-6.1/vtkMappedDataArray.h
  /usr/include/vtk-6.1/vtkMappedDataArray.txx
  /usr/include/vtk-6.1/vtkMapper.h
@@ -62,6 +63,7 @@ CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.o
  /usr/include/vtk-6.1/vtkProp.h
  /usr/include/vtk-6.1/vtkProp3D.h
  /usr/include/vtk-6.1/vtkPropCollection.h
+ /usr/include/vtk-6.1/vtkProperty.h
  /usr/include/vtk-6.1/vtkRenderWindow.h
  /usr/include/vtk-6.1/vtkRenderWindowInteractor.h
  /usr/include/vtk-6.1/vtkRenderer.h

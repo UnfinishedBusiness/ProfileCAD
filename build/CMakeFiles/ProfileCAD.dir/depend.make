@@ -45,6 +45,7 @@ CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.o: /usr/include/vtk-6.1/vtkInformationI
 CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.o: /usr/include/vtk-6.1/vtkInformationKey.h
 CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.o: /usr/include/vtk-6.1/vtkInformationVector.h
 CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.o: /usr/include/vtk-6.1/vtkIntArray.h
+CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.o: /usr/include/vtk-6.1/vtkLineSource.h
 CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.o: /usr/include/vtk-6.1/vtkMappedDataArray.h
 CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.o: /usr/include/vtk-6.1/vtkMappedDataArray.txx
 CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.o: /usr/include/vtk-6.1/vtkMapper.h
@@ -61,6 +62,7 @@ CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.o: /usr/include/vtk-6.1/vtkPolyDataMapp
 CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.o: /usr/include/vtk-6.1/vtkProp.h
 CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.o: /usr/include/vtk-6.1/vtkProp3D.h
 CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.o: /usr/include/vtk-6.1/vtkPropCollection.h
+CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.o: /usr/include/vtk-6.1/vtkProperty.h
 CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.o: /usr/include/vtk-6.1/vtkRenderWindow.h
 CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.o: /usr/include/vtk-6.1/vtkRenderWindowInteractor.h
 CMakeFiles/ProfileCAD.dir/ProfileCAD.cxx.o: /usr/include/vtk-6.1/vtkRenderer.h
