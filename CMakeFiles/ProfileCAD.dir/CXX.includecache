@@ -37,6 +37,10 @@ unistd.h
 -
 sys/types.h
 -
+signal.h
+-
+pthread.h
+-
 
 /usr/local/Cellar/vtk/6.2.0/include/vtk-6.2/vtkABI.h
 

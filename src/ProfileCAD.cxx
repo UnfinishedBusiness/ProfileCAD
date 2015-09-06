@@ -13,8 +13,12 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <signal.h>
+#include <pthread.h>
 
 using namespace std;
+
+pthread_t vtk_thread;
 
 void KeypressCallbackFunction (
   vtkObject* caller,
@@ -24,18 +28,24 @@ void KeypressCallbackFunction (
 
 int cli_main()
 {
+  int status;
   string cmd;
   while(1)
   {
     cout << "> ";
     cin >> cmd;
+    if (cmd == "exit")
+    {
+      //kill(pid, SIGKILL);
+      exit(0);
+    }
     if (cmd == "test")
     {
       cout << "Its working!\n";
     }
   }
 }
-int vtk_main()
+void *vtk_main(void *)
 {
   // Create a sphere
   vtkSmartPointer<vtkSphereSource> sphereSource = vtkSmartPointer<vtkSphereSource>::New();
@@ -68,21 +78,16 @@ int vtk_main()
   renderer->SetBackground(0,0,0); // Background color black
   renderWindow->Render();
   renderWindowInteractor->Start();
-
-  return EXIT_SUCCESS;
+  return NULL;
 }
 int main()
 {
-  int pid;
-  pid = fork();
-  if (pid == 0)
+  if(pthread_create(&vtk_thread, NULL, vtk_main, NULL))
   {
-    cli_main();
+    fprintf(stderr, "Error creating thread!\n");
+    return 1;
   }
-  else
-  {
-    vtk_main();
-  }
+  cli_main();
 }
 void KeypressCallbackFunction ( vtkObject* caller, long unsigned int vtkNotUsed(eventId), void* vtkNotUsed(clientData), void* vtkNotUsed(callData) )
 {
