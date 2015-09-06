@@ -84,7 +84,7 @@ void sceneDraw(void)
     glStencilFunc(GL_ALWAYS, 0, 1);
     glStencilOp(GL_INVERT, GL_INVERT, GL_INVERT);
   }
-  glColor3f(1.0, 1.0, 0.0);
+  glColor3f(1.0, 1.0, 1.0); //white
   for (i = 0; i < 6; i++)
   {
     sceneDrawWireframe(i);
@@ -95,12 +95,12 @@ void sceneDraw(void)
     glColor3f(0.0, 0.0, 0.0);
     sceneDrawFilled(i);
 
-    glColor3f(1.0, 1.0, 0.0);
+    glColor3f(1.0, 1.0, 1.0); //white
     if (stencilOn) {
       glStencilFunc(GL_ALWAYS, 0, 1);
       glStencilOp(GL_INVERT, GL_INVERT, GL_INVERT);
     }
-    glColor3f(1.0, 1.0, 0.0);
+    glColor3f(1.0, 1.0, 1.0); //white
     sceneDrawWireframe(i);
   }
   glPopMatrix();
