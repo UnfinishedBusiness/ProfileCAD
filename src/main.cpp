@@ -7,26 +7,9 @@
 #include <Keyboard.h>
 #include <Menu.h>
 #include <Window.h>
+#include <application.h>
 
 using namespace std;
-
-/*void animation(void)
-{
-  ax += 5.0;
-  ay -= 2.0;
-  az += 5.0;
-
-  if (ax >= 360)
-    ax = 0.0;
-  if (ay <= -360)
-    ay = 0.0;
-  if (az >= 360)
-    az = 0.0;
-  glutPostRedisplay();
-  count++;
-  if (count >= 60)
-    glutIdleFunc(NULL);
-}*/
 
 int main(int argc, char **argv)
 {

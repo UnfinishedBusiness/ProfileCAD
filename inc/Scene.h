@@ -1,6 +1,6 @@
 #ifndef SCENE_
 #define SCENE_
-
+#include "application.h"
 static int stencilOn = 1;
 
 static GLfloat cube[8][3] =
@@ -25,4 +25,7 @@ void sceneDraw(void);
 void sceneDrawWireframe(int);
 void sceneDrawFilled(int);
 void sceneSetViewAngle(float, float, float);
+void sceneIncViewAngle(float, float, float);
+point_t sceneGetViewAngle();
+
 #endif

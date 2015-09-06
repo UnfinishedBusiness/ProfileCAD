@@ -7,16 +7,45 @@
 
 using namespace std;
 float ax, ay, az;       /* angles for animation */
+/*void animation(void)
+{
+  ax += 5.0;
+  ay -= 2.0;
+  az += 5.0;
+
+  if (ax >= 360)
+    ax = 0.0;
+  if (ay <= -360)
+    ay = 0.0;
+  if (az >= 360)
+    az = 0.0;
+  glutPostRedisplay();
+  count++;
+  if (count >= 60)
+    glutIdleFunc(NULL);
+}*/
 void sceneInit()
 {
   glutDisplayFunc(sceneDraw);
   sceneSetViewAngle(10, -10, 0);
+}
+void sceneIncViewAngle(float x, float y, float z)
+{
+  ax = ax + x;
+  ay = ay + y;
+  az = az + z;
+  glutPostRedisplay();
 }
 void sceneSetViewAngle(float x, float y, float z)
 {
   ax = x;
   ay = y;
   az = z;
+  glutPostRedisplay();
+}
+point_t sceneGetViewAngle()
+{
+  return point_t{ax, ay, az};
 }
 void sceneDrawFilled(int face)
 {
