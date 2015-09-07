@@ -14,6 +14,7 @@ struct uiEntity{
 
 void uiInit();
 void uiAppend(uiEntity);
+void uiEdit(int, uiEntity);
 void uiDrawText(void *, char *, float, float, float);
 void uiRender();
 #endif

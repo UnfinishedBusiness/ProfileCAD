@@ -59,6 +59,10 @@ void sceneColor(color_t c)
 {
   glColor3f(c.r, c.g, c.b);
 }
+float sceneGetScale()
+{
+  return scale;
+}
 /*void sceneDrawWireframe(int face)
 {
   sceneColor(WHITE);

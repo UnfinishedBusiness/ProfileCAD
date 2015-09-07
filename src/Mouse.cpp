@@ -12,8 +12,24 @@ void mouseInit()
 }
 void mouseCallback(int btn, int state, int x, int y)
 {
+  GLint viewport[4]; //var to hold the viewport info
+  GLdouble modelview[16]; //var to hold the modelview info
+  GLdouble projection[16]; //var to hold the projection matrix info
+  GLfloat winX, winY, winZ; //variables to hold screen x,y,z coordinates
+  GLdouble worldX, worldY, worldZ; //variables to hold world x,y,z coordinates
+  glGetDoublev( GL_MODELVIEW_MATRIX, modelview ); //get the modelview info
+  glGetDoublev( GL_PROJECTION_MATRIX, projection ); //get the projection matrix info
+  glGetIntegerv( GL_VIEWPORT, viewport ); //get the viewport info
+  winX = (float)x;
+  winY = (float)viewport[3] - (float)y;
+  winZ = 0;
+  //get the world coordinates from the screen coordinates
+  gluUnProject( winX, winY, winZ, modelview, projection, viewport, &worldX, &worldY, &worldZ);
+  worldX = worldX/sceneGetScale();
+  worldY = worldY/sceneGetScale();
+  D printf("(mouseCallback) WorldX: %.6f WorldY: %.6f\n", worldX, worldY);
+
     button = btn;
-    //D printf("(mouseCallback) btn = %d\n", btn);
     mod = glutGetModifiers();
     if ((btn == 3) || (btn == 4)) // It's a wheel event
     {
@@ -34,6 +50,14 @@ void mouseCallback(int btn, int state, int x, int y)
     if(btn==GLUT_LEFT_BUTTON && state==GLUT_DOWN && mod != GLUT_ACTIVE_CTRL)
     {
         D printf("Left button at X: %d, Y: %d\n", x, y);
+        int m = cadGetEntityArrayIndex();
+        cadEntity e;
+        for (int a = 0; a < m; a++)
+        {
+          e = cadGetEntityArray(a);
+          D printf("Entity %d start(%.6f, %.6f) end(%.6f, %.6f)\n", a, e.Line.start.x, e.Line.start.y, e.Line.end.x, e.Line.end.y);
+          
+        }
     }
     if(btn==GLUT_RIGHT_BUTTON && state==GLUT_DOWN)
     {

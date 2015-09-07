@@ -36,4 +36,9 @@ struct point_t{
 struct color_t{
   float r, g, b, a;
 };
+#define WHITE color_t{1, 1, 1, 1}
+#define BLACK color_t{0, 0, 0, 1}
+#define RED   color_t{1, 0, 0, 1}
+#define GREEN color_t{0, 1, 0, 1}
+#define BLUE  color_t{0, 0, 1, 1}
 #endif

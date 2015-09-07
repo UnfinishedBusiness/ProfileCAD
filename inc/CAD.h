@@ -19,7 +19,10 @@ struct cadEntity{
 
 void cadInit();
 void cadAppend(cadEntity);
+void cadSetColor(color_t);
 void cadRender();
 void cadRedraw();
+cadEntity cadGetEntityArray(int);
+int cadGetEntityArrayIndex();
 void cadDrawLine(point_t start, point_t end);
 #endif

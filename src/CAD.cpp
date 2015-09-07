@@ -7,6 +7,7 @@ using namespace std;
 
 vector<cadEntity> cadEntityArray;
 int cadEntityArrayIndex;
+color_t cadColorAttribute = GREEN;
 
 void cadInit()
 {
@@ -20,9 +21,23 @@ void cadAppend(cadEntity e)
 }
 void cadDrawLine(point_t start, point_t end)
 {
-  cadAppend(cadEntity{CAD_LINE, WHITE, cadEntityLine{ start, end }, cadEntityArc{ start, end } });
+  cadAppend(cadEntity{CAD_LINE, cadColorAttribute, cadEntityLine{ start, end }, cadEntityArc{ start, end } });
 }
-
+void cadSetColor(color_t c)
+{
+  cadColorAttribute = c;
+}
+cadEntity cadGetEntityArray(int x)
+{
+  if (cadEntityArrayIndex > x)
+  {
+    return cadEntityArray[x];
+  }
+}
+int cadGetEntityArrayIndex()
+{
+  return cadEntityArrayIndex;
+}
 void cadRender()
 {
   //sceneColor(WHITE);

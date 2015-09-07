@@ -53,20 +53,53 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
         case 121 : CmdInput.append("y"); break;
         case 122 : CmdInput.append("z"); break;
 
+        case 8 : if (CmdInput.size() > 0) CmdInput.pop_back(); break;
+        case 32 : CmdInput.append(" "); break;
+
         case 27 : EXIT; //Escape
         case 13 :
           //D point_t angle = sceneGetViewAngle();
           //D printf("Screen angle is x: %.6f y: %.6f z: %.6f\n", angle.x, angle.y, angle.z);
+          if (CmdInput.find("plane") != std::string::npos)
+          {
+            std::size_t posSpace = CmdInput.find(" ");
+            std::string plane = CmdInput.substr(posSpace+1, (CmdInput.length() - posSpace)-1);
+            if (plane == "xy")
+            {
+              sceneSetViewAngle(0, 0, 0);
+            }
+            if (plane == "xz")
+            {
+              sceneSetViewAngle(90, 0, 0);
+            }
+            if (plane == "yz")
+            {
+              sceneSetViewAngle(0, 90, 0);
+            }
+          }
           if (CmdInput == "line")
           {
+            cadSetColor(BLUE);
             cadDrawLine(point_t{0, 0, 0}, point_t{2,2,2});
             cadRedraw();
+          }
+          if (CmdInput == "test")
+          {
+            cadSetColor(GREEN);
+            cadDrawLine(point_t{0, 0, 0}, point_t{2,0,0});
+            cadDrawLine(point_t{0, 0, 0}, point_t{0,2,0});
+            cadDrawLine(point_t{0, 0, 0}, point_t{0,0,2});
+            cadRedraw();
+          }
+          if (CmdInput == "exit")
+          {
+            EXIT;
           }
           CmdInput = "";
           break; //Return
       }
       //D printf("(keyboardCallbackNormal) CmdInput = %s\n", CmdInput.c_str());
-      //
+      uiEdit(0, uiEntity{UI_TEXT, WHITE, "> " + CmdInput, point_t{5, 10, 0}});
 }
 void keyboardCallbackSpecial(int key, int x, int y)
 {

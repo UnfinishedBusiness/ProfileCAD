@@ -8,13 +8,22 @@ int uiEntityArrayIndex;
 void uiInit()
 {
   uiEntityArrayIndex = 0;
-  uiAppend(uiEntity{UI_TEXT, WHITE, "Test", point_t{5, 10, 0}});
+  uiAppend(uiEntity{UI_TEXT, WHITE, ">", point_t{5, 10, 0}}); //CmdInput text - index 0
 }
 void uiAppend(uiEntity e)
 {
   uiEntityArray.push_back(uiEntity());
   uiEntityArray[uiEntityArrayIndex] = e;
   uiEntityArrayIndex++;
+  glutPostRedisplay();
+}
+void uiEdit(int x, uiEntity e)
+{
+  if (uiEntityArrayIndex > x) //Make sure entity exists
+  {
+    uiEntityArray[x] = e;
+  }
+  glutPostRedisplay();
 }
 void uiDrawText(void * font, char *s, float x, float y, float z)
 {
@@ -33,9 +42,9 @@ void uiRender()
   {
       if (uiEntityArray[i].Type == UI_TEXT)
       {
-        //glTranslatef(2, 2, 1);
+        //glScalef(5, 5, 0);
         sceneColor(uiEntityArray[i].Color);
-        uiDrawText(GLUT_BITMAP_HELVETICA_18, (char *)uiEntityArray[i].Text.c_str(), uiEntityArray[i].Position.x * .001, uiEntityArray[i].Position.y * .001, uiEntityArray[i].Position.z * .001);
+        uiDrawText(GLUT_BITMAP_HELVETICA_12, (char *)uiEntityArray[i].Text.c_str(), uiEntityArray[i].Position.x * .001, uiEntityArray[i].Position.y * .001, uiEntityArray[i].Position.z * .001);
       }
 
   }
