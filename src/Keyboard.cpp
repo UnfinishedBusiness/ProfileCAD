@@ -24,10 +24,12 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
       }
       switch(key)
       {
-        case 27 : cout << "Bye!\n"; exit(0); //Escape
+        case 27 : EXIT; //Escape
         case 13 :
-          point_t angle = sceneGetViewAngle();
-          printf("Screen angle is x: %.6f y: %.6f z: %.6f\n", angle.x, angle.y, angle.z);
+          //D point_t angle = sceneGetViewAngle();
+          //D printf("Screen angle is x: %.6f y: %.6f z: %.6f\n", angle.x, angle.y, angle.z);
+          cadDrawLine(point_t{0, 0, 0}, point_t{2,2,2});
+          cadRedraw();
           break; //Return
       }
 }

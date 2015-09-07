@@ -3,6 +3,7 @@
 #include <string.h>
 #include <GL/glut.h>
 #include <iostream>
+#include <vector>
 
 #include <CAD.h>
 #include <Keyboard.h>
@@ -13,6 +14,8 @@
 
 #ifndef APPLICATION_
 #define  APPLICATION_
+
+#define EXIT cout << "Bye!\n"; exit(0);
 
 #define WINDOW_HEIGHT 800
 #define WINDOW_WIDTH 1100
@@ -29,5 +32,7 @@
 struct point_t{
   float x,y,z;
 };
-
+struct color_t{
+  float r, g, b, a;
+};
 #endif

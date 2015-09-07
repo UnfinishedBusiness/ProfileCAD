@@ -9,6 +9,8 @@
 /home/travis/Projects/ProfileCAD/src/../inc/CAD.h
 application.h
 -
+Scene.h
+-
 
 /home/travis/Projects/ProfileCAD/src/../inc/Keyboard.h
 application.h
@@ -40,6 +42,8 @@ string.h
 GL/glut.h
 -
 iostream
+-
+vector
 -
 CAD.h
 -

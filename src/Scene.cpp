@@ -48,14 +48,19 @@ void sceneIncPan(float x, float y, float z)
   tz = tz + z;
   glutPostRedisplay();
 }
-void sceneDrawWireframe(int face)
+void sceneColor(color_t c)
 {
+  glColor3f(c.r, c.g, c.b);
+}
+/*void sceneDrawWireframe(int face)
+{
+  sceneColor(WHITE);
   glBegin(GL_LINE_LOOP);
-  /*for (int i = 0; i < 8; i++)
-    glVertex3fv((GLfloat *) cube[faceIndex[face][i]]);*/
+  for (int i = 0; i < 8; i++)
+    glVertex3fv((GLfloat *) cube[faceIndex[face][i]]);
 
   glEnd();
-}
+}*/
 void sceneDraw(void)
 {
   D printf("(sceneDraw) %d\r", s++);
@@ -78,24 +83,14 @@ void sceneDraw(void)
   glStencilFunc(GL_ALWAYS, 0, 1);
   glStencilOp(GL_INVERT, GL_INVERT, GL_INVERT);
 
-  glColor3f(1.0, 1.0, 1.0); //white
-  for (int i = 0; i < 6; i++)
-  {
-    sceneDrawWireframe(i);
-    if (stencilOn) {
-      glStencilFunc(GL_EQUAL, 0, 1);
-      glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-    }
-    glColor3f(0.0, 0.0, 0.0);
 
-    glColor3f(1.0, 1.0, 1.0); //white
-    if (stencilOn) {
-      glStencilFunc(GL_ALWAYS, 0, 1);
-      glStencilOp(GL_INVERT, GL_INVERT, GL_INVERT);
-    }
-    glColor3f(1.0, 1.0, 1.0); //white
-    sceneDrawWireframe(i);
-  }
+  glStencilFunc(GL_EQUAL, 0, 1);
+  glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+  glStencilFunc(GL_ALWAYS, 0, 1);
+  glStencilOp(GL_INVERT, GL_INVERT, GL_INVERT);
+
+  cadRender();
+
   glPopMatrix();
   glDisable(GL_STENCIL_TEST);
 

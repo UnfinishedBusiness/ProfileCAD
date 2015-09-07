@@ -2,6 +2,9 @@
 #define SCENE_
 #include "application.h"
 
+#define WHITE color_t{1, 1, 1, 1}
+#define BLACK color_t{0, 0, 0, 1}
+
 static int stencilOn = 1;
 
 static GLfloat cube[8][3] =
@@ -24,10 +27,11 @@ static int faceIndex[6][4] =
 
 void sceneInit();
 void sceneDraw(void);
-void sceneDrawWireframe(int);
+//void sceneDrawWireframe(int);
 void sceneSetViewAngle(float, float, float);
 void sceneIncViewAngle(float, float, float);
 point_t sceneGetViewAngle();
 void sceneIncZoom(float);
 void sceneIncPan(float, float, float);
+void sceneColor(color_t);
 #endif

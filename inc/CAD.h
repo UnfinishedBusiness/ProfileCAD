@@ -1,9 +1,25 @@
 #ifndef CAD_
 #define CAD_
 #include <application.h>
+#include <Scene.h>
 
-#define CAD_MEMORY_PAGE_SIZE 1000
+struct cadEntityArc{
+  point_t start, end;
+  float radius;
+};
+struct cadEntityLine{
+  point_t start, end;
+};
+struct cadEntity{
+  int Type; //Line or Arc
+  color_t Color;
+  cadEntityLine Line;
+  cadEntityArc Arc;
+};
 
 void cadInit();
-
+void cadAppend(cadEntity);
+void cadRender();
+void cadRedraw();
+void cadDrawLine(point_t start, point_t end);
 #endif
