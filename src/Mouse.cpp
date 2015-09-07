@@ -27,7 +27,7 @@ void mouseCallback(int btn, int state, int x, int y)
   gluUnProject( winX, winY, winZ, modelview, projection, viewport, &worldX, &worldY, &worldZ);
   worldX = worldX/sceneGetScale();
   worldY = worldY/sceneGetScale();
-  D printf("(mouseCallback) WorldX: %.6f WorldY: %.6f\n", worldX, worldY);
+  //D printf("(mouseCallback) WorldX: %.6f WorldY: %.6f\n", worldX, worldY);
 
     button = btn;
     mod = glutGetModifiers();
@@ -49,14 +49,45 @@ void mouseCallback(int btn, int state, int x, int y)
     }
     if(btn==GLUT_LEFT_BUTTON && state==GLUT_DOWN && mod != GLUT_ACTIVE_CTRL)
     {
-        D printf("Left button at X: %d, Y: %d\n", x, y);
+        //D printf("Left button at X: %d, Y: %d\n", x, y);
         int m = cadGetEntityArrayIndex();
         cadEntity e;
         for (int a = 0; a < m; a++)
         {
           e = cadGetEntityArray(a);
-          D printf("Entity %d start(%.6f, %.6f) end(%.6f, %.6f)\n", a, e.Line.start.x, e.Line.start.y, e.Line.end.x, e.Line.end.y);
-          
+          //D printf("Entity %d start(%.6f, %.6f) end(%.6f, %.6f)\n", a, e.Line.start.x, e.Line.start.y, e.Line.end.x, e.Line.end.y);
+
+          if (isSimilar(worldX, e.Line.start.x) && isSimilar(worldY, e.Line.start.y))
+          {
+            D printf("\t%s Entity #%d Start point Clicked!%s\n", KGREEN, a, KNORMAL);
+            e.Color = WHITE;
+            cadEdit(a, e);
+          }
+          if (isSimilar(worldX, e.Line.end.x) && isSimilar(worldY, e.Line.end.y))
+          {
+            D printf("\t%s Entity #%d End point Clicked!%s\n", KGREEN, a, KNORMAL);
+            e.Color = WHITE;
+            cadEdit(a, e);
+          }
+
+          vector<point_t> points = geoGetPointsOfLine(e.Line.start, e.Line.end);
+          bool Select = false;
+          //D printf("\t number of points: %d\n", points.size());
+          for (int b = 0; b < points.size(); b++)
+          {
+            if (isSimilar(worldX, points[b].x) && isSimilar(worldY, points[b].y))
+            {
+              Select = true;
+            }
+            //D printf("points[%d]\n", b);
+          }
+          if (Select == true)
+          {
+            Select = false;
+            D printf("\t%s Entity #%d Clicked!%s\n", KGREEN, a, KNORMAL);
+            e.Color = WHITE;
+            cadEdit(a, e);
+          }
         }
     }
     if(btn==GLUT_RIGHT_BUTTON && state==GLUT_DOWN)

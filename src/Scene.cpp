@@ -74,18 +74,21 @@ float sceneGetScale()
 }*/
 void sceneDraw(void)
 {
-  D printf("(sceneDraw) %d\r", s++);
-  D fflush(stdout);
+  //D printf("(sceneDraw) %d\r", s++);
+  //D fflush(stdout);
 
   glClearColor(0.0, 0.0, 0.0, 0.0);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+  //glEnable(GL_LIGHTING);
+  //glDisable(GL_BLEND);
+  //glColorMaterial ( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
+  //glEnable ( GL_COLOR_MATERIAL );
   //Render 3D
   glPushMatrix();
   glRotatef(ax, 1.0, 0.0, 0.0);
   glRotatef(-ay, 0.0, 1.0, 0.0);
   glTranslatef(tx, ty, tz);
-  D printf("\nscale = %f\n", scale);
+  //D printf("\nscale = %f\n", scale);
   glScalef(scale, scale, scale);
   //scale = 1; //Dont scale again;
   //gluLookAt( 10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 10.0, 10.0, 10.0 );

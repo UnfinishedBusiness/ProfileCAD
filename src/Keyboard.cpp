@@ -12,7 +12,7 @@ void keyboardInit()
 void keyboardCallbackNormal(unsigned char key, int x, int y)
 {
     // Press ALT or  SHIFT or  CTRL in combination with other keys.
-    D printf("Key -> %d \n",key);
+    //D printf("Key -> %d \n",key);
     int mod = glutGetModifiers();
     if (mod != 0) //ALT=4  SHIFT=1  CTRL=2
       {
@@ -80,7 +80,8 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
           if (CmdInput == "line")
           {
             cadSetColor(BLUE);
-            cadDrawLine(point_t{0, 0, 0}, point_t{2,2,2});
+            cadDrawLine(point_t{0, 0, 0}, point_t{2,0,0});
+            cadDrawLine(point_t{0, 0, 0}, point_t{0,2,0});
             cadRedraw();
           }
           if (CmdInput == "test")

@@ -27,7 +27,7 @@ void uiEdit(int x, uiEntity e)
 }
 void uiDrawText(void * font, char *s, float x, float y, float z)
 {
-  D printf("(windowDrawText) s = %s\n", s);
+  //D printf("(uiDrawText) s = %s\n", s);
   unsigned int i;
   glRasterPos3f(x, y, z);
   for (i = 0; i < strlen (s); i++)
@@ -37,7 +37,7 @@ void uiDrawText(void * font, char *s, float x, float y, float z)
 }
 void uiRender()
 {
-  D printf("(uiRender)\n");
+  //D printf("(uiRender)\n");
   for (int i = 0; i < uiEntityArrayIndex; i++)
   {
       if (uiEntityArray[i].Type == UI_TEXT)

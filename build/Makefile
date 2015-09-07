@@ -150,6 +150,33 @@ CAD.cpp.s:
 	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/CAD.cpp.s
 .PHONY : CAD.cpp.s
 
+Geometry.o: Geometry.cpp.o
+
+.PHONY : Geometry.o
+
+# target to build an object file
+Geometry.cpp.o:
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/Geometry.cpp.o
+.PHONY : Geometry.cpp.o
+
+Geometry.i: Geometry.cpp.i
+
+.PHONY : Geometry.i
+
+# target to preprocess a source file
+Geometry.cpp.i:
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/Geometry.cpp.i
+.PHONY : Geometry.cpp.i
+
+Geometry.s: Geometry.cpp.s
+
+.PHONY : Geometry.s
+
+# target to generate assembly for a file
+Geometry.cpp.s:
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/Geometry.cpp.s
+.PHONY : Geometry.cpp.s
+
 Keyboard.o: Keyboard.cpp.o
 
 .PHONY : Keyboard.o
@@ -351,6 +378,9 @@ help:
 	@echo "... CAD.o"
 	@echo "... CAD.i"
 	@echo "... CAD.s"
+	@echo "... Geometry.o"
+	@echo "... Geometry.i"
+	@echo "... Geometry.s"
 	@echo "... Keyboard.o"
 	@echo "... Keyboard.i"
 	@echo "... Keyboard.s"

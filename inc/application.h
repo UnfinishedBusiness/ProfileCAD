@@ -4,8 +4,10 @@
 #include <GL/glut.h>
 #include <iostream>
 #include <vector>
+#include <cmath>
 
 #include <CAD.h>
+#include <Geometry.h>
 #include <Keyboard.h>
 #include <Menu.h>
 #include <Mouse.h>
@@ -41,4 +43,23 @@ struct color_t{
 #define RED   color_t{1, 0, 0, 1}
 #define GREEN color_t{0, 1, 0, 1}
 #define BLUE  color_t{0, 0, 1, 1}
+
+#define KNORMAL  "\x1B[0m"
+#define KRED  "\x1B[31m"
+#define KGREEN  "\x1B[32m"
+#define KYELLOW  "\x1B[33m"
+#define KBLUE  "\x1B[34m"
+#define KMAGENTA  "\x1B[35m"
+#define KCYNAN  "\x1B[36m"
+#define KWHITE  "\x1B[37m"
+
+
+#define ZERO 1e-10
+#define SMALL 0.1
+#define DELTA 1e-10
+#define isZero(A) ( (A < ZERO) && (A > -ZERO) )
+#define isSmall(A) ( (A < SMALL) && (A > -SMALL) )
+#define isSame(A, B) ( ((A-B) < ZERO) && ((A-B) > -ZERO) )
+#define isSimilar(A, B) ( ((A-B) < SMALL) && ((A-B) > -SMALL) )
+#define isBetween(A, B, C) ( ((A-B) > -ZERO) && ((A-C) < ZERO) )
 #endif

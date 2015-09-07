@@ -12,6 +12,10 @@ application.h
 Scene.h
 -
 
+/home/travis/Projects/ProfileCAD/src/../inc/Geometry.h
+application.h
+-
+
 /home/travis/Projects/ProfileCAD/src/../inc/Keyboard.h
 application.h
 -
@@ -51,7 +55,11 @@ iostream
 -
 vector
 -
+cmath
+-
 CAD.h
+-
+Geometry.h
 -
 Keyboard.h
 -
@@ -68,6 +76,10 @@ Window.h
 
 /home/travis/Projects/ProfileCAD/src/CAD.cpp
 CAD.h
+-
+
+/home/travis/Projects/ProfileCAD/src/Geometry.cpp
+Geometry.h
 -
 
 /home/travis/Projects/ProfileCAD/src/Keyboard.cpp

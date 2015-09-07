@@ -10,7 +10,7 @@ using namespace std;
 void windowInit()
 {
   glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-  glutInitDisplayMode(GLUT_RGB | GLUT_STENCIL | GLUT_DOUBLE | GLUT_DEPTH);
+  glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
   glutCreateWindow(WINDOW_TITLE);
   glutReshapeFunc(windowResize);
 }

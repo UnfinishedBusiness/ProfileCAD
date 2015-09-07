@@ -19,6 +19,7 @@ struct cadEntity{
 
 void cadInit();
 void cadAppend(cadEntity);
+void cadEdit(int, cadEntity);
 void cadSetColor(color_t);
 void cadRender();
 void cadRedraw();
