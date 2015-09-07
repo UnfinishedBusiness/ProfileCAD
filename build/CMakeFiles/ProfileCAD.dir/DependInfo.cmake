@@ -9,6 +9,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/travis/Projects/ProfileCAD/src/Menu.cpp" "/home/travis/Projects/ProfileCAD/build/CMakeFiles/ProfileCAD.dir/Menu.cpp.o"
   "/home/travis/Projects/ProfileCAD/src/Mouse.cpp" "/home/travis/Projects/ProfileCAD/build/CMakeFiles/ProfileCAD.dir/Mouse.cpp.o"
   "/home/travis/Projects/ProfileCAD/src/Scene.cpp" "/home/travis/Projects/ProfileCAD/build/CMakeFiles/ProfileCAD.dir/Scene.cpp.o"
+  "/home/travis/Projects/ProfileCAD/src/UI.cpp" "/home/travis/Projects/ProfileCAD/build/CMakeFiles/ProfileCAD.dir/UI.cpp.o"
   "/home/travis/Projects/ProfileCAD/src/Window.cpp" "/home/travis/Projects/ProfileCAD/build/CMakeFiles/ProfileCAD.dir/Window.cpp.o"
   "/home/travis/Projects/ProfileCAD/src/main.cpp" "/home/travis/Projects/ProfileCAD/build/CMakeFiles/ProfileCAD.dir/main.cpp.o"
   )

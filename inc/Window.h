@@ -4,5 +4,4 @@
 
 void windowInit();
 void windowResize(int, int);
-void windowSetMatrix();
 #endif

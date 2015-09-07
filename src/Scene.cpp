@@ -1,8 +1,9 @@
 #include <Scene.h>
 
 using namespace std;
-float ax, ay, az;       /* angles for animation */
-float tx, ty, tz;
+float ax, ay, az;       /* angles for orbit */
+float tx, ty, tz;       /* factors for paning */
+float scale = 0.1;          /* factor for scaling */
 D int s = 0;
 void sceneInit()
 {
@@ -32,13 +33,19 @@ void sceneIncZoom(float inc)
 {
   if (inc > 0)
   {
-    inc = inc + 1;
+    //inc = inc + 1;
+    scale = scale + 0.01;
   }
   else
   {
-    inc = 1 + inc;
+    //inc = 1 + inc;
+    scale = scale - 0.01;
+    if (scale < 0)
+    {
+      scale = 0.01;
+    }
   }
-  glScalef(inc, inc, inc);
+  //scale = scale + inc;
   glutPostRedisplay();
 }
 void sceneIncPan(float x, float y, float z)
@@ -65,36 +72,35 @@ void sceneDraw(void)
 {
   D printf("(sceneDraw) %d\r", s++);
   D fflush(stdout);
-  glEnable(GL_DEPTH_TEST);
-  glDepthFunc(GL_LEQUAL);
+
   glClearColor(0.0, 0.0, 0.0, 0.0);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glPushMatrix();
 
+  //Render 3D
+  glPushMatrix();
   glRotatef(ax, 1.0, 0.0, 0.0);
   glRotatef(-ay, 0.0, 1.0, 0.0);
-
   glTranslatef(tx, ty, tz);
-
-
-  glEnable(GL_STENCIL_TEST);
-  glClear(GL_STENCIL_BUFFER_BIT);
-  glStencilMask(1);
-  glStencilFunc(GL_ALWAYS, 0, 1);
-  glStencilOp(GL_INVERT, GL_INVERT, GL_INVERT);
-
-
-  glStencilFunc(GL_EQUAL, 0, 1);
-  glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-  glStencilFunc(GL_ALWAYS, 0, 1);
-  glStencilOp(GL_INVERT, GL_INVERT, GL_INVERT);
-
+  D printf("\nscale = %f\n", scale);
+  glScalef(scale, scale, scale);
+  //scale = 1; //Dont scale again;
+  //gluLookAt( 10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 10.0, 10.0, 10.0 );
   cadRender();
-
   glPopMatrix();
-  glDisable(GL_STENCIL_TEST);
 
-  /* end of good stuff */
+  //Render 2D overlay
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+  glMatrixMode(GL_PROJECTION);
+  glPushMatrix();
+  glLoadIdentity();
+  gluOrtho2D(0, 1, 0, 1);
+  uiRender();
+  glPopMatrix();
+  glPopMatrix();
+  glMatrixMode(GL_MODELVIEW);
 
+  //glDisable(GL_STENCIL_TEST);
   glutSwapBuffers();
+
 }

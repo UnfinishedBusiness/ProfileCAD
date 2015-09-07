@@ -10,6 +10,7 @@
 #include <Menu.h>
 #include <Mouse.h>
 #include <Scene.h>
+#include <UI.h>
 #include <Window.h>
 
 #ifndef APPLICATION_

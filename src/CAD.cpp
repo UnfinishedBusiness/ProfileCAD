@@ -26,7 +26,7 @@ void cadDrawLine(point_t start, point_t end)
 void cadRender()
 {
   //sceneColor(WHITE);
-  D printf("(cadRender)");
+  D printf("(cadRender)\n");
   glBegin(GL_LINE_LOOP);
   for (int i = 0; i < cadEntityArrayIndex; i++)
   {

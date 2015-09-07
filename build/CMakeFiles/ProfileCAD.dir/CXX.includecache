@@ -28,6 +28,12 @@ application.h
 application.h
 /home/travis/Projects/ProfileCAD/src/../inc/application.h
 
+/home/travis/Projects/ProfileCAD/src/../inc/UI.h
+application.h
+-
+Scene.h
+-
+
 /home/travis/Projects/ProfileCAD/src/../inc/Window.h
 application.h
 -
@@ -54,6 +60,8 @@ Menu.h
 Mouse.h
 -
 Scene.h
+-
+UI.h
 -
 Window.h
 -
@@ -86,6 +94,10 @@ Mouse.h
 
 /home/travis/Projects/ProfileCAD/src/Scene.cpp
 Scene.h
+-
+
+/home/travis/Projects/ProfileCAD/src/UI.cpp
+UI.h
 -
 
 /home/travis/Projects/ProfileCAD/src/Window.cpp

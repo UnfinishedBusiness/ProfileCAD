@@ -10,6 +10,7 @@ int main(int argc, char **argv)
   menuInit();
   keyboardInit();
   mouseInit();
+  uiInit();
   cadInit();
   glutMainLoop();
   return 0;             /* ANSI C requires main to return int. */

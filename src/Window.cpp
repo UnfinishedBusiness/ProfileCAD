@@ -17,13 +17,4 @@ void windowInit()
 void windowResize(int w, int h)
 {
   glViewport(0, 0, w, h);
-  windowSetMatrix();
-}
-void windowSetMatrix(void)
-{
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  glOrtho(-2.0, 2.0, -2.0, 2.0, -2.0, 2.0);
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
 }

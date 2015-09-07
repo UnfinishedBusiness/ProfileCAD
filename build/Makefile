@@ -258,6 +258,33 @@ Scene.cpp.s:
 	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/Scene.cpp.s
 .PHONY : Scene.cpp.s
 
+UI.o: UI.cpp.o
+
+.PHONY : UI.o
+
+# target to build an object file
+UI.cpp.o:
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/UI.cpp.o
+.PHONY : UI.cpp.o
+
+UI.i: UI.cpp.i
+
+.PHONY : UI.i
+
+# target to preprocess a source file
+UI.cpp.i:
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/UI.cpp.i
+.PHONY : UI.cpp.i
+
+UI.s: UI.cpp.s
+
+.PHONY : UI.s
+
+# target to generate assembly for a file
+UI.cpp.s:
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/UI.cpp.s
+.PHONY : UI.cpp.s
+
 Window.o: Window.cpp.o
 
 .PHONY : Window.o
@@ -336,6 +363,9 @@ help:
 	@echo "... Scene.o"
 	@echo "... Scene.i"
 	@echo "... Scene.s"
+	@echo "... UI.o"
+	@echo "... UI.i"
+	@echo "... UI.s"
 	@echo "... Window.o"
 	@echo "... Window.i"
 	@echo "... Window.s"
