@@ -123,6 +123,33 @@ ProfileCAD/fast:
 	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/build
 .PHONY : ProfileCAD/fast
 
+CAD.o: CAD.cpp.o
+
+.PHONY : CAD.o
+
+# target to build an object file
+CAD.cpp.o:
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/CAD.cpp.o
+.PHONY : CAD.cpp.o
+
+CAD.i: CAD.cpp.i
+
+.PHONY : CAD.i
+
+# target to preprocess a source file
+CAD.cpp.i:
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/CAD.cpp.i
+.PHONY : CAD.cpp.i
+
+CAD.s: CAD.cpp.s
+
+.PHONY : CAD.s
+
+# target to generate assembly for a file
+CAD.cpp.s:
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/CAD.cpp.s
+.PHONY : CAD.cpp.s
+
 Keyboard.o: Keyboard.cpp.o
 
 .PHONY : Keyboard.o
@@ -176,6 +203,33 @@ Menu.s: Menu.cpp.s
 Menu.cpp.s:
 	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/Menu.cpp.s
 .PHONY : Menu.cpp.s
+
+Mouse.o: Mouse.cpp.o
+
+.PHONY : Mouse.o
+
+# target to build an object file
+Mouse.cpp.o:
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/Mouse.cpp.o
+.PHONY : Mouse.cpp.o
+
+Mouse.i: Mouse.cpp.i
+
+.PHONY : Mouse.i
+
+# target to preprocess a source file
+Mouse.cpp.i:
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/Mouse.cpp.i
+.PHONY : Mouse.cpp.i
+
+Mouse.s: Mouse.cpp.s
+
+.PHONY : Mouse.s
+
+# target to generate assembly for a file
+Mouse.cpp.s:
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/Mouse.cpp.s
+.PHONY : Mouse.cpp.s
 
 Scene.o: Scene.cpp.o
 
@@ -267,12 +321,18 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... ProfileCAD"
+	@echo "... CAD.o"
+	@echo "... CAD.i"
+	@echo "... CAD.s"
 	@echo "... Keyboard.o"
 	@echo "... Keyboard.i"
 	@echo "... Keyboard.s"
 	@echo "... Menu.o"
 	@echo "... Menu.i"
 	@echo "... Menu.s"
+	@echo "... Mouse.o"
+	@echo "... Mouse.i"
+	@echo "... Mouse.s"
 	@echo "... Scene.o"
 	@echo "... Scene.i"
 	@echo "... Scene.s"

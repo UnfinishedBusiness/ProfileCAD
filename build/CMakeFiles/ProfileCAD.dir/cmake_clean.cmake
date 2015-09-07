@@ -4,6 +4,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/ProfileCAD.dir/Keyboard.cpp.o"
   "CMakeFiles/ProfileCAD.dir/Menu.cpp.o"
   "CMakeFiles/ProfileCAD.dir/Window.cpp.o"
+  "CMakeFiles/ProfileCAD.dir/Mouse.cpp.o"
+  "CMakeFiles/ProfileCAD.dir/CAD.cpp.o"
   "ProfileCAD.pdb"
   "ProfileCAD"
 )

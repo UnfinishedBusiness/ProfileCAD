@@ -7,10 +7,6 @@
 
 using namespace std;
 
-#define WINDOW_HEIGHT 800
-#define WINDOW_WIDTH 1100
-#define WINDOW_TITLE "ProfileCAD"
-
 void windowInit()
 {
   glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);

@@ -177,13 +177,63 @@ CMakeFiles/ProfileCAD.dir/Window.cpp.o.provides: CMakeFiles/ProfileCAD.dir/Windo
 CMakeFiles/ProfileCAD.dir/Window.cpp.o.provides.build: CMakeFiles/ProfileCAD.dir/Window.cpp.o
 
 
+CMakeFiles/ProfileCAD.dir/Mouse.cpp.o: CMakeFiles/ProfileCAD.dir/flags.make
+CMakeFiles/ProfileCAD.dir/Mouse.cpp.o: /home/travis/Projects/ProfileCAD/src/Mouse.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/travis/Projects/ProfileCAD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/ProfileCAD.dir/Mouse.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/ProfileCAD.dir/Mouse.cpp.o -c /home/travis/Projects/ProfileCAD/src/Mouse.cpp
+
+CMakeFiles/ProfileCAD.dir/Mouse.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ProfileCAD.dir/Mouse.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/travis/Projects/ProfileCAD/src/Mouse.cpp > CMakeFiles/ProfileCAD.dir/Mouse.cpp.i
+
+CMakeFiles/ProfileCAD.dir/Mouse.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ProfileCAD.dir/Mouse.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/travis/Projects/ProfileCAD/src/Mouse.cpp -o CMakeFiles/ProfileCAD.dir/Mouse.cpp.s
+
+CMakeFiles/ProfileCAD.dir/Mouse.cpp.o.requires:
+
+.PHONY : CMakeFiles/ProfileCAD.dir/Mouse.cpp.o.requires
+
+CMakeFiles/ProfileCAD.dir/Mouse.cpp.o.provides: CMakeFiles/ProfileCAD.dir/Mouse.cpp.o.requires
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/Mouse.cpp.o.provides.build
+.PHONY : CMakeFiles/ProfileCAD.dir/Mouse.cpp.o.provides
+
+CMakeFiles/ProfileCAD.dir/Mouse.cpp.o.provides.build: CMakeFiles/ProfileCAD.dir/Mouse.cpp.o
+
+
+CMakeFiles/ProfileCAD.dir/CAD.cpp.o: CMakeFiles/ProfileCAD.dir/flags.make
+CMakeFiles/ProfileCAD.dir/CAD.cpp.o: /home/travis/Projects/ProfileCAD/src/CAD.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/travis/Projects/ProfileCAD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/ProfileCAD.dir/CAD.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/ProfileCAD.dir/CAD.cpp.o -c /home/travis/Projects/ProfileCAD/src/CAD.cpp
+
+CMakeFiles/ProfileCAD.dir/CAD.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ProfileCAD.dir/CAD.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/travis/Projects/ProfileCAD/src/CAD.cpp > CMakeFiles/ProfileCAD.dir/CAD.cpp.i
+
+CMakeFiles/ProfileCAD.dir/CAD.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ProfileCAD.dir/CAD.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/travis/Projects/ProfileCAD/src/CAD.cpp -o CMakeFiles/ProfileCAD.dir/CAD.cpp.s
+
+CMakeFiles/ProfileCAD.dir/CAD.cpp.o.requires:
+
+.PHONY : CMakeFiles/ProfileCAD.dir/CAD.cpp.o.requires
+
+CMakeFiles/ProfileCAD.dir/CAD.cpp.o.provides: CMakeFiles/ProfileCAD.dir/CAD.cpp.o.requires
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/CAD.cpp.o.provides.build
+.PHONY : CMakeFiles/ProfileCAD.dir/CAD.cpp.o.provides
+
+CMakeFiles/ProfileCAD.dir/CAD.cpp.o.provides.build: CMakeFiles/ProfileCAD.dir/CAD.cpp.o
+
+
 # Object files for target ProfileCAD
 ProfileCAD_OBJECTS = \
 "CMakeFiles/ProfileCAD.dir/main.cpp.o" \
 "CMakeFiles/ProfileCAD.dir/Scene.cpp.o" \
 "CMakeFiles/ProfileCAD.dir/Keyboard.cpp.o" \
 "CMakeFiles/ProfileCAD.dir/Menu.cpp.o" \
-"CMakeFiles/ProfileCAD.dir/Window.cpp.o"
+"CMakeFiles/ProfileCAD.dir/Window.cpp.o" \
+"CMakeFiles/ProfileCAD.dir/Mouse.cpp.o" \
+"CMakeFiles/ProfileCAD.dir/CAD.cpp.o"
 
 # External object files for target ProfileCAD
 ProfileCAD_EXTERNAL_OBJECTS =
@@ -193,6 +243,8 @@ ProfileCAD: CMakeFiles/ProfileCAD.dir/Scene.cpp.o
 ProfileCAD: CMakeFiles/ProfileCAD.dir/Keyboard.cpp.o
 ProfileCAD: CMakeFiles/ProfileCAD.dir/Menu.cpp.o
 ProfileCAD: CMakeFiles/ProfileCAD.dir/Window.cpp.o
+ProfileCAD: CMakeFiles/ProfileCAD.dir/Mouse.cpp.o
+ProfileCAD: CMakeFiles/ProfileCAD.dir/CAD.cpp.o
 ProfileCAD: CMakeFiles/ProfileCAD.dir/build.make
 ProfileCAD: /usr/lib64/libGLU.so
 ProfileCAD: /usr/lib64/libGL.so
@@ -200,7 +252,7 @@ ProfileCAD: /usr/lib64/libglut.so
 ProfileCAD: /usr/lib64/libXmu.so
 ProfileCAD: /usr/lib64/libXi.so
 ProfileCAD: CMakeFiles/ProfileCAD.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/travis/Projects/ProfileCAD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable ProfileCAD"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/travis/Projects/ProfileCAD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable ProfileCAD"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/ProfileCAD.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -213,6 +265,8 @@ CMakeFiles/ProfileCAD.dir/requires: CMakeFiles/ProfileCAD.dir/Scene.cpp.o.requir
 CMakeFiles/ProfileCAD.dir/requires: CMakeFiles/ProfileCAD.dir/Keyboard.cpp.o.requires
 CMakeFiles/ProfileCAD.dir/requires: CMakeFiles/ProfileCAD.dir/Menu.cpp.o.requires
 CMakeFiles/ProfileCAD.dir/requires: CMakeFiles/ProfileCAD.dir/Window.cpp.o.requires
+CMakeFiles/ProfileCAD.dir/requires: CMakeFiles/ProfileCAD.dir/Mouse.cpp.o.requires
+CMakeFiles/ProfileCAD.dir/requires: CMakeFiles/ProfileCAD.dir/CAD.cpp.o.requires
 
 .PHONY : CMakeFiles/ProfileCAD.dir/requires
 

@@ -6,11 +6,19 @@
 
 #IncludeRegexTransform: 
 
+/home/travis/Projects/ProfileCAD/src/../inc/CAD.h
+application.h
+-
+
 /home/travis/Projects/ProfileCAD/src/../inc/Keyboard.h
 application.h
 -
 
 /home/travis/Projects/ProfileCAD/src/../inc/Menu.h
+application.h
+-
+
+/home/travis/Projects/ProfileCAD/src/../inc/Mouse.h
 application.h
 -
 
@@ -23,8 +31,6 @@ application.h
 -
 
 /home/travis/Projects/ProfileCAD/src/../inc/application.h
-
-/home/travis/Projects/ProfileCAD/src/Keyboard.cpp
 stdio.h
 -
 stdlib.h
@@ -35,9 +41,25 @@ GL/glut.h
 -
 iostream
 -
+CAD.h
+-
 Keyboard.h
 -
+Menu.h
+-
+Mouse.h
+-
 Scene.h
+-
+Window.h
+-
+
+/home/travis/Projects/ProfileCAD/src/CAD.cpp
+CAD.h
+-
+
+/home/travis/Projects/ProfileCAD/src/Keyboard.cpp
+Keyboard.h
 -
 
 /home/travis/Projects/ProfileCAD/src/Menu.cpp
@@ -54,17 +76,11 @@ iostream
 Menu.h
 -
 
+/home/travis/Projects/ProfileCAD/src/Mouse.cpp
+Mouse.h
+-
+
 /home/travis/Projects/ProfileCAD/src/Scene.cpp
-stdio.h
--
-stdlib.h
--
-string.h
--
-GL/glut.h
--
-iostream
--
 Scene.h
 -
 
@@ -83,24 +99,6 @@ Window.h
 -
 
 /home/travis/Projects/ProfileCAD/src/main.cpp
-stdio.h
--
-stdlib.h
--
-string.h
--
-GL/glut.h
--
-iostream
--
-Scene.h
--
-Keyboard.h
--
-Menu.h
--
-Window.h
--
 application.h
 -
 
