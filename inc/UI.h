@@ -5,6 +5,9 @@
 
 #define UI_TEXT 0x00
 
+#define UI_MENU_POSITION point_t{5, 10, 0}
+#define UI_INPUT_POSITION point_t{5, 30, 0}
+
 struct uiEntity{
   int Type; //Text
   color_t Color;

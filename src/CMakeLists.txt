@@ -28,7 +28,7 @@ endif(NOT OPENGL_FOUND)
 # Include Files
 #########################################################
 
-add_executable(ProfileCAD MACOSX_BUNDLE main Scene Keyboard Menu Window Mouse CAD UI Geometry)
+add_executable(ProfileCAD MACOSX_BUNDLE main Scene Keyboard Menu Window Mouse CAD UI Geometry CLI)
 include_directories(../inc)
 ########################################################
 # Linking & stuff

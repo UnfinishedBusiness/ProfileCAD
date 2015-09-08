@@ -8,6 +8,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/ProfileCAD.dir/CAD.cpp.o"
   "CMakeFiles/ProfileCAD.dir/UI.cpp.o"
   "CMakeFiles/ProfileCAD.dir/Geometry.cpp.o"
+  "CMakeFiles/ProfileCAD.dir/CLI.cpp.o"
   "ProfileCAD.pdb"
   "ProfileCAD"
 )

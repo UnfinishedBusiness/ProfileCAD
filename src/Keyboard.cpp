@@ -2,8 +2,6 @@
 
 using namespace std;
 
-string CmdInput = "";
-
 void keyboardInit()
 {
   glutSpecialFunc( keyboardCallbackSpecial );
@@ -13,6 +11,7 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
 {
     // Press ALT or  SHIFT or  CTRL in combination with other keys.
     //D printf("Key -> %d \n",key);
+    //D fflush(stdout);
     int mod = glutGetModifiers();
     if (mod != 0) //ALT=4  SHIFT=1  CTRL=2
       {
@@ -26,81 +25,55 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
       }
       switch(key)
       {
-        case 97 : CmdInput.append("a"); break;
-        case 98 : CmdInput.append("b"); break;
-        case 99 : CmdInput.append("c"); break;
-        case 100 : CmdInput.append("d"); break;
-        case 101 : CmdInput.append("e"); break;
-        case 102 : CmdInput.append("f"); break;
-        case 103 : CmdInput.append("g"); break;
-        case 104 : CmdInput.append("h"); break;
-        case 105 : CmdInput.append("i"); break;
-        case 106 : CmdInput.append("j"); break;
-        case 107 : CmdInput.append("k"); break;
-        case 108 : CmdInput.append("l"); break;
-        case 109 : CmdInput.append("m"); break;
-        case 110 : CmdInput.append("n"); break;
-        case 111 : CmdInput.append("o"); break;
-        case 112 : CmdInput.append("p"); break;
-        case 113 : CmdInput.append("q"); break;
-        case 114 : CmdInput.append("r"); break;
-        case 115 : CmdInput.append("s"); break;
-        case 116 : CmdInput.append("t"); break;
-        case 117 : CmdInput.append("u"); break;
-        case 118 : CmdInput.append("v"); break;
-        case 119 : CmdInput.append("w"); break;
-        case 120 : CmdInput.append("x"); break;
-        case 121 : CmdInput.append("y"); break;
-        case 122 : CmdInput.append("z"); break;
+        case 97 : cliPush("a"); break;
+        case 98 : cliPush("b"); break;
+        case 99 : cliPush("c"); break;
+        case 100 : cliPush("d"); break;
+        case 101 : cliPush("e"); break;
+        case 102 : cliPush("f"); break;
+        case 103 : cliPush("g"); break;
+        case 104 : cliPush("h"); break;
+        case 105 : cliPush("i"); break;
+        case 106 : cliPush("j"); break;
+        case 107 : cliPush("k"); break;
+        case 108 : cliPush("l"); break;
+        case 109 : cliPush("m"); break;
+        case 110 : cliPush("n"); break;
+        case 111 : cliPush("o"); break;
+        case 112 : cliPush("p"); break;
+        case 113 : cliPush("q"); break;
+        case 114 : cliPush("r"); break;
+        case 115 : cliPush("s"); break;
+        case 116 : cliPush("t"); break;
+        case 117 : cliPush("u"); break;
+        case 118 : cliPush("v"); break;
+        case 119 : cliPush("w"); break;
+        case 120 : cliPush("x"); break;
+        case 121 : cliPush("y"); break;
+        case 122 : cliPush("z"); break;
 
-        case 8 : if (CmdInput.size() > 0) CmdInput.pop_back(); break;
-        case 32 : CmdInput.append(" "); break;
+        case 48 : cliPush("0"); break;
+        case 49 : cliPush("1"); break;
+        case 50 : cliPush("2"); break;
+        case 51 : cliPush("3"); break;
+        case 52 : cliPush("4"); break;
+        case 53 : cliPush("5"); break;
+        case 54 : cliPush("6"); break;
+        case 55 : cliPush("7"); break;
+        case 56 : cliPush("8"); break;
+        case 57 : cliPush("9"); break;
+
+        case 8 : cliBackup(); break;
+
+        case 46 : cliPush("."); break;
+
+        case 32 : cliPush(" "); break;
 
         case 27 : EXIT; //Escape
-        case 13 :
-          //D point_t angle = sceneGetViewAngle();
-          //D printf("Screen angle is x: %.6f y: %.6f z: %.6f\n", angle.x, angle.y, angle.z);
-          if (CmdInput.find("plane") != std::string::npos)
-          {
-            std::size_t posSpace = CmdInput.find(" ");
-            std::string plane = CmdInput.substr(posSpace+1, (CmdInput.length() - posSpace)-1);
-            if (plane == "xy")
-            {
-              sceneSetViewAngle(0, 0, 0);
-            }
-            if (plane == "xz")
-            {
-              sceneSetViewAngle(90, 0, 0);
-            }
-            if (plane == "yz")
-            {
-              sceneSetViewAngle(0, 90, 0);
-            }
-          }
-          if (CmdInput == "line")
-          {
-            cadSetColor(BLUE);
-            cadDrawLine(point_t{0, 0, 0}, point_t{2,0,0});
-            cadDrawLine(point_t{0, 0, 0}, point_t{0,2,0});
-            cadRedraw();
-          }
-          if (CmdInput == "test")
-          {
-            cadSetColor(GREEN);
-            cadDrawLine(point_t{0, 0, 0}, point_t{2,0,0});
-            cadDrawLine(point_t{0, 0, 0}, point_t{0,2,0});
-            cadDrawLine(point_t{0, 0, 0}, point_t{0,0,2});
-            cadRedraw();
-          }
-          if (CmdInput == "exit")
-          {
-            EXIT;
-          }
-          CmdInput = "";
-          break; //Return
+        case 13 : cliReturn(); break;
       }
       //D printf("(keyboardCallbackNormal) CmdInput = %s\n", CmdInput.c_str());
-      uiEdit(0, uiEntity{UI_TEXT, WHITE, "> " + CmdInput, point_t{5, 10, 0}});
+      //uiEdit(0, uiEntity{UI_TEXT, WHITE, "> " + CmdInput, UI_CMD_POSITION});
 }
 void keyboardCallbackSpecial(int key, int x, int y)
 {

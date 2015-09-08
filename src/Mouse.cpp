@@ -5,11 +5,32 @@ using namespace std;
 int mod;
 int button;
 mouse_t mouseLast;
+point_t mouseCadLastClickPos()
+{
+  GLint viewport[4]; //var to hold the viewport info
+  GLdouble modelview[16]; //var to hold the modelview info
+  GLdouble projection[16]; //var to hold the projection matrix info
+  GLfloat winX, winY, winZ; //variables to hold screen x,y,z coordinates
+  GLdouble worldX, worldY, worldZ; //variables to hold world x,y,z coordinates
+  glGetDoublev( GL_MODELVIEW_MATRIX, modelview ); //get the modelview info
+  glGetDoublev( GL_PROJECTION_MATRIX, projection ); //get the projection matrix info
+  glGetIntegerv( GL_VIEWPORT, viewport ); //get the viewport info
+  winX = (float)mouseLast.x;
+  winY = (float)viewport[3] - (float)mouseLast.y;
+  winZ = 0;
+  //get the world coordinates from the screen coordinates
+  gluUnProject( winX, winY, winZ, modelview, projection, viewport, &worldX, &worldY, &worldZ);
+  worldX = worldX/sceneGetScale();
+  worldY = worldY/sceneGetScale();
+
+  return point_t{(float)worldX, (float)worldY, 0};
+}
 void mouseInit()
 {
   glutMouseFunc(mouseCallback);
   glutMotionFunc(mouseMotionCallback);
 }
+
 void mouseCallback(int btn, int state, int x, int y)
 {
   GLint viewport[4]; //var to hold the viewport info
@@ -60,14 +81,18 @@ void mouseCallback(int btn, int state, int x, int y)
           if (isSimilar(worldX, e.Line.start.x) && isSimilar(worldY, e.Line.start.y))
           {
             D printf("\t%s Entity #%d Start point Clicked!%s\n", KGREEN, a, KNORMAL);
-            e.Color = WHITE;
+            e.Selected = !e.Selected;
+            e.SelectedAt = e.Line.start;
             cadEdit(a, e);
+            return;
           }
           if (isSimilar(worldX, e.Line.end.x) && isSimilar(worldY, e.Line.end.y))
           {
             D printf("\t%s Entity #%d End point Clicked!%s\n", KGREEN, a, KNORMAL);
-            e.Color = WHITE;
+            e.Selected = !e.Selected;
+            e.SelectedAt = e.Line.end;
             cadEdit(a, e);
+            return;
           }
 
           vector<point_t> points = geoGetPointsOfLine(e.Line.start, e.Line.end);
@@ -85,7 +110,8 @@ void mouseCallback(int btn, int state, int x, int y)
           {
             Select = false;
             D printf("\t%s Entity #%d Clicked!%s\n", KGREEN, a, KNORMAL);
-            e.Color = WHITE;
+            e.Selected = !e.Selected;
+            e.SelectedBody = !e.SelectedBody;
             cadEdit(a, e);
           }
         }

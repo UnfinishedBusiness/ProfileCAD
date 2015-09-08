@@ -12,6 +12,10 @@ application.h
 Scene.h
 -
 
+/home/travis/Projects/ProfileCAD/src/../inc/CLI.h
+application.h
+-
+
 /home/travis/Projects/ProfileCAD/src/../inc/Geometry.h
 application.h
 -
@@ -59,6 +63,8 @@ cmath
 -
 CAD.h
 -
+CLI.h
+-
 Geometry.h
 -
 Keyboard.h
@@ -76,6 +82,10 @@ Window.h
 
 /home/travis/Projects/ProfileCAD/src/CAD.cpp
 CAD.h
+-
+
+/home/travis/Projects/ProfileCAD/src/CLI.cpp
+CLI.h
 -
 
 /home/travis/Projects/ProfileCAD/src/Geometry.cpp

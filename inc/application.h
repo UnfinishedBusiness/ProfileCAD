@@ -7,6 +7,7 @@
 #include <cmath>
 
 #include <CAD.h>
+#include <CLI.h>
 #include <Geometry.h>
 #include <Keyboard.h>
 #include <Menu.h>

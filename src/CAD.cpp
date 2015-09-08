@@ -4,7 +4,6 @@ using namespace std;
 #define CAD_ARC 0x00
 #define CAD_LINE 0x01
 
-
 vector<cadEntity> cadEntityArray;
 int cadEntityArrayIndex;
 color_t cadColorAttribute = GREEN;
@@ -15,6 +14,9 @@ void cadInit()
 }
 void cadAppend(cadEntity e)
 {
+  e.Selected = false;
+  e.Removed = false;
+
   cadEntityArray.push_back(cadEntity());
   cadEntityArray[cadEntityArrayIndex] = e;
   cadEntityArrayIndex++;
@@ -47,24 +49,50 @@ int cadGetEntityArrayIndex()
 {
   return cadEntityArrayIndex;
 }
-void cadRender()
+void cadRemoveSelected()
 {
-  //sceneColor(WHITE);
-  //D printf("(cadRender)\n");
-
-
   for (int i = 0; i < cadEntityArrayIndex; i++)
   {
-      if (cadEntityArray[i].Type == CAD_LINE)
+      if (cadEntityArray[i].Selected && !cadEntityArray[i].Removed) //Make sure were selected and not removed
       {
-        sceneColor(cadEntityArray[i].Color);
+        cadEntityArray[i].Removed = true;
+      }
+  }
+}
+std::vector<cadEntity> cadGetSelected()
+{
+  std::vector<cadEntity> e;
+  for (int i = 0; i < cadEntityArrayIndex; i++)
+  {
+      if (cadEntityArray[i].Selected && !cadEntityArray[i].Removed) //Make sure were selected and not removed
+      {
+        e.push_back(cadEntity());
+        e[e.size()-1] = cadEntityArray[i];
+      }
+  }
+  return e;
+}
+void cadRender()
+{
+  for (int i = 0; i < cadEntityArrayIndex; i++)
+  {
+      if (cadEntityArray[i].Type == CAD_LINE && !cadEntityArray[i].Removed) //Where a line and its not been removed
+      {
+        if (cadEntityArray[i].Selected)
+        {
+          sceneColor(WHITE);
+        }
+        else
+        {
+          sceneColor(cadEntityArray[i].Color);
+        }
+
         glLineWidth(1);
         glBegin(GL_LINE_LOOP);
         glVertex3f((GLfloat) cadEntityArray[i].Line.start.x, cadEntityArray[i].Line.start.y, cadEntityArray[i].Line.start.z);
         glVertex3f((GLfloat) cadEntityArray[i].Line.end.x, cadEntityArray[i].Line.end.y, cadEntityArray[i].Line.end.z);
         glEnd();
       }
-
   }
 }
 void cadRedraw()

@@ -7,6 +7,7 @@ struct mouse_t{
 };
 
 void mouseInit();
+point_t mouseCadLastClickPos();
 void mouseCallback(int, int, int, int);
 void mouseMotionCallback(int, int);
 #endif
