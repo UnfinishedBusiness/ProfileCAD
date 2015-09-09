@@ -5,6 +5,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
   "/Users/admin/Documents/Projects/ProfileCAD/src/CAD.cpp" "/Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles/ProfileCAD.dir/CAD.cpp.o"
+  "/Users/admin/Documents/Projects/ProfileCAD/src/CLI.cpp" "/Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles/ProfileCAD.dir/CLI.cpp.o"
   "/Users/admin/Documents/Projects/ProfileCAD/src/Geometry.cpp" "/Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles/ProfileCAD.dir/Geometry.cpp.o"
   "/Users/admin/Documents/Projects/ProfileCAD/src/Keyboard.cpp" "/Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles/ProfileCAD.dir/Keyboard.cpp.o"
   "/Users/admin/Documents/Projects/ProfileCAD/src/Menu.cpp" "/Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles/ProfileCAD.dir/Menu.cpp.o"

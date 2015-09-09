@@ -48,6 +48,7 @@ void *cliCreateLineVerticalOrigin()
     TextInput = true;
     cliPush("> ");
     uiEdit(0, uiEntity{UI_TEXT, RED, "Input Y coordinant!", UI_MENU_POSITION});
+    return NULL;
 }
 void *cliCreateLineHorizontalOrigin()
 {
@@ -65,8 +66,14 @@ void *cliCreateLineHorizontalOrigin()
   TextInput = true;
   cliPush("> ");
   uiEdit(0, uiEntity{UI_TEXT, RED, "Input X coordinant!", UI_MENU_POSITION});
+  return NULL;
 }
-#define CLI_MENU_ITEMS 2
+void *cliViewPlaneXY() { sceneSetViewAngle(0, 0, 0); return NULL; }
+void *cliViewPlaneYZ() { sceneSetViewAngle(0, 90, 0); return NULL; }
+void *cliViewPlaneZX() { sceneSetViewAngle(90, 0, 0); return NULL; }
+void *cliViewPlaneOrtho() { sceneSetViewAngle(45, 45, 45); return NULL; }
+
+#define CLI_MENU_ITEMS 3
 menu_item_t menu[CLI_MENU_ITEMS] = {
   { "l", "line",
       sub_menu_item_t{ "v", "verticle",
@@ -83,6 +90,14 @@ menu_item_t menu[CLI_MENU_ITEMS] = {
       sub_menu_item_t{ "t", "trim" },
       sub_menu_item_t{ "m", "mirror" }
   },
+  { "v", "view",
+      sub_menu_item_t{ "p", "plane",
+        sub_sub_menu_item_t{ "x", "xy", &cliViewPlaneXY },
+        sub_sub_menu_item_t{ "y", "yz", &cliViewPlaneYZ },
+        sub_sub_menu_item_t{ "z", "zx", &cliViewPlaneZX },
+        sub_sub_menu_item_t{ "o", "ortho", &cliViewPlaneOrtho }
+      }
+  },
 };
 
 void cliPush(std::string c)
@@ -98,8 +113,11 @@ void cliPush(std::string c)
     {
       for (int x=0; x < 10; x++)
       {
-        if (menu[Level1Selection].submenu[Level2Selection].submenu[x].cmd == NULL) break;
-        (*menu[Level1Selection].submenu[Level2Selection].submenu[x].cmd)();
+        if (menu[Level1Selection].submenu[Level2Selection].submenu[x].c == c)
+        {
+          if (menu[Level1Selection].submenu[Level2Selection].submenu[x].cmd == NULL) break;
+          (*menu[Level1Selection].submenu[Level2Selection].submenu[x].cmd)();
+        }
       }
     }
     if (Level == 1)

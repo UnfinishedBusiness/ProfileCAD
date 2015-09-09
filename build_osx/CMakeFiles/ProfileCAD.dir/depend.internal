@@ -3,6 +3,7 @@
 
 CMakeFiles/ProfileCAD.dir/CAD.cpp.o
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/CAD.h
+ /Users/admin/Documents/Projects/ProfileCAD/src/../inc/CLI.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/Geometry.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/Keyboard.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/Menu.h
@@ -12,8 +13,21 @@ CMakeFiles/ProfileCAD.dir/CAD.cpp.o
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/Window.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/application.h
  /Users/admin/Documents/Projects/ProfileCAD/src/CAD.cpp
+CMakeFiles/ProfileCAD.dir/CLI.cpp.o
+ /Users/admin/Documents/Projects/ProfileCAD/src/../inc/CAD.h
+ /Users/admin/Documents/Projects/ProfileCAD/src/../inc/CLI.h
+ /Users/admin/Documents/Projects/ProfileCAD/src/../inc/Geometry.h
+ /Users/admin/Documents/Projects/ProfileCAD/src/../inc/Keyboard.h
+ /Users/admin/Documents/Projects/ProfileCAD/src/../inc/Menu.h
+ /Users/admin/Documents/Projects/ProfileCAD/src/../inc/Mouse.h
+ /Users/admin/Documents/Projects/ProfileCAD/src/../inc/Scene.h
+ /Users/admin/Documents/Projects/ProfileCAD/src/../inc/UI.h
+ /Users/admin/Documents/Projects/ProfileCAD/src/../inc/Window.h
+ /Users/admin/Documents/Projects/ProfileCAD/src/../inc/application.h
+ /Users/admin/Documents/Projects/ProfileCAD/src/CLI.cpp
 CMakeFiles/ProfileCAD.dir/Geometry.cpp.o
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/CAD.h
+ /Users/admin/Documents/Projects/ProfileCAD/src/../inc/CLI.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/Geometry.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/Keyboard.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/Menu.h
@@ -25,6 +39,7 @@ CMakeFiles/ProfileCAD.dir/Geometry.cpp.o
  /Users/admin/Documents/Projects/ProfileCAD/src/Geometry.cpp
 CMakeFiles/ProfileCAD.dir/Keyboard.cpp.o
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/CAD.h
+ /Users/admin/Documents/Projects/ProfileCAD/src/../inc/CLI.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/Geometry.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/Keyboard.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/Menu.h
@@ -36,6 +51,7 @@ CMakeFiles/ProfileCAD.dir/Keyboard.cpp.o
  /Users/admin/Documents/Projects/ProfileCAD/src/Keyboard.cpp
 CMakeFiles/ProfileCAD.dir/Menu.cpp.o
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/CAD.h
+ /Users/admin/Documents/Projects/ProfileCAD/src/../inc/CLI.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/Geometry.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/Keyboard.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/Menu.h
@@ -47,6 +63,7 @@ CMakeFiles/ProfileCAD.dir/Menu.cpp.o
  /Users/admin/Documents/Projects/ProfileCAD/src/Menu.cpp
 CMakeFiles/ProfileCAD.dir/Mouse.cpp.o
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/CAD.h
+ /Users/admin/Documents/Projects/ProfileCAD/src/../inc/CLI.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/Geometry.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/Keyboard.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/Menu.h
@@ -58,6 +75,7 @@ CMakeFiles/ProfileCAD.dir/Mouse.cpp.o
  /Users/admin/Documents/Projects/ProfileCAD/src/Mouse.cpp
 CMakeFiles/ProfileCAD.dir/Scene.cpp.o
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/CAD.h
+ /Users/admin/Documents/Projects/ProfileCAD/src/../inc/CLI.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/Geometry.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/Keyboard.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/Menu.h
@@ -69,6 +87,7 @@ CMakeFiles/ProfileCAD.dir/Scene.cpp.o
  /Users/admin/Documents/Projects/ProfileCAD/src/Scene.cpp
 CMakeFiles/ProfileCAD.dir/UI.cpp.o
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/CAD.h
+ /Users/admin/Documents/Projects/ProfileCAD/src/../inc/CLI.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/Geometry.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/Keyboard.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/Menu.h
@@ -80,6 +99,7 @@ CMakeFiles/ProfileCAD.dir/UI.cpp.o
  /Users/admin/Documents/Projects/ProfileCAD/src/UI.cpp
 CMakeFiles/ProfileCAD.dir/Window.cpp.o
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/CAD.h
+ /Users/admin/Documents/Projects/ProfileCAD/src/../inc/CLI.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/Geometry.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/Keyboard.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/Menu.h
@@ -91,6 +111,7 @@ CMakeFiles/ProfileCAD.dir/Window.cpp.o
  /Users/admin/Documents/Projects/ProfileCAD/src/Window.cpp
 CMakeFiles/ProfileCAD.dir/main.cpp.o
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/CAD.h
+ /Users/admin/Documents/Projects/ProfileCAD/src/../inc/CLI.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/Geometry.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/Keyboard.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/Menu.h

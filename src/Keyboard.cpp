@@ -65,7 +65,8 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
 
         case 45 : cliPush("-"); break;
 
-        case 8 : cliBackup(); break;
+        case 8 : cliBackup(); break; //Normal backspace
+        case 127 : cliBackup(); break; //Mac delete
 
         case 46 : cliPush("."); break;
 

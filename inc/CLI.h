@@ -10,4 +10,8 @@ void cliReturn();
 
 void *cliCreateLineVerticalOrigin();
 void *cliCreateLineHorizontalOrigin();
+void *cliViewPlaneXY();
+void *cliViewPlaneYZ();
+void *cliViewPlaneZX();
+void *cliViewPlaneOrtho();
 #endif
