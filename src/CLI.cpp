@@ -20,27 +20,62 @@ struct menu_item_t{
   sub_menu_item_t submenu[10];
 };
 
+void *(*textCallback)();
+color_t CurrentColor = GREEN;
 int Level = 0;
 int Level1Selection;
 int Level2Selection;
 bool TextInput = false;
+bool TextReady = false;
 string text = "";
 
-void *cliCreateLineVertialOrigin()
-{
-    D printf("It Worked!\n");
-}
+#define CLI_MENU_ITEM_SEPERATOR "   "
+#define CLI_MENU_ITEM_LINK  " - "
 
+void *cliCreateLineVerticalOrigin()
+{
+    if (TextReady == true)
+    {
+      TextReady = false;
+      text.replace(text.find("> "), sizeof("> ")-1, "");
+      point_t Start = { 0, 0};
+      point_t End = { 0 , (float)atof(text.c_str()) };
+      cadSetColor(CurrentColor);
+      cadDrawLine(Start, End);
+      return NULL;
+    }
+    textCallback = &cliCreateLineVerticalOrigin;
+    TextInput = true;
+    cliPush("> ");
+    uiEdit(0, uiEntity{UI_TEXT, RED, "Input Y coordinant!", UI_MENU_POSITION});
+}
+void *cliCreateLineHorizontalOrigin()
+{
+  if (TextReady == true)
+  {
+    TextReady = false;
+    text.replace(text.find("> "), sizeof("> ")-1, "");
+    point_t Start = { 0, 0};
+    point_t End = {(float)atof(text.c_str()), 0};
+    cadSetColor(CurrentColor);
+    cadDrawLine(Start, End);
+    return NULL;
+  }
+  textCallback = &cliCreateLineHorizontalOrigin;
+  TextInput = true;
+  cliPush("> ");
+  uiEdit(0, uiEntity{UI_TEXT, RED, "Input X coordinant!", UI_MENU_POSITION});
+}
 #define CLI_MENU_ITEMS 2
 menu_item_t menu[CLI_MENU_ITEMS] = {
   { "l", "line",
       sub_menu_item_t{ "v", "verticle",
-          sub_sub_menu_item_t{ "o", "origin", &cliCreateLineVertialOrigin },
-          sub_sub_menu_item_t{ "e", "endpoint" }
+          sub_sub_menu_item_t{ "o", "origin", &cliCreateLineVerticalOrigin },
+          sub_sub_menu_item_t{ "e", "endpoints" }
      },
-     sub_menu_item_t{ "h", "horizontale",
-         sub_sub_menu_item_t{ "o", "origin" },
-         sub_sub_menu_item_t{ "e", "endpoint" }
+     sub_menu_item_t{ "h", "horizontal",
+         sub_sub_menu_item_t{ "o", "origin", &cliCreateLineHorizontalOrigin },
+         sub_sub_menu_item_t{ "e", "endpoints" }
     },
      sub_menu_item_t{ "p", "parallel"},
   },
@@ -55,7 +90,7 @@ void cliPush(std::string c)
   if (TextInput)
   {
     text.append(c);
-    uiEdit(0, uiEntity{UI_TEXT, GREEN, text, UI_MENU_POSITION});
+    uiEdit(1, uiEntity{UI_TEXT, GREEN, text, UI_INPUT_POSITION});
   }
   else
   {
@@ -94,29 +129,54 @@ void cliPush(std::string c)
 }
 void cliBackup()
 {
-  if (Level > 0) Level--;
-  cliMenu();
+  if (TextInput)
+  {
+    if (text.size() > 2)
+    {
+      text.pop_back();
+    }
+    else
+    {
+      TextInput = false;
+      text = "";
+      cliMenu();
+    }
+    uiEdit(1, uiEntity{UI_TEXT, GREEN, text, UI_INPUT_POSITION});
+  }
+  else
+  {
+    if (Level > 0) Level--;
+    cliMenu();
+  }
+
 }
 void cliReturn()
 {
   TextInput = false;
-  //Do somthing with text variables
+  TextReady = true;
+  uiEdit(1, uiEntity{UI_TEXT, GREEN, "", UI_INPUT_POSITION});
+  (*textCallback)();
   text = "";
+  cliMenu();
 
 }
 void cliMenu()
 {
-  string text = "   ";
+  if (TextInput)
+  {
+    return;
+  }
+  string text = "";
   if (Level == 0)
   {
     for (int x=0; x < CLI_MENU_ITEMS; x++)
     {
       if (x != 0)
       {
-        text.append(" <> ");
+        text.append(CLI_MENU_ITEM_SEPERATOR);
       }
       text.append(menu[x].c);
-      text.append(" - ");
+      text.append(CLI_MENU_ITEM_LINK);
       text.append(menu[x].msg);
 
     }
@@ -129,10 +189,10 @@ void cliMenu()
 
       if (x != 0)
       {
-        text.append(" <> ");
+        text.append(CLI_MENU_ITEM_SEPERATOR);
       }
       text.append(menu[Level1Selection].submenu[x].c);
-      text.append(" - ");
+      text.append(CLI_MENU_ITEM_LINK);
       text.append(menu[Level1Selection].submenu[x].msg);
 
     }
@@ -145,10 +205,10 @@ void cliMenu()
 
       if (x != 0)
       {
-        text.append(" <> ");
+        text.append(CLI_MENU_ITEM_SEPERATOR);
       }
       text.append(menu[Level1Selection].submenu[Level2Selection].submenu[x].c);
-      text.append(" - ");
+      text.append(CLI_MENU_ITEM_LINK);
       text.append(menu[Level1Selection].submenu[Level2Selection].submenu[x].msg);
 
     }

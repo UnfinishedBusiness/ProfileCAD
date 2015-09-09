@@ -10,7 +10,7 @@ void keyboardInit()
 void keyboardCallbackNormal(unsigned char key, int x, int y)
 {
     // Press ALT or  SHIFT or  CTRL in combination with other keys.
-    //D printf("Key -> %d \n",key);
+    D printf("Key -> %d \n",key);
     //D fflush(stdout);
     int mod = glutGetModifiers();
     if (mod != 0) //ALT=4  SHIFT=1  CTRL=2
@@ -62,6 +62,8 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
         case 55 : cliPush("7"); break;
         case 56 : cliPush("8"); break;
         case 57 : cliPush("9"); break;
+
+        case 45 : cliPush("-"); break;
 
         case 8 : cliBackup(); break;
 

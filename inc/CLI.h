@@ -8,5 +8,6 @@ void cliMenu();
 void cliBackup();
 void cliReturn();
 
-void *cliCreateLineVertialOrigin();
+void *cliCreateLineVerticalOrigin();
+void *cliCreateLineHorizontalOrigin();
 #endif
