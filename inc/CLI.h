@@ -10,6 +10,10 @@ void cliReturn();
 
 void *cliCreateLineVerticalOrigin();
 void *cliCreateLineHorizontalOrigin();
+void *cliCreateLineVerticalEndpoints();
+void *cliCreateLineEndpoints();
+void *cliScreenSelectAll();
+void *cliScreenDeleteSelected();
 void *cliViewPlaneXY();
 void *cliViewPlaneYZ();
 void *cliViewPlaneZX();

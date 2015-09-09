@@ -32,6 +32,65 @@ string text = "";
 #define CLI_MENU_ITEM_SEPERATOR "   "
 #define CLI_MENU_ITEM_LINK  " - "
 
+void *cliCreateLineEndpoints()
+{
+  std::vector<cadEntity> e = cadGetSelected();
+  if (e.size() < 2)
+  {
+    return NULL;
+  }
+  point_t Start = e[0].SelectedAt;
+  point_t End = e[1].SelectedAt;
+  cadSetColor(CurrentColor);
+  cadDrawLine(Start, End);
+  return NULL;
+}
+void *cliCreateLineVerticalEndpoint()
+{
+  if (TextReady == true)
+  {
+    TextReady = false;
+    text.replace(text.find("> "), sizeof("> ")-1, "");
+    std::vector<cadEntity> e = cadGetSelected();
+    if (e.size() < 1)
+    {
+      return NULL;
+    }
+    point_t Start = e[0].SelectedAt;
+    point_t End = { e[0].SelectedAt.x , (float)atof(text.c_str()) };
+    cadSetColor(CurrentColor);
+    cadDrawLine(Start, End);
+    return NULL;
+  }
+  textCallback = &cliCreateLineVerticalEndpoint;
+  TextInput = true;
+  cliPush("> ");
+  uiEdit(0, uiEntity{UI_TEXT, RED, "Input Y endpoint!", UI_MENU_POSITION});
+  return NULL;
+}
+void *cliCreateLineHorizontalEndpoint()
+{
+  if (TextReady == true)
+  {
+    TextReady = false;
+    text.replace(text.find("> "), sizeof("> ")-1, "");
+    std::vector<cadEntity> e = cadGetSelected();
+    if (e.size() < 1)
+    {
+      return NULL;
+    }
+    point_t Start = e[0].SelectedAt;
+    point_t End = { (float)atof(text.c_str()), e[0].SelectedAt.y };
+    cadSetColor(CurrentColor);
+    cadDrawLine(Start, End);
+    return NULL;
+  }
+  textCallback = &cliCreateLineHorizontalEndpoint;
+  TextInput = true;
+  cliPush("> ");
+  uiEdit(0, uiEntity{UI_TEXT, RED, "Input X endpoint!", UI_MENU_POSITION});
+  return NULL;
+}
 void *cliCreateLineVerticalOrigin()
 {
     if (TextReady == true)
@@ -68,23 +127,43 @@ void *cliCreateLineHorizontalOrigin()
   uiEdit(0, uiEntity{UI_TEXT, RED, "Input X coordinant!", UI_MENU_POSITION});
   return NULL;
 }
+void *cliScreenSelectAll()
+{
+  int m = cadGetEntityArrayIndex();
+  cadEntity e;
+  for (int a = 0; a < m; a++)
+  {
+    e = cadGetEntityArray(a);
+    e.Selected = !e.Selected;
+    cadEdit(a, e);
+  }
+}
+void *cliScreenDeleteSelected()
+{
+  cadRemoveSelected();
+}
 void *cliViewPlaneXY() { sceneSetViewAngle(0, 0, 0); return NULL; }
 void *cliViewPlaneYZ() { sceneSetViewAngle(0, 90, 0); return NULL; }
 void *cliViewPlaneZX() { sceneSetViewAngle(90, 0, 0); return NULL; }
 void *cliViewPlaneOrtho() { sceneSetViewAngle(45, 45, 45); return NULL; }
 
-#define CLI_MENU_ITEMS 3
+#define CLI_MENU_ITEMS 4
 menu_item_t menu[CLI_MENU_ITEMS] = {
   { "l", "line",
-      sub_menu_item_t{ "v", "verticle",
-          sub_sub_menu_item_t{ "o", "origin", &cliCreateLineVerticalOrigin },
-          sub_sub_menu_item_t{ "e", "endpoints" }
+    sub_menu_item_t{ "v", "vertical",
+         sub_sub_menu_item_t{ "o", "origin", &cliCreateLineVerticalOrigin },
+         sub_sub_menu_item_t{ "e", "endpoint", &cliCreateLineVerticalEndpoint },
      },
      sub_menu_item_t{ "h", "horizontal",
          sub_sub_menu_item_t{ "o", "origin", &cliCreateLineHorizontalOrigin },
-         sub_sub_menu_item_t{ "e", "endpoints" }
+         sub_sub_menu_item_t{ "e", "endpoint", &cliCreateLineHorizontalEndpoint },
     },
-     sub_menu_item_t{ "p", "parallel"},
+    sub_menu_item_t{ "e", "endpoints",
+         sub_sub_menu_item_t{ "d", "done", &cliCreateLineEndpoints },
+    },
+    sub_menu_item_t{ "p", "parallel",
+         sub_sub_menu_item_t{ "s", "side distance", &cliCreateLineEndpoints },
+    },
   },
   { "x", "xform",
       sub_menu_item_t{ "t", "trim" },
@@ -96,6 +175,12 @@ menu_item_t menu[CLI_MENU_ITEMS] = {
         sub_sub_menu_item_t{ "y", "yz", &cliViewPlaneYZ },
         sub_sub_menu_item_t{ "z", "zx", &cliViewPlaneZX },
         sub_sub_menu_item_t{ "o", "ortho", &cliViewPlaneOrtho }
+      }
+  },
+  { "s", "screen",
+      sub_menu_item_t{ "s", "selection",
+        sub_sub_menu_item_t{ "a", "select all", &cliScreenSelectAll },
+        sub_sub_menu_item_t{ "d", "delete selected", &cliScreenDeleteSelected },
       }
   },
 };
@@ -122,7 +207,7 @@ void cliPush(std::string c)
     }
     if (Level == 1)
     {
-      for (int x=0; x < CLI_MENU_ITEMS; x++)
+      for (int x=0; x < 10; x++)
       {
         if (menu[Level1Selection].submenu[x].c == c)
         {

@@ -7,7 +7,7 @@ int main(int argc, char **argv)
   glutInit(&argc, argv);
   windowInit();
   sceneInit();
-  //menuInit();
+  menuInit();
   keyboardInit();
   mouseInit();
   uiInit();
