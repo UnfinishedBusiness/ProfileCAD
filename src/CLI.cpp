@@ -161,8 +161,7 @@ void *cliCreateLinePerpendicular()
     std::vector<cadEntity> e = cadGetSelected();
     if (e.size() == 1) //Make sure we have only one entity seleced
     {
-      //D printf("(cliCreateLinePerpendicular) %d Entitys selected!\n", e.size());
-      line_t p = geoGetPerpendicularLine(line_t{ e[0].Line.start,  e[0].Line.end}, input);
+      line_t p = geoGetPerpendicularLine(line_t{ e[0].Line.start,  e[0].Line.end}, mouseCadLastClickPos(), input);
       point_t Start = p.start;
       point_t End = p.end;
       cadSetColor(CurrentColor);
@@ -187,7 +186,7 @@ void *cliCreateLineParallel()
     if (e.size() == 1) //Make sure we have only one entity seleced
     {
       //D printf("(cliCreateLinePerpendicular) %d Entitys selected!\n", e.size());
-      line_t p = geoGetParallelLine(line_t{ e[0].Line.start,  e[0].Line.end}, input);
+      line_t p = geoGetParallelLine(line_t{ e[0].Line.start,  e[0].Line.end}, mouseCadLastClickPos(), input);
       point_t Start = p.start;
       point_t End = p.end;
       cadSetColor(CurrentColor);

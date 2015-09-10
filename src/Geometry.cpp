@@ -91,26 +91,34 @@ line_t geoExtendLineAngle(point_t s, float angle, float d)
   point_t new_endpoint = point_t{ s.x + (fabs(d) * cosf(angle)), s.y + (fabs(d) * sinf(angle)) };
   return line_t{ s, new_endpoint };
 }
-line_t geoGetPerpendicularLine(line_t l, float d)
+line_t geoGetPerpendicularLine(line_t l, point_t direction, float d)
 {
   int angle;
   point_t midpoint = geoGetLineMidpoint(l);
-  if (d > 0)
+  //Get lines perpendicular on both sides and see which enpoint is closest to direction point
+  line_t r;
+  line_t r270 = line_t{ midpoint, geoRotatePointAroundPoint(l.start, midpoint, 270) };
+  line_t r90 = line_t{ midpoint, geoRotatePointAroundPoint(l.start, midpoint, 90) };
+  float r270_d = geoGetLineLength(line_t{ r270.end, direction });
+  float r90_d = geoGetLineLength(line_t{ r90.end, direction });
+  D printf("(geoGetPerpendicularLine) R270 Distance: %.6f, R90 Distance: %.6f\n", r270_d, r90_d);
+  if ( r90_d < r270_d )
   {
-    angle = 270;
+    D printf("(geoGetPerpendicularLine) R270 is closer!\n");
+    r = r270;
   }
   else
   {
-    angle = 90;
+    D printf("(geoGetPerpendicularLine) R90 is closer!\n");
+    r = r90;
   }
-  line_t r = line_t{ midpoint, geoRotatePointAroundPoint(l.start, midpoint, angle) };
   float a = geoGetLineAngle(r);
   point_t new_endpoint = point_t{ midpoint.x + (fabs(d) * cosf(a)), midpoint.y + (fabs(d) * sinf(a)) };
   return line_t{ midpoint, new_endpoint };
 }
-line_t geoGetParallelLine(line_t l, float d)
+line_t geoGetParallelLine(line_t l, point_t direction, float d)
 {
-  line_t perp = geoGetPerpendicularLine(l, d);
+  line_t perp = geoGetPerpendicularLine(l, direction, d);
   point_t midpoint = geoGetLineMidpoint(l);
   line_t r1 = geoExtendLineAngle(perp.end, geoGetLineAngle(l), geoGetLineLength(line_t{midpoint, l.end})); //Get half of line
   line_t r2 = geoExtendLineAngle(r1.end, geoGetLineAngle(l) + 3.14159265, geoGetLineLength(line_t{l.end, l.start})); //Get rest of line
