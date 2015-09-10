@@ -36,9 +36,12 @@ void cadDrawLine(line_t l)
 }
 void cadDrawLine(point_t start, point_t end)
 {
-  cadAppend(cadEntity{CAD_LINE, cadColorAttribute, cadEntityLine{ start, end }, cadEntityArc{ start, end } });
+  cadAppend(cadEntity{CAD_LINE, cadColorAttribute, line_t{ start, end }, arc_t{} });
 }
-
+void cadDrawArc(arc_t a)
+{
+  cadAppend(cadEntity{CAD_ARC, cadColorAttribute, line_t{}, a });
+}
 void cadSetColor(color_t c)
 {
   cadColorAttribute = c;

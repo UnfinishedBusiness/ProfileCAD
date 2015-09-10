@@ -20,10 +20,13 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
                case 1 :  D printf("SHIFT key %d\n",mod);  break;
                case 2 :
                   D printf("CTRL  key %d\n",mod);
-                  if (key == 1) cliScreenSelectAll();
-                  if (key == 21) cliScreenUnSelectAll();
-                  if (key == 4) cliScreenDeleteSelected(); cadRedraw();
-                  if (key == 15) fileOpen("test/complex.dxf");
+                  if (key == 1) cliScreenSelectAll(); //CTRL+a
+                  if (key == 21) cliScreenUnSelectAll(); //CTRL+u
+                  if (key == 4) cliScreenDeleteSelected(); cadRedraw(); //CTRL+d
+                  if (key == 15) fileOpen("test/complex.dxf"); //CTRL+s
+
+                  if (key == 2) cadDrawArc(arc_t{point_t{0, 0, 0}, point_t{1, 1, 0}, 0.5}); //CTRL+space
+
                   break;
                case 4 :  D printf("ALT   key %d\n",mod);  break;
                mod=0;

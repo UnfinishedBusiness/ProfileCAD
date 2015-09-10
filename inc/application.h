@@ -46,6 +46,11 @@ struct line_t{
   point_t start;
   point_t end;
 };
+struct arc_t{
+  point_t start;
+  point_t end;
+  float radius;
+};
 struct color_t{
   float r, g, b, a;
 };

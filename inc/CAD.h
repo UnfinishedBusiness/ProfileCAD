@@ -3,18 +3,11 @@
 #include <application.h>
 #include <Scene.h>
 
-struct cadEntityArc{
-  point_t start, end;
-  float radius;
-};
-struct cadEntityLine{
-  point_t start, end;
-};
 struct cadEntity{
   int Type; //Line or Arc
   color_t Color;
-  cadEntityLine Line;
-  cadEntityArc Arc;
+  line_t Line;
+  arc_t Arc;
 
   //Operational data
   bool Selected;
@@ -38,4 +31,7 @@ int cadGetEntityArrayIndex();
 
 void cadDrawLine(point_t start, point_t end);
 void cadDrawLine(line_t);
+
+void cadDrawArc(arc_t);
+
 #endif
