@@ -16,6 +16,10 @@ Scene.h
 application.h
 -
 
+/Users/admin/Documents/Projects/ProfileCAD/src/../inc/FileIO.h
+application.h
+-
+
 /Users/admin/Documents/Projects/ProfileCAD/src/../inc/Geometry.h
 application.h
 -
@@ -61,9 +65,23 @@ vector
 -
 cmath
 -
+fstream
+-
+cctype
+-
+cstring
+-
+sstream
+-
+algorithm
+-
+array
+-
 CAD.h
 -
 CLI.h
+-
+FileIO.h
 -
 Geometry.h
 -
@@ -86,6 +104,10 @@ CAD.h
 
 /Users/admin/Documents/Projects/ProfileCAD/src/CLI.cpp
 CLI.h
+-
+
+/Users/admin/Documents/Projects/ProfileCAD/src/FileIO.cpp
+FileIO.h
 -
 
 /Users/admin/Documents/Projects/ProfileCAD/src/Geometry.cpp

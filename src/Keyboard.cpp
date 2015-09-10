@@ -23,7 +23,7 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
                   if (key == 1) cliScreenSelectAll(); //CTRL+a
                   if (key == 21) cliScreenUnSelectAll(); //CTRL+u
                   if (key == 4) cliScreenDeleteSelected(); cadRedraw(); //CTRL+d
-                  if (key == 15) fileOpen("test/complex.dxf"); //CTRL+s
+                  if (key == 15) fileOpen("../test/complex.dxf"); //CTRL+s
 
                   if (key == 2) cadDrawArc(arc_t{point_t{0, 0, 0}, point_t{1, 1, 0}, 0.5}); //CTRL+space
 

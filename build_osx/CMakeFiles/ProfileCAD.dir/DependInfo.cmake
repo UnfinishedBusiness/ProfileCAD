@@ -6,6 +6,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_CXX
   "/Users/admin/Documents/Projects/ProfileCAD/src/CAD.cpp" "/Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles/ProfileCAD.dir/CAD.cpp.o"
   "/Users/admin/Documents/Projects/ProfileCAD/src/CLI.cpp" "/Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles/ProfileCAD.dir/CLI.cpp.o"
+  "/Users/admin/Documents/Projects/ProfileCAD/src/FileIO.cpp" "/Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles/ProfileCAD.dir/FileIO.cpp.o"
   "/Users/admin/Documents/Projects/ProfileCAD/src/Geometry.cpp" "/Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles/ProfileCAD.dir/Geometry.cpp.o"
   "/Users/admin/Documents/Projects/ProfileCAD/src/Keyboard.cpp" "/Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles/ProfileCAD.dir/Keyboard.cpp.o"
   "/Users/admin/Documents/Projects/ProfileCAD/src/Menu.cpp" "/Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles/ProfileCAD.dir/Menu.cpp.o"
