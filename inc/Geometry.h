@@ -7,4 +7,6 @@ line_t geoGetPerpendicularLine(line_t, float);
 float geoGetLineLength(line_t);
 point_t geoRotatePointAroundPoint(point_t, point_t, float);
 point_t geoGetLineMidpoint(line_t);
+float geoGetLineAngle(line_t);
+float geoRadiansToDegrees(float);
 #endif

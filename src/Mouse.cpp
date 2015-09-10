@@ -71,9 +71,8 @@ void mouseCallback(int btn, int state, int x, int y)
     if(btn==GLUT_LEFT_BUTTON && state==GLUT_DOWN)
     {
         //D printf("Left button at X: %d, Y: %d\n", x, y);
-        int m = cadGetEntityArrayIndex();
         cadEntity e;
-        for (int a = 0; a < m; a++)
+        for (int a = 0; a < cadGetEntityArrayIndex(); a++)
         {
           e = cadGetEntityArray(a);
           //D printf("Entity %d start(%.6f, %.6f) end(%.6f, %.6f)\n", a, e.Line.start.x, e.Line.start.y, e.Line.end.x, e.Line.end.y);

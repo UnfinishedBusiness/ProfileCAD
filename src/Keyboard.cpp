@@ -77,7 +77,7 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
 
         case 96 :
           cadSetColor(RED);
-          cadDrawLine(point_t{0,0}, point_t{5,2});
+          cadDrawLine(point_t{-6,-8}, point_t{5,2});
           break;
       }
       //D printf("(keyboardCallbackNormal) CmdInput = %s\n", CmdInput.c_str());

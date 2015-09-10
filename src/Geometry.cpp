@@ -42,25 +42,45 @@ float geoGetLineLength(line_t l)
 point_t geoGetLineMidpoint(line_t l)
 {
   point_t m;
-  m.x = (l.end.x - l.start.x) / 2;
-  m.y = (l.end.y - l.start.y) / 2;
-  m.z = (l.end.z - l.start.z) / 2;
+  m.x = (l.end.x + l.start.x) / 2;
+  m.y = (l.end.y + l.start.y) / 2;
+  m.z = (l.end.z + l.start.z) / 2;
+  D printf("(geoGetLineMidpoint) Midpoint of (%.6f, %.6f) --- (%.6f, %.6f) is (%.6f, %.6f)\n", l.start.x, l.start.y, l.end.x, l.end.y, m.x, m.y);
   return m;
 }
 point_t geoRotatePointAroundPoint(point_t p, point_t o, float angle)
 {
-  float rad = angle * 3.14159265359 / 180.0;
-  return point_t{ cos(rad) * (p.x - o.x) - sin(rad) * (p.y - o.y) + o.x,
-                  sin(rad) * (p.x - o.x) + cos(rad) * (p.y - o.y) + o.y,
-                  0
-                };
+  float rad = angle * (3.14159265359 / 180.0);
+  return point_t{ cosf(rad) * (p.x - o.x) - sinf(rad) * (p.y - o.y) + o.x,
+                    sinf(rad) * (p.x - o.x) + cosf(rad) * (p.y - o.y) + o.y,
+                    0 };
+}
+float geoRadiansToDegrees(float r)
+{
+  return r * 57.2957795;
+}
+float geoGetLineAngle(line_t l)
+{
+  float angle = atan2f(l.start.y - l.end.y, l.start.x - l.end.x);
+  return angle;
 }
 line_t geoGetPerpendicularLine(line_t l, float d)
 {
+  int angle;
   point_t midpoint = geoGetLineMidpoint(l);
-  line_t r = line_t{ midpoint, geoRotatePointAroundPoint(l.start, midpoint, 90) };
-
-  D printf("(geoGetPerpendicularLine) Returned line of length %.6f\n", geoGetLineLength(r));
+  if (d > 0)
+  {
+    angle = 270;
+  }
+  else
+  {
+    angle = 90;
+  }
+  line_t r = line_t{ midpoint, geoRotatePointAroundPoint(l.start, midpoint, angle) };
+  float perp_angle = geoGetLineAngle(r);
+  point_t real_endpoint = point_t{ midpoint.x + (fabs(d) * cosf(perp_angle)), midpoint.y + (fabs(d) * sinf(perp_angle)) };
+  r.end = real_endpoint;
+  D printf("(geoGetPerpendicularLine) New Line:  (%.6f, %.6f) --- (%.6f, %.6f)\n", r.start, r.end);
+  D printf("(geoGetPerpendicularLine) Returned line of length %.6f and angle %.6f\n", geoGetLineLength(r), geoGetLineAngle(r));
   return r;
-
 }
