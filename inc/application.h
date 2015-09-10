@@ -32,9 +32,12 @@
 #else
  #define D for(;0;)
 #endif
-
 struct point_t{
   float x,y,z;
+};
+struct line_t{
+  point_t start;
+  point_t end;
 };
 struct color_t{
   float r, g, b, a;

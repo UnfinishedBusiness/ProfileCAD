@@ -39,6 +39,10 @@ void *cliCreateLineEndpoints()
   {
     return NULL;
   }
+  if (e[0].SelectedBody || e[1].SelectedBody)
+  {
+    return NULL; //We need endpoints
+  }
   point_t Start = e[0].SelectedAt;
   point_t End = e[1].SelectedAt;
   cadSetColor(CurrentColor);
@@ -55,6 +59,10 @@ void *cliCreateLineVerticalEndpoint()
     if (e.size() < 1)
     {
       return NULL;
+    }
+    if (e[0].SelectedBody)
+    {
+      return NULL; //We need a endpoint
     }
     point_t Start = e[0].SelectedAt;
     point_t End = { e[0].SelectedAt.x , (float)atof(text.c_str()) };
@@ -78,6 +86,10 @@ void *cliCreateLineHorizontalEndpoint()
     if (e.size() < 1)
     {
       return NULL;
+    }
+    if (e[0].SelectedBody)
+    {
+      return NULL; //We need a endpoint
     }
     point_t Start = e[0].SelectedAt;
     point_t End = { (float)atof(text.c_str()), e[0].SelectedAt.y };
@@ -127,6 +139,31 @@ void *cliCreateLineHorizontalOrigin()
   uiEdit(0, uiEntity{UI_TEXT, RED, "Input X coordinant!", UI_MENU_POSITION});
   return NULL;
 }
+void *cliCreateLinePerpendicular()
+{
+  if (TextReady == true)
+  {
+    TextReady = false;
+    text.replace(text.find("> "), sizeof("> ")-1, "");
+    std::vector<cadEntity> e = cadGetSelected();
+    if (e.size() == 1) //Make sure we have only one entity seleced
+    {
+      //D printf("(cliCreateLinePerpendicular) %d Entitys selected!\n", e.size());
+      line_t p = geoGetPerpendicularLine(line_t{ e[0].Line.start,  e[0].Line.end}, (float) atof(text.c_str()));
+      point_t Start = p.start;
+      point_t End = p.end;
+      cadSetColor(CurrentColor);
+      cadDrawLine(Start, End);
+      return NULL;
+    }
+    return NULL;
+  }
+  textCallback = &cliCreateLinePerpendicular;
+  TextInput = true;
+  cliPush("> ");
+  uiEdit(0, uiEntity{UI_TEXT, RED, "Input distance!", UI_MENU_POSITION});
+  return NULL;
+}
 void *cliScreenSelectAll()
 {
   int m = cadGetEntityArrayIndex();
@@ -134,7 +171,18 @@ void *cliScreenSelectAll()
   for (int a = 0; a < m; a++)
   {
     e = cadGetEntityArray(a);
-    e.Selected = !e.Selected;
+    e.Selected = true;
+    cadEdit(a, e);
+  }
+}
+void *cliScreenUnSelectAll()
+{
+  int m = cadGetEntityArrayIndex();
+  cadEntity e;
+  for (int a = 0; a < m; a++)
+  {
+    e = cadGetEntityArray(a);
+    e.Selected = false;
     cadEdit(a, e);
   }
 }
@@ -146,9 +194,17 @@ void *cliViewPlaneXY() { sceneSetViewAngle(0, 0, 0); return NULL; }
 void *cliViewPlaneYZ() { sceneSetViewAngle(0, 90, 0); return NULL; }
 void *cliViewPlaneZX() { sceneSetViewAngle(90, 0, 0); return NULL; }
 void *cliViewPlaneOrtho() { sceneSetViewAngle(45, 45, 45); return NULL; }
-
-#define CLI_MENU_ITEMS 4
+void *cliScreenColorRed() { CurrentColor = RED; return NULL; }
+void *cliScreenColorBlue() { CurrentColor = BLUE; return NULL; }
+void *cliScreenColorGreen() { CurrentColor = GREEN; return NULL; }
+void *cliFileExit() { EXIT; return NULL; };
+#define CLI_MENU_ITEMS 5
 menu_item_t menu[CLI_MENU_ITEMS] = {
+  { "f", "file",
+    sub_menu_item_t{ "e", "exit",
+         sub_sub_menu_item_t{ "y", "are you sure?", &cliFileExit },
+     },
+  },
   { "l", "line",
     sub_menu_item_t{ "v", "vertical",
          sub_sub_menu_item_t{ "o", "origin", &cliCreateLineVerticalOrigin },
@@ -161,8 +217,11 @@ menu_item_t menu[CLI_MENU_ITEMS] = {
     sub_menu_item_t{ "e", "endpoints",
          sub_sub_menu_item_t{ "d", "done", &cliCreateLineEndpoints },
     },
+    sub_menu_item_t{ "d", "perpendicular",
+         sub_sub_menu_item_t{ "d", "distance", &cliCreateLinePerpendicular },
+    },
     sub_menu_item_t{ "p", "parallel",
-         sub_sub_menu_item_t{ "s", "side distance", &cliCreateLineEndpoints },
+         sub_sub_menu_item_t{ "s", "side distance" },
     },
   },
   { "x", "xform",
@@ -175,13 +234,19 @@ menu_item_t menu[CLI_MENU_ITEMS] = {
         sub_sub_menu_item_t{ "y", "yz", &cliViewPlaneYZ },
         sub_sub_menu_item_t{ "z", "zx", &cliViewPlaneZX },
         sub_sub_menu_item_t{ "o", "ortho", &cliViewPlaneOrtho }
-      }
+      },
   },
   { "s", "screen",
       sub_menu_item_t{ "s", "selection",
         sub_sub_menu_item_t{ "a", "select all", &cliScreenSelectAll },
+        sub_sub_menu_item_t{ "u", "un-select all", &cliScreenUnSelectAll },
         sub_sub_menu_item_t{ "d", "delete selected", &cliScreenDeleteSelected },
-      }
+      },
+      sub_menu_item_t{ "c", "color",
+        sub_sub_menu_item_t{ "r", "red", &cliScreenColorRed },
+        sub_sub_menu_item_t{ "b", "blue", &cliScreenColorBlue },
+        sub_sub_menu_item_t{ "g", "green", &cliScreenColorGreen },
+      },
   },
 };
 

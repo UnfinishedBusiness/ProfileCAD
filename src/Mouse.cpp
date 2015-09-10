@@ -68,7 +68,7 @@ void mouseCallback(int btn, int state, int x, int y)
     {
         D printf("Left + Ctrl button at X: %d, Y: %d\n", x, y);
     }
-    if(btn==GLUT_LEFT_BUTTON && state==GLUT_DOWN && mod != GLUT_ACTIVE_CTRL)
+    if(btn==GLUT_LEFT_BUTTON && state==GLUT_DOWN)
     {
         //D printf("Left button at X: %d, Y: %d\n", x, y);
         int m = cadGetEntityArrayIndex();
@@ -78,23 +78,37 @@ void mouseCallback(int btn, int state, int x, int y)
           e = cadGetEntityArray(a);
           //D printf("Entity %d start(%.6f, %.6f) end(%.6f, %.6f)\n", a, e.Line.start.x, e.Line.start.y, e.Line.end.x, e.Line.end.y);
 
-          if (isSimilar(worldX, e.Line.start.x) && isSimilar(worldY, e.Line.start.y))
+          if (isSimilar(worldX, e.Line.start.x) && isSimilar(worldY, e.Line.start.y) && !e.Removed)
           {
             D printf("\t%s Entity #%d Start point Clicked!%s\n", KGREEN, a, KNORMAL);
-            e.Selected = !e.Selected;
+            if (mod == GLUT_ACTIVE_CTRL)
+            {
+              e.Selected = false;
+            }
+            else
+            {
+              e.Selected = true;
+            }
             e.SelectedAt = e.Line.start;
             cadEdit(a, e);
             return;
           }
-          if (isSimilar(worldX, e.Line.end.x) && isSimilar(worldY, e.Line.end.y))
+          if (isSimilar(worldX, e.Line.end.x) && isSimilar(worldY, e.Line.end.y) && !e.Removed)
           {
             D printf("\t%s Entity #%d End point Clicked!%s\n", KGREEN, a, KNORMAL);
-            e.Selected = !e.Selected;
+            if (mod == GLUT_ACTIVE_CTRL)
+            {
+              e.Selected = false;
+            }
+            else
+            {
+              e.Selected = true;
+            }
             e.SelectedAt = e.Line.end;
             cadEdit(a, e);
             return;
           }
-
+          /*
           vector<point_t> points = geoGetPointsOfLine(e.Line.start, e.Line.end);
           bool Select = false;
           //D printf("\t number of points: %d\n", points.size());
@@ -110,10 +124,19 @@ void mouseCallback(int btn, int state, int x, int y)
           {
             Select = false;
             D printf("\t%s Entity #%d Clicked!%s\n", KGREEN, a, KNORMAL);
-            e.Selected = !e.Selected;
-            e.SelectedBody = !e.SelectedBody;
+            if (mod == GLUT_ACTIVE_CTRL)
+            {
+              e.Selected = false;
+              e.SelectedBody = false;
+            }
+            else
+            {
+              e.Selected = true;
+              e.SelectedBody = true;
+            }
+
             cadEdit(a, e);
-          }
+          }*/
         }
     }
     if(btn==GLUT_RIGHT_BUTTON && state==GLUT_DOWN)

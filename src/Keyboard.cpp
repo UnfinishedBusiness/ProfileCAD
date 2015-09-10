@@ -67,13 +67,18 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
 
         case 8 : cliBackup(); break; //Normal backspace
         case 127 : cliBackup(); break; //Mac delete
+        case 27 : cliBackup(); break; //Escape
 
         case 46 : cliPush("."); break;
 
         case 32 : cliPush(" "); break;
 
-        case 27 : EXIT; //Escape
         case 13 : cliReturn(); break;
+
+        case 96 :
+          cadSetColor(RED);
+          cadDrawLine(point_t{0,0}, point_t{5,2});
+          break;
       }
       //D printf("(keyboardCallbackNormal) CmdInput = %s\n", CmdInput.c_str());
       //uiEdit(0, uiEntity{UI_TEXT, WHITE, "> " + CmdInput, UI_CMD_POSITION});

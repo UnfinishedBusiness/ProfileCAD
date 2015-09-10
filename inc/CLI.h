@@ -8,14 +8,20 @@ void cliMenu();
 void cliBackup();
 void cliReturn();
 
+void *cliFileExit();
 void *cliCreateLineVerticalOrigin();
 void *cliCreateLineHorizontalOrigin();
 void *cliCreateLineVerticalEndpoints();
 void *cliCreateLineEndpoints();
+void *cliCreateLinePerpendicular();
 void *cliScreenSelectAll();
+void *cliScreenUnSelectAll();
 void *cliScreenDeleteSelected();
 void *cliViewPlaneXY();
 void *cliViewPlaneYZ();
 void *cliViewPlaneZX();
+void *cliScreenColorRed();
+void *cliScreenColorBlue();
+void *cliScreenColorGreen();
 void *cliViewPlaneOrtho();
 #endif
