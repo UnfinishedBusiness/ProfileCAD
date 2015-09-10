@@ -86,7 +86,6 @@ void cadRender()
         {
           sceneColor(cadEntityArray[i].Color);
         }
-
         glLineWidth(1);
         glBegin(GL_LINE_LOOP);
         glVertex3f((GLfloat) cadEntityArray[i].Line.start.x, cadEntityArray[i].Line.start.y, cadEntityArray[i].Line.start.z);

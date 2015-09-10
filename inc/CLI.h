@@ -7,6 +7,7 @@ void cliPush(std::string);
 void cliMenu();
 void cliBackup();
 void cliReturn();
+float cliGetInput();
 
 void *cliFileExit();
 void *cliCreateLineVerticalOrigin();

@@ -32,6 +32,19 @@ string text = "";
 #define CLI_MENU_ITEM_SEPERATOR "   "
 #define CLI_MENU_ITEM_LINK  " - "
 
+float cliGetInput()
+{
+  text.replace(text.find("> "), sizeof("> ")-1, "");
+  float input = (float)atof(text.c_str());
+  if (!isnan(input))
+  {
+    return input;
+  }
+  else
+  {
+    return 0;
+  }
+}
 void *cliCreateLineEndpoints()
 {
   std::vector<cadEntity> e = cadGetSelected();
@@ -54,7 +67,7 @@ void *cliCreateLineVerticalEndpoint()
   if (TextReady == true)
   {
     TextReady = false;
-    text.replace(text.find("> "), sizeof("> ")-1, "");
+    float input = cliGetInput();
     std::vector<cadEntity> e = cadGetSelected();
     if (e.size() < 1)
     {
@@ -65,7 +78,7 @@ void *cliCreateLineVerticalEndpoint()
       return NULL; //We need a endpoint
     }
     point_t Start = e[0].SelectedAt;
-    point_t End = { e[0].SelectedAt.x , (float)atof(text.c_str()) };
+    point_t End = { e[0].SelectedAt.x , input };
     cadSetColor(CurrentColor);
     cadDrawLine(Start, End);
     return NULL;
@@ -81,7 +94,7 @@ void *cliCreateLineHorizontalEndpoint()
   if (TextReady == true)
   {
     TextReady = false;
-    text.replace(text.find("> "), sizeof("> ")-1, "");
+    float input = cliGetInput();
     std::vector<cadEntity> e = cadGetSelected();
     if (e.size() < 1)
     {
@@ -108,9 +121,9 @@ void *cliCreateLineVerticalOrigin()
     if (TextReady == true)
     {
       TextReady = false;
-      text.replace(text.find("> "), sizeof("> ")-1, "");
+      float input = cliGetInput();
       point_t Start = { 0, 0};
-      point_t End = { 0 , (float)atof(text.c_str()) };
+      point_t End = { 0 , input };
       cadSetColor(CurrentColor);
       cadDrawLine(Start, End);
       return NULL;
@@ -126,9 +139,9 @@ void *cliCreateLineHorizontalOrigin()
   if (TextReady == true)
   {
     TextReady = false;
-    text.replace(text.find("> "), sizeof("> ")-1, "");
+    float input = cliGetInput();
     point_t Start = { 0, 0};
-    point_t End = {(float)atof(text.c_str()), 0};
+    point_t End = {input, 0};
     cadSetColor(CurrentColor);
     cadDrawLine(Start, End);
     return NULL;
@@ -144,12 +157,12 @@ void *cliCreateLinePerpendicular()
   if (TextReady == true)
   {
     TextReady = false;
-    text.replace(text.find("> "), sizeof("> ")-1, "");
+    float input = cliGetInput();
     std::vector<cadEntity> e = cadGetSelected();
     if (e.size() == 1) //Make sure we have only one entity seleced
     {
       //D printf("(cliCreateLinePerpendicular) %d Entitys selected!\n", e.size());
-      line_t p = geoGetPerpendicularLine(line_t{ e[0].Line.start,  e[0].Line.end}, (float) atof(text.c_str()));
+      line_t p = geoGetPerpendicularLine(line_t{ e[0].Line.start,  e[0].Line.end}, input);
       point_t Start = p.start;
       point_t End = p.end;
       cadSetColor(CurrentColor);
@@ -169,12 +182,12 @@ void *cliCreateLineParallel()
   if (TextReady == true)
   {
     TextReady = false;
-    text.replace(text.find("> "), sizeof("> ")-1, "");
+    float input = cliGetInput();
     std::vector<cadEntity> e = cadGetSelected();
     if (e.size() == 1) //Make sure we have only one entity seleced
     {
       //D printf("(cliCreateLinePerpendicular) %d Entitys selected!\n", e.size());
-      line_t p = geoGetParallelLine(line_t{ e[0].Line.start,  e[0].Line.end}, (float) atof(text.c_str()));
+      line_t p = geoGetParallelLine(line_t{ e[0].Line.start,  e[0].Line.end}, input);
       point_t Start = p.start;
       point_t End = p.end;
       cadSetColor(CurrentColor);
@@ -345,13 +358,15 @@ void cliBackup()
 }
 void cliReturn()
 {
-  TextInput = false;
-  TextReady = true;
-  uiEdit(1, uiEntity{UI_TEXT, GREEN, "", UI_INPUT_POSITION});
-  (*textCallback)();
-  text = "";
-  cliMenu();
-
+  if (TextInput == true)
+  {
+    TextInput = false;
+    TextReady = true;
+    uiEdit(1, uiEntity{UI_TEXT, GREEN, "", UI_INPUT_POSITION});
+    if ((*textCallback)() != NULL) (*textCallback)();
+    text = "";
+    cliMenu();
+  }
 }
 void cliMenu()
 {
