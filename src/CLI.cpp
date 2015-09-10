@@ -235,6 +235,35 @@ void *cliScreenColorRed() { CurrentColor = RED; return NULL; }
 void *cliScreenColorBlue() { CurrentColor = BLUE; return NULL; }
 void *cliScreenColorGreen() { CurrentColor = GREEN; return NULL; }
 void *cliFileExit() { EXIT; return NULL; };
+
+void *cliXformTrim1()
+{
+  std::vector<cadEntity> e = cadGetSelected();
+  if (e.size() < 2)
+  {
+    return NULL;
+  }
+  if (e[0].SelectedBody || e[1].SelectedBody)
+  {
+    return NULL; //We need endpoints
+  }
+  point_t new_endpoint = geoGetLineIntersection(line_t{e[0].Line.start, e[0].Line.end}, line_t{e[1].Line.start, e[1].Line.end});
+  D printf("(cliXformTrim1) Intersection point is (%.6f, %.6f)\n", new_endpoint.x, new_endpoint.y);
+  //Find which end of e[0] is closest to the Intersection point, then replace with intersection point
+  float start_d = geoGetLineLength(line_t{ e[0].Line.start, new_endpoint });
+  float end_d = geoGetLineLength(line_t{ e[0].Line.end, new_endpoint });
+  if (start_d < end_d)
+  {
+    e[0].Line.start = new_endpoint;
+  }
+  else
+  {
+    e[0].Line.end = new_endpoint;
+  }
+  cadEdit(e[0].Index, e[0]);
+  return NULL;
+}
+
 #define CLI_MENU_ITEMS 5
 menu_item_t menu[CLI_MENU_ITEMS] = {
   { "f", "file",
@@ -262,8 +291,13 @@ menu_item_t menu[CLI_MENU_ITEMS] = {
     },
   },
   { "x", "xform",
-      sub_menu_item_t{ "t", "trim" },
-      sub_menu_item_t{ "m", "mirror" }
+      sub_menu_item_t{ "t", "trim",
+        sub_sub_menu_item_t{ "1", "1 entity", &cliXformTrim1 },
+        sub_sub_menu_item_t{ "2", "2 entitys" },
+      },
+      sub_menu_item_t{ "m", "mirror" },
+      sub_menu_item_t{ "r", "rotate" },
+      sub_menu_item_t{ "o", "offset" },
   },
   { "v", "view",
       sub_menu_item_t{ "p", "plane",

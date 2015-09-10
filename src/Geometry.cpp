@@ -2,6 +2,20 @@
 
 using namespace std;
 
+point_t geoGetLineIntersection(line_t l1, line_t l2)
+{
+  float a1 = (l1.start.y - l1.end.y) / (l1.start.x - l1.end.x);
+  float b1 = l1.start.y - a1 * l1.start.x;
+  float a2 = (l2.start.y - l2.end.y) / (l2.start.x - l2.end.x);
+  float b2 = l2.start.y - a2 * l2.start.x;
+  if (fabs(a1 - a2) < 0.000001)
+  {
+    D printf("(geoGetLineIntersection) Lines dont intersect!\n");
+  }
+  float x = (b2 - b1) / (a1 - a2);
+  float y = a1 * x + b1;
+  return point_t{x, y};
+}
 vector<point_t> geoGetPointsOfLine(point_t start, point_t end)
 {
   //D printf("(geoGetPointsOfLine) Start(%.6f, %.6f) End(%.6f, %.6f)\n", start.x, start.y, end.x, end.y);
@@ -101,15 +115,15 @@ line_t geoGetPerpendicularLine(line_t l, point_t direction, float d)
   line_t r90 = line_t{ midpoint, geoRotatePointAroundPoint(l.start, midpoint, 90) };
   float r270_d = geoGetLineLength(line_t{ r270.end, direction });
   float r90_d = geoGetLineLength(line_t{ r90.end, direction });
-  D printf("(geoGetPerpendicularLine) R270 Distance: %.6f, R90 Distance: %.6f\n", r270_d, r90_d);
+  //D printf("(geoGetPerpendicularLine) R270 Distance: %.6f, R90 Distance: %.6f\n", r270_d, r90_d);
   if ( r90_d < r270_d )
   {
-    D printf("(geoGetPerpendicularLine) R270 is closer!\n");
+    //D printf("(geoGetPerpendicularLine) R270 is closer!\n");
     r = r270;
   }
   else
   {
-    D printf("(geoGetPerpendicularLine) R90 is closer!\n");
+    //D printf("(geoGetPerpendicularLine) R90 is closer!\n");
     r = r90;
   }
   float a = geoGetLineAngle(r);

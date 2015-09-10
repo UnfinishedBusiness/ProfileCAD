@@ -16,14 +16,18 @@ void *cliCreateLineVerticalEndpoints();
 void *cliCreateLineEndpoints();
 void *cliCreateLinePerpendicular();
 void *cliCreateLineParallel();
+
 void *cliScreenSelectAll();
 void *cliScreenUnSelectAll();
 void *cliScreenDeleteSelected();
-void *cliViewPlaneXY();
-void *cliViewPlaneYZ();
-void *cliViewPlaneZX();
 void *cliScreenColorRed();
 void *cliScreenColorBlue();
 void *cliScreenColorGreen();
+
+void *cliViewPlaneXY();
+void *cliViewPlaneYZ();
+void *cliViewPlaneZX();
 void *cliViewPlaneOrtho();
+
+void *cliXformTrim1();
 #endif

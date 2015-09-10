@@ -2,6 +2,7 @@
 #define GEOMETRY_
 #include <application.h>
 
+point_t geoGetLineIntersection(line_t, line_t);
 std::vector<point_t> geoGetPointsOfLine(point_t, point_t);
 line_t geoGetPerpendicularLine(line_t, point_t, float);
 line_t geoGetParallelLine(line_t, point_t, float);

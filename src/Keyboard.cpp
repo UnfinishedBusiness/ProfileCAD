@@ -18,10 +18,16 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
             switch(mod)
             {
                case 1 :  D printf("SHIFT key %d\n",mod);  break;
-               case 2 :  D printf("CTRL  key %d\n",mod);  break;
+               case 2 :
+                  D printf("CTRL  key %d\n",mod);
+                  if (key == 1) cliScreenSelectAll();
+                  if (key == 21) cliScreenUnSelectAll();
+                  if (key == 4) cliScreenDeleteSelected(); cadRedraw();
+                  break;
                case 4 :  D printf("ALT   key %d\n",mod);  break;
                mod=0;
             }
+            return;
       }
       switch(key)
       {

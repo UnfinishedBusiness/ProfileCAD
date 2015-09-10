@@ -21,6 +21,7 @@ struct cadEntity{
   point_t SelectedAt;
   bool SelectedBody;
   bool Removed;
+  int Index;
 };
 
 void cadInit();

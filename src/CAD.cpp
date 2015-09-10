@@ -16,7 +16,7 @@ void cadAppend(cadEntity e)
 {
   e.Selected = false;
   e.Removed = false;
-
+  e.Index = cadEntityArrayIndex;
   cadEntityArray.push_back(cadEntity());
   cadEntityArray[cadEntityArrayIndex] = e;
   cadEntityArrayIndex++;
