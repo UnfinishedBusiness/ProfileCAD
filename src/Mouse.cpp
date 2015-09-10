@@ -62,7 +62,7 @@ void mouseCallback(int btn, int state, int x, int y)
       {
         sceneIncZoom(-0.1);
       }
-      D printf("Scroll %s At %d %d\n", (btn == 3) ? "Up" : "Down", x, y);
+      //D printf("Scroll %s At %d %d\n", (btn == 3) ? "Up" : "Down", x, y);
     }
     if(btn==GLUT_LEFT_BUTTON && state==GLUT_DOWN && mod == GLUT_ACTIVE_CTRL)
     {
