@@ -177,6 +177,33 @@ CLI.cpp.s:
 	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/CLI.cpp.s
 .PHONY : CLI.cpp.s
 
+FileIO.o: FileIO.cpp.o
+
+.PHONY : FileIO.o
+
+# target to build an object file
+FileIO.cpp.o:
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/FileIO.cpp.o
+.PHONY : FileIO.cpp.o
+
+FileIO.i: FileIO.cpp.i
+
+.PHONY : FileIO.i
+
+# target to preprocess a source file
+FileIO.cpp.i:
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/FileIO.cpp.i
+.PHONY : FileIO.cpp.i
+
+FileIO.s: FileIO.cpp.s
+
+.PHONY : FileIO.s
+
+# target to generate assembly for a file
+FileIO.cpp.s:
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/FileIO.cpp.s
+.PHONY : FileIO.cpp.s
+
 Geometry.o: Geometry.cpp.o
 
 .PHONY : Geometry.o
@@ -408,6 +435,9 @@ help:
 	@echo "... CLI.o"
 	@echo "... CLI.i"
 	@echo "... CLI.s"
+	@echo "... FileIO.o"
+	@echo "... FileIO.i"
+	@echo "... FileIO.s"
 	@echo "... Geometry.o"
 	@echo "... Geometry.i"
 	@echo "... Geometry.s"

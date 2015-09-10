@@ -37,4 +37,5 @@ int cadGetEntityArrayIndex();
 
 
 void cadDrawLine(point_t start, point_t end);
+void cadDrawLine(line_t);
 #endif

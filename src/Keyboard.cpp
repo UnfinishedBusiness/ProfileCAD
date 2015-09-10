@@ -23,6 +23,7 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
                   if (key == 1) cliScreenSelectAll();
                   if (key == 21) cliScreenUnSelectAll();
                   if (key == 4) cliScreenDeleteSelected(); cadRedraw();
+                  if (key == 15) fileOpen("test.dxf");
                   break;
                case 4 :  D printf("ALT   key %d\n",mod);  break;
                mod=0;

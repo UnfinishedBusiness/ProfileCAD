@@ -5,9 +5,16 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <fstream>
+#include <cctype>
+#include <cstring>
+#include <sstream>
+#include <algorithm>
+#include <array>
 
 #include <CAD.h>
 #include <CLI.h>
+#include <FileIO.h>
 #include <Geometry.h>
 #include <Keyboard.h>
 #include <Menu.h>
@@ -47,6 +54,11 @@ struct color_t{
 #define RED   color_t{1, 0, 0, 1}
 #define GREEN color_t{0, 1, 0, 1}
 #define BLUE  color_t{0, 0, 1, 1}
+#define YELLOW  color_t{1, 1, 0.5, 1}
+#define CYAN  color_t{0, 1, 1, 1}
+#define MAGENTA color_t{1, 0, 1, 1}
+#define LIGHTGREY color_t{0.3, 0.3, 0.3, 1}
+#define DARKGREY color_t{0.8, 0.8, 0.8, 1}
 
 #define KNORMAL  "\x1B[0m"
 #define KRED  "\x1B[31m"

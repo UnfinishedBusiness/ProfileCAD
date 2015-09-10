@@ -30,10 +30,15 @@ void cadEdit(int i, cadEntity e)
   }
   glutPostRedisplay();
 }
+void cadDrawLine(line_t l)
+{
+  cadDrawLine(l.start, l.end);
+}
 void cadDrawLine(point_t start, point_t end)
 {
   cadAppend(cadEntity{CAD_LINE, cadColorAttribute, cadEntityLine{ start, end }, cadEntityArc{ start, end } });
 }
+
 void cadSetColor(color_t c)
 {
   cadColorAttribute = c;
