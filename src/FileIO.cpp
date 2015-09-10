@@ -78,8 +78,10 @@ void fileReadDXF()
                 cadRedraw();
                 l.start.x = 0;
                 l.start.y = 0;
+                l.start.z = 0;
                 l.end.x = 0;
                 l.end.y = 0;
+                l.end.z = 0;
                 LineEntitity = false;
               break;
             case 62: //Color

@@ -36,6 +36,7 @@ void cadDrawLine(line_t l)
 }
 void cadDrawLine(point_t start, point_t end)
 {
+  D printf("(cadDrawLine) Drawing line at (%.6f, %.6f, %.6f) ===== (%.6f, %.6f, %.6f)\n", start.x, start.y, start.z, end.x, end.y, end.z);
   cadAppend(cadEntity{CAD_LINE, cadColorAttribute, line_t{ start, end }, arc_t{} });
 }
 void cadDrawArc(arc_t a)
@@ -99,6 +100,55 @@ void cadRender()
         glVertex3f((GLfloat) cadEntityArray[i].Line.start.x, cadEntityArray[i].Line.start.y, cadEntityArray[i].Line.start.z);
         glVertex3f((GLfloat) cadEntityArray[i].Line.end.x, cadEntityArray[i].Line.end.y, cadEntityArray[i].Line.end.z);
         glEnd();
+      }
+      if (cadEntityArray[i].Type == CAD_ARC && !cadEntityArray[i].Removed && cadEntityArray[i].Arc.radius > 0)
+      {
+        D printf("(cadRender) Found arc!\n");
+        if (cadEntityArray[i].Selected)
+        {
+          sceneColor(WHITE);
+        }
+        else
+        {
+          sceneColor(cadEntityArray[i].Color);
+        }
+        glLineWidth(1);
+        point_t center = point_t{0, 0, 0};
+    		float Radius = cadEntityArray[i].Arc.radius;
+    		float ypos, xpos;
+    		float two_pi=6.283f;
+    		float angle_inc=0.1f/Radius;
+        //glBegin(GL_LINE_LOOP);
+        //glVertex3f((GLfloat) cadEntityArray[i].Arc.start.x, (GLfloat) cadEntityArray[i].Arc.start.y, 0);
+        float found_start = true;
+        for(float angle=0.0f; angle<= two_pi;angle+=angle_inc)
+    		{
+            //D printf("arc> (%.6f, %.6f) \n", xpos, ypos);
+
+            if (isSimilar(xpos, cadEntityArray[i].Arc.end.x) && isSimilar(ypos, cadEntityArray[i].Arc.end.y) && found_start)
+            {
+              //break;
+            }
+            if (isSimilar(xpos, cadEntityArray[i].Arc.start.x) && isSimilar(ypos, cadEntityArray[i].Arc.start.y))
+            {
+              found_start = true;
+            }
+
+            if (found_start)
+            {
+              glBegin(GL_POINT);
+              xpos=center.x+Radius*cos(angle);
+      		    ypos=center.y+Radius*sin(angle);
+              glVertex3f((GLfloat) xpos, (GLfloat) ypos, 0);
+              glEnd();
+              //angle+=angle_inc;
+              //xpos=center.x+Radius*cos(angle);
+      		    //ypos=center.y+Radius*sin(angle);
+              //glVertex3f((GLfloat) xpos, (GLfloat) ypos, 0);
+              //glEnd();
+            }
+    		}
+        //glEnd();
       }
   }
 }
