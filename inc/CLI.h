@@ -14,6 +14,7 @@ void *cliCreateLineHorizontalOrigin();
 void *cliCreateLineVerticalEndpoints();
 void *cliCreateLineEndpoints();
 void *cliCreateLinePerpendicular();
+void *cliCreateLineParallel();
 void *cliScreenSelectAll();
 void *cliScreenUnSelectAll();
 void *cliScreenDeleteSelected();

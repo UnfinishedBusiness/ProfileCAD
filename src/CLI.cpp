@@ -164,6 +164,31 @@ void *cliCreateLinePerpendicular()
   uiEdit(0, uiEntity{UI_TEXT, RED, "Input distance!", UI_MENU_POSITION});
   return NULL;
 }
+void *cliCreateLineParallel()
+{
+  if (TextReady == true)
+  {
+    TextReady = false;
+    text.replace(text.find("> "), sizeof("> ")-1, "");
+    std::vector<cadEntity> e = cadGetSelected();
+    if (e.size() == 1) //Make sure we have only one entity seleced
+    {
+      //D printf("(cliCreateLinePerpendicular) %d Entitys selected!\n", e.size());
+      line_t p = geoGetParallelLine(line_t{ e[0].Line.start,  e[0].Line.end}, (float) atof(text.c_str()));
+      point_t Start = p.start;
+      point_t End = p.end;
+      cadSetColor(CurrentColor);
+      cadDrawLine(Start, End);
+      return NULL;
+    }
+    return NULL;
+  }
+  textCallback = &cliCreateLineParallel;
+  TextInput = true;
+  cliPush("> ");
+  uiEdit(0, uiEntity{UI_TEXT, RED, "Input distance!", UI_MENU_POSITION});
+  return NULL;
+}
 void *cliScreenSelectAll()
 {
   int m = cadGetEntityArrayIndex();
@@ -221,7 +246,7 @@ menu_item_t menu[CLI_MENU_ITEMS] = {
          sub_sub_menu_item_t{ "d", "distance", &cliCreateLinePerpendicular },
     },
     sub_menu_item_t{ "p", "parallel",
-         sub_sub_menu_item_t{ "s", "side distance" },
+         sub_sub_menu_item_t{ "s", "side distance", &cliCreateLineParallel },
     },
   },
   { "x", "xform",

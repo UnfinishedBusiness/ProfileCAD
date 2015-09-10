@@ -64,6 +64,33 @@ float geoGetLineAngle(line_t l)
   float angle = atan2f(l.start.y - l.end.y, l.start.x - l.end.x);
   return angle;
 }
+line_t geoRotateLine(line_t l, point_t o, float a)
+{
+  return line_t{ geoRotatePointAroundPoint(l.start, o, a), geoRotatePointAroundPoint(l.end, o, a) };
+}
+line_t geoExtendLine(line_t l, float d)
+{
+  float angle = geoGetLineAngle(l);
+  point_t new_startpoint = point_t{ l.start.x + (fabs(d) * cosf(angle)), l.start.y + (fabs(d) * sinf(angle)) };
+  point_t new_endpoint = point_t{ l.end.x + (fabs(d) * cosf(angle)), l.end.y + (fabs(d) * sinf(angle)) };
+  float new_startpoint_distance = geoGetLineLength(line_t{ l.start, new_startpoint });
+  float new_endpoint_distance = geoGetLineLength(line_t{ l.end, new_endpoint });
+  if (new_startpoint_distance > new_endpoint_distance)
+  {
+    D printf("(geoExtendLine) Entending from start point\n");
+    return line_t{ new_startpoint, l.end };
+  }
+  else
+  {
+    D printf("(geoExtendLine) Entending from end point\n");
+    return line_t{ l.start, new_endpoint };
+  }
+}
+line_t geoExtendLineAngle(point_t s, float angle, float d)
+{
+  point_t new_endpoint = point_t{ s.x + (fabs(d) * cosf(angle)), s.y + (fabs(d) * sinf(angle)) };
+  return line_t{ s, new_endpoint };
+}
 line_t geoGetPerpendicularLine(line_t l, float d)
 {
   int angle;
@@ -77,10 +104,15 @@ line_t geoGetPerpendicularLine(line_t l, float d)
     angle = 90;
   }
   line_t r = line_t{ midpoint, geoRotatePointAroundPoint(l.start, midpoint, angle) };
-  float perp_angle = geoGetLineAngle(r);
-  point_t real_endpoint = point_t{ midpoint.x + (fabs(d) * cosf(perp_angle)), midpoint.y + (fabs(d) * sinf(perp_angle)) };
-  r.end = real_endpoint;
-  D printf("(geoGetPerpendicularLine) New Line:  (%.6f, %.6f) --- (%.6f, %.6f)\n", r.start, r.end);
-  D printf("(geoGetPerpendicularLine) Returned line of length %.6f and angle %.6f\n", geoGetLineLength(r), geoGetLineAngle(r));
-  return r;
+  float a = geoGetLineAngle(r);
+  point_t new_endpoint = point_t{ midpoint.x + (fabs(d) * cosf(a)), midpoint.y + (fabs(d) * sinf(a)) };
+  return line_t{ midpoint, new_endpoint };
+}
+line_t geoGetParallelLine(line_t l, float d)
+{
+  line_t perp = geoGetPerpendicularLine(l, d);
+  point_t midpoint = geoGetLineMidpoint(l);
+  line_t r1 = geoExtendLineAngle(perp.end, geoGetLineAngle(l), geoGetLineLength(line_t{midpoint, l.end})); //Get half of line
+  line_t r2 = geoExtendLineAngle(r1.end, geoGetLineAngle(l) + 3.14159265, geoGetLineLength(line_t{l.end, l.start})); //Get rest of line
+  return r2;
 }
