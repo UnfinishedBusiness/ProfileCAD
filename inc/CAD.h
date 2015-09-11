@@ -23,6 +23,8 @@ void cadEdit(int, cadEntity);
 void cadRemoveSelected();
 std::vector<cadEntity> cadGetSelected();
 void cadSetColor(color_t);
+void cadRenderLine(line_t);
+void cadRenderArc(arc_t);
 void cadRender();
 void cadRedraw();
 cadEntity cadGetEntityArray(int);

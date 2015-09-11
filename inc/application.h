@@ -39,6 +39,10 @@
 #else
  #define D for(;0;)
 #endif
+
+#define ARC_CW true
+#define ARC_CCW false
+
 struct point_t{
   float x,y,z;
 };
@@ -51,6 +55,7 @@ struct arc_t{
   point_t end;
   point_t center;
   float radius;
+  bool direction;
 };
 struct color_t{
   float r, g, b, a;
@@ -77,7 +82,7 @@ struct color_t{
 
 
 #define ZERO 1e-10
-#define SMALL 0.1
+#define SMALL 0.001
 #define DELTA 1e-10
 #define isZero(A) ( (A < ZERO) && (A > -ZERO) )
 #define isSmall(A) ( (A < SMALL) && (A > -SMALL) )

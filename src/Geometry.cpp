@@ -138,3 +138,19 @@ line_t geoGetParallelLine(line_t l, point_t direction, float d)
   line_t r2 = geoExtendLineAngle(r1.end, geoGetLineAngle(l) + 3.14159265, geoGetLineLength(line_t{l.end, l.start})); //Get rest of line
   return r2;
 }
+point_t geoGetArcEndpoint(arc_t a, float length)
+{
+    float r = sqrtf(powf(a.start.x - a.center.x, 2) + powf(a.start.y - a.center.y, 2));
+    float angle = atan2(a.start.y - a.center.y, a.start.x - a.center.x);
+    if (a.direction == ARC_CW) {
+        angle = angle - length / r;
+    }
+    else {
+        angle = angle + length / r;
+    }
+    return point_t{a.center.x + r * cos(angle), a.center.y + r * sin(angle) };
+}
+float geoGetArcStartAngle(arc_t a)
+{
+  return atan2(a.start.y - a.center.y, a.start.x - a.center.x);
+}

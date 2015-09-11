@@ -14,4 +14,7 @@ line_t geoExtendLineAngle(point_t, float, float);
 point_t geoGetLineMidpoint(line_t);
 float geoGetLineAngle(line_t);
 float geoRadiansToDegrees(float);
+
+point_t geoGetArcEndpoint(arc_t, float);
+float geoGetArcStartAngle(arc_t);
 #endif

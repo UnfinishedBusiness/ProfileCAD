@@ -20,11 +20,28 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
                case 1 :  D printf("SHIFT key %d\n",mod);  break;
                case 2 :
                   printf("CTRL  key %d\n",mod);
-                  if (key == 1) cliScreenSelectAll(); //CTRL+a
-                  if (key == 2) cout << "Drawing arc!\n"; cadDrawArc(arc_t{point_t{-5, 0, 0}, point_t{5, 0, 0}, point_t{0, 0, 0}, 5}); //CTRL+space
-                  if (key == 21) cliScreenUnSelectAll(); //CTRL+u
-                  if (key == 4) cliScreenDeleteSelected(); cadRedraw(); //CTRL+d
-                  if (key == 15) fileOpen("../test/cube.dxf"); //CTRL+s
+                  if (key == 1) //CTRL+a
+                  {
+                    cliScreenSelectAll();
+                  }
+                  if (key == 0) //CTRL+space
+                  {
+                    cadDrawArc(arc_t{point_t{-5, 0, 0}, point_t{0, 5, 0}, point_t{0, 0, 0}, 5, ARC_CW});
+                    //cadDrawArc(arc_t{point_t{-1, 0, 0}, point_t{0, -1, 0}, point_t{0, 0, 0}, 1, ARC_CCW});
+                  }
+                  if (key == 21) //CTRL+u
+                  {
+                     cliScreenUnSelectAll();
+                  }
+                  if (key == 4) //CTRL+d
+                  {
+                    cliScreenDeleteSelected();
+                    cadRedraw();
+                  }
+                  if (key == 15) //CTRL+s
+                  {
+                    fileOpen("../test/cube.dxf");
+                  }
                   break;
                case 4 :  D printf("ALT   key %d\n",mod);  break;
                mod=0;
