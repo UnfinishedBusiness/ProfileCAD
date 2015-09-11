@@ -113,42 +113,26 @@ void cadRender()
           sceneColor(cadEntityArray[i].Color);
         }
         glLineWidth(1);
-        point_t center = point_t{0, 0, 0};
+        point_t center = cadEntityArray[i].Arc.center;
     		float Radius = cadEntityArray[i].Arc.radius;
-    		float ypos, xpos;
+    		float ypos = cadEntityArray[i].Arc.end.x;
+        float xpos = cadEntityArray[i].Arc.end.y;
     		float two_pi=6.283f;
-    		float angle_inc=0.1f/Radius;
-        //glBegin(GL_LINE_LOOP);
-        //glVertex3f((GLfloat) cadEntityArray[i].Arc.start.x, (GLfloat) cadEntityArray[i].Arc.start.y, 0);
-        float found_start = true;
-        for(float angle=0.0f; angle<= two_pi;angle+=angle_inc)
+    		float angle_inc=0.01f/Radius;
+        glBegin(GL_LINE_LOOP);
+        for(float angle=0; angle<= two_pi;angle+=angle_inc)
     		{
-            //D printf("arc> (%.6f, %.6f) \n", xpos, ypos);
-
-            if (isSimilar(xpos, cadEntityArray[i].Arc.end.x) && isSimilar(ypos, cadEntityArray[i].Arc.end.y) && found_start)
+            printf("arc> (%.6f, %.6f) \n", xpos, ypos);
+            if (xpos == cadEntityArray[i].Arc.end.x && ypos == cadEntityArray[i].Arc.end.y)
             {
+              printf("Found end point!\n");
               //break;
             }
-            if (isSimilar(xpos, cadEntityArray[i].Arc.start.x) && isSimilar(ypos, cadEntityArray[i].Arc.start.y))
-            {
-              found_start = true;
-            }
-
-            if (found_start)
-            {
-              glBegin(GL_POINT);
-              xpos=center.x+Radius*cos(angle);
-      		    ypos=center.y+Radius*sin(angle);
-              glVertex3f((GLfloat) xpos, (GLfloat) ypos, 0);
-              glEnd();
-              //angle+=angle_inc;
-              //xpos=center.x+Radius*cos(angle);
-      		    //ypos=center.y+Radius*sin(angle);
-              //glVertex3f((GLfloat) xpos, (GLfloat) ypos, 0);
-              //glEnd();
-            }
+            glVertex3f((GLfloat) xpos, (GLfloat) ypos, 0);
+            xpos=center.x+Radius*cos(angle);
+            ypos=center.y+Radius*sin(angle);
     		}
-        //glEnd();
+        glEnd();
       }
   }
 }
