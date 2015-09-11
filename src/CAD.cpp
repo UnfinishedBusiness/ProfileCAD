@@ -122,61 +122,23 @@ void cadRenderLine(line_t l)
 }
 void cadRenderArc(arc_t a)
 {
-  float start_angle;
-  float end_angle;
-  float inc; //Increment angle
-
-  if (a.direction == ARC_CW)
-  {
-    start_angle = 6.28318531;
-    end_angle = 0;
-    inc = -0.001;
-  }
-  else
-  {
-    start_angle = 0;
-    end_angle = 6.28318531;
-    inc = 0.001; //Increment angle
-  }
-  cout << KRED << "Start angle: " << geoGetArcStartAngle(a) << "\n" << KNORMAL;
+  float start_angle = geoGetArcStartAngle(a);
+  float end_angle = geoGetArcEndAngle(a);
+  D cout << KGREEN << "Start angle: " << start_angle << "\n" << KNORMAL;
+  D cout << KGREEN << "End angle: " << end_angle << "\n" << KNORMAL;
   float r = 5;
-  point_t p;
-	glBegin(GL_LINE_STRIP);//since the arc is not a closed curve, this is a strip now
-  bool found_start = false;
-  bool found_end = false;
-  int count = 0;
-
-  auto op = [](arc_t a, float i, float end_angle) {
-    if (a.direction == ARC_CW)
-    {
-      return i > end_angle;
-    }
-    else
-    {
-      return i < end_angle;
-    }
-  };
-
-  for(float i = start_angle; op(a, i, end_angle) ; i=i + inc)
+  auto arc_loop = [](arc_t a, float i, float r)
   {
+    point_t p;
     p.x = a.center.x + cos(i) * r;
     p.y = a.center.y + sin(i) * r;
-    if (count > 0 && found_start == false && isSimilar(a.start.x, p.x) && isSimilar(a.start.y, p.y))
-    {
-      cout << KRED << ">> Found Start at angle: " << i << "\n" << KNORMAL;
-      found_start = true;
-    }
-    if (count > 0 && found_start == true && isSimilar(a.end.x, p.x) && isSimilar(a.end.y, p.y))
-    {
-      cout << KRED << ">> Found End!\n" << KNORMAL;
-      found_end = true;
-    }
     //cout << KGREEN << ">> " << p.x << ", " << p.y << "\n" << KNORMAL;
-    if (found_start && !found_end)
-    {
-      glVertex3f(p.x, p.y, 0);
-    }
-    count ++;
+    glVertex3f(p.x, p.y, 0);
+  };
+  glBegin(GL_LINE_STRIP);//since the arc is not a closed curve, this is a strip now
+  for(float i = end_angle; i < start_angle; i=i + 0.001)
+  {
+    arc_loop(a, i, r);
   }
 	glEnd();
 }

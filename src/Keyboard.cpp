@@ -27,7 +27,7 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
                   if (key == 0) //CTRL+space
                   {
                     cadDrawArc(arc_t{point_t{-5, 0, 0}, point_t{0, 5, 0}, point_t{0, 0, 0}, 5, ARC_CW});
-                    //cadDrawArc(arc_t{point_t{-1, 0, 0}, point_t{0, -1, 0}, point_t{0, 0, 0}, 1, ARC_CCW});
+                    cadDrawArc(arc_t{point_t{-1, 0, 0}, point_t{0, -1, 0}, point_t{0, 0, 0}, 1, ARC_CCW});
                   }
                   if (key == 21) //CTRL+u
                   {

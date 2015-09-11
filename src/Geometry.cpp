@@ -154,3 +154,7 @@ float geoGetArcStartAngle(arc_t a)
 {
   return atan2(a.start.y - a.center.y, a.start.x - a.center.x);
 }
+float geoGetArcEndAngle(arc_t a)
+{
+  return atan2(a.end.y - a.center.y, a.end.x - a.center.x);
+}

@@ -17,4 +17,5 @@ float geoRadiansToDegrees(float);
 
 point_t geoGetArcEndpoint(arc_t, float);
 float geoGetArcStartAngle(arc_t);
+float geoGetArcEndAngle(arc_t);
 #endif
