@@ -26,8 +26,23 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
                   }
                   if (key == 0) //CTRL+space
                   {
-                    cadDrawArc(arc_t{point_t{-5, 0, 0}, point_t{0, 5, 0}, point_t{0, 0, 0}, 5, ARC_CW});
-                    cadDrawArc(arc_t{point_t{-1, 0, 0}, point_t{0, -1, 0}, point_t{0, 0, 0}, 1, ARC_CCW});
+                    if (geoInTolerance(1.250, 1.251, 0.001))
+                    {
+                      cout << KGREEN << "In Tolerance!\n" << KNORMAL;
+                    }
+                    else
+                    {
+                      cout << KRED << "Out of Tolerance!\n" << KNORMAL;
+                    }
+
+                    //cadDrawArc(arc_t{point_t{5, 0, 0}, point_t{0, -5, 0}, point_t{0, 0, 0}, 5, ARC_CW}); //Works
+                    //cadDrawArc(arc_t{point_t{-3, 0, 0}, point_t{0, 3, 0}, point_t{0, 0, 0}, 3, ARC_CW}); //Works
+
+                    //arc_t a = arc_t{point_t{5, 0, 0}, point_t{0, -5, 0}, point_t{0, 0, 0}, 5, ARC_CW};
+                    //cadDrawArc(a);
+
+
+                    //printf("Arc Length: %.6f\n", geoGetArchLength(a));
                   }
                   if (key == 21) //CTRL+u
                   {

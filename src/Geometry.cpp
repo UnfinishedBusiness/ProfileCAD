@@ -2,6 +2,27 @@
 
 using namespace std;
 
+bool geoInTolerance(float a, float b, float t)
+{
+  float diff;
+  if (a > b)
+  {
+    diff = a - b;
+  }
+  else
+  {
+    diff = b - a;
+  }
+  printf("(geoInTolerance) Difference: %.6f\n", diff);
+  if (diff <= fabs(t) && diff >= -fabs(t))
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
 point_t geoGetLineIntersection(line_t l1, line_t l2)
 {
   float a1 = (l1.start.y - l1.end.y) / (l1.start.x - l1.end.x);
@@ -157,4 +178,22 @@ float geoGetArcStartAngle(arc_t a)
 float geoGetArcEndAngle(arc_t a)
 {
   return atan2(a.end.y - a.center.y, a.end.x - a.center.x);
+}
+float geoGetArchLength(arc_t a)
+{
+  float start_angle = geoGetArcStartAngle(a);
+  float end_angle = geoGetArcEndAngle(a);
+  //printf("Start angle: %.6f\nEnd angle: %.6f\n", start_angle, end_angle);
+  float angle;
+  if (start_angle > end_angle)
+  {
+    angle = start_angle - end_angle;
+    //cout << "start_angle > end_angle - difference= " << angle << "\n";
+  }
+  else
+  {
+    angle = end_angle - start_angle;
+    //cout << "end_angle > start_angle - difference= " << angle << "\n";
+  }
+  return a.radius * angle;
 }

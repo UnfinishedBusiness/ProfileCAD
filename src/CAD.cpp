@@ -120,15 +120,16 @@ void cadRenderLine(line_t l)
   glVertex3f((GLfloat) l.end.x, l.end.y, l.end.z);
   glEnd();
 }
-void cadRenderArc(arc_t a)
+void cadRenderArcDecip(arc_t a)
 {
-  float start_angle = geoGetArcStartAngle(a);
-  float end_angle = geoGetArcEndAngle(a);
-  D cout << KGREEN << "Start angle: " << start_angle << "\n" << KNORMAL;
-  D cout << KGREEN << "End angle: " << end_angle << "\n" << KNORMAL;
-  float r = 5;
+  float step = 0.5;
+  float start_angle;
+  float end_angle;
+  float length;
+  float r = a.radius;
   auto arc_loop = [](arc_t a, float i, float r)
   {
+    cout << KYELLOW << i << "," << KNORMAL;
     point_t p;
     p.x = a.center.x + cos(i) * r;
     p.y = a.center.y + sin(i) * r;
@@ -136,11 +137,74 @@ void cadRenderArc(arc_t a)
     glVertex3f(p.x, p.y, 0);
   };
   glBegin(GL_LINE_STRIP);//since the arc is not a closed curve, this is a strip now
-  for(float i = end_angle; i < start_angle; i=i + 0.001)
+  /*if (a.direction == ARC_CW)
   {
-    arc_loop(a, i, r);
+    D cout << KRED << "\t> Arc CW!\n" << KNORMAL;
+    end_angle = geoGetArcStartAngle(a);
+    start_angle = geoGetArcEndAngle(a);
+
   }
+  else
+  {
+    D cout << KRED << "\t> Arc CCW!\n" << KNORMAL;
+    start_angle = geoGetArcStartAngle(a);
+    end_angle = geoGetArcEndAngle(a);
+
+  }*/
+  start_angle = geoGetArcStartAngle(a);
+  D cout << KGREEN << "Start angle: " << start_angle << "\n" << KNORMAL;
+  //D cout << KGREEN << "End angle: " << end_angle << "\n" << KNORMAL;
+  length = geoGetArchLength(a);
+  D cout << KGREEN << "Length: " << length << "\n" << KNORMAL;
+  if (a.direction == ARC_CW)
+  {
+    D cout << KGREEN << "\tArc CW\n" << KNORMAL;
+    for(float i = start_angle; i < length; i=i + step) arc_loop(a, i, r);
+  }
+  else
+  {
+    D cout << KGREEN << "\tArc CCW\n" << KNORMAL;
+    for(float i = start_angle; i > length; i=i - step) arc_loop(a, i, r);
+  }
+
+
+
+
 	glEnd();
+  fflush(stdout);
+}
+//void drawArc(int x, int y, float startAngle, float endAngle, uint32_t radiusX, uint32_t radiusY,)
+void cadRenderArc(arc_t a)
+{
+    if (a.radius <= 0) return;
+    float step;
+    float startAngle = geoGetArcStartAngle(a);
+    float endAngle = geoGetArcEndAngle(a);
+    point_t p;
+    if (startAngle < endAngle)
+    {
+        step = +0.001;
+        ++ endAngle;
+    }
+    else
+    {
+        step = -0.001;
+        -- endAngle;
+    }
+    printf("Step: %.6f\n EndAngle: %.6f\n", step, endAngle);
+    //return;
+    glBegin(GL_LINE_STRIP);
+    while (startAngle != endAngle)
+    {
+        cout << KYELLOW << startAngle << "," << KNORMAL;
+        point_t p;
+        p.x = a.center.x + cos(startAngle) * a.radius;
+        p.y = a.center.y + sin(startAngle) * a.radius;
+        //cout << KGREEN << ">> " << p.x << ", " << p.y << "\n" << KNORMAL;
+        glVertex3f(p.x, p.y, 0);
+        startAngle += step;
+    }
+    glEnd();
 }
 void cadRedraw()
 {
