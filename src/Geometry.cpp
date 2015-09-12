@@ -13,7 +13,7 @@ bool geoInTolerance(float a, float b, float t)
   {
     diff = b - a;
   }
-  printf("(geoInTolerance) Difference: %.6f\n", diff);
+  //printf("(geoInTolerance) Difference: %.6f, Plus: %.6f, Minus: %.6f\n", diff, fabs(t), -fabs(t));
   if (diff <= fabs(t) && diff >= -fabs(t))
   {
     return true;
@@ -83,7 +83,7 @@ point_t geoGetLineMidpoint(line_t l)
   D printf("(geoGetLineMidpoint) Midpoint of (%.6f, %.6f) --- (%.6f, %.6f) is (%.6f, %.6f)\n", l.start.x, l.start.y, l.end.x, l.end.y, m.x, m.y);
   return m;
 }
-point_t geoRotatePointAroundPoint(point_t p, point_t o, float angle)
+point_t geoRotatePointAroundPoint(point_t p, point_t o, float angle) //angle is in degrees!
 {
   float rad = angle * (3.14159265359 / 180.0);
   return point_t{ cosf(rad) * (p.x - o.x) - sinf(rad) * (p.y - o.y) + o.x,
@@ -94,6 +94,11 @@ float geoRadiansToDegrees(float r)
 {
   return r * 57.2957795;
 }
+float geoDegreesToRadians(float r)
+{
+  return 2 * M_PI * (r / 360);
+}
+
 float geoGetLineAngle(line_t l)
 {
   float angle = atan2f(l.start.y - l.end.y, l.start.x - l.end.x);
@@ -185,6 +190,7 @@ float geoGetArchLength(arc_t a)
   float end_angle = geoGetArcEndAngle(a);
   //printf("Start angle: %.6f\nEnd angle: %.6f\n", start_angle, end_angle);
   float angle;
+  float r;
   if (start_angle > end_angle)
   {
     angle = start_angle - end_angle;
@@ -195,5 +201,24 @@ float geoGetArchLength(arc_t a)
     angle = end_angle - start_angle;
     //cout << "end_angle > start_angle - difference= " << angle << "\n";
   }
-  return a.radius * angle;
+  if (a.direction == ARC_CW)
+  {
+      return a.radius * angle;
+  }
+  else
+  {
+     return (2 * M_PI * a.radius) - (a.radius * angle);
+  }
+}
+float geoGetIncludedAngle(arc_t a)
+{
+  if (a.direction == ARC_CCW)
+  {
+    return fabs(geoGetArcStartAngle(a) - geoGetArcEndAngle(a));
+  }
+  else
+  {
+    return geoDegreesToRadians(360) - fabs(geoGetArcStartAngle(a) - geoGetArcEndAngle(a));
+  }
+
 }

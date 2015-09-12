@@ -26,23 +26,31 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
                   }
                   if (key == 0) //CTRL+space
                   {
-                    if (geoInTolerance(1.250, 1.251, 0.001))
+                    /*if (geoInTolerance(1.250, 1.251, 0.001))
                     {
                       cout << KGREEN << "In Tolerance!\n" << KNORMAL;
                     }
                     else
                     {
                       cout << KRED << "Out of Tolerance!\n" << KNORMAL;
-                    }
+                    }*/
 
-                    //cadDrawArc(arc_t{point_t{5, 0, 0}, point_t{0, -5, 0}, point_t{0, 0, 0}, 5, ARC_CW}); //Works
-                    //cadDrawArc(arc_t{point_t{-3, 0, 0}, point_t{0, 3, 0}, point_t{0, 0, 0}, 3, ARC_CW}); //Works
+                    //Quadrant 1
+                    cadDrawArc(arc_t{point_t{2, 0, 0}, point_t{0, 2, 0}, point_t{0, 0, 0}, 2, ARC_CW}); //Works CW and CCW and Direction is correct!
 
-                    //arc_t a = arc_t{point_t{5, 0, 0}, point_t{0, -5, 0}, point_t{0, 0, 0}, 5, ARC_CW};
-                    //cadDrawArc(a);
+                    //Quadrant 2
+                    //cadDrawArc(arc_t{point_t{-3, 0, 0}, point_t{0, 3, 0}, point_t{0, 0, 0}, 3, ARC_CCW}); //Works CW and CCW but direction is backwards
 
+                    //Quadrant 3
+                    //cadDrawArc(arc_t{point_t{-4, 0, 0}, point_t{0, -4, 0}, point_t{0, 0, 0}, 4, ARC_CCW}); //Works CW a d CCW but direction is backwords
 
-                    //printf("Arc Length: %.6f\n", geoGetArchLength(a));
+                    //Quadrant 4
+                    //cadDrawArc(arc_t{point_t{5, 0, 0}, point_t{0, -5, 0}, point_t{0, 0, 0}, 5, ARC_CCW}); //Works both dirction but is mirrored
+
+                    arc_t a = arc_t{point_t{2, 0, 0}, point_t{0, 2, 0}, point_t{0, 0, 0}, 2, ARC_CW};
+                    printf("Arc CW Length: %.6f\n", geoGetArchLength(a));
+                    a = arc_t{point_t{2, 0, 0}, point_t{0, 2, 0}, point_t{0, 0, 0}, 2, ARC_CCW};
+                    printf("Arc CCW Length: %.6f\n", geoGetArchLength(a));
                   }
                   if (key == 21) //CTRL+u
                   {
@@ -55,7 +63,7 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
                   }
                   if (key == 15) //CTRL+s
                   {
-                    fileOpen("../test/cube.dxf");
+                    fileOpen("../test/simple.dxf");
                   }
                   break;
                case 4 :  D printf("ALT   key %d\n",mod);  break;

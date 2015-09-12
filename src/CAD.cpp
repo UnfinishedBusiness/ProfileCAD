@@ -1,6 +1,7 @@
 #include <CAD.h>
 
 using namespace std;
+
 #define CAD_ARC 0x00
 #define CAD_LINE 0x01
 
@@ -120,7 +121,7 @@ void cadRenderLine(line_t l)
   glVertex3f((GLfloat) l.end.x, l.end.y, l.end.z);
   glEnd();
 }
-void cadRenderArcDecip(arc_t a)
+void cadRenderArcDecip1(arc_t a)
 {
   float step = 0.5;
   float start_angle;
@@ -137,20 +138,6 @@ void cadRenderArcDecip(arc_t a)
     glVertex3f(p.x, p.y, 0);
   };
   glBegin(GL_LINE_STRIP);//since the arc is not a closed curve, this is a strip now
-  /*if (a.direction == ARC_CW)
-  {
-    D cout << KRED << "\t> Arc CW!\n" << KNORMAL;
-    end_angle = geoGetArcStartAngle(a);
-    start_angle = geoGetArcEndAngle(a);
-
-  }
-  else
-  {
-    D cout << KRED << "\t> Arc CCW!\n" << KNORMAL;
-    start_angle = geoGetArcStartAngle(a);
-    end_angle = geoGetArcEndAngle(a);
-
-  }*/
   start_angle = geoGetArcStartAngle(a);
   D cout << KGREEN << "Start angle: " << start_angle << "\n" << KNORMAL;
   //D cout << KGREEN << "End angle: " << end_angle << "\n" << KNORMAL;
@@ -159,52 +146,79 @@ void cadRenderArcDecip(arc_t a)
   if (a.direction == ARC_CW)
   {
     D cout << KGREEN << "\tArc CW\n" << KNORMAL;
-    for(float i = start_angle; i < length; i=i + step) arc_loop(a, i, r);
   }
   else
   {
     D cout << KGREEN << "\tArc CCW\n" << KNORMAL;
-    for(float i = start_angle; i > length; i=i - step) arc_loop(a, i, r);
   }
-
-
-
-
+  for(float i = start_angle; i > length; i=i - step) arc_loop(a, i, r);
 	glEnd();
   fflush(stdout);
 }
 //void drawArc(int x, int y, float startAngle, float endAngle, uint32_t radiusX, uint32_t radiusY,)
-void cadRenderArc(arc_t a)
+void cadRenderArcDecip(arc_t a) //Fuck me!!!!
 {
     if (a.radius <= 0) return;
     float step;
     float startAngle = geoGetArcStartAngle(a);
     float endAngle = geoGetArcEndAngle(a);
-    point_t p;
-    if (startAngle < endAngle)
-    {
-        step = +0.001;
-        ++ endAngle;
-    }
-    else
-    {
-        step = -0.001;
-        -- endAngle;
-    }
-    printf("Step: %.6f\n EndAngle: %.6f\n", step, endAngle);
+    float arcLength = geoGetArchLength(a);
+    float stepAngle;
+    float includedAngle = geoRadiansToDegrees(geoGetIncludedAngle(a));
+    arc_t gen;
+    //if (startAngle < endAngle)
+    gen.radius = a.radius;
+    gen.center = a.center;
+    gen.direction = a.direction;
+    step = arcLength / includedAngle;
+    gen.start = a.start;
+    gen.end = a.start;
+    printf("Include arc angle: %.6f\n", geoRadiansToDegrees(geoGetIncludedAngle(a)));
+    //return;
+    printf("Step: %.6f\nstartAngle: %.6f\nendAngle: %.6f\narcLength: %.6f\n", step, startAngle, endAngle, arcLength);
+    //printf("Test: %.6f\n", geoRadiansToDegrees(atan2(-5, 0)));
     //return;
     glBegin(GL_LINE_STRIP);
-    while (startAngle != endAngle)
+    int over_run = abs(7 / step);
+    float x = 0;
+    float y = 0;
+    stepAngle = startAngle;
+    while(includedAngle > x)
     {
-        cout << KYELLOW << startAngle << "," << KNORMAL;
-        point_t p;
-        p.x = a.center.x + cos(startAngle) * a.radius;
-        p.y = a.center.y + sin(startAngle) * a.radius;
-        //cout << KGREEN << ">> " << p.x << ", " << p.y << "\n" << KNORMAL;
-        glVertex3f(p.x, p.y, 0);
-        startAngle += step;
+      gen.end.x = a.center.x + cos(stepAngle) * gen.radius;
+      gen.end.y = a.center.y + sin(stepAngle) * gen.radius;
+      glVertex3f(gen.end.x, gen.end.y, 0);
+      cout << KYELLOW << "Step " << x << " / " << includedAngle << "\n" << KNORMAL;
+      cout << KYELLOW << "\t Current radian: " << stepAngle << "\n" << KNORMAL;
+      if (gen.direction == ARC_CCW)
+      {
+          stepAngle += geoDegreesToRadians(step);
+      }
+      else
+      {
+        stepAngle -= geoDegreesToRadians(step);
+      }
+      x += step;
     }
     glEnd();
+}
+void cadRenderArc(arc_t a)
+{
+  float includedAngle = geoRadiansToDegrees(geoGetIncludedAngle(a));
+  line_t l = line_t{ point_t{a.start.x, a.start.y} , point_t{a.end.x, a.end.y} };
+  glBegin(GL_LINE_STRIP);
+  //Draw start line
+  glVertex3f(a.center.x, a.start.y, 0);
+  glVertex3f(a.start.x, a.start.y, 0);
+
+  l = geoRotateLine(l, a.center, 5);
+  glVertex3f(l.start.x, l.start.y, 0);
+  glVertex3f(l.end.x, l.end.y, 0);
+
+  //Draw end line
+  glVertex3f(a.center.x, a.start.y, 0);
+  glVertex3f(a.end.x, a.end.y, 0);
+  glEnd();
 }
 void cadRedraw()
 {
