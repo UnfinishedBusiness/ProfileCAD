@@ -89,7 +89,7 @@ void sceneDraw(void)
   glRotatef(-ay, 0.0, 1.0, 0.0);
   glTranslatef(tx, ty, tz);
   //D printf("\nscale = %f\n", scale);
-  glScalef(scale, scale+0.05, scale);
+  glScalef(scale, scale, scale);
   //scale = 1; //Dont scale again;
   //gluLookAt( 10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 10.0, 10.0, 10.0 );
   cadRender();

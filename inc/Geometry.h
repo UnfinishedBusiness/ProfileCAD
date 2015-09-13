@@ -20,5 +20,7 @@ float geoGetArchLength(arc_t a);
 point_t geoGetArcEndpoint(arc_t, float);
 float geoGetArcStartAngle(arc_t);
 float geoGetArcEndAngle(arc_t);
+point_t geoGetArcPoint(arc_t, float);
+
 float geoGetIncludedAngle(arc_t);
 #endif

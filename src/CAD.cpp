@@ -37,7 +37,7 @@ void cadDrawLine(line_t l)
 }
 void cadDrawLine(point_t start, point_t end)
 {
-  D printf("(cadDrawLine) Drawing line at (%.6f, %.6f, %.6f) ===== (%.6f, %.6f, %.6f)\n", start.x, start.y, start.z, end.x, end.y, end.z);
+  //D printf("(cadDrawLine) Drawing line at (%.6f, %.6f, %.6f) ===== (%.6f, %.6f, %.6f)\n", start.x, start.y, start.z, end.x, end.y, end.z);
   cadAppend(cadEntity{CAD_LINE, cadColorAttribute, line_t{ start, end }, arc_t{} });
 }
 void cadDrawArc(arc_t a)
@@ -100,7 +100,7 @@ void cadRender()
       }
       if (cadEntityArray[i].Type == CAD_ARC && !cadEntityArray[i].Removed && cadEntityArray[i].Arc.radius > 0)
       {
-        D printf("(cadRender) Found arc!\n");
+        //D printf("(cadRender) Found arc!\n");
         if (cadEntityArray[i].Selected)
         {
           sceneColor(WHITE);
@@ -125,9 +125,11 @@ void cadRenderArc(arc_t a)
 {
   float includedAngle = geoRadiansToDegrees(geoGetIncludedAngle(a));
   line_t l = line_t{ point_t{a.center.x, a.center.y,} , point_t{a.start.x, a.start.y} };
-  //Draw start line
   glBegin(GL_LINE_STRIP);
-  glVertex3f(a.start.x, a.start.y, 0);
+  if (a.start.x != a.end.x && a.start.y != a.end.y)
+  {
+    glVertex3f(a.start.x, a.start.y, 0);
+  }
   int steps = geoRadiansToDegrees(geoGetIncludedAngle(a));
   float inc_angle = 1; //Degrees
   for (int x=0; x < steps; x++)
@@ -140,10 +142,13 @@ void cadRenderArc(arc_t a)
     {
       l = geoRotateLine(l, a.center, inc_angle);
     }
-    //glVertex3f(l.start.x, l.start.y, 0);
     glVertex3f(l.end.x, l.end.y, 0);
   }
-  glVertex3f(a.end.x, a.end.y, 0);
+  if (a.start.x != a.end.x && a.start.y != a.end.y)
+  {
+    glVertex3f(a.end.x, a.end.y, 0);
+  }
+
   glEnd();
 }
 void cadRedraw()

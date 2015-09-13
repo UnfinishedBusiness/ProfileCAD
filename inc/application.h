@@ -16,6 +16,7 @@
 
 #include <CAD.h>
 #include <CLI.h>
+#include <Debug.h>
 #include <FileIO.h>
 #include <Geometry.h>
 #include <Keyboard.h>
@@ -31,7 +32,7 @@
 #define EXIT cout << "Bye!\n"; exit(0);
 
 #define WINDOW_HEIGHT 800
-#define WINDOW_WIDTH 1100
+#define WINDOW_WIDTH 800
 #define WINDOW_TITLE "ProfileCAD"
 
 #define DEBUG
