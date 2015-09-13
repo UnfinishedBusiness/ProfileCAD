@@ -36,16 +36,16 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
                     }*/
 
                     //Quadrant 1
-                    cadDrawArc(arc_t{point_t{2, 0, 0}, point_t{0, 2, 0}, point_t{0, 0, 0}, 2, ARC_CW}); //Works CW and CCW and Direction is correct!
+                    //cadDrawArc(arc_t{point_t{2, 0, 0}, point_t{0, 2, 0}, point_t{0, 0, 0}, 2, ARC_CCW}); //Works CW and CCW and Direction is correct!
 
                     //Quadrant 2
-                    //cadDrawArc(arc_t{point_t{-3, 0, 0}, point_t{0, 3, 0}, point_t{0, 0, 0}, 3, ARC_CCW}); //Works CW and CCW but direction is backwards
+                    //cadDrawArc(arc_t{point_t{-3, 0, 0}, point_t{0, 3, 0}, point_t{0, 0, 0}, 3, ARC_CW}); //Works CW and CCW and Direction is correct!
 
                     //Quadrant 3
-                    //cadDrawArc(arc_t{point_t{-4, 0, 0}, point_t{0, -4, 0}, point_t{0, 0, 0}, 4, ARC_CCW}); //Works CW a d CCW but direction is backwords
+                    //cadDrawArc(arc_t{point_t{-4, 0, 0}, point_t{0, -4, 0}, point_t{0, 0, 0}, 4, ARC_CW}); //Works CW and CCW and Direction is correct!
 
                     //Quadrant 4
-                    //cadDrawArc(arc_t{point_t{5, 0, 0}, point_t{0, -5, 0}, point_t{0, 0, 0}, 5, ARC_CCW}); //Works both dirction but is mirrored
+                    //cadDrawArc(arc_t{point_t{5, 0, 0}, point_t{0, -5, 0}, point_t{0, 0, 0}, 5, ARC_CW}); //Works CW and CCW and Direction is correct!
 
                     arc_t a = arc_t{point_t{2, 0, 0}, point_t{0, 2, 0}, point_t{0, 0, 0}, 2, ARC_CW};
                     printf("Arc CW Length: %.6f\n", geoGetArchLength(a));

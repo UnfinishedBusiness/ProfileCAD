@@ -84,7 +84,7 @@ struct color_t{
 
 
 #define ZERO 1e-10
-#define SMALL 0.01
+#define SMALL 0.2
 #define DELTA 1e-10
 #define isZero(A) ( (A < ZERO) && (A > -ZERO) )
 #define isSmall(A) ( (A < SMALL) && (A > -SMALL) )

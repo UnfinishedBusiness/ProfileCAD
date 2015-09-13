@@ -205,18 +205,35 @@ void cadRenderArcDecip(arc_t a) //Fuck me!!!!
 void cadRenderArc(arc_t a)
 {
   float includedAngle = geoRadiansToDegrees(geoGetIncludedAngle(a));
-  line_t l = line_t{ point_t{a.start.x, a.start.y} , point_t{a.end.x, a.end.y} };
-  glBegin(GL_LINE_STRIP);
-  //Draw start line
-  glVertex3f(a.center.x, a.start.y, 0);
-  glVertex3f(a.start.x, a.start.y, 0);
+  line_t l = line_t{ point_t{a.center.x, a.center.y,} , point_t{a.start.x, a.start.y} };
 
-  l = geoRotateLine(l, a.center, 5);
-  glVertex3f(l.start.x, l.start.y, 0);
-  glVertex3f(l.end.x, l.end.y, 0);
+  //Draw start line
+  glBegin(GL_LINE_STRIP);
+  glVertex3f(a.center.x, a.center.y, 0);
+  glVertex3f(a.start.x, a.start.y, 0);
+  glEnd();
+
+  int steps = geoRadiansToDegrees(geoGetIncludedAngle(a));
+  float inc_angle = 1; //Degrees
+  for (int x=0; x < steps; x++)
+  {
+    glBegin(GL_LINE_STRIP);
+    if (a.direction == ARC_CW)
+    {
+      l = geoRotateLine(l, a.center, -inc_angle);
+    }
+    else
+    {
+      l = geoRotateLine(l, a.center, inc_angle);
+    }
+    glVertex3f(l.start.x, l.start.y, 0);
+    glVertex3f(l.end.x, l.end.y, 0);
+    glEnd();
+  }
 
   //Draw end line
-  glVertex3f(a.center.x, a.start.y, 0);
+  glBegin(GL_LINE_STRIP);
+  glVertex3f(a.center.x, a.center.y, 0);
   glVertex3f(a.end.x, a.end.y, 0);
   glEnd();
 }

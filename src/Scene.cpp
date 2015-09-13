@@ -31,7 +31,7 @@ point_t sceneGetViewAngle()
 }
 void sceneIncZoom(float inc)
 {
-  if (inc > 0)
+  if (inc > 0.01)
   {
     //inc = inc + 1;
     scale = scale + 0.01;

@@ -87,8 +87,10 @@ point_t geoRotatePointAroundPoint(point_t p, point_t o, float angle) //angle is 
 {
   float rad = angle * (3.14159265359 / 180.0);
   return point_t{ cosf(rad) * (p.x - o.x) - sinf(rad) * (p.y - o.y) + o.x,
-                    sinf(rad) * (p.x - o.x) + cosf(rad) * (p.y - o.y) + o.y,
-                    0 };
+                  sinf(rad) * (p.x - o.x) + cosf(rad) * (p.y - o.y) + o.y, 0 };
+
+  //return point_t{ ((p.x - o.x) * cosf(rad)) - ((o.y - p.y) * sinf(rad)) + o.x ,
+                  //((o.y - p.y) * cosf(rad)) - ((p.x - o.x) * sinf(rad)) + p.y};
 }
 float geoRadiansToDegrees(float r)
 {
@@ -212,7 +214,21 @@ float geoGetArchLength(arc_t a)
 }
 float geoGetIncludedAngle(arc_t a)
 {
+  bool direction;
   if (a.direction == ARC_CCW)
+  {
+    direction = true;
+  }
+  else
+  {
+    direction = false;
+  }
+  if ((360 + (int)geoGetArcStartAngle(a) - (int)geoGetArcEndAngle(a)) % 360 < 180)
+  {
+    //cout << "True!\n";
+    direction = !direction;
+  }
+  if (direction)
   {
     return fabs(geoGetArcStartAngle(a) - geoGetArcEndAngle(a));
   }
@@ -220,5 +236,7 @@ float geoGetIncludedAngle(arc_t a)
   {
     return geoDegreesToRadians(360) - fabs(geoGetArcStartAngle(a) - geoGetArcEndAngle(a));
   }
+
+
 
 }
