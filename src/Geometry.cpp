@@ -86,8 +86,8 @@ point_t geoGetLineMidpoint(line_t l)
 point_t geoRotatePointAroundPoint(point_t p, point_t o, float angle) //angle is in degrees!
 {
   float rad = angle * (3.14159265359 / 180.0);
-  return point_t{ cosf(rad) * (p.x - o.x) - sinf(rad) * (p.y - o.y) + o.x,
-                  sinf(rad) * (p.x - o.x) + cosf(rad) * (p.y - o.y) + o.y, 0 };
+  return point_t{ geoRound(cosf(rad) * (p.x - o.x) - sinf(rad) * (p.y - o.y) + o.x),
+                  geoRound(sinf(rad) * (p.x - o.x) + cosf(rad) * (p.y - o.y) + o.y), 0 };
 }
 float geoRadiansToDegrees(float r)
 {
@@ -185,7 +185,7 @@ float geoGetArcEndAngle(arc_t a)
 }
 point_t geoGetArcPoint(arc_t a, float angle) //Angle is in degrees
 {
-  point_t e = point_t{ a.radius, 0, 0 };
+  point_t e = point_t{ a.radius + a.center.x, a.center.y, 0 };
   return geoRotatePointAroundPoint(e, a.center, angle);
 }
 float geoGetArchLength(arc_t a)
@@ -247,4 +247,8 @@ float geoGetIncludedAngle(arc_t a)
   {
     return angle;
   }
+}
+float geoRound(float x) //Round to 6 places
+{
+   return round(1000000 * x) / 1000000;
 }

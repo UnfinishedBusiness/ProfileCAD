@@ -211,17 +211,17 @@ void fileReadDXF()
                 getline (ifs, line);
                 a.center.z = atof((char *)line.c_str());
                 break;
-            case 40: //Secondary X coordinat (11-18)
+            case 40: //Arc radius
                 //D cout << "\tFound arc radius!\n";
                 getline (ifs, line);
                 a.radius = atof((char *)line.c_str());
                 break;
-            case 50: //Secondary Y coordinat (21-28)
+            case 50: //Start angle
                 //D cout << "\tFound start angle!\n";
                 getline (ifs, line);
                 arc_start_angle = atof((char *)line.c_str());
                 break;
-            case 51: //Secondary Z coordinat (31-37)
+            case 51: //End angle
                 //D cout << "\tFound end angle!\n";
                 getline (ifs, line);
                 arc_end_angle = atof((char *)line.c_str());
@@ -240,16 +240,9 @@ void fileReadDXF()
           {
             case 0: //End of entity
                 //D cout << KRED << "\tDrawing Entity!\n" << KNORMAL;
-                if (arc_start_angle < arc_end_angle)
-                {
-                  a.direction = ARC_CCW;
-                }
-                else
-                {
-                  a.direction = ARC_CW;
-                }
-                a.start = point_t{a.center.x + a.radius, a.center.y + a.radius};
-                a.end = point_t{a.center.x + a.radius, a.center.y + a.radius};
+                a.direction = ARC_CW;
+                a.start = point_t{a.center.x + a.radius, a.center.y};
+                a.end = point_t{a.center.x + a.radius, a.center.y};
                 //D printf("Start: %.6f, %.6f\nEnd: %.6f, %.6f\n", a.start.x, a.start.y, a.end.x, a.end.y);
                 debugDumpArcStructure(a);
                 cadSetColor(CurrentColor);
@@ -297,8 +290,7 @@ void fileReadDXF()
               getline (ifs, line);
               a.center.z = atof((char *)line.c_str());
               break;
-            case 40: //Secondary X coordinate (11-18)
-              //D cout << "\tFound arc radius!\n";
+            case 40: //Circle Radius
               getline (ifs, line);
               a.radius = atof((char *)line.c_str());
               break;

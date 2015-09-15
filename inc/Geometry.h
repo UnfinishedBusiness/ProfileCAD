@@ -23,4 +23,5 @@ float geoGetArcEndAngle(arc_t);
 point_t geoGetArcPoint(arc_t, float);
 
 float geoGetIncludedAngle(arc_t);
+float geoRound(float);
 #endif
