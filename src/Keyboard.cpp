@@ -112,9 +112,9 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
 
         case 13 : cliReturn(); break;
 
-        case 96 :
-          cadSetColor(RED);
-          cadDrawLine(point_t{-6,-8}, point_t{5,2});
+        case 96 : //backtick key
+          //cadSetColor(RED);
+          //cadDrawLine(point_t{-6,-8}, point_t{5,2});
           break;
       }
       //D printf("(keyboardCallbackNormal) CmdInput = %s\n", CmdInput.c_str());
