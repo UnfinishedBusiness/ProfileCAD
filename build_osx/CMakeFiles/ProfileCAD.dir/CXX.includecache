@@ -16,6 +16,10 @@ Scene.h
 application.h
 -
 
+/Users/admin/Documents/Projects/ProfileCAD/src/../inc/Debug.h
+application.h
+-
+
 /Users/admin/Documents/Projects/ProfileCAD/src/../inc/FileIO.h
 application.h
 -
@@ -81,6 +85,8 @@ CAD.h
 -
 CLI.h
 -
+Debug.h
+-
 FileIO.h
 -
 Geometry.h
@@ -104,6 +110,10 @@ CAD.h
 
 /Users/admin/Documents/Projects/ProfileCAD/src/CLI.cpp
 CLI.h
+-
+
+/Users/admin/Documents/Projects/ProfileCAD/src/Debug.cpp
+Debug.h
 -
 
 /Users/admin/Documents/Projects/ProfileCAD/src/FileIO.cpp

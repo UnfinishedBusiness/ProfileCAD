@@ -177,6 +177,33 @@ CLI.cpp.s:
 	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/CLI.cpp.s
 .PHONY : CLI.cpp.s
 
+Debug.o: Debug.cpp.o
+
+.PHONY : Debug.o
+
+# target to build an object file
+Debug.cpp.o:
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/Debug.cpp.o
+.PHONY : Debug.cpp.o
+
+Debug.i: Debug.cpp.i
+
+.PHONY : Debug.i
+
+# target to preprocess a source file
+Debug.cpp.i:
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/Debug.cpp.i
+.PHONY : Debug.cpp.i
+
+Debug.s: Debug.cpp.s
+
+.PHONY : Debug.s
+
+# target to generate assembly for a file
+Debug.cpp.s:
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/Debug.cpp.s
+.PHONY : Debug.cpp.s
+
 FileIO.o: FileIO.cpp.o
 
 .PHONY : FileIO.o
@@ -435,6 +462,9 @@ help:
 	@echo "... CLI.o"
 	@echo "... CLI.i"
 	@echo "... CLI.s"
+	@echo "... Debug.o"
+	@echo "... Debug.i"
+	@echo "... Debug.s"
 	@echo "... FileIO.o"
 	@echo "... FileIO.i"
 	@echo "... FileIO.s"
