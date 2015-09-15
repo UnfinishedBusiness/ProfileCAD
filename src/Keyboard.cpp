@@ -26,20 +26,11 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
                   }
                   if (key == 0) //CTRL+space
                   {
-                    /*if (geoInTolerance(1.250, 1.251, 0.001))
-                    {
-                      cout << KGREEN << "In Tolerance!\n" << KNORMAL;
-                    }
-                    else
-                    {
-                      cout << KRED << "Out of Tolerance!\n" << KNORMAL;
-                    }*/
-
-                    cadDrawArc(arc_t{point_t{1, 0, 0}, point_t{-1, 0, 0}, point_t{0, 0, 0}, 1, ARC_CW}); //Works CW and CCW and Direction is correct!
-                    cadDrawArc(arc_t{point_t{2, 0, 0}, point_t{0, 2, 0}, point_t{0, 0, 0}, 2, ARC_CCW}); //Works CW and CCW and Direction is correct!
-                    cadDrawArc(arc_t{point_t{-3, 0, 0}, point_t{0, 3, 0}, point_t{0, 0, 0}, 3, ARC_CW}); //Works CW and CCW and Direction is correct!
-                    cadDrawArc(arc_t{point_t{-4, 0, 0}, point_t{0, -4, 0}, point_t{0, 0, 0}, 4, ARC_CCW}); //Works CW and CCW and Direction is correct!
-                    cadDrawArc(arc_t{point_t{5, 0, 0}, point_t{0, -5, 0}, point_t{0, 0, 0}, 5, ARC_CW}); //Works CW and CCW and Direction is correct!
+                    //cadDrawArc(arc_t{point_t{1, 0, 0}, point_t{-1, 0, 0}, point_t{0, 0, 0}, 1, ARC_CW}); //Works CW and CCW and Direction is correct!
+                    //cadDrawArc(arc_t{point_t{2, 0, 0}, point_t{0, 2, 0}, point_t{0, 0, 0}, 2, ARC_CCW}); //Works CW and CCW and Direction is correct!
+                    //cadDrawArc(arc_t{point_t{-3, 0, 0}, point_t{0, 3, 0}, point_t{0, 0, 0}, 3, ARC_CW}); //Works CW and CCW and Direction is correct!
+                    //cadDrawArc(arc_t{point_t{-4, 0, 0}, point_t{0, -4, 0}, point_t{0, 0, 0}, 4, ARC_CCW}); //Works CW and CCW and Direction is correct!
+                    //cadDrawArc(arc_t{point_t{5, 0, 0}, point_t{0, -5, 0}, point_t{0, 0, 0}, 5, ARC_CW}); //Works CW and CCW and Direction is correct!
                   }
                   if (key == 21) //CTRL+u
                   {

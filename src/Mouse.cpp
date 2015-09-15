@@ -29,6 +29,7 @@ void mouseInit()
 {
   glutMouseFunc(mouseCallback);
   glutMotionFunc(mouseMotionCallback);
+  glutPassiveMotionFunc(mousePassiceMotionCallback);
 }
 
 void mouseCallback(int btn, int state, int x, int y)
@@ -174,4 +175,9 @@ void mouseMotionCallback(int x, int y)
     }
     mouseLast.x = x;
     mouseLast.y = y;
+}
+void mousePassiceMotionCallback(int x, int y)
+{
+  D printf("%sX: %d, Y: %d%s\r", KGREEN, x, y, KNORMAL);
+  fflush(stdout);
 }
