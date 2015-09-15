@@ -3,8 +3,9 @@
 
 Controls
 --------
-Ctrl+click orbit
-Mouse middle-click+drag panning
+Ctrl+click orbit<br>
+Mouse middle-click+drag panning<br>
+Mouse scroll zoom<br>
 
 Fileformats
 -----------
