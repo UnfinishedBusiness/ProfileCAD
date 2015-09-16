@@ -60,6 +60,7 @@ void *cliCreateLineEndpoints()
   point_t End = e[1].SelectedAt;
   cadSetColor(CurrentColor);
   cadDrawLine(Start, End);
+  cliScreenUnSelectAll();
   return NULL;
 }
 void *cliCreateLineVerticalEndpoint()
@@ -166,6 +167,7 @@ void *cliCreateLinePerpendicular()
       point_t End = p.end;
       cadSetColor(CurrentColor);
       cadDrawLine(Start, End);
+      cliScreenUnSelectAll();
       return NULL;
     }
     return NULL;
@@ -191,6 +193,7 @@ void *cliCreateLineParallel()
       point_t End = p.end;
       cadSetColor(CurrentColor);
       cadDrawLine(Start, End);
+      cliScreenUnSelectAll();
       return NULL;
     }
     return NULL;

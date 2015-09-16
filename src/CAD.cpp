@@ -2,6 +2,11 @@
 
 using namespace std;
 
+#define CAD_ARC 0x00
+#define CAD_LINE 0x01
+
+cadSelectionBox_t cadSelectionBox;
+
 vector<cadEntity> cadEntityArray;
 int cadEntityArrayIndex;
 color_t cadColorAttribute = GREEN;
@@ -79,8 +84,30 @@ std::vector<cadEntity> cadGetSelected()
   }
   return e;
 }
+void cadShowSelectionBox(point_t p)
+{
+  //line_t geoGetPerpendicularLine(line_t, point_t, float);
+  //line_t geoGetParallelLine(line_t, point_t, float);
+  cadSelectionBox.a.radius = 0.1;
+  cadSelectionBox.a.center = p;
+  cadSelectionBox.a.start = p;
+  cadSelectionBox.a.start.x += cadSelectionBox.a.radius;
+  cadSelectionBox.a.end = p;
+  cadSelectionBox.a.end.x += cadSelectionBox.a.radius;
+  cadSelectionBox.visable = true;
+}
+void cadHideSelectionBox()
+{
+  cadSelectionBox.visable = false;
+}
 void cadRender()
 {
+  if (cadSelectionBox.visable == true)
+  {
+    //printf("Rendering selection box!\n");
+    sceneColor(DARKGREY);
+    cadRenderArc(cadSelectionBox.a);
+  }
   for (int i = 0; i < cadEntityArrayIndex; i++)
   {
       if (cadEntityArray[i].Type == CAD_LINE && !cadEntityArray[i].Removed) //Where a line and its not been removed
@@ -98,7 +125,7 @@ void cadRender()
       if (cadEntityArray[i].Type == CAD_ARC && !cadEntityArray[i].Removed && cadEntityArray[i].Arc.radius > 0)
       {
         //D printf("(cadRender) Found arc!\n");
-        if (cadEntityArray[i].Selected)
+        if (cadEntityArray[i].Selected || cadEntityArray[i].MouseOver)
         {
           sceneColor(WHITE);
         }
@@ -154,19 +181,6 @@ void cadRedraw()
 }
 point_t cadScreenCordToCadCord(int x, int y)
 {
-  /*GLdouble ox=0.0,oy=0.0,oz=0.0;
-  GLint viewport[4];
-  GLdouble modelview[16],projection[16];
-  GLfloat wx=x,wy,wz;
-  glGetIntegerv(GL_VIEWPORT,viewport);
-  y=viewport[3]-y;
-  wy=y;
-  glGetDoublev(GL_MODELVIEW_MATRIX,modelview);
-  glGetDoublev(GL_PROJECTION_MATRIX,projection);
-  glReadPixels(x,y,1,1,GL_DEPTH_COMPONENT,GL_FLOAT,&wz);
-  gluUnProject(wx,wy,wz,modelview,projection,viewport,&ox,&oy,&oz);
-  return point_t{(float)ox, (float)oy, (float)oz};*/
-
   GLint viewport[4]; //var to hold the viewport info
   GLdouble modelview[16]; //var to hold the modelview info
   GLdouble projection[16]; //var to hold the projection matrix info

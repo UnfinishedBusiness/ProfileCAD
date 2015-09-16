@@ -46,9 +46,49 @@ void mouseCallback(int btn, int state, int x, int y)
         for (int a = 0; a < cadGetEntityArrayIndex(); a++)
         {
           e = cadGetEntityArray(a);
-          //D printf("Entity %d start(%.6f, %.6f) end(%.6f, %.6f)\n", a, e.Line.start.x, e.Line.start.y, e.Line.end.x, e.Line.end.y);
-
-          if (isSimilar(pos.x, e.Line.start.x) && isSimilar(pos.y, e.Line.start.y) && !e.Removed)
+          if (isSimilar(pos.x, e.Arc.start.x) && isSimilar(pos.y, e.Arc.start.y) && !e.Removed && e.Type == CAD_ARC)
+          {
+            if (mod == GLUT_ACTIVE_CTRL)
+            {
+              e.Selected = false;
+            }
+            else
+            {
+              e.Selected = true;
+            }
+            e.SelectedAt = e.Arc.start;
+            cadEdit(a, e);
+            return;
+          }
+          if (isSimilar(pos.x, e.Arc.end.x) && isSimilar(pos.y, e.Arc.end.y) && !e.Removed && e.Type == CAD_ARC)
+          {
+            if (mod == GLUT_ACTIVE_CTRL)
+            {
+              e.Selected = false;
+            }
+            else
+            {
+              e.Selected = true;
+            }
+            e.SelectedAt = e.Arc.end;
+            cadEdit(a, e);
+            return;
+          }
+          if (isSimilar(pos.x, e.Arc.center.x) && isSimilar(pos.y, e.Arc.center.y) && !e.Removed && e.Type == CAD_ARC)
+          {
+            if (mod == GLUT_ACTIVE_CTRL)
+            {
+              e.Selected = false;
+            }
+            else
+            {
+              e.Selected = true;
+            }
+            e.SelectedAt = e.Arc.center;
+            cadEdit(a, e);
+            return;
+          }
+          if (isSimilar(pos.x, e.Line.start.x) && isSimilar(pos.y, e.Line.start.y) && !e.Removed && e.Type == CAD_LINE)
           {
             D printf("\t%s Entity #%d Start point Clicked!%s\n", KGREEN, a, KNORMAL);
             if (mod == GLUT_ACTIVE_CTRL)
@@ -63,7 +103,7 @@ void mouseCallback(int btn, int state, int x, int y)
             cadEdit(a, e);
             return;
           }
-          if (isSimilar(pos.x, e.Line.end.x) && isSimilar(pos.y, e.Line.end.y) && !e.Removed)
+          if (isSimilar(pos.x, e.Line.end.x) && isSimilar(pos.y, e.Line.end.y) && !e.Removed && e.Type == CAD_LINE)
           {
             D printf("\t%s Entity #%d End point Clicked!%s\n", KGREEN, a, KNORMAL);
             if (mod == GLUT_ACTIVE_CTRL)
@@ -78,7 +118,7 @@ void mouseCallback(int btn, int state, int x, int y)
             cadEdit(a, e);
             return;
           }
-          if (isSimilar(pos.x, geoGetLineMidpoint(e.Line).x) && isSimilar(pos.y, geoGetLineMidpoint(e.Line).y))
+          if (isSimilar(pos.x, geoGetLineMidpoint(e.Line).x) && isSimilar(pos.y, geoGetLineMidpoint(e.Line).y) && !e.Removed && e.Type == CAD_LINE)
           {
             if (mod == GLUT_ACTIVE_CTRL)
             {
@@ -137,16 +177,54 @@ void mousePassiceMotionCallback(int x, int y)
   for (int a = 0; a < cadGetEntityArrayIndex(); a++)
   {
     e = cadGetEntityArray(a);
-    if ((isSimilar(pos.x, geoGetLineMidpoint(e.Line).x) && isSimilar(pos.y, geoGetLineMidpoint(e.Line).y) || isSimilar(pos.x, e.Line.start.x) && isSimilar(pos.y, e.Line.start.y) || isSimilar(pos.x, e.Line.end.x) && isSimilar(pos.y, e.Line.end.y)) && !e.Removed && e.Type == CAD_LINE)
+    if (isSimilar(pos.x, e.Arc.start.x) && isSimilar(pos.y, e.Arc.start.y) && !e.Removed && e.Type == CAD_ARC)
     {
+      cadShowSelectionBox(e.Arc.start);
       e.MouseOver = true;
       cadEdit(a, e);
-      break; //Only highlight one entity
+      return;
+    }
+    else if (isSimilar(pos.x, e.Arc.end.x) && isSimilar(pos.y, e.Arc.end.y) && !e.Removed && e.Type == CAD_ARC)
+    {
+      cadShowSelectionBox(e.Arc.end);
+      e.MouseOver = true;
+      cadEdit(a, e);
+      return;
+    }
+    else if (isSimilar(pos.x, e.Arc.center.x) && isSimilar(pos.y, e.Arc.center.y) && !e.Removed && e.Type == CAD_ARC)
+    {
+      cadShowSelectionBox(e.Arc.center);
+      e.MouseOver = true;
+      cadEdit(a, e);
+      return;
+    }
+    else if (isSimilar(pos.x, e.Line.start.x) && isSimilar(pos.y, e.Line.start.y) && !e.Removed && e.Type == CAD_LINE)
+    {
+      cadShowSelectionBox(e.Line.start);
+      e.MouseOver = true;
+      cadEdit(a, e);
+      return;
+    }
+    else if (isSimilar(pos.x, e.Line.end.x) && isSimilar(pos.y, e.Line.end.y) && !e.Removed && e.Type == CAD_LINE)
+    {
+      cadShowSelectionBox(e.Line.end);
+      e.MouseOver = true;
+      cadEdit(a, e);
+      return;
+    }
+    else if (isSimilar(pos.x, geoGetLineMidpoint(e.Line).x) && isSimilar(pos.y, geoGetLineMidpoint(e.Line).y) && !e.Removed && e.Type == CAD_LINE)
+    {
+      cadShowSelectionBox(geoGetLineMidpoint(e.Line));
+      e.MouseOver = true;
+      cadEdit(a, e);
+      return; //Only highlight one entity
     }
     else
     {
       e.MouseOver = false;
       cadEdit(a, e);
+      cadHideSelectionBox();
+      cadRedraw();
     }
   }
   fflush(stdout);

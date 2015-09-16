@@ -6,6 +6,11 @@
 #define CAD_ARC 0x00
 #define CAD_LINE 0x01
 
+struct cadSelectionBox_t{
+  arc_t a;
+  bool visable;
+};
+
 struct cadEntity{
   int Type; //Line or Arc
   color_t Color;
@@ -34,6 +39,9 @@ void cadRedraw();
 cadEntity cadGetEntityArray(int);
 int cadGetEntityArrayIndex();
 point_t cadScreenCordToCadCord(int x, int y);
+
+void cadShowSelectionBox(point_t);
+void cadHideSelectionBox();
 
 void cadDrawLine(point_t start, point_t end);
 void cadDrawLine(line_t);
