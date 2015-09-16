@@ -23,6 +23,7 @@ struct cadEntity{
   point_t SelectedAt;
   bool Removed;
   int Index;
+  int SelectionIndex;
 };
 
 void cadInit();
@@ -30,6 +31,7 @@ void cadAppend(cadEntity);
 void cadEdit(int, cadEntity);
 void cadRemoveSelected();
 std::vector<cadEntity> cadGetSelected();
+int cadCountSelection();
 void cadSetColor(color_t);
 void cadRenderLine(line_t);
 void cadRenderArc(arc_t);

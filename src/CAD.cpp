@@ -84,6 +84,18 @@ std::vector<cadEntity> cadGetSelected()
   }
   return e;
 }
+int cadCountSelection()
+{
+  int r = 0;
+  for (int i = 0; i < cadEntityArrayIndex; i++)
+  {
+      if (cadEntityArray[i].Selected && !cadEntityArray[i].Removed) //Make sure were selected and not removed
+      {
+        r++;
+      }
+  }
+  return r;
+}
 void cadShowSelectionBox(point_t p)
 {
   //line_t geoGetPerpendicularLine(line_t, point_t, float);

@@ -224,32 +224,91 @@ void *cliViewPlaneXY() { sceneSetViewAngle(0, 0, 0); return NULL; }
 void *cliViewPlaneYZ() { sceneSetViewAngle(0, 90, 0); return NULL; }
 void *cliViewPlaneZX() { sceneSetViewAngle(90, 0, 0); return NULL; }
 void *cliViewPlaneOrtho() { sceneSetViewAngle(45, 45, 45); return NULL; }
-void *cliScreenColorRed() { CurrentColor = RED; return NULL; }
-void *cliScreenColorBlue() { CurrentColor = BLUE; return NULL; }
-void *cliScreenColorGreen() { CurrentColor = GREEN; return NULL; }
 void *cliFileExit() { EXIT; return NULL; };
+
+void *cliScreenColorRed()
+{
+  CurrentColor = RED;
+  cadEntity e;
+  for (int x=0; x < cadGetEntityArrayIndex(); x++)
+  {
+    e = cadGetEntityArray(x);
+    if (e.Selected && !e.Removed)
+    {
+      e.Color = CurrentColor;
+      cadEdit(x, e);
+    }
+  }
+  cliScreenUnSelectAll();
+  return NULL;
+}
+void *cliScreenColorBlue()
+{
+  CurrentColor = BLUE;
+  cadEntity e;
+  for (int x=0; x < cadGetEntityArrayIndex(); x++)
+  {
+    e = cadGetEntityArray(x);
+    if (e.Selected && !e.Removed)
+    {
+      e.Color = CurrentColor;
+      cadEdit(x, e);
+    }
+  }
+  cliScreenUnSelectAll();
+  return NULL;
+}
+void *cliScreenColorGreen()
+{
+  CurrentColor = GREEN;
+  cadEntity e;
+  for (int x=0; x < cadGetEntityArrayIndex(); x++)
+  {
+    e = cadGetEntityArray(x);
+    if (e.Selected && !e.Removed)
+    {
+      e.Color = CurrentColor;
+      cadEdit(x, e);
+    }
+  }
+  cliScreenUnSelectAll();
+  return NULL;
+}
 
 void *cliXformTrim1()
 {
+  int index;
   std::vector<cadEntity> e = cadGetSelected();
   if (e.size() < 2)
   {
     return NULL;
   }
-  point_t new_endpoint = geoGetLineIntersection(line_t{e[0].Line.start, e[0].Line.end}, line_t{e[1].Line.start, e[1].Line.end});
-  D printf("(cliXformTrim1) Intersection point is (%.6f, %.6f)\n", new_endpoint.x, new_endpoint.y);
-  //Find which end of e[0] is closest to the Intersection point, then replace with intersection point
-  float start_d = geoGetLineLength(line_t{ e[0].Line.start, new_endpoint });
-  float end_d = geoGetLineLength(line_t{ e[0].Line.end, new_endpoint });
-  if (start_d < end_d)
+  if (e[0].SelectionIndex < e[1].SelectionIndex) //Get line that was clicked first
   {
-    e[0].Line.start = new_endpoint;
+    index = 0;
   }
   else
   {
-    e[0].Line.end = new_endpoint;
+    index = 1;
   }
-  cadEdit(e[0].Index, e[0]);
+  point_t new_endpoint = geoGetLineIntersection(line_t{e[0].Line.start, e[0].Line.end}, line_t{e[1].Line.start, e[1].Line.end});
+  //D printf("(cliXformTrim1) Intersection point is (%.6f, %.6f)\n", new_endpoint.x, new_endpoint.y);
+
+  //Find which end of first selected line is closest to the Intersection point, then replace with intersection point
+  float start_d = geoGetLineLength(line_t{ e[index].Line.start, new_endpoint });
+  float end_d = geoGetLineLength(line_t{ e[index].Line.end, new_endpoint });
+  //Doesnt work because were looking at first in array not first clicked
+  //D printf("e[0].SelectionIndex = %d\ne[1].SelectionIndex = %d\n", e[0].SelectionIndex, e[1].SelectionIndex);
+  if (start_d < end_d)
+  {
+      e[index].Line.start = new_endpoint;
+  }
+  else
+  {
+    e[index].Line.end = new_endpoint;
+  }
+  cadEdit(e[index].Index, e[index]);
+  cliScreenUnSelectAll();
   return NULL;
 }
 

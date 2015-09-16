@@ -55,6 +55,7 @@ void mouseCallback(int btn, int state, int x, int y)
             else
             {
               e.Selected = true;
+              e.SelectionIndex = cadCountSelection() + 1;
             }
             e.SelectedAt = e.Arc.start;
             cadEdit(a, e);
@@ -69,6 +70,7 @@ void mouseCallback(int btn, int state, int x, int y)
             else
             {
               e.Selected = true;
+              e.SelectionIndex = cadCountSelection() + 1;
             }
             e.SelectedAt = e.Arc.end;
             cadEdit(a, e);
@@ -83,6 +85,7 @@ void mouseCallback(int btn, int state, int x, int y)
             else
             {
               e.Selected = true;
+              e.SelectionIndex = cadCountSelection() + 1;
             }
             e.SelectedAt = e.Arc.center;
             cadEdit(a, e);
@@ -98,6 +101,7 @@ void mouseCallback(int btn, int state, int x, int y)
             else
             {
               e.Selected = true;
+              e.SelectionIndex = cadCountSelection() + 1;
             }
             e.SelectedAt = e.Line.start;
             cadEdit(a, e);
@@ -113,6 +117,7 @@ void mouseCallback(int btn, int state, int x, int y)
             else
             {
               e.Selected = true;
+              e.SelectionIndex = cadCountSelection() + 1;
             }
             e.SelectedAt = e.Line.end;
             cadEdit(a, e);
@@ -127,6 +132,7 @@ void mouseCallback(int btn, int state, int x, int y)
             else
             {
               e.Selected = true;
+              e.SelectionIndex = cadCountSelection() + 1;
             }
             e.SelectedAt = geoGetLineMidpoint(e.Line);
             cadEdit(a, e);
@@ -144,8 +150,8 @@ void mouseMotionCallback(int x, int y)
     if (button == 1) //Middle mouse button
     {
       mouse_t inc{x - mouseLast.x , y - mouseLast.y};
-      D printf("\rPan %d, %d", inc.x, inc.y);
-      D fflush(stdout);
+      //D printf("\rPan %d, %d", inc.x, inc.y);
+      //D fflush(stdout);
       if (abs(inc.x) < 10  && abs(inc.y) < 10)
       {
         sceneIncPan(inc.x * 0.01, (-1 * inc.y) * 0.01 , 0);
@@ -154,8 +160,8 @@ void mouseMotionCallback(int x, int y)
     else if (mod == GLUT_ACTIVE_CTRL)
     {
       mouse_t inc{x - mouseLast.x , y - mouseLast.y};
-      D printf("\rOrbit %d, %d", inc.x, inc.y);
-      D fflush(stdout);
+      //D printf("\rOrbit %d, %d", inc.x, inc.y);
+      //D fflush(stdout);
       if (abs(inc.x) < 10  && abs(inc.y) < 10)
       {
         sceneIncViewAngle(inc.y, -1 * inc.x, 0);
@@ -172,7 +178,7 @@ void mouseMotionCallback(int x, int y)
 void mousePassiceMotionCallback(int x, int y)
 {
   point_t pos = cadScreenCordToCadCord(x, y);
-  D printf("%sX: %.6f, Y: %.6f, Z: %.6f%s\r", KGREEN, pos.x, pos.y, pos.z, KNORMAL);
+  //D printf("%sX: %.6f, Y: %.6f, Z: %.6f%s\r", KGREEN, pos.x, pos.y, pos.z, KNORMAL);
   cadEntity e;
   for (int a = 0; a < cadGetEntityArrayIndex(); a++)
   {
