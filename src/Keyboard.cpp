@@ -45,6 +45,14 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
                   {
                     fileOpen("../test/dxf/complex.dxf");
                   }
+                  if (key == 61)
+                  {
+                    sceneIncZoom(+0.1);
+                  }
+                  if (key == 31)
+                  {
+                    sceneIncZoom(-0.1);
+                  }
                   break;
                case 4 :  D printf("ALT   key %d\n",mod);  break;
                mod=0;
@@ -117,9 +125,9 @@ void keyboardCallbackSpecial(int key, int x, int y)
   switch (key)
   {
        case 27 :      break;
-       case 100 : D printf("GLUT_KEY_LEFT %d\n",key); if (mod == GLUT_ACTIVE_CTRL) sceneIncViewAngle(0, -5, 0); break;
-       case 102: D printf("GLUT_KEY_RIGHT %d\n",key); if (mod == GLUT_ACTIVE_CTRL) sceneIncViewAngle(0, +5, 0); break;
-       case 101   : D printf("GLUT_KEY_UP %d\n",key); if (mod == GLUT_ACTIVE_CTRL) sceneIncViewAngle(-5, 0, 0); break;
-       case 103 : D printf("GLUT_KEY_DOWN %d\n",key); if (mod == GLUT_ACTIVE_CTRL) sceneIncViewAngle(+5, 0, 0); break;
+       case 100 : D printf("GLUT_KEY_LEFT %d\n",key); if (mod == GLUT_ACTIVE_CTRL) sceneIncViewAngle(0, -5, 0); else sceneIncPan(-0.01, 0 , 0); break;
+       case 102: D printf("GLUT_KEY_RIGHT %d\n",key); if (mod == GLUT_ACTIVE_CTRL) sceneIncViewAngle(0, +5, 0); else sceneIncPan(0.01, 0 , 0); break; break;
+       case 101   : D printf("GLUT_KEY_UP %d\n",key); if (mod == GLUT_ACTIVE_CTRL) sceneIncViewAngle(-5, 0, 0); else sceneIncPan(0, 0.01 , 0); break;break;
+       case 103 : D printf("GLUT_KEY_DOWN %d\n",key); if (mod == GLUT_ACTIVE_CTRL) sceneIncViewAngle(+5, 0, 0); else sceneIncPan(0, -0.01 , 0); break;break;
   }
 }
