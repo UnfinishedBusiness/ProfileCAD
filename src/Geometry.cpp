@@ -80,7 +80,7 @@ point_t geoGetLineMidpoint(line_t l)
   m.x = (l.end.x + l.start.x) / 2;
   m.y = (l.end.y + l.start.y) / 2;
   m.z = (l.end.z + l.start.z) / 2;
-  D printf("(geoGetLineMidpoint) Midpoint of (%.6f, %.6f) --- (%.6f, %.6f) is (%.6f, %.6f)\n", l.start.x, l.start.y, l.end.x, l.end.y, m.x, m.y);
+  //D printf("(geoGetLineMidpoint) Midpoint of (%.6f, %.6f) --- (%.6f, %.6f) is (%.6f, %.6f)\n", l.start.x, l.start.y, l.end.x, l.end.y, m.x, m.y);
   return m;
 }
 point_t geoRotatePointAroundPoint(point_t p, point_t o, float angle) //angle is in degrees!

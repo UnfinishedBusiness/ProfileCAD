@@ -7,23 +7,7 @@ int button;
 mouse_t mouseLast;
 point_t mouseCadLastClickPos()
 {
-  GLint viewport[4]; //var to hold the viewport info
-  GLdouble modelview[16]; //var to hold the modelview info
-  GLdouble projection[16]; //var to hold the projection matrix info
-  GLfloat winX, winY, winZ; //variables to hold screen x,y,z coordinates
-  GLdouble worldX, worldY, worldZ; //variables to hold world x,y,z coordinates
-  glGetDoublev( GL_MODELVIEW_MATRIX, modelview ); //get the modelview info
-  glGetDoublev( GL_PROJECTION_MATRIX, projection ); //get the projection matrix info
-  glGetIntegerv( GL_VIEWPORT, viewport ); //get the viewport info
-  winX = (float)mouseLast.x;
-  winY = (float)viewport[3] - (float)mouseLast.y;
-  winZ = 0;
-  //get the world coordinates from the screen coordinates
-  gluUnProject( winX, winY, winZ, modelview, projection, viewport, &worldX, &worldY, &worldZ);
-  worldX = worldX/sceneGetScale();
-  worldY = worldY/sceneGetScale();
-
-  return point_t{(float)worldX, (float)worldY, 0};
+  return cadScreenCordToCadCord(mouseLast.x, mouseLast.y);
 }
 void mouseInit()
 {
@@ -34,23 +18,7 @@ void mouseInit()
 
 void mouseCallback(int btn, int state, int x, int y)
 {
-  GLint viewport[4]; //var to hold the viewport info
-  GLdouble modelview[16]; //var to hold the modelview info
-  GLdouble projection[16]; //var to hold the projection matrix info
-  GLfloat winX, winY, winZ; //variables to hold screen x,y,z coordinates
-  GLdouble worldX, worldY, worldZ; //variables to hold world x,y,z coordinates
-  glGetDoublev( GL_MODELVIEW_MATRIX, modelview ); //get the modelview info
-  glGetDoublev( GL_PROJECTION_MATRIX, projection ); //get the projection matrix info
-  glGetIntegerv( GL_VIEWPORT, viewport ); //get the viewport info
-  winX = (float)x;
-  winY = (float)viewport[3] - (float)y;
-  winZ = 0;
-  //get the world coordinates from the screen coordinates
-  gluUnProject( winX, winY, winZ, modelview, projection, viewport, &worldX, &worldY, &worldZ);
-  worldX = worldX/sceneGetScale();
-  worldY = worldY/sceneGetScale();
-  //D printf("(mouseCallback) WorldX: %.6f WorldY: %.6f\n", worldX, worldY);
-
+    point_t pos = cadScreenCordToCadCord(x, y);
     button = btn;
     mod = glutGetModifiers();
     if ((btn == 3) || (btn == 4)) // It's a wheel event
@@ -80,7 +48,7 @@ void mouseCallback(int btn, int state, int x, int y)
           e = cadGetEntityArray(a);
           //D printf("Entity %d start(%.6f, %.6f) end(%.6f, %.6f)\n", a, e.Line.start.x, e.Line.start.y, e.Line.end.x, e.Line.end.y);
 
-          if (isSimilar(worldX, e.Line.start.x) && isSimilar(worldY, e.Line.start.y) && !e.Removed)
+          if (isSimilar(pos.x, e.Line.start.x) && isSimilar(pos.y, e.Line.start.y) && !e.Removed)
           {
             D printf("\t%s Entity #%d Start point Clicked!%s\n", KGREEN, a, KNORMAL);
             if (mod == GLUT_ACTIVE_CTRL)
@@ -95,7 +63,7 @@ void mouseCallback(int btn, int state, int x, int y)
             cadEdit(a, e);
             return;
           }
-          if (isSimilar(worldX, e.Line.end.x) && isSimilar(worldY, e.Line.end.y) && !e.Removed)
+          if (isSimilar(pos.x, e.Line.end.x) && isSimilar(pos.y, e.Line.end.y) && !e.Removed)
           {
             D printf("\t%s Entity #%d End point Clicked!%s\n", KGREEN, a, KNORMAL);
             if (mod == GLUT_ACTIVE_CTRL)
@@ -110,35 +78,20 @@ void mouseCallback(int btn, int state, int x, int y)
             cadEdit(a, e);
             return;
           }
-          /*
-          vector<point_t> points = geoGetPointsOfLine(e.Line.start, e.Line.end);
-          bool Select = false;
-          //D printf("\t number of points: %d\n", points.size());
-          for (int b = 0; b < points.size(); b++)
+          if (isSimilar(pos.x, geoGetLineMidpoint(e.Line).x) && isSimilar(pos.y, geoGetLineMidpoint(e.Line).y))
           {
-            if (isSimilar(worldX, points[b].x) && isSimilar(worldY, points[b].y))
-            {
-              Select = true;
-            }
-            //D printf("points[%d]\n", b);
-          }
-          if (Select == true)
-          {
-            Select = false;
-            D printf("\t%s Entity #%d Clicked!%s\n", KGREEN, a, KNORMAL);
             if (mod == GLUT_ACTIVE_CTRL)
             {
               e.Selected = false;
-              e.SelectedBody = false;
             }
             else
             {
               e.Selected = true;
-              e.SelectedBody = true;
             }
-
+            e.SelectedAt = geoGetLineMidpoint(e.Line);
             cadEdit(a, e);
-          }*/
+            return;
+          }
         }
     }
     if(btn==GLUT_RIGHT_BUTTON && state==GLUT_DOWN)
@@ -178,6 +131,23 @@ void mouseMotionCallback(int x, int y)
 }
 void mousePassiceMotionCallback(int x, int y)
 {
-  D printf("%sX: %d, Y: %d%s\r", KGREEN, x, y, KNORMAL);
+  point_t pos = cadScreenCordToCadCord(x, y);
+  D printf("%sX: %.6f, Y: %.6f, Z: %.6f%s\r", KGREEN, pos.x, pos.y, pos.z, KNORMAL);
+  cadEntity e;
+  for (int a = 0; a < cadGetEntityArrayIndex(); a++)
+  {
+    e = cadGetEntityArray(a);
+    if ((isSimilar(pos.x, geoGetLineMidpoint(e.Line).x) && isSimilar(pos.y, geoGetLineMidpoint(e.Line).y) || isSimilar(pos.x, e.Line.start.x) && isSimilar(pos.y, e.Line.start.y) || isSimilar(pos.x, e.Line.end.x) && isSimilar(pos.y, e.Line.end.y)) && !e.Removed && e.Type == CAD_LINE)
+    {
+      e.MouseOver = true;
+      cadEdit(a, e);
+      break; //Only highlight one entity
+    }
+    else
+    {
+      e.MouseOver = false;
+      cadEdit(a, e);
+    }
+  }
   fflush(stdout);
 }

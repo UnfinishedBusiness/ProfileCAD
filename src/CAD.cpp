@@ -2,9 +2,6 @@
 
 using namespace std;
 
-#define CAD_ARC 0x00
-#define CAD_LINE 0x01
-
 vector<cadEntity> cadEntityArray;
 int cadEntityArrayIndex;
 color_t cadColorAttribute = GREEN;
@@ -88,7 +85,7 @@ void cadRender()
   {
       if (cadEntityArray[i].Type == CAD_LINE && !cadEntityArray[i].Removed) //Where a line and its not been removed
       {
-        if (cadEntityArray[i].Selected)
+        if (cadEntityArray[i].Selected || cadEntityArray[i].MouseOver)
         {
           sceneColor(WHITE);
         }
@@ -154,4 +151,38 @@ void cadRenderArc(arc_t a)
 void cadRedraw()
 {
   glutPostRedisplay();
+}
+point_t cadScreenCordToCadCord(int x, int y)
+{
+  /*GLdouble ox=0.0,oy=0.0,oz=0.0;
+  GLint viewport[4];
+  GLdouble modelview[16],projection[16];
+  GLfloat wx=x,wy,wz;
+  glGetIntegerv(GL_VIEWPORT,viewport);
+  y=viewport[3]-y;
+  wy=y;
+  glGetDoublev(GL_MODELVIEW_MATRIX,modelview);
+  glGetDoublev(GL_PROJECTION_MATRIX,projection);
+  glReadPixels(x,y,1,1,GL_DEPTH_COMPONENT,GL_FLOAT,&wz);
+  gluUnProject(wx,wy,wz,modelview,projection,viewport,&ox,&oy,&oz);
+  return point_t{(float)ox, (float)oy, (float)oz};*/
+
+  GLint viewport[4]; //var to hold the viewport info
+  GLdouble modelview[16]; //var to hold the modelview info
+  GLdouble projection[16]; //var to hold the projection matrix info
+  GLfloat winX, winY, winZ; //variables to hold screen x,y,z coordinates
+  GLdouble worldX, worldY, worldZ; //variables to hold world x,y,z coordinates
+  glGetDoublev( GL_MODELVIEW_MATRIX, modelview ); //get the modelview info
+  glGetDoublev( GL_PROJECTION_MATRIX, projection ); //get the projection matrix info
+  glGetIntegerv( GL_VIEWPORT, viewport ); //get the viewport info
+  winX = (float)x;
+  winY = (float)viewport[3] - (float)y;
+  winZ = 0;
+  //get the world coordinates from the screen coordinates
+  gluUnProject( winX, winY, winZ, modelview, projection, viewport, &worldX, &worldY, &worldZ);
+  //printf("tx: %.6f, ty: %.6f\n", sceneGetPanOffset().x, sceneGetPanOffset().y);
+  worldX = (worldX/sceneGetScale());
+  worldY = (worldY/sceneGetScale());
+  point_t panOffset = sceneGetPanOffset();
+  return point_t{(float)worldX - (panOffset.x / sceneGetScale()), (float)worldY - (panOffset.y / sceneGetScale()), 0};
 }

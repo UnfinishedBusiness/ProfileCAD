@@ -10,6 +10,7 @@ void sceneIncViewAngle(float, float, float);
 point_t sceneGetViewAngle();
 void sceneIncZoom(float);
 void sceneIncPan(float, float, float);
+point_t sceneGetPanOffset();
 void sceneColor(color_t);
 float sceneGetScale();
 #endif

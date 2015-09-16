@@ -63,15 +63,10 @@ float sceneGetScale()
 {
   return scale;
 }
-/*void sceneDrawWireframe(int face)
+point_t sceneGetPanOffset()
 {
-  sceneColor(WHITE);
-  glBegin(GL_LINE_LOOP);
-  for (int i = 0; i < 8; i++)
-    glVertex3fv((GLfloat *) cube[faceIndex[face][i]]);
-
-  glEnd();
-}*/
+  return point_t{tx, ty, tz};
+}
 void sceneDraw(void)
 {
   //D printf("(sceneDraw) %d\r", s++);
