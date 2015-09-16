@@ -21,7 +21,6 @@ struct cadEntity{
   bool Selected;
   bool MouseOver;
   point_t SelectedAt;
-  bool SelectedBody;
   bool Removed;
   int Index;
 };

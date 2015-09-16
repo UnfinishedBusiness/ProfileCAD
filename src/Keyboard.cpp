@@ -10,7 +10,7 @@ void keyboardInit()
 void keyboardCallbackNormal(unsigned char key, int x, int y)
 {
     // Press ALT or  SHIFT or  CTRL in combination with other keys.
-    D printf("Key -> %d \n",key);
+    //D printf("Key -> %d \n",key);
     //D fflush(stdout);
     int mod = glutGetModifiers();
     if (mod != 0) //ALT=4  SHIFT=1  CTRL=2
@@ -19,7 +19,7 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
             {
                case 1 :  D printf("SHIFT key %d\n",mod);  break;
                case 2 :
-                  printf("CTRL  key %d\n",mod);
+                  //printf("CTRL  key %d\n",mod);
                   if (key == 1) //CTRL+a
                   {
                     cliScreenSelectAll();
@@ -44,14 +44,6 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
                   if (key == 15) //CTRL+s
                   {
                     fileOpen("../test/dxf/complex.dxf");
-                  }
-                  if (key == 61)
-                  {
-                    sceneIncZoom(+0.1);
-                  }
-                  if (key == 31)
-                  {
-                    sceneIncZoom(-0.1);
                   }
                   break;
                case 4 :  D printf("ALT   key %d\n",mod);  break;
@@ -125,9 +117,9 @@ void keyboardCallbackSpecial(int key, int x, int y)
   switch (key)
   {
        case 27 :      break;
-       case 100 : D printf("GLUT_KEY_LEFT %d\n",key); if (mod == GLUT_ACTIVE_CTRL) sceneIncViewAngle(0, -5, 0); else sceneIncPan(-0.01, 0 , 0); break;
-       case 102: D printf("GLUT_KEY_RIGHT %d\n",key); if (mod == GLUT_ACTIVE_CTRL) sceneIncViewAngle(0, +5, 0); else sceneIncPan(0.01, 0 , 0); break; break;
-       case 101   : D printf("GLUT_KEY_UP %d\n",key); if (mod == GLUT_ACTIVE_CTRL) sceneIncViewAngle(-5, 0, 0); else sceneIncPan(0, 0.01 , 0); break;break;
-       case 103 : D printf("GLUT_KEY_DOWN %d\n",key); if (mod == GLUT_ACTIVE_CTRL) sceneIncViewAngle(+5, 0, 0); else sceneIncPan(0, -0.01 , 0); break;break;
+       case 100 : D printf("GLUT_KEY_LEFT %d\n",key); if (mod == GLUT_ACTIVE_CTRL) sceneIncViewAngle(0, -5, 0); break;
+       case 102: D printf("GLUT_KEY_RIGHT %d\n",key); if (mod == GLUT_ACTIVE_CTRL) sceneIncViewAngle(0, +5, 0); break;
+       case 101   : D printf("GLUT_KEY_UP %d\n",key); if (mod == GLUT_ACTIVE_CTRL) sceneIncViewAngle(-5, 0, 0); break;
+       case 103 : D printf("GLUT_KEY_DOWN %d\n",key); if (mod == GLUT_ACTIVE_CTRL) sceneIncViewAngle(+5, 0, 0); break;
   }
 }

@@ -35,7 +35,7 @@ void mouseCallback(int btn, int state, int x, int y)
     }
     if(btn==GLUT_LEFT_BUTTON && state==GLUT_DOWN && mod == GLUT_ACTIVE_CTRL)
     {
-        D printf("Left + Ctrl button at X: %d, Y: %d\n", x, y);
+        //D printf("Left + Ctrl button at X: %d, Y: %d\n", x, y);
     }
     if(btn==GLUT_LEFT_BUTTON && state==GLUT_DOWN)
     {
@@ -90,7 +90,7 @@ void mouseCallback(int btn, int state, int x, int y)
           }
           if (isSimilar(pos.x, e.Line.start.x) && isSimilar(pos.y, e.Line.start.y) && !e.Removed && e.Type == CAD_LINE)
           {
-            D printf("\t%s Entity #%d Start point Clicked!%s\n", KGREEN, a, KNORMAL);
+            //D printf("\t%s Entity #%d Start point Clicked!%s\n", KGREEN, a, KNORMAL);
             if (mod == GLUT_ACTIVE_CTRL)
             {
               e.Selected = false;
@@ -105,7 +105,7 @@ void mouseCallback(int btn, int state, int x, int y)
           }
           if (isSimilar(pos.x, e.Line.end.x) && isSimilar(pos.y, e.Line.end.y) && !e.Removed && e.Type == CAD_LINE)
           {
-            D printf("\t%s Entity #%d End point Clicked!%s\n", KGREEN, a, KNORMAL);
+            //D printf("\t%s Entity #%d End point Clicked!%s\n", KGREEN, a, KNORMAL);
             if (mod == GLUT_ACTIVE_CTRL)
             {
               e.Selected = false;

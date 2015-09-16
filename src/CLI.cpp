@@ -52,10 +52,6 @@ void *cliCreateLineEndpoints()
   {
     return NULL;
   }
-  if (e[0].SelectedBody || e[1].SelectedBody)
-  {
-    return NULL; //We need endpoints
-  }
   point_t Start = e[0].SelectedAt;
   point_t End = e[1].SelectedAt;
   cadSetColor(CurrentColor);
@@ -74,14 +70,11 @@ void *cliCreateLineVerticalEndpoint()
     {
       return NULL;
     }
-    if (e[0].SelectedBody)
-    {
-      return NULL; //We need a endpoint
-    }
     point_t Start = e[0].SelectedAt;
     point_t End = { e[0].SelectedAt.x , input };
     cadSetColor(CurrentColor);
     cadDrawLine(Start, End);
+    cliScreenUnSelectAll();
     return NULL;
   }
   textCallback = &cliCreateLineVerticalEndpoint;
@@ -101,14 +94,11 @@ void *cliCreateLineHorizontalEndpoint()
     {
       return NULL;
     }
-    if (e[0].SelectedBody)
-    {
-      return NULL; //We need a endpoint
-    }
     point_t Start = e[0].SelectedAt;
     point_t End = { (float)atof(text.c_str()), e[0].SelectedAt.y };
     cadSetColor(CurrentColor);
     cadDrawLine(Start, End);
+    cliScreenUnSelectAll();
     return NULL;
   }
   textCallback = &cliCreateLineHorizontalEndpoint;
@@ -245,10 +235,6 @@ void *cliXformTrim1()
   if (e.size() < 2)
   {
     return NULL;
-  }
-  if (e[0].SelectedBody || e[1].SelectedBody)
-  {
-    return NULL; //We need endpoints
   }
   point_t new_endpoint = geoGetLineIntersection(line_t{e[0].Line.start, e[0].Line.end}, line_t{e[1].Line.start, e[1].Line.end});
   D printf("(cliXformTrim1) Intersection point is (%.6f, %.6f)\n", new_endpoint.x, new_endpoint.y);
