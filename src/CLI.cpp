@@ -22,6 +22,7 @@ struct menu_item_t{
 
 void *(*textCallback)();
 color_t CurrentColor = GREEN;
+std::string CurrentFile;
 int Level = 0;
 int Level1Selection;
 int Level2Selection;
@@ -44,6 +45,11 @@ float cliGetInput()
   {
     return 0;
   }
+}
+std::string cliGetTextInput()
+{
+  text.replace(text.find("> "), sizeof("> ")-1, "");
+  return text;
 }
 void *cliCreateLineEndpoints()
 {
@@ -225,7 +231,38 @@ void *cliViewPlaneYZ() { sceneSetViewAngle(0, 90, 0); return NULL; }
 void *cliViewPlaneZX() { sceneSetViewAngle(90, 0, 0); return NULL; }
 void *cliViewPlaneOrtho() { sceneSetViewAngle(45, 45, 45); return NULL; }
 void *cliFileExit() { EXIT; return NULL; };
-
+void *cliFileGetNew()
+{
+  if (TextReady == true)
+  {
+    TextReady = false;
+    cliScreenSelectAll();
+    cliScreenDeleteSelected();
+    CurrentFile = cliGetTextInput();
+    fileOpen(CurrentFile);
+    return NULL;
+  }
+  textCallback = &cliFileGetNew;
+  TextInput = true;
+  cliPush("> ");
+  uiEdit(0, uiEntity{UI_TEXT, RED, "File?", UI_MENU_POSITION});
+  return NULL;
+}
+void *cliFileGetMerge()
+{
+  if (TextReady == true)
+  {
+    TextReady = false;
+    CurrentFile = cliGetTextInput();
+    fileOpen(CurrentFile);
+    return NULL;
+  }
+  textCallback = &cliFileGetMerge;
+  TextInput = true;
+  cliPush("> ");
+  uiEdit(0, uiEntity{UI_TEXT, RED, "File?", UI_MENU_POSITION});
+  return NULL;
+}
 void *cliScreenColorRed()
 {
   CurrentColor = RED;
@@ -318,6 +355,10 @@ menu_item_t menu[CLI_MENU_ITEMS] = {
     sub_menu_item_t{ "e", "exit",
          sub_sub_menu_item_t{ "y", "are you sure?", &cliFileExit },
      },
+     sub_menu_item_t{ "g", "get",
+          sub_sub_menu_item_t{ "n", "new", &cliFileGetNew },
+          sub_sub_menu_item_t{ "m", "merge", &cliFileGetMerge },
+      },
   },
   { "l", "line",
     sub_menu_item_t{ "v", "vertical",

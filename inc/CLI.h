@@ -8,8 +8,12 @@ void cliMenu();
 void cliBackup();
 void cliReturn();
 float cliGetInput();
+std::string cliGetTextInput();
 
 void *cliFileExit();
+void *cliFileGetNew();
+void *cliFileGetMerge();
+
 void *cliCreateLineVerticalOrigin();
 void *cliCreateLineHorizontalOrigin();
 void *cliCreateLineVerticalEndpoints();

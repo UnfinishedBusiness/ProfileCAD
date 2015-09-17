@@ -11,7 +11,6 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
 {
     // Press ALT or  SHIFT or  CTRL in combination with other keys.
     //D printf("Key -> %d \n",key);
-    //D fflush(stdout);
     int mod = glutGetModifiers();
     if (mod != 0) //ALT=4  SHIFT=1  CTRL=2
       {
@@ -43,7 +42,8 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
                   }
                   if (key == 15) //CTRL+s
                   {
-                    fileOpen("../test/dxf/complex.dxf");
+                    //fileOpen("../test/dxf/complex.dxf");
+                    cliFileGetNew();
                   }
                   break;
                case 4 :  D printf("ALT   key %d\n",mod);  break;
@@ -92,6 +92,8 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
         case 57 : cliPush("9"); break;
 
         case 45 : cliPush("-"); break;
+        case 42 : cliPush("*"); break;
+        case 47 : cliPush("/"); break;
 
         case 8 : cliBackup(); break; //Normal backspace
         case 127 : cliBackup(); break; //Mac delete
