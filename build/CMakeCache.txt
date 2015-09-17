@@ -180,6 +180,9 @@ GLUT_Xmu_LIBRARY:FILEPATH=/usr/lib64/libXmu.so
 //Path to a library.
 GLUT_glut_LIBRARY:FILEPATH=/usr/lib64/libglut.so
 
+//The directory containing a CMake configuration file for MUPARSER.
+MUPARSER_DIR:PATH=MUPARSER_DIR-NOTFOUND
+
 //Path to a file.
 OPENGL_INCLUDE_DIR:PATH=/usr/include
 

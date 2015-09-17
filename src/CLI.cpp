@@ -30,13 +30,51 @@ bool TextInput = false;
 bool TextReady = false;
 string text = "";
 
+std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems) {
+    std::stringstream ss(s);
+    std::string item;
+    while (std::getline(ss, item, delim)) {
+        elems.push_back(item);
+    }
+    return elems;
+}
+std::vector<std::string> split(const std::string &s, char delim) {
+    std::vector<std::string> elems;
+    split(s, delim, elems);
+    return elems;
+}
+
 #define CLI_MENU_ITEM_SEPERATOR "   "
 #define CLI_MENU_ITEM_LINK  " - "
 
 float cliGetInput()
 {
   text.replace(text.find("> "), sizeof("> ")-1, "");
-  float input = (float)atof(text.c_str());
+  float input;
+  if (text.find("*") != std::string::npos) //Evaluate multiplication
+  {
+    std::vector<std::string> factors = split(text, '*');
+    input = 0;
+    if (factors.size() > 1)
+    {
+      input = atof(factors[0].c_str()) * atof(factors[1].c_str());
+    }
+    printf("(cliGetInput) Mult Eval: %.6f\n", input);
+  }
+  else if(text.find("/") != std::string::npos) //Evaluate division
+  {
+    std::vector<std::string> factors = split(text, '/');
+    input = 0;
+    if (factors.size() > 1)
+    {
+      input = atof(factors[0].c_str()) / atof(factors[1].c_str());
+    }
+    printf("(cliGetInput) Div Eval: %.6f\n", input);
+  }
+  else
+  {
+    input = (float)atof(text.c_str());
+  }
   if (!isnan(input))
   {
     return input;

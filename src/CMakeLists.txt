@@ -35,4 +35,4 @@ include_directories(../inc)
 #########################################################
 
   # create the program "ProfileCAD"
-  target_link_libraries(ProfileCAD ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} )
+  target_link_libraries(ProfileCAD ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
