@@ -59,7 +59,7 @@ float cliGetInput()
     {
       input = atof(factors[0].c_str()) * atof(factors[1].c_str());
     }
-    printf("(cliGetInput) Mult Eval: %.6f\n", input);
+    //printf("(cliGetInput) Mult Eval: %.6f\n", input);
   }
   else if(text.find("/") != std::string::npos) //Evaluate division
   {
@@ -69,7 +69,7 @@ float cliGetInput()
     {
       input = atof(factors[0].c_str()) / atof(factors[1].c_str());
     }
-    printf("(cliGetInput) Div Eval: %.6f\n", input);
+    //printf("(cliGetInput) Div Eval: %.6f\n", input);
   }
   else
   {
