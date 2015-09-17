@@ -62,6 +62,10 @@ struct arc_t{
 };
 struct color_t{
   float r, g, b, a;
+  bool operator==(const color_t& rhs)
+  {
+    return r == rhs.r && g == rhs.g && b == rhs.b && a == rhs.a;
+  }
 };
 #define WHITE color_t{1, 1, 1, 1}
 #define BLACK color_t{0, 0, 0, 1}

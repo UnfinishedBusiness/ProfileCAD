@@ -47,6 +47,10 @@ std::vector<std::string> split(const std::string &s, char delim) {
 #define CLI_MENU_ITEM_SEPERATOR "   "
 #define CLI_MENU_ITEM_LINK  " - "
 
+std::string cliGetCurrentFile()
+{
+  return CurrentFile;
+}
 float cliGetInput()
 {
   text.replace(text.find("> "), sizeof("> ")-1, "");
@@ -277,13 +281,15 @@ void *cliFileGetNew()
     cliScreenSelectAll();
     cliScreenDeleteSelected();
     CurrentFile = cliGetTextInput();
-    fileOpen(CurrentFile);
+    int r = fileOpen(CurrentFile);
+    if (r == FILE_OPEN_ERROR) uiEdit(0, uiEntity{UI_TEXT, RED, "Error reading file!", UI_MENU_POSITION});
+    if (r == FILE_UNKNOWN_FORMAT) uiEdit(0, uiEntity{UI_TEXT, RED, "Unknown file format!", UI_MENU_POSITION});
     return NULL;
   }
   textCallback = &cliFileGetNew;
   TextInput = true;
   cliPush("> ");
-  uiEdit(0, uiEntity{UI_TEXT, RED, "File?", UI_MENU_POSITION});
+  uiEdit(0, uiEntity{UI_TEXT, RED, "Get File?", UI_MENU_POSITION});
   return NULL;
 }
 void *cliFileGetMerge()
@@ -292,14 +298,46 @@ void *cliFileGetMerge()
   {
     TextReady = false;
     CurrentFile = cliGetTextInput();
-    fileOpen(CurrentFile);
+    int r = fileOpen(CurrentFile);
+    if (r == FILE_OPEN_ERROR) uiEdit(0, uiEntity{UI_TEXT, RED, "Error reading file!", UI_MENU_POSITION});
+    if (r == FILE_UNKNOWN_FORMAT) uiEdit(0, uiEntity{UI_TEXT, RED, "Unknown file format!", UI_MENU_POSITION});
     return NULL;
   }
   textCallback = &cliFileGetMerge;
   TextInput = true;
   cliPush("> ");
-  uiEdit(0, uiEntity{UI_TEXT, RED, "File?", UI_MENU_POSITION});
+  uiEdit(0, uiEntity{UI_TEXT, RED, "Merge File?", UI_MENU_POSITION});
   return NULL;
+}
+void *cliFilePutNew()
+{
+  if (TextReady == true)
+  {
+    TextReady = false;
+    CurrentFile = cliGetTextInput();
+    int r = fileSave(CurrentFile);
+    if (r == FILE_OPEN_ERROR) uiEdit(0, uiEntity{UI_TEXT, RED, "Error writing file!", UI_MENU_POSITION});
+    return NULL;
+  }
+  textCallback = &cliFilePutNew;
+  TextInput = true;
+  cliPush("> ");
+  uiEdit(0, uiEntity{UI_TEXT, RED, "New File Name?", UI_MENU_POSITION});
+  return NULL;
+}
+void *cliFilePutCurrent()
+{
+  int r = fileSave(CurrentFile);
+  if (r == FILE_OPEN_ERROR)
+  {
+    uiEdit(0, uiEntity{UI_TEXT, RED, "Error reading file!", UI_MENU_POSITION});
+  }
+  else
+  {
+    string t = "Saving " + CurrentFile;
+    uiEdit(0, uiEntity{UI_TEXT, RED, t, UI_MENU_POSITION});
+  }
+
 }
 void *cliScreenColorRed()
 {
@@ -397,6 +435,10 @@ menu_item_t menu[CLI_MENU_ITEMS] = {
           sub_sub_menu_item_t{ "n", "new", &cliFileGetNew },
           sub_sub_menu_item_t{ "m", "merge", &cliFileGetMerge },
       },
+      sub_menu_item_t{ "p", "put",
+           sub_sub_menu_item_t{ "c", "current file", &cliFilePutCurrent },
+           sub_sub_menu_item_t{ "n", "new file", &cliFilePutNew },
+       },
   },
   { "l", "line",
     sub_menu_item_t{ "v", "vertical",

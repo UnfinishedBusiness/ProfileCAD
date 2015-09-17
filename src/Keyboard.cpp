@@ -40,10 +40,14 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
                     cliScreenDeleteSelected();
                     cadRedraw();
                   }
-                  if (key == 15) //CTRL+s
+                  if (key == 15) //CTRL+o
                   {
                     //fileOpen("../test/dxf/complex.dxf");
                     cliFileGetNew();
+                  }
+                  if (key == 19) //CTRL+s
+                  {
+                    cliFilePutCurrent();
                   }
                   break;
                case 4 :  D printf("ALT   key %d\n",mod);  break;

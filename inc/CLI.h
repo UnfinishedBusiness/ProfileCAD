@@ -9,10 +9,13 @@ void cliBackup();
 void cliReturn();
 float cliGetInput();
 std::string cliGetTextInput();
+std::string cliGetCurrentFile();
 
 void *cliFileExit();
 void *cliFileGetNew();
 void *cliFileGetMerge();
+void *cliFilePutCurrent();
+void *cliFilePutNew();
 
 void *cliCreateLineVerticalOrigin();
 void *cliCreateLineHorizontalOrigin();

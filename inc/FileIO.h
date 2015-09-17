@@ -9,5 +9,7 @@
 #define FILE_UNKNOWN_FORMAT -4
 
 int fileOpen(std::string);
+int fileSave(std::string);
 void fileReadDXF();
+void fileWriteDXF();
 #endif

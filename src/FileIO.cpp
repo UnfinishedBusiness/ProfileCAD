@@ -10,7 +10,6 @@ bool isNumeric(const std::string& input) {
 }
 int fileOpen(string f)
 {
-  string line;
   ifs.open(f);
   if (ifs.is_open())
   {
@@ -30,6 +29,113 @@ int fileOpen(string f)
     return FILE_OPEN_ERROR;
   }
 }
+int fileSave(string f)
+{
+  ofs.open(f);
+  if (ofs.is_open())
+  {
+    if (f.find("dxf") != std::string::npos)
+    {
+      fileWriteDXF();
+    }
+    else
+    {
+      return FILE_UNKNOWN_FORMAT;
+    }
+    ofs.close();
+    return FILE_OK;
+  }
+  else
+  {
+    return FILE_OPEN_ERROR;
+  }
+}
+void fileWriteDXF()
+{
+  auto WriteColorCode = [](cadEntity e)
+  {
+    if (e.Color == BLACK) ofs << "0\n";
+    if (e.Color == RED) ofs << "1\n";
+    if (e.Color == YELLOW) ofs << "2\n";
+    if (e.Color == GREEN) ofs << "3\n";
+    if (e.Color == CYAN) ofs << "4\n";
+    if (e.Color == BLUE) ofs << "5\n";
+    if (e.Color == MAGENTA) ofs << "6\n";
+    if (e.Color == DARKGREY) ofs << "7\n";
+    if (e.Color == LIGHTGREY) ofs << "8\n";
+  };
+  ofs << "0\nSECTION\n2\nENTITIES\n0\n";
+
+  cadEntity e;
+  for (int x = 0; x < cadGetEntityArrayIndex(); x++)
+  {
+    e = cadGetEntityArray(x);
+    if (!e.Removed)
+    {
+      if (e.Type == CAD_ARC)
+      {
+        if (e.Arc.start.x == e.Arc.end.x && e.Arc.start.y == e.Arc.end.y) //Were a circle
+        {
+          ofs << "CIRCLE\n";
+          ofs << "8\n1\n"; //Group Code 8 - Fixed to layer one
+          ofs << "62\n"; //Group Code - Entity Color
+          WriteColorCode(e);
+          ofs << "10\n"; //X center
+          ofs << e.Arc.center.x << "\n";
+          ofs << "20\n"; //Y center
+          ofs << e.Arc.center.y << "\n";
+          ofs << "30\n"; //Z center
+          ofs << e.Arc.center.z << "\n";
+          ofs << "40\n"; //Diameter
+          ofs << e.Arc.radius * 2 << "\n";
+          ofs << "0\n"; //End entity
+        }
+        else
+        {
+          ofs << "ARC\n";
+          ofs << "8\n1\n"; //Group Code 8 - Fixed to layer one
+          ofs << "62\n"; //Group Code - Entity Color
+          WriteColorCode(e);
+          ofs << "10\n"; //X center
+          ofs << e.Arc.center.x << "\n";
+          ofs << "20\n"; //Y center
+          ofs << e.Arc.center.y << "\n";
+          ofs << "30\n"; //Z center
+          ofs << e.Arc.center.z << "\n";
+          ofs << "40\n"; //Radius
+          ofs << e.Arc.radius << "\n";
+          ofs << "50\n"; //start angle
+          ofs << geoGetArcStartAngle(e.Arc) << "\n";
+          ofs << "51\n"; //end angle
+          ofs << geoGetArcEndAngle(e.Arc) << "\n";
+          ofs << "0\n"; //End entity
+        }
+      }
+      if (e.Type == CAD_LINE)
+      {
+        ofs << "LINE\n";
+        ofs << "8\n1\n"; //Group Code 8 - Fixed to layer one
+        ofs << "62\n"; //Group Code - Entity Color
+        WriteColorCode(e);
+        ofs << "10\n"; //X start
+        ofs << e.Line.start.x << "\n";
+        ofs << "20\n"; //Y start
+        ofs << e.Line.start.y << "\n";
+        ofs << "30\n"; //Z start
+        ofs << e.Line.start.z << "\n";
+        ofs << "11\n"; //X end
+        ofs << e.Line.end.x << "\n";
+        ofs << "21\n"; //Y end
+        ofs << e.Line.end.y << "\n";
+        ofs << "31\n"; //Z end
+        ofs << e.Line.end.z << "\n";
+        ofs << "0\n"; //End entity
+      }
+
+    }
+  }
+  ofs << "ENDSEC\n0\nEOF\n";
+}
 void fileReadDXF()
 {
   string line;
@@ -47,7 +153,7 @@ void fileReadDXF()
   int cn;
   while (getline (ifs, line))
   {
-    //D cout << KGREEN << line << KNORMAL << '\n';
+    D cout << KGREEN << line << KNORMAL << '\n';
     if (line.find("ENTITIES") != std::string::npos)
     {
       InsideSection = true;
@@ -165,7 +271,7 @@ void fileReadDXF()
                 }
                 a.start = geoGetArcPoint(a, arc_start_angle);
                 a.end = geoGetArcPoint(a, arc_end_angle);
-                //debugDumpArcStructure(a);
+                debugDumpArcStructure(a);
                 cadSetColor(CurrentColor);
                 cadDrawArc(a);
                 cadRedraw();
@@ -244,7 +350,7 @@ void fileReadDXF()
                 a.start = point_t{a.center.x + a.radius, a.center.y};
                 a.end = point_t{a.center.x + a.radius, a.center.y};
                 //D printf("Start: %.6f, %.6f\nEnd: %.6f, %.6f\n", a.start.x, a.start.y, a.end.x, a.end.y);
-                //debugDumpArcStructure(a);
+                debugDumpArcStructure(a);
                 cadSetColor(CurrentColor);
                 cadDrawArc(a);
                 cadRedraw();
