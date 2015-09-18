@@ -13,6 +13,7 @@
 #include <sstream>
 #include <algorithm>
 #include <array>
+#include <iomanip>
 
 #include <CAD.h>
 #include <CLI.h>

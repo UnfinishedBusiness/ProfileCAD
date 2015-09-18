@@ -31,7 +31,7 @@ int fileOpen(string f)
 }
 int fileSave(string f)
 {
-  ofs.open(f);
+  ofs.open(f, std::ofstream::out );
   if (ofs.is_open())
   {
     if (f.find("dxf") != std::string::npos)
@@ -54,15 +54,15 @@ void fileWriteDXF()
 {
   auto WriteColorCode = [](cadEntity e)
   {
-    if (e.Color == BLACK) ofs << "0\n";
-    if (e.Color == RED) ofs << "1\n";
-    if (e.Color == YELLOW) ofs << "2\n";
-    if (e.Color == GREEN) ofs << "3\n";
-    if (e.Color == CYAN) ofs << "4\n";
-    if (e.Color == BLUE) ofs << "5\n";
-    if (e.Color == MAGENTA) ofs << "6\n";
-    if (e.Color == DARKGREY) ofs << "7\n";
-    if (e.Color == LIGHTGREY) ofs << "8\n";
+    if (e.Color == BLACK) ofs << "0" << endl;
+    if (e.Color == RED) ofs << "1" << endl;
+    if (e.Color == YELLOW) ofs << "2" << endl;
+    if (e.Color == GREEN) ofs << "3" << endl;
+    if (e.Color == CYAN) ofs << "4" << endl;
+    if (e.Color == BLUE) ofs << "5" << endl;
+    if (e.Color == MAGENTA) ofs << "6" << endl;
+    if (e.Color == DARKGREY) ofs << "7" << endl;
+    if (e.Color == LIGHTGREY) ofs << "8" << endl;
   };
   ofs << "0\nSECTION\n2\nENTITIES\n0\n";
 
@@ -76,60 +76,60 @@ void fileWriteDXF()
       {
         if (e.Arc.start.x == e.Arc.end.x && e.Arc.start.y == e.Arc.end.y) //Were a circle
         {
-          ofs << "CIRCLE\n";
-          ofs << "8\n1\n"; //Group Code 8 - Fixed to layer one
-          ofs << "62\n"; //Group Code - Entity Color
+          ofs << "CIRCLE" << endl;
+          ofs << "8" << endl << "1" << endl; //Group Code 8 - Fixed to layer one
+          ofs << "62" << endl; //Group Code - Entity Color
           WriteColorCode(e);
-          ofs << "10\n"; //X center
-          ofs << e.Arc.center.x << "\n";
-          ofs << "20\n"; //Y center
-          ofs << e.Arc.center.y << "\n";
-          ofs << "30\n"; //Z center
-          ofs << e.Arc.center.z << "\n";
-          ofs << "40\n"; //Diameter
-          ofs << e.Arc.radius * 2 << "\n";
-          ofs << "0\n"; //End entity
+          ofs << "10" << endl; //X center
+          ofs << std::fixed << std::setprecision(6) << e.Arc.center.x << endl;
+          ofs << "20" << endl; //Y center
+          ofs << std::fixed << std::setprecision(6) << e.Arc.center.y << endl;
+          ofs << "30" << endl; //Z center
+          ofs << std::fixed << std::setprecision(6) << e.Arc.center.z << endl;
+          ofs << "40" << endl; //Diameter
+          ofs << std::fixed << std::setprecision(6) << e.Arc.radius * 2 << endl;
+          ofs << "0" << endl; //End entity
         }
         else
         {
-          ofs << "ARC\n";
-          ofs << "8\n1\n"; //Group Code 8 - Fixed to layer one
-          ofs << "62\n"; //Group Code - Entity Color
+          ofs << "ARC" << endl;
+          ofs << "8" << endl << "1" << endl; //Group Code 8 - Fixed to layer one
+          ofs << "62" << endl; //Group Code - Entity Color
           WriteColorCode(e);
-          ofs << "10\n"; //X center
-          ofs << e.Arc.center.x << "\n";
-          ofs << "20\n"; //Y center
-          ofs << e.Arc.center.y << "\n";
-          ofs << "30\n"; //Z center
-          ofs << e.Arc.center.z << "\n";
-          ofs << "40\n"; //Radius
-          ofs << e.Arc.radius << "\n";
-          ofs << "50\n"; //start angle
-          ofs << geoGetArcStartAngle(e.Arc) << "\n";
-          ofs << "51\n"; //end angle
-          ofs << geoGetArcEndAngle(e.Arc) << "\n";
-          ofs << "0\n"; //End entity
+          ofs << "10" << endl; //X center
+          ofs << std::fixed << std::setprecision(6) << e.Arc.center.x << endl;
+          ofs << "20" << endl; //Y center
+          ofs << std::fixed << std::setprecision(6) << e.Arc.center.y << endl;
+          ofs << "30" << endl; //Z center
+          ofs << std::fixed << std::setprecision(6) << e.Arc.center.z << endl;
+          ofs << "40" << endl; //Radius
+          ofs << std::fixed << std::setprecision(6) << e.Arc.radius << endl;
+          ofs << "50" << endl; //start angle
+          ofs << std::fixed << std::setprecision(6) << geoGetArcStartAngle(e.Arc) << endl;
+          ofs << "51" << endl; //end angle
+          ofs << std::fixed << std::setprecision(6) << geoGetArcEndAngle(e.Arc) << endl;
+          ofs << "0" << endl; //End entity
         }
       }
       if (e.Type == CAD_LINE)
       {
         ofs << "LINE\n";
-        ofs << "8\n1\n"; //Group Code 8 - Fixed to layer one
-        ofs << "62\n"; //Group Code - Entity Color
+        ofs << "8" << endl << "1" << endl; //Group Code 8 - Fixed to layer one
+        ofs << "62" << endl; //Group Code - Entity Color
         WriteColorCode(e);
-        ofs << "10\n"; //X start
-        ofs << e.Line.start.x << "\n";
-        ofs << "20\n"; //Y start
-        ofs << e.Line.start.y << "\n";
-        ofs << "30\n"; //Z start
-        ofs << e.Line.start.z << "\n";
-        ofs << "11\n"; //X end
-        ofs << e.Line.end.x << "\n";
-        ofs << "21\n"; //Y end
-        ofs << e.Line.end.y << "\n";
-        ofs << "31\n"; //Z end
-        ofs << e.Line.end.z << "\n";
-        ofs << "0\n"; //End entity
+        ofs << "10" << endl; //X start
+        ofs << std::fixed << std::setprecision(6) << e.Line.start.x << endl;
+        ofs << "20" << endl; //Y start
+        ofs << std::fixed << std::setprecision(6) << e.Line.start.y << endl;
+        ofs << "30" << endl; //Z start
+        ofs << std::fixed << std::setprecision(6) << e.Line.start.z << endl;
+        ofs << "11" << endl; //X end
+        ofs << std::fixed << std::setprecision(6) << e.Line.end.x << endl;
+        ofs << "21" << endl; //Y end
+        ofs << std::fixed << std::setprecision(6) << e.Line.end.y << endl;
+        ofs << "31" << endl; //Z end
+        ofs << std::fixed << std::setprecision(6) << e.Line.end.z << endl;
+        ofs << "0" << endl; //End entity
       }
 
     }
@@ -153,7 +153,11 @@ void fileReadDXF()
   int cn;
   while (getline (ifs, line))
   {
-    D cout << KGREEN << line << KNORMAL << '\n';
+    line.erase(std::remove(line.begin(), line.end(), ' '), line.end()); //Remove all whitespaces
+    line.erase(std::remove(line.begin(), line.end(), '\n'), line.end()); //Remove all newline characters
+    line.erase(std::remove(line.begin(), line.end(), '\r'), line.end()); //Remove all carage return characters
+    //D cout << KGREEN << line << KNORMAL << '\n';
+    //printf("line = \"%s\"\n", line.c_str() );
     if (line.find("ENTITIES") != std::string::npos)
     {
       InsideSection = true;
@@ -184,7 +188,7 @@ void fileReadDXF()
     if (InsideSection && CurrentSection == "ENTITIES" && CurrentEntity == "line")
     {
         //D cout << KBLUE << ">>line = " << line << "!\n" << KNORMAL;
-        line.pop_back(); //Remove newline
+        //line.pop_back(); //Remove newline
         if (isNumeric(line))
         {
           Group = atoi((char *)line.c_str());
