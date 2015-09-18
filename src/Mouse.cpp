@@ -56,7 +56,7 @@ void mouseCallback(int btn, int state, int x, int y)
             {
               e.Selected = true;
               e.SelectionIndex = cadCountSelection() + 1;
-              debugDumpArcStructure(e.Arc);
+              //debugDumpArcStructure(e.Arc);
             }
             e.SelectedAt = e.Arc.start;
             cadEdit(a, e);
@@ -72,7 +72,7 @@ void mouseCallback(int btn, int state, int x, int y)
             {
               e.Selected = true;
               e.SelectionIndex = cadCountSelection() + 1;
-              debugDumpArcStructure(e.Arc);
+              //debugDumpArcStructure(e.Arc);
             }
             e.SelectedAt = e.Arc.end;
             cadEdit(a, e);
@@ -88,7 +88,7 @@ void mouseCallback(int btn, int state, int x, int y)
             {
               e.Selected = true;
               e.SelectionIndex = cadCountSelection() + 1;
-              debugDumpArcStructure(e.Arc);
+              //debugDumpArcStructure(e.Arc);
             }
             e.SelectedAt = e.Arc.center;
             cadEdit(a, e);

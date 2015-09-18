@@ -389,6 +389,102 @@ void *cliScreenColorGreen()
   cliScreenUnSelectAll();
   return NULL;
 }
+void *cliScreenColorWhite()
+{
+  CurrentColor = WHITE;
+  cadEntity e;
+  for (int x=0; x < cadGetEntityArrayIndex(); x++)
+  {
+    e = cadGetEntityArray(x);
+    if (e.Selected && !e.Removed)
+    {
+      e.Color = CurrentColor;
+      cadEdit(x, e);
+    }
+  }
+  cliScreenUnSelectAll();
+  return NULL;
+}
+void *cliScreenColorBlack()
+{
+  CurrentColor = BLACK;
+  cadEntity e;
+  for (int x=0; x < cadGetEntityArrayIndex(); x++)
+  {
+    e = cadGetEntityArray(x);
+    if (e.Selected && !e.Removed)
+    {
+      e.Color = CurrentColor;
+      cadEdit(x, e);
+    }
+  }
+  cliScreenUnSelectAll();
+  return NULL;
+}
+void *cliScreenColorYellow()
+{
+  CurrentColor = YELLOW;
+  cadEntity e;
+  for (int x=0; x < cadGetEntityArrayIndex(); x++)
+  {
+    e = cadGetEntityArray(x);
+    if (e.Selected && !e.Removed)
+    {
+      e.Color = CurrentColor;
+      cadEdit(x, e);
+    }
+  }
+  cliScreenUnSelectAll();
+  return NULL;
+}
+void *cliScreenColorCyan()
+{
+  CurrentColor = CYAN;
+  cadEntity e;
+  for (int x=0; x < cadGetEntityArrayIndex(); x++)
+  {
+    e = cadGetEntityArray(x);
+    if (e.Selected && !e.Removed)
+    {
+      e.Color = CurrentColor;
+      cadEdit(x, e);
+    }
+  }
+  cliScreenUnSelectAll();
+  return NULL;
+}
+void *cliScreenColorMagenta()
+{
+  CurrentColor = MAGENTA;
+  cadEntity e;
+  for (int x=0; x < cadGetEntityArrayIndex(); x++)
+  {
+    e = cadGetEntityArray(x);
+    if (e.Selected && !e.Removed)
+    {
+      e.Color = CurrentColor;
+      cadEdit(x, e);
+    }
+  }
+  cliScreenUnSelectAll();
+  return NULL;
+}
+void *cliScreenColorGrey()
+{
+  CurrentColor = DARKGREY;
+  cadEntity e;
+  for (int x=0; x < cadGetEntityArrayIndex(); x++)
+  {
+    e = cadGetEntityArray(x);
+    if (e.Selected && !e.Removed)
+    {
+      e.Color = CurrentColor;
+      cadEdit(x, e);
+    }
+  }
+  cliScreenUnSelectAll();
+  return NULL;
+}
 
 void *cliXformTrim1()
 {
@@ -485,9 +581,15 @@ menu_item_t menu[CLI_MENU_ITEMS] = {
         sub_sub_menu_item_t{ "d", "delete selected", &cliScreenDeleteSelected },
       },
       sub_menu_item_t{ "c", "color",
+        sub_sub_menu_item_t{ "w", "white", &cliScreenColorWhite },
+        sub_sub_menu_item_t{ "b", "black", &cliScreenColorBlack },
         sub_sub_menu_item_t{ "r", "red", &cliScreenColorRed },
-        sub_sub_menu_item_t{ "b", "blue", &cliScreenColorBlue },
         sub_sub_menu_item_t{ "g", "green", &cliScreenColorGreen },
+        sub_sub_menu_item_t{ "l", "blue", &cliScreenColorBlue },
+        sub_sub_menu_item_t{ "y", "yellow", &cliScreenColorYellow },
+        sub_sub_menu_item_t{ "c", "cyan", &cliScreenColorCyan },
+        sub_sub_menu_item_t{ "m", "magenta", &cliScreenColorMagenta },
+        sub_sub_menu_item_t{ "e", "grey", &cliScreenColorGrey },
       },
   },
 };
@@ -497,7 +599,7 @@ void cliPush(std::string c)
   if (TextInput)
   {
     text.append(c);
-    uiEdit(1, uiEntity{UI_TEXT, GREEN, text, UI_INPUT_POSITION});
+    uiEdit(1, uiEntity{UI_TEXT, UI_MENU_COLOR, text, UI_INPUT_POSITION});
   }
   else
   {
@@ -551,7 +653,7 @@ void cliBackup()
       text = "";
       cliMenu();
     }
-    uiEdit(1, uiEntity{UI_TEXT, GREEN, text, UI_INPUT_POSITION});
+    uiEdit(1, uiEntity{UI_TEXT, UI_MENU_COLOR, text, UI_INPUT_POSITION});
   }
   else
   {
@@ -566,7 +668,7 @@ void cliReturn()
   {
     TextInput = false;
     TextReady = true;
-    uiEdit(1, uiEntity{UI_TEXT, GREEN, "", UI_INPUT_POSITION});
+    uiEdit(1, uiEntity{UI_TEXT, UI_MENU_COLOR, "", UI_INPUT_POSITION});
     if ((*textCallback)() != NULL) (*textCallback)();
     text = "";
     cliMenu();
@@ -625,85 +727,5 @@ void cliMenu()
 
     }
   }
-  uiEdit(0, uiEntity{UI_TEXT, GREEN, text, UI_MENU_POSITION});
+  uiEdit(0, uiEntity{UI_TEXT, UI_MENU_COLOR, text, UI_MENU_POSITION});
 }
-/*void cliParse(string CmdInput)
-{
-  if (CmdInput.find("plane") != std::string::npos)
-  {
-    std::size_t posSpace = CmdInput.find(" ");
-    std::string plane = CmdInput.substr(posSpace+1, (CmdInput.length() - posSpace)-1);
-    if (plane == "xy")
-    {
-      sceneSetViewAngle(0, 0, 0);
-    }
-    if (plane == "xz")
-    {
-      sceneSetViewAngle(90, 0, 0);
-    }
-    if (plane == "yz")
-    {
-      sceneSetViewAngle(0, 90, 0);
-    }
-  }
-  else if (CmdInput.find("color") != std::string::npos)
-  {
-    std::size_t posSpace = CmdInput.find(" ");
-    std::string color = CmdInput.substr(posSpace+1, (CmdInput.length() - posSpace)-1);
-    if (color == "green")
-    {
-      CurrentColor = GREEN;
-      uiEdit(1, uiEntity{UI_TEXT, CurrentColor, "> GREEN <", UI_MSG_POSITION});
-    }
-    if (color == "red")
-    {
-      CurrentColor = RED;
-      uiEdit(1, uiEntity{UI_TEXT, CurrentColor, "> RED <", UI_MSG_POSITION});
-    }
-    if (color == "blue")
-    {
-      CurrentColor = BLUE;
-      uiEdit(1, uiEntity{UI_TEXT, CurrentColor, "> BLUE <", UI_MSG_POSITION});
-    }
-  }
-  else if (CmdInput.find("line") != std::string::npos)
-  {
-    if (CmdInput == "line") //no arguments supplied
-    {
-      uiEdit(1, uiEntity{UI_TEXT, CurrentColor, "? (Endpoints) line x0y0z0x1y1z1 | (Selected line) line distance (+ right, - left) ?", UI_MSG_POSITION});
-      return;
-    }
-    cadSetColor(CurrentColor);
-    std::vector<cadEntity> e = cadGetSelected();
-    if (e.size() == 0) //No entitys are selected
-    {
-
-      //point_t Start = {(float)atof((char*)X1s.c_str()), (float)atof((char*)Y1s.c_str())};
-      //point_t End = {(float)atof((char*)X2s.c_str()), (float)atof((char*)Y2s.c_str())};
-      //cadDrawLine(Start, End);
-      //uiEdit(1, uiEntity{UI_TEXT, CurrentColor, "> LINE ENDPOINTS <", UI_MSG_POSITION});
-    }
-  }
-  else if (CmdInput == "test")
-  {
-    cadSetColor(GREEN);
-    cadDrawLine(point_t{0, 0, 0}, point_t{2,0,0});
-    cadDrawLine(point_t{0, 0, 0}, point_t{0,2,0});
-    cadDrawLine(point_t{0, 0, 0}, point_t{0,0,2});
-    cadRedraw();
-  }
-  else if (CmdInput == "rm")
-  {
-    uiEdit(1, uiEntity{UI_TEXT, RED, "> REMOVING SELECTED ENTITYS!", UI_MSG_POSITION});
-    cadRemoveSelected();
-  }
-  else if (CmdInput == "exit")
-  {
-    uiEdit(1, uiEntity{UI_TEXT, RED, "Bye!", UI_MSG_POSITION});
-    EXIT;
-  }
-  else
-  {
-    uiEdit(1, uiEntity{UI_TEXT, RED, "! NO SUCH COMMAND !", UI_MSG_POSITION});
-  }
-}*/

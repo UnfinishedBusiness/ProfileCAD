@@ -27,9 +27,16 @@ void *cliCreateLineParallel();
 void *cliScreenSelectAll();
 void *cliScreenUnSelectAll();
 void *cliScreenDeleteSelected();
+
+void *cliScreenColorWhite();
+void *cliScreenColorBlack();
 void *cliScreenColorRed();
-void *cliScreenColorBlue();
 void *cliScreenColorGreen();
+void *cliScreenColorBlue();
+void *cliScreenColorYellow();
+void *cliScreenColorCyan();
+void *cliScreenColorMagenta();
+void *cliScreenColorGrey();
 
 void *cliViewPlaneXY();
 void *cliViewPlaneYZ();

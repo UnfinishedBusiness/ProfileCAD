@@ -5,6 +5,8 @@
 
 #define UI_TEXT 0x00
 
+#define UI_MENU_COLOR MAGENTA
+
 #define UI_MENU_POSITION point_t{10, 10, 0}
 #define UI_INPUT_POSITION point_t{5, 30, 0}
 #define UI_MOUSE_POSITION point_t{5, (WINDOW_HEIGHT + 170), 0}
