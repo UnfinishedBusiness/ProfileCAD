@@ -187,8 +187,6 @@ void fileReadDXF()
     }
     if (InsideSection && CurrentSection == "ENTITIES" && CurrentEntity == "line")
     {
-        //D cout << KBLUE << ">>line = " << line << "!\n" << KNORMAL;
-        //line.pop_back(); //Remove newline
         if (isNumeric(line))
         {
           Group = atoi((char *)line.c_str());
@@ -256,8 +254,6 @@ void fileReadDXF()
     }
     if (InsideSection && CurrentSection == "ENTITIES" && CurrentEntity == "arc")
     {
-        //D cout << KBLUE << ">>arc = " << line << "!\n" << KNORMAL;
-        line.pop_back(); //Remove newline
         if (isNumeric(line))
         {
           Group = atoi((char *)line.c_str());
@@ -341,8 +337,6 @@ void fileReadDXF()
     }
     if (InsideSection && CurrentSection == "ENTITIES" && CurrentEntity == "circle")
     {
-        //D cout << KBLUE << ">>circle = " << line << "!\n" << KNORMAL;
-        line.pop_back(); //Remove newline
         if (isNumeric(line))
         {
           Group = atoi((char *)line.c_str());
