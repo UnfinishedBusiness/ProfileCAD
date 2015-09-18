@@ -42,14 +42,14 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
                   }
                   if (key == 15) //CTRL+o
                   {
-                    fileOpen("../test/dxf/complex.dxf");
-                    fileSave("test.dxf");
-                    cliScreenSelectAll();
-                    cliScreenDeleteSelected();
-                    fileOpen("test.dxf");
+                    //fileOpen("../test/dxf/complex.dxf");
+                    //fileSave("test.dxf");
+                    //cliScreenSelectAll();
+                    //cliScreenDeleteSelected();
+                    //fileOpen("test.dxf");
                     //fileOpen("../test/dxf/arc.dxf");
 
-                    //cliFileGetNew(); //Default action
+                    cliFileGetNew(); //Default action
                   }
                   if (key == 19) //CTRL+s
                   {

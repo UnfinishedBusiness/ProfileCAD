@@ -155,9 +155,9 @@ void mouseMotionCallback(int x, int y)
       mouse_t inc{x - mouseLast.x , y - mouseLast.y};
       //D printf("\rPan %d, %d", inc.x, inc.y);
       //D fflush(stdout);
-      if (abs(inc.x) < 10  && abs(inc.y) < 10)
+      if (abs(inc.x) < 30  && abs(inc.y) < 30)
       {
-        sceneIncPan(inc.x * 0.01, (-1 * inc.y) * 0.01 , 0);
+        sceneIncPan(inc.x * 0.01 * sceneGetScale(), (-1 * inc.y) * 0.01 * sceneGetScale(), 0);
       }
     }
     else if (mod == GLUT_ACTIVE_CTRL)
@@ -168,6 +168,8 @@ void mouseMotionCallback(int x, int y)
       if (abs(inc.x) < 10  && abs(inc.y) < 10)
       {
         sceneIncViewAngle(inc.y, -1 * inc.x, 0);
+        point_t  va = sceneGetViewAngle();
+        uiEdit(2, uiEntity{UI_TEXT, RED, "Orbit > Xa: " + to_string(va.x) + " Ya: " + to_string(va.y), UI_MOUSE_POSITION});
       }
     }
     else
@@ -182,13 +184,23 @@ void mousePassiveMotionCallback(int x, int y)
 {
   point_t pos = cadScreenCordToCadCord(x, y);
   //D printf("%sX: %.6f, Y: %.6f, Z: %.6f%s\r", KGREEN, pos.x, pos.y, pos.z, KNORMAL);
+  string m;
+  if (pos.z > 0)
+  {
+      m = "X: " + to_string(pos.x) + " Y: " + to_string(pos.y) + " Z: " + to_string(pos.z);
+  }
+  else
+  {
+    m = "X: " + to_string(pos.x) + " Y: " + to_string(pos.y);
+  }
+  uiEdit(2, uiEntity{UI_TEXT, WHITE, m, UI_MOUSE_POSITION});
   cadEntity e;
   for (int a = 0; a < cadGetEntityArrayIndex(); a++)
   {
     e = cadGetEntityArray(a);
     if (isSimilar(pos.x, e.Arc.start.x) && isSimilar(pos.y, e.Arc.start.y) && !e.Removed && e.Type == CAD_ARC)
     {
-      uiEdit(0, uiEntity{UI_TEXT, RED, "Start point", UI_MENU_POSITION});
+      //uiEdit(0, uiEntity{UI_TEXT, RED, "Start point", UI_MENU_POSITION});
       cadShowSelectionBox(e.Arc.start);
       e.MouseOver = true;
       cadEdit(a, e);
@@ -196,7 +208,7 @@ void mousePassiveMotionCallback(int x, int y)
     }
     else if (isSimilar(pos.x, e.Arc.end.x) && isSimilar(pos.y, e.Arc.end.y) && !e.Removed && e.Type == CAD_ARC)
     {
-      uiEdit(0, uiEntity{UI_TEXT, RED, "End point", UI_MENU_POSITION});
+      //uiEdit(0, uiEntity{UI_TEXT, RED, "End point", UI_MENU_POSITION});
       cadShowSelectionBox(e.Arc.end);
       e.MouseOver = true;
       cadEdit(a, e);
@@ -204,7 +216,7 @@ void mousePassiveMotionCallback(int x, int y)
     }
     else if (isSimilar(pos.x, e.Arc.center.x) && isSimilar(pos.y, e.Arc.center.y) && !e.Removed && e.Type == CAD_ARC)
     {
-      uiEdit(0, uiEntity{UI_TEXT, RED, "Center point", UI_MENU_POSITION});
+      //uiEdit(0, uiEntity{UI_TEXT, RED, "Center point", UI_MENU_POSITION});
       cadShowSelectionBox(e.Arc.center);
       e.MouseOver = true;
       cadEdit(a, e);

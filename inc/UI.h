@@ -7,6 +7,7 @@
 
 #define UI_MENU_POSITION point_t{10, 10, 0}
 #define UI_INPUT_POSITION point_t{5, 30, 0}
+#define UI_MOUSE_POSITION point_t{5, (WINDOW_HEIGHT + 170), 0}
 
 struct uiEntity{
   int Type; //Text

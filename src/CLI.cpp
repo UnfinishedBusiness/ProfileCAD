@@ -282,6 +282,7 @@ void *cliFileGetNew()
     cliScreenDeleteSelected();
     CurrentFile = cliGetTextInput();
     int r = fileOpen(CurrentFile);
+    glutSetWindowTitle(CurrentFile.c_str());
     if (r == FILE_OPEN_ERROR) uiEdit(0, uiEntity{UI_TEXT, RED, "Error reading file!", UI_MENU_POSITION});
     if (r == FILE_UNKNOWN_FORMAT) uiEdit(0, uiEntity{UI_TEXT, RED, "Unknown file format!", UI_MENU_POSITION});
     return NULL;
@@ -298,6 +299,7 @@ void *cliFileGetMerge()
   {
     TextReady = false;
     CurrentFile = cliGetTextInput();
+    glutSetWindowTitle(CurrentFile.c_str());
     int r = fileOpen(CurrentFile);
     if (r == FILE_OPEN_ERROR) uiEdit(0, uiEntity{UI_TEXT, RED, "Error reading file!", UI_MENU_POSITION});
     if (r == FILE_UNKNOWN_FORMAT) uiEdit(0, uiEntity{UI_TEXT, RED, "Unknown file format!", UI_MENU_POSITION});
