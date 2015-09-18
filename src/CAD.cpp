@@ -159,14 +159,14 @@ void cadRenderLine(line_t l)
 }
 void cadRenderArc(arc_t a)
 {
-  float includedAngle = geoRadiansToDegrees(geoGetIncludedAngle(a));
+  float includedAngle = geoGetIncludedAngle(a);
   line_t l = line_t{ point_t{a.center.x, a.center.y,} , point_t{a.start.x, a.start.y} };
   glBegin(GL_LINE_STRIP);
   if (a.start.x != a.end.x && a.start.y != a.end.y)
   {
     glVertex3f(a.start.x, a.start.y, 0);
   }
-  int steps = geoRadiansToDegrees(geoGetIncludedAngle(a));
+  int steps = geoGetIncludedAngle(a);
   float inc_angle = 1; //Degrees
   for (int x=0; x < steps; x++)
   {

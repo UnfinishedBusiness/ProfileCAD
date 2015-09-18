@@ -261,17 +261,10 @@ void fileReadDXF()
           {
             case 0: //End of entity
                 //D cout << KRED << "\tDrawing Entity!\n" << KNORMAL;
-                if (arc_start_angle < arc_end_angle)
-                {
-                  a.direction = ARC_CCW;
-                }
-                else
-                {
-                  a.direction = ARC_CW;
-                }
+                a.direction = geoGetArcDirection(arc_start_angle, arc_end_angle);
                 a.start = geoGetArcPoint(a, arc_start_angle);
                 a.end = geoGetArcPoint(a, arc_end_angle);
-                debugDumpArcStructure(a);
+                //debugDumpArcStructure(a);
                 cadSetColor(CurrentColor);
                 cadDrawArc(a);
                 cadRedraw();
@@ -348,7 +341,7 @@ void fileReadDXF()
                 a.start = point_t{a.center.x + a.radius, a.center.y};
                 a.end = point_t{a.center.x + a.radius, a.center.y};
                 //D printf("Start: %.6f, %.6f\nEnd: %.6f, %.6f\n", a.start.x, a.start.y, a.end.x, a.end.y);
-                debugDumpArcStructure(a);
+                //debugDumpArcStructure(a);
                 cadSetColor(CurrentColor);
                 cadDrawArc(a);
                 cadRedraw();

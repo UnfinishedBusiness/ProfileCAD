@@ -10,5 +10,5 @@ void mouseInit();
 point_t mouseCadLastClickPos();
 void mouseCallback(int, int, int, int);
 void mouseMotionCallback(int, int);
-void mousePassiceMotionCallback(int , int);
+void mousePassiveMotionCallback(int , int);
 #endif

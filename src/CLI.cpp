@@ -330,7 +330,7 @@ void *cliFilePutCurrent()
   int r = fileSave(CurrentFile);
   if (r == FILE_OPEN_ERROR)
   {
-    uiEdit(0, uiEntity{UI_TEXT, RED, "Error reading file!", UI_MENU_POSITION});
+    uiEdit(0, uiEntity{UI_TEXT, RED, "Error writing file!", UI_MENU_POSITION});
   }
   else
   {

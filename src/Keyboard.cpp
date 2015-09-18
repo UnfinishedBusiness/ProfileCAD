@@ -47,6 +47,7 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
                     cliScreenSelectAll();
                     cliScreenDeleteSelected();
                     fileOpen("test.dxf");
+                    //fileOpen("../test/dxf/arc.dxf");
 
                     //cliFileGetNew(); //Default action
                   }

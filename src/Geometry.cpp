@@ -91,7 +91,7 @@ point_t geoRotatePointAroundPoint(point_t p, point_t o, float angle) //angle is 
 }
 float geoRadiansToDegrees(float r)
 {
-  return r * 57.2957795;
+  return (r * 57.2957795);
 }
 float geoDegreesToRadians(float r)
 {
@@ -185,12 +185,25 @@ float geoGetArcEndAngle(arc_t a)
   //return geoGetLineAngle(line_t{a.center, a.end});
   return atan2(a.end.y - a.center.y, a.end.x - a.center.x);
 }
+float geoGetArcStartAngleAbs(arc_t a)
+{
+  //Draw line from arc center to start point and calculate angle of line
+  float angle = geoRadiansToDegrees(geoGetLineAngle(line_t{ a.center, a.start}));
+  cout << KRED << "(geoGetArcStartAngleAbs) Angle = " << angle << KNORMAL << endl;
+  return angle;
+}
+float geoGetArcEndAngleAbs(arc_t a)
+{
+  float angle = geoRadiansToDegrees(geoGetLineAngle(line_t{ a.center, a.end}));
+  cout << KRED << "(geoGetArcStartAngleAbs) Angle = " << angle << KNORMAL << endl;
+  return angle;
+}
 point_t geoGetArcPoint(arc_t a, float angle) //Angle is in degrees
 {
   point_t e = point_t{ a.radius + a.center.x, a.center.y, 0 };
   return geoRotatePointAroundPoint(e, a.center, angle);
 }
-float geoGetArchLength(arc_t a)
+float geoGetArcLength(arc_t a)
 {
   float start_angle = geoGetArcStartAngle(a);
   float end_angle = geoGetArcEndAngle(a);
@@ -247,8 +260,26 @@ float geoGetIncludedAngle(arc_t a)
   }
   else
   {
-    return angle;
+    return geoRadiansToDegrees(angle);
   }
+}
+bool geoGetArcDirection(float s, float e)
+{
+  float direction;
+  if (s < e)
+  {
+    direction = ARC_CCW;
+  }
+  else
+  {
+    direction = ARC_CW;
+  }
+  if ((360 + (int)s - (int)e) % 360 < 180)
+  {
+    //cout << "True!\n";
+    direction = !direction;
+  }
+  return direction;
 }
 float geoRound(float x) //Round to 6 places
 {

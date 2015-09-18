@@ -2,6 +2,8 @@
 #define GEOMETRY_
 #include <application.h>
 
+//Angle 0 degrees is on x horizon
+
 bool geoInTolerance(float, float, float);
 point_t geoGetLineIntersection(line_t, line_t);
 std::vector<point_t> geoGetPointsOfLine(point_t, point_t);
@@ -16,12 +18,15 @@ point_t geoGetLineMidpoint(line_t);
 float geoGetLineAngle(line_t);
 float geoRadiansToDegrees(float);
 float geoDegreesToRadians(float);
-float geoGetArchLength(arc_t a);
+
+float geoGetArcLength(arc_t a);
 point_t geoGetArcEndpoint(arc_t, float);
+float geoGetArcStartAngleAbs(arc_t); //Returns degrees!
+float geoGetArcEndAngleAbs(arc_t); //Returns degrees!
 float geoGetArcStartAngle(arc_t);
 float geoGetArcEndAngle(arc_t);
 point_t geoGetArcPoint(arc_t, float);
-
-float geoGetIncludedAngle(arc_t);
+bool geoGetArcDirection(float, float); //Return direction given start and end angle
+float geoGetIncludedAngle(arc_t); //Returns in degrees!
 float geoRound(float);
 #endif
