@@ -64,7 +64,7 @@ void fileWriteDXF()
     if (e.Color == DARKGREY) ofs << "7" << endl;
     if (e.Color == LIGHTGREY) ofs << "8" << endl;
   };
-  ofs << "0\nSECTION\n2\nENTITIES\n0\n";
+  ofs << "0" << endl << "SECTION" <<endl << "2" << endl << "ENTITIES" << endl << "0" << endl;
 
   cadEntity e;
   for (int x = 0; x < cadGetEntityArrayIndex(); x++)
@@ -81,13 +81,13 @@ void fileWriteDXF()
           ofs << "62" << endl; //Group Code - Entity Color
           WriteColorCode(e);
           ofs << "10" << endl; //X center
-          ofs << std::fixed << std::setprecision(6) << e.Arc.center.x << endl;
+          ofs <<  std::setprecision(6) << e.Arc.center.x << endl;
           ofs << "20" << endl; //Y center
-          ofs << std::fixed << std::setprecision(6) << e.Arc.center.y << endl;
+          ofs <<  std::setprecision(6) << e.Arc.center.y << endl;
           ofs << "30" << endl; //Z center
-          ofs << std::fixed << std::setprecision(6) << e.Arc.center.z << endl;
-          ofs << "40" << endl; //Diameter
-          ofs << std::fixed << std::setprecision(6) << e.Arc.radius * 2 << endl;
+          ofs <<  std::setprecision(6) << e.Arc.center.z << endl;
+          ofs << "40" << endl; //Radius
+          ofs <<  std::setprecision(6) << e.Arc.radius << endl;
           ofs << "0" << endl; //End entity
         }
         else
@@ -97,17 +97,17 @@ void fileWriteDXF()
           ofs << "62" << endl; //Group Code - Entity Color
           WriteColorCode(e);
           ofs << "10" << endl; //X center
-          ofs << std::fixed << std::setprecision(6) << e.Arc.center.x << endl;
+          ofs <<  std::setprecision(6) << e.Arc.center.x << endl;
           ofs << "20" << endl; //Y center
-          ofs << std::fixed << std::setprecision(6) << e.Arc.center.y << endl;
+          ofs <<  std::setprecision(6) << e.Arc.center.y << endl;
           ofs << "30" << endl; //Z center
-          ofs << std::fixed << std::setprecision(6) << e.Arc.center.z << endl;
+          ofs <<  std::setprecision(6) << e.Arc.center.z << endl;
           ofs << "40" << endl; //Radius
-          ofs << std::fixed << std::setprecision(6) << e.Arc.radius << endl;
+          ofs <<  std::setprecision(6) << e.Arc.radius << endl;
           ofs << "50" << endl; //start angle
-          ofs << std::fixed << std::setprecision(6) << geoGetArcStartAngle(e.Arc) << endl;
+          ofs <<  std::setprecision(6) << geoRadiansToDegrees(geoGetArcStartAngle(e.Arc)) << endl;
           ofs << "51" << endl; //end angle
-          ofs << std::fixed << std::setprecision(6) << geoGetArcEndAngle(e.Arc) << endl;
+          ofs <<  std::setprecision(6) << geoRadiansToDegrees(geoGetArcEndAngle(e.Arc)) << endl;
           ofs << "0" << endl; //End entity
         }
       }
@@ -118,17 +118,17 @@ void fileWriteDXF()
         ofs << "62" << endl; //Group Code - Entity Color
         WriteColorCode(e);
         ofs << "10" << endl; //X start
-        ofs << std::fixed << std::setprecision(6) << e.Line.start.x << endl;
+        ofs <<  std::setprecision(6) << e.Line.start.x << endl;
         ofs << "20" << endl; //Y start
-        ofs << std::fixed << std::setprecision(6) << e.Line.start.y << endl;
+        ofs <<  std::setprecision(6) << e.Line.start.y << endl;
         ofs << "30" << endl; //Z start
-        ofs << std::fixed << std::setprecision(6) << e.Line.start.z << endl;
+        ofs <<  std::setprecision(6) << e.Line.start.z << endl;
         ofs << "11" << endl; //X end
-        ofs << std::fixed << std::setprecision(6) << e.Line.end.x << endl;
+        ofs <<  std::setprecision(6) << e.Line.end.x << endl;
         ofs << "21" << endl; //Y end
-        ofs << std::fixed << std::setprecision(6) << e.Line.end.y << endl;
+        ofs <<  std::setprecision(6) << e.Line.end.y << endl;
         ofs << "31" << endl; //Z end
-        ofs << std::fixed << std::setprecision(6) << e.Line.end.z << endl;
+        ofs <<  std::setprecision(6) << e.Line.end.z << endl;
         ofs << "0" << endl; //End entity
       }
 

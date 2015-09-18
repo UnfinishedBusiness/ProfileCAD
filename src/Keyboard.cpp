@@ -42,8 +42,13 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
                   }
                   if (key == 15) //CTRL+o
                   {
-                    //fileOpen("../test/dxf/complex.dxf");
-                    cliFileGetNew();
+                    fileOpen("../test/dxf/complex.dxf");
+                    fileSave("test.dxf");
+                    cliScreenSelectAll();
+                    cliScreenDeleteSelected();
+                    fileOpen("test.dxf");
+
+                    //cliFileGetNew(); //Default action
                   }
                   if (key == 19) //CTRL+s
                   {
