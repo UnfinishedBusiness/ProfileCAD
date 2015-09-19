@@ -8,7 +8,8 @@ struct mouse_t{
 
 void mouseInit();
 
-void mouseToggleEndpointSnap();
+void mouseToggleLineEndpointSnap();
+void mouseToggleArcEndpointSnap();
 void mouseToggleCenterSnap();
 void mouseToggleMidpointSnap();
 void mouseToggleVectorSnap();

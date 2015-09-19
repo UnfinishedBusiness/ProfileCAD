@@ -73,16 +73,33 @@ void cadRemoveSelected()
 }
 std::vector<cadEntity> cadGetSelected()
 {
-  std::vector<cadEntity> e;
+  std::vector<cadEntity> e; //Unordered
+  std::vector<cadEntity> o; //Ordered by selection
   for (int i = 0; i < cadEntityArrayIndex; i++)
   {
       if (cadEntityArray[i].Selected && !cadEntityArray[i].Removed) //Make sure were selected and not removed
       {
+        //cout << "SelectionIndex = " << cadEntityArray[i].SelectionIndex << endl;
         e.push_back(cadEntity());
         e[e.size()-1] = cadEntityArray[i];
       }
   }
-  return e;
+  int next = 1;
+  for (int a = 0; a < e.size(); a++)
+  {
+    for (int x = 0; x < e.size(); x++)
+    {
+      if (e[x].SelectionIndex == next)
+      {
+        //cout << "Ordered = " << e[x].SelectionIndex << endl;
+        o.push_back(cadEntity());
+        o[next-1] = e[x];
+        next++;
+      }
+    }
+  }
+
+  return o;
 }
 int cadCountSelection()
 {
@@ -173,10 +190,6 @@ void cadRenderArc(arc_t a)
   float includedAngle = geoGetIncludedAngle(a);
   line_t l = line_t{ point_t{a.center.x, a.center.y,} , point_t{a.start.x, a.start.y} };
   glBegin(GL_LINE_STRIP);
-  if (a.start.x != a.end.x && a.start.y != a.end.y)
-  {
-    glVertex3f(a.start.x, a.start.y, 0);
-  }
   int steps;
   if (a.start == a.end)
   {
@@ -185,8 +198,10 @@ void cadRenderArc(arc_t a)
   }
   else
   {
+    glVertex3f(a.start.x, a.start.y, a.start.z);
     steps = geoGetIncludedAngle(a);
   }
+  cadEntityArray[a.parentIndex].Vector.clear();
   float inc_angle = 1; //Degrees
   for (int x=0; x < steps; x++)
   {
@@ -205,9 +220,9 @@ void cadRenderArc(arc_t a)
       cadEntityArray[a.parentIndex].Vector[x] = l.end;
     }
   }
-  if (a.start.x != a.end.x && a.start.y != a.end.y)
+  if (a.start != a.end)
   {
-    glVertex3f(a.end.x, a.end.y, 0);
+    glVertex3f(a.end.x, a.end.y, a.end.z);
   }
 
   glEnd();

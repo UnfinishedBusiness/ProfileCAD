@@ -53,6 +53,10 @@ struct point_t{
   {
     return x == rhs.x && y == rhs.y && z == rhs.z;
   }
+  bool operator!=(const point_t& rhs)
+  {
+    return x != rhs.x && y != rhs.y && z != rhs.z;
+  }
 };
 struct line_t{
   point_t start;

@@ -12,9 +12,10 @@ void menuInit()
   glutCreateMenu(menuCallback);
   glutAddMenuEntry("Repaint", 1);
   glutAddMenuEntry("Toggle Snap Center", 2);
-  glutAddMenuEntry("Toggle Snap Enpoints", 3);
-  glutAddMenuEntry("Toggle Snap Midpoint", 4);
-  glutAddMenuEntry("Toggle Snap Vector", 5);
+  glutAddMenuEntry("Toggle Snap Arc Enpoints", 3);
+  glutAddMenuEntry("Toggle Snap Line Enpoints", 4);
+  glutAddMenuEntry("Toggle Snap Midpoint", 5);
+  glutAddMenuEntry("Toggle Snap Vector", 6);
   glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 void menuCallback(int choice)
@@ -23,8 +24,9 @@ void menuCallback(int choice)
   {
     case 1: cadRedraw(); break;
     case 2: mouseToggleCenterSnap(); break;
-    case 3: mouseToggleEndpointSnap(); break;
-    case 4: mouseToggleMidpointSnap(); break;
-    case 5: mouseToggleVectorSnap(); break;
+    case 3: mouseToggleArcEndpointSnap(); break;
+    case 4: mouseToggleLineEndpointSnap(); break;
+    case 5: mouseToggleMidpointSnap(); break;
+    case 6: mouseToggleVectorSnap(); break;
   }
 }

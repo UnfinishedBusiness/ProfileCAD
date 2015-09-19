@@ -197,6 +197,51 @@ point_t geoGetArcPoint(arc_t a, float angle) //Angle is in degrees
   point_t e = point_t{ a.radius + a.center.x, a.center.y, 0 };
   return geoRotatePointAroundPoint(e, a.center, angle);
 }
+std::vector<point_t> geoGetPointsOfArc(arc_t a)
+{
+  std::vector<point_t> r;
+  int rx = 0;
+  float includedAngle = geoGetIncludedAngle(a);
+  line_t l = line_t{ point_t{a.center.x, a.center.y,} , point_t{a.start.x, a.start.y} };
+  if (a.start != a.end)
+  {
+    r.push_back(point_t());
+    r[rx] = a.start;
+    rx++;
+  }
+  int steps;
+  if (a.start == a.end)
+  {
+    //Were a circle
+    steps = 361; //Go the full 360 to close the gap
+  }
+  else
+  {
+    steps = geoGetIncludedAngle(a);
+  }
+  float inc_angle = 1; //Degrees
+  for (int x=0; x < steps; x++)
+  {
+    if (a.direction == ARC_CW)
+    {
+      l = geoRotateLine(l, a.center, -inc_angle);
+    }
+    else
+    {
+      l = geoRotateLine(l, a.center, inc_angle);
+    }
+    r.push_back(point_t());
+    r[rx] = l.end;
+    rx++;
+  }
+  if (a.start != a.end)
+  {
+    r.push_back(point_t());
+    r[rx] = a.end;
+    rx++;
+  }
+  return r;
+}
 float geoGetArcLength(arc_t a)
 {
   float start_angle = geoGetArcStartAngle(a);

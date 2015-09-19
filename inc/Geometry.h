@@ -26,6 +26,7 @@ float geoGetArcEndAngleAbs(arc_t); //Returns degrees!
 float geoGetArcStartAngle(arc_t);
 float geoGetArcEndAngle(arc_t);
 point_t geoGetArcPoint(arc_t, float);
+std::vector<point_t> geoGetPointsOfArc(arc_t);
 bool geoGetArcDirection(float, float); //Return direction given start and end angle
 float geoGetIncludedAngle(arc_t); //Returns in degrees!
 float geoRound(float);

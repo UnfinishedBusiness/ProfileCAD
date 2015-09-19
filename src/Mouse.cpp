@@ -27,9 +27,12 @@ void mouseInit()
   glutMotionFunc(mouseMotionCallback);
   glutPassiveMotionFunc(mousePassiveMotionCallback);
 }
-void mouseToggleEndpointSnap()
+void mouseToggleLineEndpointSnap()
 {
   snapLineEndpoints = !snapLineEndpoints;
+}
+void mouseToggleArcEndpointSnap()
+{
   snapArcEndpoints = !snapArcEndpoints;
 }
 void mouseToggleCenterSnap()
@@ -138,6 +141,7 @@ void mouseCallback(int btn, int state, int x, int y)
               e.SelectionIndex = cadCountSelection() + 1;
             }
             e.SelectedAt = e.Line.start;
+            //D printf("\t%s Entity #%d Start point Clicked! X: %.6f, Y: %.6f%s\n", KGREEN, a, e.Line.start.x, e.Line.start.y, KNORMAL);
             mouseLastSnapClick = e.SelectedAt;
             cadEdit(a, e);
             return;
@@ -155,6 +159,7 @@ void mouseCallback(int btn, int state, int x, int y)
               e.SelectionIndex = cadCountSelection() + 1;
             }
             e.SelectedAt = e.Line.end;
+            //D printf("\t%s Entity #%d End point Clicked! X: %.6f, Y: %.6f%s\n", KGREEN, a, e.Line.end.x, e.Line.end.y, KNORMAL);
             mouseLastSnapClick = e.SelectedAt;
             cadEdit(a, e);
             return;
@@ -174,6 +179,40 @@ void mouseCallback(int btn, int state, int x, int y)
             mouseLastSnapClick = e.SelectedAt;
             cadEdit(a, e);
             return;
+          }
+          bool selected = false;
+          if (snapVector)
+          {
+            for (x = 0; x < e.Vector.size(); x++)
+            {
+              if ( geoInTolerance(pos.x, e.Vector[x].x, 0.050) && geoInTolerance(pos.y, e.Vector[x].y, 0.050) )
+              {
+                //cout << KRED << "Vecter[" << x << "] = " << e.Vector[x].x << ", " << e.Vector[x].y << KNORMAL << endl;
+                selected = true;
+                //cadShowSelectionBox(e.Vector[x]);
+                mouseLastMouseOver = e.Vector[x];
+                e.MouseOver = true;
+                cadEdit(a, e);
+                cadRedraw();
+                break;
+              }
+            }
+          }
+          if (selected)
+          {
+            e.MouseOver = false;
+            if (mod == GLUT_ACTIVE_CTRL)
+            {
+              e.Selected = false;
+            }
+            else
+            {
+              e.Selected = true;
+              e.SelectionIndex = cadCountSelection() + 1;
+            }
+            e.SelectedAt = mouseLastMouseOver;
+            cadEdit(a, e);
+            cadRedraw();
           }
         }
     }

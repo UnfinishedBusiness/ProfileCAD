@@ -53,6 +53,10 @@ std::string cliGetCurrentFile()
 }
 float cliGetInput()
 {
+  if (text.size() == 0)
+  {
+    return 0;
+  }
   text.replace(text.find("> "), sizeof("> ")-1, "");
   float input;
   if (text.find("*") != std::string::npos) //Evaluate multiplication
@@ -90,6 +94,10 @@ float cliGetInput()
 }
 std::string cliGetTextInput()
 {
+  if (text.size() == 0)
+  {
+    return "";
+  }
   text.replace(text.find("> "), sizeof("> ")-1, "");
   return text;
 }
@@ -623,7 +631,56 @@ void *cliXformTrim2()
 }
 void *cliXformTrimCircle()
 {
-
+  if (TextReady == true)
+  {
+    TextReady = false;
+    //uiEdit(3, uiEntity{UI_TEXT, RED, "Click for center point!", UI_HINT_POSITION});
+    cliGetTextInput();
+    int index;
+    std::vector<cadEntity> e = cadGetSelected();
+    if (e.empty())
+    {
+      return NULL;
+    }
+    if (e.size() == 3)
+    {
+      if (e[0].Type == CAD_ARC && e[0].Line.start == e[0].Line.end && e[1].Type == CAD_LINE && e[2].Type == CAD_LINE) //Make sure first selection is a circle and second and third selections are lines
+      {
+        //printf("Line1 - X: %.6f, Y: %.6f\n", e[1].SelectedAt.x, e[1].SelectedAt.y);
+        //printf("Line2 - X: %.6f, Y: %.6f\n", e[2].SelectedAt.x, e[2].SelectedAt.y);
+        bool closest = false;
+        e[0].Arc.start = e[1].SelectedAt;
+        e[0].Arc.end = e[2].SelectedAt;
+        std::vector<point_t> p = geoGetPointsOfArc(e[0].Arc);
+        for (int z = 0; z < p.size(); z++)
+        {
+          if (geoInTolerance(p[z].x, e[0].SelectedAt.x, 0.050) && geoInTolerance(p[z].y, e[0].SelectedAt.y, 0.050))
+          {
+            closest = true;
+          }
+        }
+        if (!closest)
+        {
+          e[0].Arc.direction = !e[0].Arc.direction;
+          e[0].Arc.start = e[2].SelectedAt;
+          e[0].Arc.end = e[1].SelectedAt;
+        }
+        cadEdit(e[0].Index, e[0]);
+        cliScreenUnSelectAll();
+      }
+      else
+      {
+        printf("Selection wasnt satisfied!\n");
+      }
+      return NULL;
+    }
+    return NULL;
+  }
+  textCallback = &cliXformTrimCircle;
+  TextInput = true;
+  cliPush("> ");
+  uiEdit(3, uiEntity{UI_TEXT, RED, "Select Circle and two line endpoints and press enter!", UI_HINT_POSITION});
+  return NULL;
 }
 
 #define CLI_MENU_ITEMS 6
@@ -676,7 +733,7 @@ menu_item_t menu[CLI_MENU_ITEMS] = {
       sub_menu_item_t{ "t", "trim",
         sub_sub_menu_item_t{ "1", "1 entity", &cliXformTrim1 },
         sub_sub_menu_item_t{ "2", "2 entitys", &cliXformTrim2 },
-        sub_sub_menu_item_t{ "c", "circle to endpoints", &cliXformTrimCircle },
+        sub_sub_menu_item_t{ "c", "circle two endpoints", &cliXformTrimCircle },
       },
       sub_menu_item_t{ "m", "mirror",
           sub_sub_menu_item_t{ "l", "across line" },
