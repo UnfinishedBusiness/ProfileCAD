@@ -207,6 +207,7 @@ float geoGetArcLength(arc_t a)
 {
   float start_angle = geoGetArcStartAngle(a);
   float end_angle = geoGetArcEndAngle(a);
+  bool direction = a.direction;
   //printf("Start angle: %.6f\nEnd angle: %.6f\n", start_angle, end_angle);
   float angle;
   float r;
@@ -220,7 +221,12 @@ float geoGetArcLength(arc_t a)
     angle = end_angle - start_angle;
     //cout << "end_angle > start_angle - difference= " << angle << "\n";
   }
-  if (a.direction == ARC_CW)
+  if ((360 + (int)geoGetArcStartAngle(a) - (int)geoGetArcEndAngle(a)) % 360 < 180)
+  {
+    //cout << "True!\n";
+    direction = !direction;
+  }
+  if (direction == ARC_CW)
   {
       return a.radius * angle;
   }

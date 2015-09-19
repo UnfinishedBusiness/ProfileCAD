@@ -244,6 +244,62 @@ void *cliCreateLineParallel()
   uiEdit(3, uiEntity{UI_TEXT, RED, "Click to indecated offset direction!", UI_HINT_POSITION});
   return NULL;
 }
+void *cliCreateCircleCenterDiameter()
+{
+  if (TextReady == true)
+  {
+    TextReady = false;
+    float input = cliGetInput();
+    std::vector<cadEntity> e = cadGetSelected();
+    if (e.size() == 1) //Make sure we have only one entity seleced
+    {
+      point_t center = mouseCadLastSnapClick();
+      float radius = input / 2;
+      point_t endpoints = point_t{ center.x + radius, center.y };
+      cadSetColor(CurrentColor);
+      cadDrawArc(arc_t{ endpoints, endpoints, center, radius, ARC_CW });
+      cliScreenUnSelectAll();
+      return NULL;
+    }
+    return NULL;
+  }
+  textCallback = &cliCreateCircleCenterDiameter;
+  TextInput = true;
+  cliPush("> ");
+  uiEdit(0, uiEntity{UI_TEXT, RED, "Circle Diameter?", UI_MENU_POSITION});
+  uiEdit(3, uiEntity{UI_TEXT, RED, "Click for center point!", UI_HINT_POSITION});
+  return NULL;
+}
+void *cliCreateCircleCenterRadius()
+{
+  if (TextReady == true)
+  {
+    TextReady = false;
+    float input = cliGetInput();
+    std::vector<cadEntity> e = cadGetSelected();
+    if (e.size() == 1) //Make sure we have only one entity seleced
+    {
+      point_t center = mouseCadLastSnapClick();
+      float radius = input;
+      point_t endpoints = point_t{ center.x + radius, center.y };
+      cadSetColor(CurrentColor);
+      cadDrawArc(arc_t{ endpoints, endpoints, center, radius, ARC_CW });
+      cliScreenUnSelectAll();
+      return NULL;
+    }
+    return NULL;
+  }
+  textCallback = &cliCreateCircleCenterRadius;
+  TextInput = true;
+  cliPush("> ");
+  uiEdit(0, uiEntity{UI_TEXT, RED, "Circle Radius?", UI_MENU_POSITION});
+  uiEdit(3, uiEntity{UI_TEXT, RED, "Click for center point!", UI_HINT_POSITION});
+  return NULL;
+}
+void *cliCreateCircleTwoPoints()
+{
+  //
+}
 void *cliScreenSelectAll()
 {
   int m = cadGetEntityArrayIndex();
@@ -487,7 +543,44 @@ void *cliScreenColorGrey()
   cliScreenUnSelectAll();
   return NULL;
 }
-
+void *cliScreenAnalyzeEntity()
+{
+  string t = "";
+  cadEntity e;
+  if (TextReady == true)
+  {
+    cliGetTextInput();
+    TextReady = false;
+    return NULL;
+  }
+  for (int x=0; x < cadGetEntityArrayIndex(); x++)
+  {
+    e = cadGetEntityArray(x);
+    if (e.Selected && !e.Removed)
+    {
+      if (e.Type == CAD_ARC)
+      {
+        t.append("Type=> Arc, Diameter=> " + to_string(e.Arc.radius *2)
+        + ", Radius=> " + to_string(e.Arc.radius)
+        + ", Start Angle=> " + to_string(geoRadiansToDegrees(geoGetArcStartAngle(e.Arc)))
+        + ", End Angle=> " + to_string(geoRadiansToDegrees(geoGetArcEndAngle(e.Arc)))
+        + ", Length=> " + to_string(geoGetArcLength(e.Arc))
+        );
+      }
+      if (e.Type == CAD_LINE)
+      {
+        t.append("Type=> Line, Length=> " + to_string(geoGetLineLength(e.Line))
+        + ", Angle=> " + to_string(geoRadiansToDegrees(geoGetLineAngle(e.Line)))
+        + ", Midpoint=> (" + to_string(geoGetLineMidpoint(e.Line).x) + ", " + to_string(geoGetLineMidpoint(e.Line).y) + ", " + to_string(geoGetLineMidpoint(e.Line).z) + ")"
+        );
+      }
+    }
+  }
+  textCallback = &cliScreenAnalyzeEntity;
+  TextInput = true;
+  uiEdit(0, uiEntity{UI_TEXT, GREEN, t, UI_MENU_POSITION});
+  return NULL;
+}
 void *cliXformTrim1()
 {
   int index;
@@ -561,9 +654,9 @@ menu_item_t menu[CLI_MENU_ITEMS] = {
   },
   { "a", "arcs & circles",
     sub_menu_item_t{ "c", "circle",
-         sub_sub_menu_item_t{ "d", "center & diameter"},
-         sub_sub_menu_item_t{ "r", "center & radius" },
-         sub_sub_menu_item_t{ "t", "two points" },
+         sub_sub_menu_item_t{ "d", "center & diameter", &cliCreateCircleCenterDiameter },
+         sub_sub_menu_item_t{ "r", "center & radius", &cliCreateCircleCenterRadius },
+         sub_sub_menu_item_t{ "t", "two points", &cliCreateCircleTwoPoints },
      },
      sub_menu_item_t{ "a", "arc",
           sub_sub_menu_item_t{ "d", "center & diameter"},
@@ -577,16 +670,15 @@ menu_item_t menu[CLI_MENU_ITEMS] = {
         sub_sub_menu_item_t{ "2", "2 entitys" },
       },
       sub_menu_item_t{ "m", "mirror",
-          sub_sub_menu_item_t{ "a", "all" },
-          sub_sub_menu_item_t{ "s", "selected" },
+          sub_sub_menu_item_t{ "l", "across line" },
       },
       sub_menu_item_t{ "r", "rotate",
-        sub_sub_menu_item_t{ "a", "all" },
-        sub_sub_menu_item_t{ "s", "selected" },
+        sub_sub_menu_item_t{ "o", "origin" },
+        sub_sub_menu_item_t{ "p", "point" },
       },
       sub_menu_item_t{ "l", "translate",
-        sub_sub_menu_item_t{ "a", "all" },
-        sub_sub_menu_item_t{ "s", "selected" },
+        sub_sub_menu_item_t{ "o", "origin" },
+        sub_sub_menu_item_t{ "p", "point" },
       },
       sub_menu_item_t{ "o", "offset",
       sub_sub_menu_item_t{ "c", "chain" },
@@ -613,6 +705,9 @@ menu_item_t menu[CLI_MENU_ITEMS] = {
         sub_sub_menu_item_t{ "a", "select all", &cliScreenSelectAll },
         sub_sub_menu_item_t{ "u", "un-select all", &cliScreenUnSelectAll },
         sub_sub_menu_item_t{ "d", "delete selected", &cliScreenDeleteSelected },
+      },
+      sub_menu_item_t{ "a", "analyze",
+        sub_sub_menu_item_t{ "e", "entity", &cliScreenAnalyzeEntity },
       },
       sub_menu_item_t{ "c", "color",
         sub_sub_menu_item_t{ "w", "white", &cliScreenColorWhite },

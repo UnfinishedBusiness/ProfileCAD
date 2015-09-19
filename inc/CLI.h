@@ -24,6 +24,10 @@ void *cliCreateLineEndpoints();
 void *cliCreateLinePerpendicular();
 void *cliCreateLineParallel();
 
+void *cliCreateCircleCenterDiameter();
+void *cliCreateCircleCenterRadius();
+void *cliCreateCircleTwoPoints();
+
 void *cliScreenSelectAll();
 void *cliScreenUnSelectAll();
 void *cliScreenDeleteSelected();
@@ -37,6 +41,7 @@ void *cliScreenColorYellow();
 void *cliScreenColorCyan();
 void *cliScreenColorMagenta();
 void *cliScreenColorGrey();
+void *cliScreenAnalyzeEntity();
 
 void *cliViewPlaneXY();
 void *cliViewPlaneYZ();

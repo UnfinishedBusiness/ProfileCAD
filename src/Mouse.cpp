@@ -5,9 +5,15 @@ using namespace std;
 int mod;
 int button;
 mouse_t mouseLast;
+point_t mouseLastSnapClick;
+point_t mouseLastMouseOver;
 point_t mouseCadLastClickPos()
 {
   return cadScreenCordToCadCord(mouseLast.x, mouseLast.y);
+}
+point_t mouseCadLastSnapClick()
+{
+  return mouseLastSnapClick;
 }
 void mouseInit()
 {
@@ -59,6 +65,7 @@ void mouseCallback(int btn, int state, int x, int y)
               //debugDumpArcStructure(e.Arc);
             }
             e.SelectedAt = e.Arc.start;
+            mouseLastSnapClick = e.SelectedAt;
             cadEdit(a, e);
             return;
           }
@@ -75,6 +82,7 @@ void mouseCallback(int btn, int state, int x, int y)
               //debugDumpArcStructure(e.Arc);
             }
             e.SelectedAt = e.Arc.end;
+            mouseLastSnapClick = e.SelectedAt;
             cadEdit(a, e);
             return;
           }
@@ -91,6 +99,7 @@ void mouseCallback(int btn, int state, int x, int y)
               //debugDumpArcStructure(e.Arc);
             }
             e.SelectedAt = e.Arc.center;
+            mouseLastSnapClick = e.SelectedAt;
             cadEdit(a, e);
             return;
           }
@@ -107,6 +116,7 @@ void mouseCallback(int btn, int state, int x, int y)
               e.SelectionIndex = cadCountSelection() + 1;
             }
             e.SelectedAt = e.Line.start;
+            mouseLastSnapClick = e.SelectedAt;
             cadEdit(a, e);
             return;
           }
@@ -123,6 +133,7 @@ void mouseCallback(int btn, int state, int x, int y)
               e.SelectionIndex = cadCountSelection() + 1;
             }
             e.SelectedAt = e.Line.end;
+            mouseLastSnapClick = e.SelectedAt;
             cadEdit(a, e);
             return;
           }
@@ -138,6 +149,7 @@ void mouseCallback(int btn, int state, int x, int y)
               e.SelectionIndex = cadCountSelection() + 1;
             }
             e.SelectedAt = geoGetLineMidpoint(e.Line);
+            mouseLastSnapClick = e.SelectedAt;
             cadEdit(a, e);
             return;
           }
@@ -202,6 +214,7 @@ void mousePassiveMotionCallback(int x, int y)
     {
       //uiEdit(0, uiEntity{UI_TEXT, RED, "Start point", UI_MENU_POSITION});
       cadShowSelectionBox(e.Arc.start);
+      mouseLastMouseOver = e.Arc.start;
       e.MouseOver = true;
       cadEdit(a, e);
       return;
@@ -210,6 +223,7 @@ void mousePassiveMotionCallback(int x, int y)
     {
       //uiEdit(0, uiEntity{UI_TEXT, RED, "End point", UI_MENU_POSITION});
       cadShowSelectionBox(e.Arc.end);
+      mouseLastMouseOver = e.Arc.end;
       e.MouseOver = true;
       cadEdit(a, e);
       return;
@@ -218,6 +232,7 @@ void mousePassiveMotionCallback(int x, int y)
     {
       //uiEdit(0, uiEntity{UI_TEXT, RED, "Center point", UI_MENU_POSITION});
       cadShowSelectionBox(e.Arc.center);
+      mouseLastMouseOver = e.Arc.center;
       e.MouseOver = true;
       cadEdit(a, e);
       return;
@@ -225,6 +240,7 @@ void mousePassiveMotionCallback(int x, int y)
     else if (isSimilar(pos.x, e.Line.start.x) && isSimilar(pos.y, e.Line.start.y) && !e.Removed && e.Type == CAD_LINE)
     {
       cadShowSelectionBox(e.Line.start);
+      mouseLastMouseOver = e.Line.start;
       e.MouseOver = true;
       cadEdit(a, e);
       return;
@@ -232,6 +248,7 @@ void mousePassiveMotionCallback(int x, int y)
     else if (isSimilar(pos.x, e.Line.end.x) && isSimilar(pos.y, e.Line.end.y) && !e.Removed && e.Type == CAD_LINE)
     {
       cadShowSelectionBox(e.Line.end);
+      mouseLastMouseOver = e.Line.end;
       e.MouseOver = true;
       cadEdit(a, e);
       return;
@@ -239,6 +256,7 @@ void mousePassiveMotionCallback(int x, int y)
     else if (isSimilar(pos.x, geoGetLineMidpoint(e.Line).x) && isSimilar(pos.y, geoGetLineMidpoint(e.Line).y) && !e.Removed && e.Type == CAD_LINE)
     {
       cadShowSelectionBox(geoGetLineMidpoint(e.Line));
+      mouseLastMouseOver = geoGetLineMidpoint(e.Line);
       e.MouseOver = true;
       cadEdit(a, e);
       return; //Only highlight one entity
