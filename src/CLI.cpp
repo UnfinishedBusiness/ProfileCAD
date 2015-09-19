@@ -213,6 +213,7 @@ void *cliCreateLinePerpendicular()
   textCallback = &cliCreateLinePerpendicular;
   TextInput = true;
   cliPush("> ");
+  uiEdit(3, uiEntity{UI_TEXT, RED, "Click to indecated offset direction!", UI_HINT_POSITION});
   uiEdit(0, uiEntity{UI_TEXT, RED, "Input distance!", UI_MENU_POSITION});
   return NULL;
 }
@@ -240,6 +241,7 @@ void *cliCreateLineParallel()
   TextInput = true;
   cliPush("> ");
   uiEdit(0, uiEntity{UI_TEXT, RED, "Input distance!", UI_MENU_POSITION});
+  uiEdit(3, uiEntity{UI_TEXT, RED, "Click to indecated offset direction!", UI_HINT_POSITION});
   return NULL;
 }
 void *cliScreenSelectAll()
@@ -523,7 +525,7 @@ void *cliXformTrim1()
   return NULL;
 }
 
-#define CLI_MENU_ITEMS 5
+#define CLI_MENU_ITEMS 6
 menu_item_t menu[CLI_MENU_ITEMS] = {
   { "f", "file",
     sub_menu_item_t{ "e", "exit",
@@ -557,14 +559,46 @@ menu_item_t menu[CLI_MENU_ITEMS] = {
          sub_sub_menu_item_t{ "s", "side distance", &cliCreateLineParallel },
     },
   },
+  { "a", "arcs & circles",
+    sub_menu_item_t{ "c", "circle",
+         sub_sub_menu_item_t{ "d", "center & diameter"},
+         sub_sub_menu_item_t{ "r", "center & radius" },
+         sub_sub_menu_item_t{ "t", "two points" },
+     },
+     sub_menu_item_t{ "a", "arc",
+          sub_sub_menu_item_t{ "d", "center & diameter"},
+          sub_sub_menu_item_t{ "r", "center & radius" },
+          sub_sub_menu_item_t{ "t", "two points" },
+      },
+  },
   { "x", "xform",
       sub_menu_item_t{ "t", "trim",
         sub_sub_menu_item_t{ "1", "1 entity", &cliXformTrim1 },
         sub_sub_menu_item_t{ "2", "2 entitys" },
       },
-      sub_menu_item_t{ "m", "mirror" },
-      sub_menu_item_t{ "r", "rotate" },
-      sub_menu_item_t{ "o", "offset" },
+      sub_menu_item_t{ "m", "mirror",
+          sub_sub_menu_item_t{ "a", "all" },
+          sub_sub_menu_item_t{ "s", "selected" },
+      },
+      sub_menu_item_t{ "r", "rotate",
+        sub_sub_menu_item_t{ "a", "all" },
+        sub_sub_menu_item_t{ "s", "selected" },
+      },
+      sub_menu_item_t{ "l", "translate",
+        sub_sub_menu_item_t{ "a", "all" },
+        sub_sub_menu_item_t{ "s", "selected" },
+      },
+      sub_menu_item_t{ "o", "offset",
+      sub_sub_menu_item_t{ "c", "chain" },
+      },
+      sub_menu_item_t{ "f", "fillet",
+          sub_sub_menu_item_t{ "r", "radius" },
+          sub_sub_menu_item_t{ "d", "diameter" },
+      },
+      sub_menu_item_t{ "c", "chamfer",
+          sub_sub_menu_item_t{ "d", "distances" },
+          sub_sub_menu_item_t{ "l", "length" },
+      },
   },
   { "v", "view",
       sub_menu_item_t{ "p", "plane",
@@ -692,7 +726,6 @@ void cliMenu()
       text.append(menu[x].c);
       text.append(CLI_MENU_ITEM_LINK);
       text.append(menu[x].msg);
-
     }
   }
   if (Level == 1)
@@ -728,4 +761,5 @@ void cliMenu()
     }
   }
   uiEdit(0, uiEntity{UI_TEXT, UI_MENU_COLOR, text, UI_MENU_POSITION});
+  uiEdit(3, uiEntity{UI_TEXT, RED, "", UI_HINT_POSITION});
 }

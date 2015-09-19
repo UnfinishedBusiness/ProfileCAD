@@ -11,6 +11,7 @@ void uiInit()
   uiAppend(uiEntity{UI_TEXT, WHITE, "", UI_MENU_POSITION}); //Msg text - index 0
   uiAppend(uiEntity{UI_TEXT, WHITE, "", UI_INPUT_POSITION}); //Msg text - index 1
   uiAppend(uiEntity{UI_TEXT, WHITE, "", UI_INPUT_POSITION}); //Mouse Position - index 2
+  uiAppend(uiEntity{UI_TEXT, WHITE, "", UI_HINT_POSITION}); //Mouse Position - index 3
   cliMenu();
 }
 void uiAppend(uiEntity e)
