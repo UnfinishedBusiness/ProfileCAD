@@ -11,6 +11,7 @@ void mouseInit();
 void mouseToggleEndpointSnap();
 void mouseToggleCenterSnap();
 void mouseToggleMidpointSnap();
+void mouseToggleVectorSnap();
 
 point_t mouseCadLastClickPos();
 point_t mouseCadLastSnapClick();

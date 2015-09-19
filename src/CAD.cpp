@@ -132,6 +132,7 @@ void cadRender()
         {
           sceneColor(cadEntityArray[i].Color);
         }
+        cadEntityArray[i].Line.parentIndex = i;
         cadRenderLine(cadEntityArray[i].Line);
       }
       if (cadEntityArray[i].Type == CAD_ARC && !cadEntityArray[i].Removed && cadEntityArray[i].Arc.radius > 0)
@@ -145,6 +146,7 @@ void cadRender()
         {
           sceneColor(cadEntityArray[i].Color);
         }
+        cadEntityArray[i].Arc.parentIndex = i;
         cadRenderArc(cadEntityArray[i].Arc);
       }
   }
@@ -156,6 +158,15 @@ void cadRenderLine(line_t l)
   glVertex3f((GLfloat) l.start.x, l.start.y, l.start.z);
   glVertex3f((GLfloat) l.end.x, l.end.y, l.end.z);
   glEnd();
+
+  //glBegin(GL_POINTS);
+  cadEntityArray[l.parentIndex].Vector.clear();
+  cadEntityArray[l.parentIndex].Vector = geoGetPointsOfLine(l);
+  /*for (int x = 0; x < cadEntityArray[l.parentIndex].Vector.size(); x++)
+  {
+      glVertex3f((GLfloat) cadEntityArray[l.parentIndex].Vector[x].x, (GLfloat) cadEntityArray[l.parentIndex].Vector[x].y, 0);
+  }
+  glEnd();*/
 }
 void cadRenderArc(arc_t a)
 {
@@ -188,6 +199,11 @@ void cadRenderArc(arc_t a)
       l = geoRotateLine(l, a.center, inc_angle);
     }
     glVertex3f(l.end.x, l.end.y, 0);
+    if (cadEntityArray[a.parentIndex].Vector.size() != steps) //Populate vector if it hasnt already been
+    {
+      cadEntityArray[a.parentIndex].Vector.push_back(point_t());
+      cadEntityArray[a.parentIndex].Vector[x] = l.end;
+    }
   }
   if (a.start.x != a.end.x && a.start.y != a.end.y)
   {

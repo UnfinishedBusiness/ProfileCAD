@@ -4,9 +4,9 @@ using namespace std;
 
 bool snapArcCenter = true;
 bool snapArcEndpoints = true;
-
 bool snapLineMidpoint = true;
 bool snapLineEndpoints = true;
+bool snapVector = true;
 
 int mod;
 int button;
@@ -40,7 +40,10 @@ void mouseToggleMidpointSnap()
 {
   snapLineMidpoint = !snapLineMidpoint;
 }
-
+void mouseToggleVectorSnap()
+{
+  snapVector = !snapVector;
+}
 void mouseCallback(int btn, int state, int x, int y)
 {
     point_t pos = cadScreenCordToCadCord(x, y);
@@ -282,10 +285,31 @@ void mousePassiveMotionCallback(int x, int y)
     }
     else
     {
-      e.MouseOver = false;
-      cadEdit(a, e);
-      cadHideSelectionBox();
-      cadRedraw();
+      bool selected = false;
+      if (snapVector)
+      {
+        for (x = 0; x < e.Vector.size(); x++)
+        {
+          if ( geoInTolerance(pos.x, e.Vector[x].x, 0.050) && geoInTolerance(pos.y, e.Vector[x].y, 0.050) )
+          {
+            //cout << KRED << "Vecter[" << x << "] = " << e.Vector[x].x << ", " << e.Vector[x].y << KNORMAL << endl;
+            selected = true;
+            //cadShowSelectionBox(e.Vector[x]);
+            mouseLastMouseOver = e.Vector[x];
+            e.MouseOver = true;
+            cadEdit(a, e);
+            cadRedraw();
+            break;
+          }
+        }
+      }
+      if (!selected)
+      {
+        e.MouseOver = false;
+        cadEdit(a, e);
+        cadHideSelectionBox();
+        cadRedraw();
+      }
     }
   }
   fflush(stdout);

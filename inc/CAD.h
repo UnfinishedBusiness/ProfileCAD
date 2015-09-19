@@ -24,6 +24,7 @@ struct cadEntity{
   bool Removed;
   int Index;
   int SelectionIndex;
+  std::vector<point_t> Vector;
 };
 
 void cadInit();

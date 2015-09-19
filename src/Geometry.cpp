@@ -37,32 +37,26 @@ point_t geoGetLineIntersection(line_t l1, line_t l2)
   float y = a1 * x + b1;
   return point_t{x, y};
 }
-vector<point_t> geoGetPointsOfLine(point_t start, point_t end)
+vector<point_t> geoGetPointsOfLine(line_t l)
 {
   //D printf("(geoGetPointsOfLine) Start(%.6f, %.6f) End(%.6f, %.6f)\n", start.x, start.y, end.x, end.y);
   vector<point_t> p;
-	float x = end.x - start.x;
-	float y = end.y - start.y;
-
+  float x = l.end.x - l.start.x;
+	float y = l.end.y - l.start.y;
 	float length = sqrtf( x*x + y*y );
-	float addx = x / length;
-  float addy = y / length;
-  //D printf("x: %.6f, y: %.6f, addx: %.6f, addy: %.6f, length: %.6f\n", x, y, addx, addy, length);
-	x = start.x;
-	y = start.y;
-
-  point_t tmp;
+  float scale = 0.01;
+	float addx = (x / length) * scale;
+	float addy = (y / length) * scale;
+	x = l.start.x;
+	y = l.start.y;
   int count = 0;
-	for(double i = 0; i < length; i += 0.0001)
+	for(float i = 0; i < length; i += scale)
 	{
+		p.push_back(point_t());
+    p[count] = point_t{ x, y };
 	  x += addx;
 	  y += addy;
-    tmp.x = x;
-    tmp.y = y;
-    p.push_back(point_t());
-    p[count] = tmp;
-    //D printf("\t Point# %d, x: %.6f, y: %.6f\n", i, x, y);
-    count++;
+    count ++;
 	}
   return p;
 }

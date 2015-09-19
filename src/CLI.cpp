@@ -617,6 +617,14 @@ void *cliXformTrim1()
   cliScreenUnSelectAll();
   return NULL;
 }
+void *cliXformTrim2()
+{
+
+}
+void *cliXformTrimCircle()
+{
+
+}
 
 #define CLI_MENU_ITEMS 6
 menu_item_t menu[CLI_MENU_ITEMS] = {
@@ -667,7 +675,8 @@ menu_item_t menu[CLI_MENU_ITEMS] = {
   { "x", "xform",
       sub_menu_item_t{ "t", "trim",
         sub_sub_menu_item_t{ "1", "1 entity", &cliXformTrim1 },
-        sub_sub_menu_item_t{ "2", "2 entitys" },
+        sub_sub_menu_item_t{ "2", "2 entitys", &cliXformTrim2 },
+        sub_sub_menu_item_t{ "c", "circle to endpoints", &cliXformTrimCircle },
       },
       sub_menu_item_t{ "m", "mirror",
           sub_sub_menu_item_t{ "l", "across line" },

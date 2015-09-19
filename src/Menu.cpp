@@ -14,16 +14,17 @@ void menuInit()
   glutAddMenuEntry("Toggle Snap Center", 2);
   glutAddMenuEntry("Toggle Snap Enpoints", 3);
   glutAddMenuEntry("Toggle Snap Midpoint", 4);
-
+  glutAddMenuEntry("Toggle Snap Vector", 5);
   glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 void menuCallback(int choice)
 {
   switch (choice)
   {
-  case 1: cadRedraw(); break;
-  case 2: mouseToggleCenterSnap(); break;
-  case 3: mouseToggleEndpointSnap(); break;
-  case 4: mouseToggleMidpointSnap(); break;
+    case 1: cadRedraw(); break;
+    case 2: mouseToggleCenterSnap(); break;
+    case 3: mouseToggleEndpointSnap(); break;
+    case 4: mouseToggleMidpointSnap(); break;
+    case 5: mouseToggleVectorSnap(); break;
   }
 }

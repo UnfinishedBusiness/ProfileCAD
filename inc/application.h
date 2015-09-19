@@ -57,6 +57,9 @@ struct point_t{
 struct line_t{
   point_t start;
   point_t end;
+
+  //Operation data
+  int parentIndex;
 };
 struct arc_t{
   point_t start;
@@ -64,6 +67,9 @@ struct arc_t{
   point_t center;
   float radius;
   bool direction;
+
+  //Operation data
+  int parentIndex;
 };
 struct color_t{
   float r, g, b, a;
