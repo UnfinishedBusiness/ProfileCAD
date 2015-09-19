@@ -183,13 +183,13 @@ float geoGetArcStartAngleAbs(arc_t a)
 {
   //Draw line from arc center to start point and calculate angle of line
   float angle = geoRadiansToDegrees(geoGetLineAngle(line_t{ a.center, a.start}));
-  cout << KRED << "(geoGetArcStartAngleAbs) Angle = " << angle << KNORMAL << endl;
+  //cout << KRED << "(geoGetArcStartAngleAbs) Angle = " << angle << KNORMAL << endl;
   return angle;
 }
 float geoGetArcEndAngleAbs(arc_t a)
 {
   float angle = geoRadiansToDegrees(geoGetLineAngle(line_t{ a.center, a.end}));
-  cout << KRED << "(geoGetArcStartAngleAbs) Angle = " << angle << KNORMAL << endl;
+  //cout << KRED << "(geoGetArcStartAngleAbs) Angle = " << angle << KNORMAL << endl;
   return angle;
 }
 point_t geoGetArcPoint(arc_t a, float angle) //Angle is in degrees

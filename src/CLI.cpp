@@ -648,9 +648,19 @@ void *cliXformTrimCircle()
       {
         //printf("Line1 - X: %.6f, Y: %.6f\n", e[1].SelectedAt.x, e[1].SelectedAt.y);
         //printf("Line2 - X: %.6f, Y: %.6f\n", e[2].SelectedAt.x, e[2].SelectedAt.y);
+        float d1 = geoGetLineLength(line_t{e[0].Arc.start, e[1].SelectedAt});
+        float d2 = geoGetLineLength(line_t{e[0].Arc.end, e[1].SelectedAt});
+        if (d1 < d2)
+        {
+          e[0].Arc.start = e[1].SelectedAt;
+          e[0].Arc.end = e[2].SelectedAt;
+        }
+        else
+        {
+          e[0].Arc.end = e[1].SelectedAt;
+          e[0].Arc.start = e[2].SelectedAt;
+        }
         bool closest = false;
-        e[0].Arc.start = e[1].SelectedAt;
-        e[0].Arc.end = e[2].SelectedAt;
         std::vector<point_t> p = geoGetPointsOfArc(e[0].Arc);
         for (int z = 0; z < p.size(); z++)
         {
@@ -662,15 +672,13 @@ void *cliXformTrimCircle()
         if (!closest)
         {
           e[0].Arc.direction = !e[0].Arc.direction;
-          e[0].Arc.start = e[2].SelectedAt;
-          e[0].Arc.end = e[1].SelectedAt;
         }
         cadEdit(e[0].Index, e[0]);
         cliScreenUnSelectAll();
       }
       else
       {
-        printf("Selection wasnt satisfied!\n");
+        //printf("Selection wasnt satisfied!\n");
       }
       return NULL;
     }
