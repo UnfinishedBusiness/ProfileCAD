@@ -2,6 +2,12 @@
 
 using namespace std;
 
+bool snapArcCenter = true;
+bool snapArcEndpoints = true;
+
+bool snapLineMidpoint = true;
+bool snapLineEndpoints = true;
+
 int mod;
 int button;
 mouse_t mouseLast;
@@ -20,6 +26,19 @@ void mouseInit()
   glutMouseFunc(mouseCallback);
   glutMotionFunc(mouseMotionCallback);
   glutPassiveMotionFunc(mousePassiveMotionCallback);
+}
+void mouseToggleEndpointSnap()
+{
+  snapLineEndpoints = !snapLineEndpoints;
+  snapArcEndpoints = !snapArcEndpoints;
+}
+void mouseToggleCenterSnap()
+{
+  snapArcCenter = !snapArcCenter;
+}
+void mouseToggleMidpointSnap()
+{
+  snapLineMidpoint = !snapLineMidpoint;
 }
 
 void mouseCallback(int btn, int state, int x, int y)
@@ -52,7 +71,7 @@ void mouseCallback(int btn, int state, int x, int y)
         for (int a = 0; a < cadGetEntityArrayIndex(); a++)
         {
           e = cadGetEntityArray(a);
-          if (isSimilar(pos.x, e.Arc.start.x) && isSimilar(pos.y, e.Arc.start.y) && !e.Removed && e.Type == CAD_ARC)
+          if (isSimilar(pos.x, e.Arc.start.x) && isSimilar(pos.y, e.Arc.start.y) && !e.Removed && e.Type == CAD_ARC && snapArcEndpoints)
           {
             if (mod == GLUT_ACTIVE_CTRL)
             {
@@ -69,7 +88,7 @@ void mouseCallback(int btn, int state, int x, int y)
             cadEdit(a, e);
             return;
           }
-          if (isSimilar(pos.x, e.Arc.end.x) && isSimilar(pos.y, e.Arc.end.y) && !e.Removed && e.Type == CAD_ARC)
+          if (isSimilar(pos.x, e.Arc.end.x) && isSimilar(pos.y, e.Arc.end.y) && !e.Removed && e.Type == CAD_ARC && snapArcEndpoints)
           {
             if (mod == GLUT_ACTIVE_CTRL)
             {
@@ -86,7 +105,7 @@ void mouseCallback(int btn, int state, int x, int y)
             cadEdit(a, e);
             return;
           }
-          if (isSimilar(pos.x, e.Arc.center.x) && isSimilar(pos.y, e.Arc.center.y) && !e.Removed && e.Type == CAD_ARC)
+          if (isSimilar(pos.x, e.Arc.center.x) && isSimilar(pos.y, e.Arc.center.y) && !e.Removed && e.Type == CAD_ARC && snapArcCenter)
           {
             if (mod == GLUT_ACTIVE_CTRL)
             {
@@ -103,7 +122,7 @@ void mouseCallback(int btn, int state, int x, int y)
             cadEdit(a, e);
             return;
           }
-          if (isSimilar(pos.x, e.Line.start.x) && isSimilar(pos.y, e.Line.start.y) && !e.Removed && e.Type == CAD_LINE)
+          if (isSimilar(pos.x, e.Line.start.x) && isSimilar(pos.y, e.Line.start.y) && !e.Removed && e.Type == CAD_LINE && snapLineEndpoints)
           {
             //D printf("\t%s Entity #%d Start point Clicked!%s\n", KGREEN, a, KNORMAL);
             if (mod == GLUT_ACTIVE_CTRL)
@@ -120,7 +139,7 @@ void mouseCallback(int btn, int state, int x, int y)
             cadEdit(a, e);
             return;
           }
-          if (isSimilar(pos.x, e.Line.end.x) && isSimilar(pos.y, e.Line.end.y) && !e.Removed && e.Type == CAD_LINE)
+          if (isSimilar(pos.x, e.Line.end.x) && isSimilar(pos.y, e.Line.end.y) && !e.Removed && e.Type == CAD_LINE && snapLineEndpoints)
           {
             //D printf("\t%s Entity #%d End point Clicked!%s\n", KGREEN, a, KNORMAL);
             if (mod == GLUT_ACTIVE_CTRL)
@@ -137,7 +156,7 @@ void mouseCallback(int btn, int state, int x, int y)
             cadEdit(a, e);
             return;
           }
-          if (isSimilar(pos.x, geoGetLineMidpoint(e.Line).x) && isSimilar(pos.y, geoGetLineMidpoint(e.Line).y) && !e.Removed && e.Type == CAD_LINE)
+          if (isSimilar(pos.x, geoGetLineMidpoint(e.Line).x) && isSimilar(pos.y, geoGetLineMidpoint(e.Line).y) && !e.Removed && e.Type == CAD_LINE && snapLineMidpoint)
           {
             if (mod == GLUT_ACTIVE_CTRL)
             {
@@ -157,7 +176,7 @@ void mouseCallback(int btn, int state, int x, int y)
     }
     if(btn==GLUT_RIGHT_BUTTON && state==GLUT_DOWN)
     {
-        D printf("Right button at X: %d, Y: %d\n", x, y);
+        //D printf("Right button at X: %d, Y: %d\n", x, y);
     }
 }
 void mouseMotionCallback(int x, int y)
@@ -186,8 +205,8 @@ void mouseMotionCallback(int x, int y)
     }
     else
     {
-      D printf("\rMouse %d, %d", x, y);
-      D fflush(stdout);
+      //D printf("\rMouse %d, %d", x, y);
+      //D fflush(stdout);
     }
     mouseLast.x = x;
     mouseLast.y = y;
@@ -210,7 +229,7 @@ void mousePassiveMotionCallback(int x, int y)
   for (int a = 0; a < cadGetEntityArrayIndex(); a++)
   {
     e = cadGetEntityArray(a);
-    if (isSimilar(pos.x, e.Arc.start.x) && isSimilar(pos.y, e.Arc.start.y) && !e.Removed && e.Type == CAD_ARC)
+    if (isSimilar(pos.x, e.Arc.start.x) && isSimilar(pos.y, e.Arc.start.y) && !e.Removed && e.Type == CAD_ARC && snapArcEndpoints)
     {
       //uiEdit(0, uiEntity{UI_TEXT, RED, "Start point", UI_MENU_POSITION});
       cadShowSelectionBox(e.Arc.start);
@@ -219,7 +238,7 @@ void mousePassiveMotionCallback(int x, int y)
       cadEdit(a, e);
       return;
     }
-    else if (isSimilar(pos.x, e.Arc.end.x) && isSimilar(pos.y, e.Arc.end.y) && !e.Removed && e.Type == CAD_ARC)
+    else if (isSimilar(pos.x, e.Arc.end.x) && isSimilar(pos.y, e.Arc.end.y) && !e.Removed && e.Type == CAD_ARC && snapArcEndpoints)
     {
       //uiEdit(0, uiEntity{UI_TEXT, RED, "End point", UI_MENU_POSITION});
       cadShowSelectionBox(e.Arc.end);
@@ -228,7 +247,7 @@ void mousePassiveMotionCallback(int x, int y)
       cadEdit(a, e);
       return;
     }
-    else if (isSimilar(pos.x, e.Arc.center.x) && isSimilar(pos.y, e.Arc.center.y) && !e.Removed && e.Type == CAD_ARC)
+    else if (isSimilar(pos.x, e.Arc.center.x) && isSimilar(pos.y, e.Arc.center.y) && !e.Removed && e.Type == CAD_ARC && snapArcCenter)
     {
       //uiEdit(0, uiEntity{UI_TEXT, RED, "Center point", UI_MENU_POSITION});
       cadShowSelectionBox(e.Arc.center);
@@ -237,7 +256,7 @@ void mousePassiveMotionCallback(int x, int y)
       cadEdit(a, e);
       return;
     }
-    else if (isSimilar(pos.x, e.Line.start.x) && isSimilar(pos.y, e.Line.start.y) && !e.Removed && e.Type == CAD_LINE)
+    else if (isSimilar(pos.x, e.Line.start.x) && isSimilar(pos.y, e.Line.start.y) && !e.Removed && e.Type == CAD_LINE && snapArcCenter)
     {
       cadShowSelectionBox(e.Line.start);
       mouseLastMouseOver = e.Line.start;
@@ -245,7 +264,7 @@ void mousePassiveMotionCallback(int x, int y)
       cadEdit(a, e);
       return;
     }
-    else if (isSimilar(pos.x, e.Line.end.x) && isSimilar(pos.y, e.Line.end.y) && !e.Removed && e.Type == CAD_LINE)
+    else if (isSimilar(pos.x, e.Line.end.x) && isSimilar(pos.y, e.Line.end.y) && !e.Removed && e.Type == CAD_LINE && snapLineEndpoints)
     {
       cadShowSelectionBox(e.Line.end);
       mouseLastMouseOver = e.Line.end;
@@ -253,7 +272,7 @@ void mousePassiveMotionCallback(int x, int y)
       cadEdit(a, e);
       return;
     }
-    else if (isSimilar(pos.x, geoGetLineMidpoint(e.Line).x) && isSimilar(pos.y, geoGetLineMidpoint(e.Line).y) && !e.Removed && e.Type == CAD_LINE)
+    else if (isSimilar(pos.x, geoGetLineMidpoint(e.Line).x) && isSimilar(pos.y, geoGetLineMidpoint(e.Line).y) && !e.Removed && e.Type == CAD_LINE && snapLineMidpoint)
     {
       cadShowSelectionBox(geoGetLineMidpoint(e.Line));
       mouseLastMouseOver = geoGetLineMidpoint(e.Line);

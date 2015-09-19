@@ -7,6 +7,11 @@ struct mouse_t{
 };
 
 void mouseInit();
+
+void mouseToggleEndpointSnap();
+void mouseToggleCenterSnap();
+void mouseToggleMidpointSnap();
+
 point_t mouseCadLastClickPos();
 point_t mouseCadLastSnapClick();
 void mouseCallback(int, int, int, int);

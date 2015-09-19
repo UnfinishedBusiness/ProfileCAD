@@ -166,7 +166,16 @@ void cadRenderArc(arc_t a)
   {
     glVertex3f(a.start.x, a.start.y, 0);
   }
-  int steps = geoGetIncludedAngle(a);
+  int steps;
+  if (a.start == a.end)
+  {
+    //Were a circle
+    steps = 361; //Go the full 360 to close the gap
+  }
+  else
+  {
+    steps = geoGetIncludedAngle(a);
+  }
   float inc_angle = 1; //Degrees
   for (int x=0; x < steps; x++)
   {

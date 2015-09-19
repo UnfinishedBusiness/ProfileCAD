@@ -11,15 +11,19 @@ void menuInit()
 {
   glutCreateMenu(menuCallback);
   glutAddMenuEntry("Repaint", 1);
-  //glutAddMenuEntry("Stencil on", 1);
-  //glutAddMenuEntry("Stencil off", 2);
+  glutAddMenuEntry("Toggle Snap Center", 2);
+  glutAddMenuEntry("Toggle Snap Enpoints", 3);
+  glutAddMenuEntry("Toggle Snap Midpoint", 4);
+
   glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 void menuCallback(int choice)
 {
-  switch (choice) {
-  case 1:
-    cadRedraw();
-    break;
+  switch (choice)
+  {
+  case 1: cadRedraw(); break;
+  case 2: mouseToggleCenterSnap(); break;
+  case 3: mouseToggleEndpointSnap(); break;
+  case 4: mouseToggleMidpointSnap(); break;
   }
 }
