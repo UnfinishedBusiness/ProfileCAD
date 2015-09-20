@@ -14,6 +14,7 @@ void mouseToggleCenterSnap();
 void mouseToggleMidpointSnap();
 void mouseToggleVectorSnap();
 
+point_t mouseCadGetCurrentPos();
 point_t mouseCadLastClickPos();
 point_t mouseCadLastSnapClick();
 void mouseCallback(int, int, int, int);

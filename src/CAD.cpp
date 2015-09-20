@@ -117,7 +117,7 @@ void cadShowSelectionBox(point_t p)
 {
   //line_t geoGetPerpendicularLine(line_t, point_t, float);
   //line_t geoGetParallelLine(line_t, point_t, float);
-  cadSelectionBox.a.radius = 0.015 / sceneGetScale();
+  cadSelectionBox.a.radius = 0.005 / sceneGetScale();
   cadSelectionBox.a.center = p;
   cadSelectionBox.a.start = p;
   cadSelectionBox.a.start.x += cadSelectionBox.a.radius;
@@ -250,5 +250,26 @@ point_t cadScreenCordToCadCord(int x, int y)
   worldX = (worldX/sceneGetScale());
   worldY = (worldY/sceneGetScale());
   point_t panOffset = sceneGetPanOffset();
-  return point_t{(float)worldX - (panOffset.x / sceneGetScale()), (float)worldY - (panOffset.y / sceneGetScale()), 0};
+  return point_t{(float)worldX - (panOffset.x), (float)worldY - (panOffset.y), 0};
+}
+point_t cadCadCordToScreenCord(point_t s)
+{
+  GLint viewport[4];
+  GLdouble modelview[16];
+  GLdouble viewVector[3];
+  GLdouble projection[16];
+  GLdouble winX, winY, winZ;//2D point
+  GLdouble posX, posY, posZ;//3D point
+  posX=s.x;
+  posY=s.y;
+  posZ=s.z;
+  //get the matrices
+  glGetDoublev( GL_MODELVIEW_MATRIX, modelview );
+  viewVector[0]=modelview[8];
+  viewVector[1]=modelview[9];
+  viewVector[2]=modelview[10];
+  glGetDoublev( GL_PROJECTION_MATRIX, projection );
+  glGetIntegerv( GL_VIEWPORT, viewport );
+  gluProject(posX,posY,posZ,modelview,projection,viewport,&winX,&winY,&winZ);
+  return point_t{(float)winX, (float)winY, (float)winZ,};
 }

@@ -11,9 +11,14 @@ bool snapIntersection = true; //Not yet implemented
 
 int mod;
 int button;
+point_t mouseCurrent;
 mouse_t mouseLast;
 point_t mouseLastSnapClick;
 point_t mouseLastMouseOver;
+point_t mouseCadGetCurrentPos()
+{
+  return mouseCurrent;
+}
 point_t mouseCadLastClickPos()
 {
   return cadScreenCordToCadCord(mouseLast.x, mouseLast.y);
@@ -51,20 +56,22 @@ void mouseToggleVectorSnap()
 void mouseCallback(int btn, int state, int x, int y)
 {
     point_t pos = cadScreenCordToCadCord(x, y);
+    mouseCurrent = pos;
     button = btn;
     mod = glutGetModifiers();
-    if ((btn == 3) || (btn == 4)) // It's a wheel event
+    if (state==GLUT_UP) // It's a wheel event
     {
-      if (btn == 3) //Zoom in
-      {
-        sceneIncZoom(+0.1);
-      }
-      else //Zoom out
-      {
-        sceneIncZoom(-0.1);
-      }
-      //D printf("Scroll %s At %d %d\n", (btn == 3) ? "Up" : "Down", x, y);
+        if ((btn == 3))
+        {
+          sceneZoomToMouse(+(0.05 * sceneGetScale()), cadScreenCordToCadCord(x, y));
+        }
+        if ((btn == 4))
+        {
+          sceneZoomToMouse(-(0.05 * sceneGetScale()), cadScreenCordToCadCord(x, y));
+        }
+
     }
+    //D printf("Scroll %s At %d %d\n", (btn == 3) ? "Up" : "Down", x, y);
     if(btn==GLUT_LEFT_BUTTON && state==GLUT_DOWN && mod == GLUT_ACTIVE_CTRL)
     {
         //D printf("Left + Ctrl button at X: %d, Y: %d\n", x, y);
@@ -225,6 +232,8 @@ void mouseCallback(int btn, int state, int x, int y)
 }
 void mouseMotionCallback(int x, int y)
 {
+    point_t pos = cadScreenCordToCadCord(x, y);
+    mouseCurrent = pos;
     if (button == 1) //Middle mouse button
     {
       mouse_t inc{x - mouseLast.x , y - mouseLast.y};
@@ -232,7 +241,8 @@ void mouseMotionCallback(int x, int y)
       //D fflush(stdout);
       if (abs(inc.x) < 30  && abs(inc.y) < 30)
       {
-        sceneIncPan(inc.x * 0.01 * sceneGetScale(), (-1 * inc.y) * 0.01 * sceneGetScale(), 0);
+        //sceneIncPan(inc.x * 0.01 * sceneGetScale(), (-1 * inc.y) * 0.01 * sceneGetScale(), 0);
+        sceneIncPan(inc.x * 0.01, (-1 * inc.y) * 0.01, 0);
       }
     }
     else if (mod == GLUT_ACTIVE_CTRL)
@@ -258,6 +268,7 @@ void mouseMotionCallback(int x, int y)
 void mousePassiveMotionCallback(int x, int y)
 {
   point_t pos = cadScreenCordToCadCord(x, y);
+  mouseCurrent = pos;
   //D printf("%sX: %.6f, Y: %.6f, Z: %.6f%s\r", KGREEN, pos.x, pos.y, pos.z, KNORMAL);
   string m;
   if (pos.z > 0)

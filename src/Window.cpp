@@ -25,7 +25,7 @@ void windowResize(int width, int height)
   double Yoffset = 100;
 
   glOrtho( -bound*scaleX/2, bound*scaleX/2, -bound*scaleY, bound*scaleY, -1,1 );
-  glScalef(1, WINDOW_WIDTH/WINDOW_HEIGHT + WINDOW_WIDTH/WINDOW_HEIGHT + 0.5, 1);
+  glScalef(1, WINDOW_WIDTH/WINDOW_HEIGHT + WINDOW_WIDTH/WINDOW_HEIGHT + 0.5, 1); //Not sure wtf, but it works!
   //gluPerspective(0, 16.0/9.0*float(width)/float(height), -1, 1);
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();

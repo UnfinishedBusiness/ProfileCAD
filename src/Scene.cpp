@@ -6,6 +6,8 @@ float tx, ty, tz;       /* factors for paning */
 float scale = 0.1;          /* factor for scaling */
 D int s = 0;
 
+point_t sceneLastZoomToMouse;
+
 color_t BackgroundColor = BACKGROUND;
 void sceneInit()
 {
@@ -33,21 +35,23 @@ point_t sceneGetViewAngle()
 }
 void sceneIncZoom(float inc)
 {
-  if (inc > 0.01)
+  scale += inc;
+  if (scale <= 0.001)
   {
-    //inc = inc + 1;
-    scale = scale + 0.01;
-  }
-  else
-  {
-    //inc = 1 + inc;
-    scale = scale - 0.01;
-    if (scale < 0)
-    {
-      scale = 0.01;
-    }
+    scale = 0.001;
   }
   //scale = scale + inc;
+  //cout << "Scale: " << scale << endl;
+  glutPostRedisplay();
+}
+void sceneZoomToMouse(float inc, point_t pos)
+{
+  sceneIncZoom(inc);
+  tx = (pos.x * -1);
+  ty = (pos.y * -1);
+  point_t m = cadCadCordToScreenCord(point_t{0, 0, 0});
+  glutWarpPointer(m.x, m.y);
+  //cout << "pos.x: " << pos.x << " pos.y: " << pos.y << endl;
   glutPostRedisplay();
 }
 void sceneIncPan(float x, float y, float z)
@@ -84,9 +88,12 @@ void sceneDraw(void)
   glPushMatrix();
   glRotatef(ax, 1.0, 0.0, 0.0);
   glRotatef(-ay, 0.0, 1.0, 0.0);
-  glTranslatef(tx, ty, tz);
+
   //D printf("\nscale = %f\n", scale);
+
   glScalef(scale, scale, scale);
+  glTranslatef(tx, ty, tz);
+
   //gluLookAt( 10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 10.0, 10.0, 10.0 );
   cadRender();
   glPopMatrix();

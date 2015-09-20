@@ -41,6 +41,7 @@ void cadRedraw();
 cadEntity cadGetEntityArray(int);
 int cadGetEntityArrayIndex();
 point_t cadScreenCordToCadCord(int x, int y);
+point_t cadCadCordToScreenCord(point_t);
 
 void cadShowSelectionBox(point_t);
 void cadHideSelectionBox();
