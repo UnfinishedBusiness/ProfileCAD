@@ -568,7 +568,16 @@ void *cliScreenAnalyzeEntity()
     {
       if (e.Type == CAD_ARC)
       {
-        t.append("Type=> Arc, Diameter=> " + to_string(e.Arc.radius *2)
+        string direction;
+        if (e.Arc.direction == ARC_CW)
+        {
+          direction = "CW";
+        }
+        else
+        {
+          direction = "CCW";
+        }
+        t.append("Type=> Arc, Direction=> " + direction + ", Diameter=> " + to_string(e.Arc.radius *2)
         + ", Radius=> " + to_string(e.Arc.radius)
         + ", Start Angle=> " + to_string(geoRadiansToDegrees(geoGetArcStartAngle(e.Arc)))
         + ", End Angle=> " + to_string(geoRadiansToDegrees(geoGetArcEndAngle(e.Arc)))

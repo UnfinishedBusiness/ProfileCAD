@@ -74,7 +74,7 @@ void fileWriteDXF()
     {
       if (e.Type == CAD_ARC)
       {
-        if (e.Arc.start.x == e.Arc.end.x && e.Arc.start.y == e.Arc.end.y) //Were a circle
+        if (e.Arc.start == e.Arc.end) //Were a circle
         {
           ofs << "CIRCLE" << endl;
           ofs << "8" << endl << "1" << endl; //Group Code 8 - Fixed to layer one
@@ -92,6 +92,7 @@ void fileWriteDXF()
         }
         else
         {
+          //ofs << "#" << x << endl;
           ofs << "ARC" << endl;
           ofs << "8" << endl << "1" << endl; //Group Code 8 - Fixed to layer one
           ofs << "62" << endl; //Group Code - Entity Color
@@ -104,11 +105,14 @@ void fileWriteDXF()
           ofs <<  std::setprecision(6) << e.Arc.center.z << endl;
           ofs << "40" << endl; //Radius
           ofs <<  std::setprecision(6) << e.Arc.radius << endl;
+          float start_angle = geoRadiansToDegrees(geoGetArcStartAngle(e.Arc));
+          float end_angle = geoRadiansToDegrees(geoGetArcEndAngle(e.Arc));
           ofs << "50" << endl; //start angle
-          ofs <<  std::setprecision(6) << geoRadiansToDegrees(geoGetArcStartAngle(e.Arc)) << endl;
+          ofs <<  std::setprecision(6) << start_angle << endl;
           ofs << "51" << endl; //end angle
-          ofs <<  std::setprecision(6) << geoRadiansToDegrees(geoGetArcEndAngle(e.Arc)) << endl;
+          ofs <<  std::setprecision(6) << end_angle << endl;
           ofs << "0" << endl; //End entity
+
         }
       }
       if (e.Type == CAD_LINE)

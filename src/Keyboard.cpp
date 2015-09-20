@@ -47,9 +47,9 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
                     //cliScreenSelectAll();
                     //cliScreenDeleteSelected();
                     //fileOpen("test.dxf");
-                    //fileOpen("../test/dxf/arc.dxf");
+                    fileOpen("../test/dxf/complex.dxf");
 
-                    cliFileGetNew(); //Default action
+                    //cliFileGetNew(); //Default action
                   }
                   if (key == 19) //CTRL+s
                   {

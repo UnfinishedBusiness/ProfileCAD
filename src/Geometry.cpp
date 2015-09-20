@@ -171,13 +171,19 @@ point_t geoGetArcEndpoint(arc_t a, float length)
 }
 float geoGetArcStartAngle(arc_t a)
 {
-  //return geoGetLineAngle(line_t{a.center, a.start});
   return atan2(a.start.y - a.center.y, a.start.x - a.center.x);
 }
 float geoGetArcEndAngle(arc_t a)
 {
-  //return geoGetLineAngle(line_t{a.center, a.end});
-  return atan2(a.end.y - a.center.y, a.end.x - a.center.x);
+  if (a.direction == ARC_CCW && geoGetArcStartAngle(a) > 0 && (atan2(a.end.y - a.center.y, a.end.x - a.center.x) + 6.28318531) < 6.28318531)
+  {
+    return atan2(a.end.y - a.center.y, a.end.x - a.center.x) + 6.28318531;
+  }
+  else
+  {
+    return atan2(a.end.y - a.center.y, a.end.x - a.center.x);
+  }
+
 }
 float geoGetArcStartAngleAbs(arc_t a)
 {
@@ -242,70 +248,30 @@ std::vector<point_t> geoGetPointsOfArc(arc_t a)
   }
   return r;
 }
-float geoGetArcLength(arc_t a)
+float geoGetArcLength(arc_t a) //Not varified
 {
-  float start_angle = geoGetArcStartAngle(a);
-  float end_angle = geoGetArcEndAngle(a);
-  bool direction = a.direction;
-  //printf("Start angle: %.6f\nEnd angle: %.6f\n", start_angle, end_angle);
-  float angle;
-  float r;
-  if (start_angle > end_angle)
-  {
-    angle = start_angle - end_angle;
-    //cout << "start_angle > end_angle - difference= " << angle << "\n";
-  }
-  else
-  {
-    angle = end_angle - start_angle;
-    //cout << "end_angle > start_angle - difference= " << angle << "\n";
-  }
-  if ((360 + (int)geoGetArcStartAngle(a) - (int)geoGetArcEndAngle(a)) % 360 < 180)
-  {
-    //cout << "True!\n";
-    direction = !direction;
-  }
-  if (direction == ARC_CW)
-  {
-      return a.radius * angle;
-  }
-  else
-  {
-     return (2 * M_PI * a.radius) - (a.radius * angle);
-  }
+  float angle = geoGetIncludedAngle(a);
+  return a.radius * angle;
 }
 float geoGetIncludedAngle(arc_t a)
 {
-  bool direction;
   float angle;
-  if (a.direction == ARC_CCW)
+  /*if (a.direction == ARC_CCW)
   {
-    direction = true;
+    angle = geoGetArcEndAngle(a) - geoGetArcStartAngle(a);
   }
   else
   {
-    direction = false;
-  }
-  if ((360 + (int)geoGetArcStartAngle(a) - (int)geoGetArcEndAngle(a)) % 360 < 180)
-  {
-    //cout << "True!\n";
-    direction = !direction;
-  }
-  if (direction)
-  {
-    angle = fabs(geoGetArcStartAngle(a) - geoGetArcEndAngle(a));
-  }
-  else
-  {
-    angle = geoDegreesToRadians(360) - fabs(geoGetArcStartAngle(a) - geoGetArcEndAngle(a));
-  }
+    angle = geoGetArcStartAngle(a) - geoGetArcEndAngle(a) + geoDegreesToRadians(360);
+  }*/
+  angle = geoGetArcEndAngle(a) - geoGetArcStartAngle(a);
   if (angle == 0)
   {
     return 360;
   }
   else
   {
-    return geoRadiansToDegrees(angle);
+    return geoRadiansToDegrees(fabs(angle));
   }
 }
 bool geoGetArcDirection(float s, float e)
@@ -319,11 +285,11 @@ bool geoGetArcDirection(float s, float e)
   {
     direction = ARC_CW;
   }
-  if ((360 + (int)s - (int)e) % 360 < 180)
+  /*if ((360 + (int)s - (int)e) % 360 < 180)
   {
     //cout << "True!\n";
     direction = !direction;
-  }
+  }*/
   return direction;
 }
 float geoRound(float x) //Round to 6 places

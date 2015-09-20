@@ -211,6 +211,7 @@ void mouseCallback(int btn, int state, int x, int y)
               e.SelectionIndex = cadCountSelection() + 1;
             }
             e.SelectedAt = mouseLastMouseOver;
+            //D printf("\t%s Entity #%d Clicked!\n", KGREEN, e.Index ,KNORMAL);
             cadEdit(a, e);
             cadRedraw();
           }
