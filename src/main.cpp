@@ -25,6 +25,7 @@ int main(int argc, char **argv)
   mouseInit();
   uiInit();
   cadInit();
+  cliInit();
   sceneSetViewAngle(0, 0, 0); //Set plane to XY
   glutMainLoop();
   return 0;             /* ANSI C requires main to return int. */

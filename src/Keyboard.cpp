@@ -156,7 +156,6 @@ void keyboardCallbackSpecial(int key, int x, int y)
           if (toggleFullscreen)
           {
             glutFullScreen();
-
           }
           else
           {

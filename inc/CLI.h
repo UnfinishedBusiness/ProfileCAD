@@ -2,6 +2,8 @@
 #define CLI_
 #include <application.h>
 
+void cliInit();
+
 void cliParse(std::string); //Depricated
 void cliPush(std::string);
 void cliMenu();

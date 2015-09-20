@@ -2,6 +2,19 @@
 
 using namespace std;
 
+float mouseClose = 0.010;
+float mouseTolerance()
+{
+  float t = mouseClose / sceneGetScale();
+  if (t < 0.0005) //we dont want to be less than vector point spacing!
+  {
+    return 0.0005;
+  }
+  else
+  {
+    return t;
+  }
+}
 bool snapArcCenter = true;
 bool snapArcEndpoints = true;
 bool snapLineMidpoint = true;
@@ -85,7 +98,7 @@ void mouseCallback(int btn, int state, int x, int y)
         for (int a = 0; a < cadGetEntityArrayIndex(); a++)
         {
           e = cadGetEntityArray(a);
-          if (isSimilar(pos.x, e.Arc.start.x) && isSimilar(pos.y, e.Arc.start.y) && !e.Removed && e.Type == CAD_ARC && snapArcEndpoints)
+          if (geoInTolerance(pos.x, e.Arc.start.x, mouseTolerance()) && geoInTolerance(pos.y, e.Arc.start.y, mouseTolerance()) && !e.Removed && e.Type == CAD_ARC && snapArcEndpoints)
           {
             if (mod == GLUT_ACTIVE_CTRL)
             {
@@ -102,7 +115,7 @@ void mouseCallback(int btn, int state, int x, int y)
             cadEdit(a, e);
             return;
           }
-          if (isSimilar(pos.x, e.Arc.end.x) && isSimilar(pos.y, e.Arc.end.y) && !e.Removed && e.Type == CAD_ARC && snapArcEndpoints)
+          if (geoInTolerance(pos.x, e.Arc.end.x, mouseTolerance()) && geoInTolerance(pos.y, e.Arc.end.y, mouseTolerance()) && !e.Removed && e.Type == CAD_ARC && snapArcEndpoints)
           {
             if (mod == GLUT_ACTIVE_CTRL)
             {
@@ -119,7 +132,7 @@ void mouseCallback(int btn, int state, int x, int y)
             cadEdit(a, e);
             return;
           }
-          if (isSimilar(pos.x, e.Arc.center.x) && isSimilar(pos.y, e.Arc.center.y) && !e.Removed && e.Type == CAD_ARC && snapArcCenter)
+          if (geoInTolerance(pos.x, e.Arc.center.x, mouseTolerance()) && geoInTolerance(pos.y, e.Arc.center.y, mouseTolerance()) && !e.Removed && e.Type == CAD_ARC && snapArcCenter)
           {
             if (mod == GLUT_ACTIVE_CTRL)
             {
@@ -136,7 +149,7 @@ void mouseCallback(int btn, int state, int x, int y)
             cadEdit(a, e);
             return;
           }
-          if (isSimilar(pos.x, e.Line.start.x) && isSimilar(pos.y, e.Line.start.y) && !e.Removed && e.Type == CAD_LINE && snapLineEndpoints)
+          if (geoInTolerance(pos.x, e.Line.start.x, mouseTolerance()) && geoInTolerance(pos.y, e.Line.start.y, mouseTolerance()) && !e.Removed && e.Type == CAD_LINE && snapLineEndpoints)
           {
             //D printf("\t%s Entity #%d Start point Clicked!%s\n", KGREEN, a, KNORMAL);
             if (mod == GLUT_ACTIVE_CTRL)
@@ -154,7 +167,7 @@ void mouseCallback(int btn, int state, int x, int y)
             cadEdit(a, e);
             return;
           }
-          if (isSimilar(pos.x, e.Line.end.x) && isSimilar(pos.y, e.Line.end.y) && !e.Removed && e.Type == CAD_LINE && snapLineEndpoints)
+          if (geoInTolerance(pos.x, e.Line.end.x, mouseTolerance()) && geoInTolerance(pos.y, e.Line.end.y, mouseTolerance()) && !e.Removed && e.Type == CAD_LINE && snapLineEndpoints)
           {
             //D printf("\t%s Entity #%d End point Clicked!%s\n", KGREEN, a, KNORMAL);
             if (mod == GLUT_ACTIVE_CTRL)
@@ -172,7 +185,7 @@ void mouseCallback(int btn, int state, int x, int y)
             cadEdit(a, e);
             return;
           }
-          if (isSimilar(pos.x, geoGetLineMidpoint(e.Line).x) && isSimilar(pos.y, geoGetLineMidpoint(e.Line).y) && !e.Removed && e.Type == CAD_LINE && snapLineMidpoint)
+          if (geoInTolerance(pos.x, geoGetLineMidpoint(e.Line).x, mouseTolerance()) && geoInTolerance(pos.y, geoGetLineMidpoint(e.Line).y, mouseTolerance()) && !e.Removed && e.Type == CAD_LINE && snapLineMidpoint)
           {
             if (mod == GLUT_ACTIVE_CTRL)
             {
@@ -193,7 +206,7 @@ void mouseCallback(int btn, int state, int x, int y)
           {
             for (x = 0; x < e.Vector.size(); x++)
             {
-              if ( geoInTolerance(pos.x, e.Vector[x].x, 0.050) && geoInTolerance(pos.y, e.Vector[x].y, 0.050) )
+              if ( geoInTolerance(pos.x, e.Vector[x].x, mouseTolerance()) && geoInTolerance(pos.y, e.Vector[x].y, mouseTolerance()) )
               {
                 //cout << KRED << "Vecter[" << x << "] = " << e.Vector[x].x << ", " << e.Vector[x].y << KNORMAL << endl;
                 selected = true;
@@ -284,7 +297,7 @@ void mousePassiveMotionCallback(int x, int y)
   for (int a = 0; a < cadGetEntityArrayIndex(); a++)
   {
     e = cadGetEntityArray(a);
-    if (isSimilar(pos.x, e.Arc.start.x) && isSimilar(pos.y, e.Arc.start.y) && !e.Removed && e.Type == CAD_ARC && snapArcEndpoints)
+    if (geoInTolerance(pos.x, e.Arc.start.x, mouseTolerance()) && geoInTolerance(pos.y, e.Arc.start.y, mouseTolerance()) && !e.Removed && e.Type == CAD_ARC && snapArcEndpoints)
     {
       //uiEdit(0, uiEntity{UI_TEXT, RED, "Start point", UI_MENU_POSITION});
       cadShowSelectionBox(e.Arc.start);
@@ -293,7 +306,7 @@ void mousePassiveMotionCallback(int x, int y)
       cadEdit(a, e);
       return;
     }
-    else if (isSimilar(pos.x, e.Arc.end.x) && isSimilar(pos.y, e.Arc.end.y) && !e.Removed && e.Type == CAD_ARC && snapArcEndpoints)
+    else if (geoInTolerance(pos.x, e.Arc.end.x, mouseTolerance()) && geoInTolerance(pos.y, e.Arc.end.y, mouseTolerance()) && !e.Removed && e.Type == CAD_ARC && snapArcEndpoints)
     {
       //uiEdit(0, uiEntity{UI_TEXT, RED, "End point", UI_MENU_POSITION});
       cadShowSelectionBox(e.Arc.end);
@@ -302,7 +315,7 @@ void mousePassiveMotionCallback(int x, int y)
       cadEdit(a, e);
       return;
     }
-    else if (isSimilar(pos.x, e.Arc.center.x) && isSimilar(pos.y, e.Arc.center.y) && !e.Removed && e.Type == CAD_ARC && snapArcCenter)
+    else if (geoInTolerance(pos.x, e.Arc.center.x, mouseTolerance()) && geoInTolerance(pos.y, e.Arc.center.y, mouseTolerance()) && !e.Removed && e.Type == CAD_ARC && snapArcCenter)
     {
       //uiEdit(0, uiEntity{UI_TEXT, RED, "Center point", UI_MENU_POSITION});
       cadShowSelectionBox(e.Arc.center);
@@ -311,7 +324,7 @@ void mousePassiveMotionCallback(int x, int y)
       cadEdit(a, e);
       return;
     }
-    else if (isSimilar(pos.x, e.Line.start.x) && isSimilar(pos.y, e.Line.start.y) && !e.Removed && e.Type == CAD_LINE && snapArcCenter)
+    else if (geoInTolerance(pos.x, e.Line.start.x, mouseTolerance()) && geoInTolerance(pos.y, e.Line.start.y, mouseTolerance()) && !e.Removed && e.Type == CAD_LINE && snapArcCenter)
     {
       cadShowSelectionBox(e.Line.start);
       mouseLastMouseOver = e.Line.start;
@@ -319,7 +332,7 @@ void mousePassiveMotionCallback(int x, int y)
       cadEdit(a, e);
       return;
     }
-    else if (isSimilar(pos.x, e.Line.end.x) && isSimilar(pos.y, e.Line.end.y) && !e.Removed && e.Type == CAD_LINE && snapLineEndpoints)
+    else if (geoInTolerance(pos.x, e.Line.end.x, mouseTolerance()) && geoInTolerance(pos.y, e.Line.end.y, mouseTolerance()) && !e.Removed && e.Type == CAD_LINE && snapLineEndpoints)
     {
       cadShowSelectionBox(e.Line.end);
       mouseLastMouseOver = e.Line.end;
@@ -327,7 +340,7 @@ void mousePassiveMotionCallback(int x, int y)
       cadEdit(a, e);
       return;
     }
-    else if (isSimilar(pos.x, geoGetLineMidpoint(e.Line).x) && isSimilar(pos.y, geoGetLineMidpoint(e.Line).y) && !e.Removed && e.Type == CAD_LINE && snapLineMidpoint)
+    else if (geoInTolerance(pos.x, geoGetLineMidpoint(e.Line).x, mouseTolerance()) && geoInTolerance(pos.y, geoGetLineMidpoint(e.Line).y, mouseTolerance()) && !e.Removed && e.Type == CAD_LINE && snapLineMidpoint)
     {
       cadShowSelectionBox(geoGetLineMidpoint(e.Line));
       mouseLastMouseOver = geoGetLineMidpoint(e.Line);
@@ -342,7 +355,7 @@ void mousePassiveMotionCallback(int x, int y)
       {
         for (x = 0; x < e.Vector.size(); x++)
         {
-          if ( geoInTolerance(pos.x, e.Vector[x].x, 0.050) && geoInTolerance(pos.y, e.Vector[x].y, 0.050) )
+          if ( geoInTolerance(pos.x, e.Vector[x].x, mouseTolerance()) && geoInTolerance(pos.y, e.Vector[x].y, mouseTolerance()) )
           {
             //cout << KRED << "Vecter[" << x << "] = " << e.Vector[x].x << ", " << e.Vector[x].y << KNORMAL << endl;
             selected = true;

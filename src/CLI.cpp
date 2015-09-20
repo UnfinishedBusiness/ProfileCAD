@@ -941,3 +941,24 @@ void cliMenu()
   uiEdit(0, uiEntity{UI_TEXT, UI_MENU_COLOR, text, UI_MENU_POSITION});
   uiEdit(3, uiEntity{UI_TEXT, RED, "", UI_HINT_POSITION});
 }
+void cliInit()
+{
+  args_t args = mainGetArgs();
+  if (args.args.find("-fullscreen") != std::string::npos)
+  {
+    glutFullScreen();
+  }
+  if (args.args.find("-file") != std::string::npos)
+  {
+    vector<string> array = split(args.args, ' ');
+    for (int x = 0; x < array.size(); x++)
+    {
+      if (array[x] == "-file")
+      {
+        CurrentFile = array[x+1];
+        fileOpen(CurrentFile);
+        cout << KGREEN << "-> Opening " << CurrentFile << KNORMAL << endl;
+      }
+    }
+  }
+}
