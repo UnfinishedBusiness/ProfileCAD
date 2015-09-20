@@ -5,6 +5,8 @@ float ax, ay, az;       /* angles for orbit */
 float tx, ty, tz;       /* factors for paning */
 float scale = 0.1;          /* factor for scaling */
 D int s = 0;
+
+color_t BackgroundColor = BACKGROUND;
 void sceneInit()
 {
   tx, ty, tz = 0;
@@ -72,7 +74,7 @@ void sceneDraw(void)
   //D printf("(sceneDraw) %d\r", s++);
   //D fflush(stdout);
 
-  glClearColor(0.0, 0.0, 0.0, 0.0);
+  glClearColor(BackgroundColor.r, BackgroundColor.g, BackgroundColor.b, BackgroundColor.a);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   //glEnable(GL_LIGHTING);
   //glDisable(GL_BLEND);
@@ -85,7 +87,6 @@ void sceneDraw(void)
   glTranslatef(tx, ty, tz);
   //D printf("\nscale = %f\n", scale);
   glScalef(scale, scale, scale);
-  //scale = 1; //Dont scale again;
   //gluLookAt( 10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 10.0, 10.0, 10.0 );
   cadRender();
   glPopMatrix();

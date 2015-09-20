@@ -33,7 +33,7 @@
 #define EXIT cout << "Bye!\n"; exit(0);
 
 #define WINDOW_HEIGHT 800
-#define WINDOW_WIDTH 800
+#define WINDOW_WIDTH 1100
 #define WINDOW_TITLE "ProfileCAD"
 
 #define DEBUG
@@ -82,6 +82,8 @@ struct color_t{
     return r == rhs.r && g == rhs.g && b == rhs.b && a == rhs.a;
   }
 };
+#define BACKGROUND color_t{0, 0, 0.05, 1}
+
 #define WHITE color_t{1, 1, 1, 1}
 #define BLACK color_t{0, 0, 0, 1}
 #define RED   color_t{1, 0, 0, 1}

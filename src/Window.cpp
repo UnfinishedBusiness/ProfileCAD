@@ -14,7 +14,20 @@ void windowInit()
   glutCreateWindow(WINDOW_TITLE);
   glutReshapeFunc(windowResize);
 }
-void windowResize(int w, int h)
+void windowResize(int width, int height)
 {
-  glViewport(0, 0, w, h);
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();//these two lines are unchanged
+
+  double bound = 1.0; //I reduced the edge distance to make the shape larger in the window
+  double scaleX = double(width)/WINDOW_WIDTH;
+  double scaleY = double(height)/WINDOW_HEIGHT;
+  double Yoffset = 100;
+
+  glOrtho( -bound*scaleX/2, bound*scaleX/2, -bound*scaleY, bound*scaleY, -1,1 );
+  glScalef(1, WINDOW_WIDTH/WINDOW_HEIGHT + WINDOW_WIDTH/WINDOW_HEIGHT + 0.5, 1);
+  //gluPerspective(0, 16.0/9.0*float(width)/float(height), -1, 1);
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+  glViewport(0,0,width,height);
 }

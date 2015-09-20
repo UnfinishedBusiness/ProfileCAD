@@ -7,6 +7,7 @@ bool snapArcEndpoints = true;
 bool snapLineMidpoint = true;
 bool snapLineEndpoints = true;
 bool snapVector = true;
+bool snapIntersection = true; //Not yet implemented
 
 int mod;
 int button;
