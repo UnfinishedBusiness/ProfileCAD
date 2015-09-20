@@ -2,6 +2,7 @@
 
 using namespace std;
 
+bool toggleFullscreen = true;
 void keyboardInit()
 {
   glutSpecialFunc( keyboardCallbackSpecial );
@@ -10,7 +11,11 @@ void keyboardInit()
 void keyboardCallbackNormal(unsigned char key, int x, int y)
 {
     // Press ALT or  SHIFT or  CTRL in combination with other keys.
-    //D printf("Key -> %d \n",key);
+    args_t args = mainGetArgs();
+    if (args.args.find("-keys") != std::string::npos)
+    {
+      printf("NormalKey -> %d \n",key);
+    }
     int mod = glutGetModifiers();
     if (mod != 0) //ALT=4  SHIFT=1  CTRL=2
       {
@@ -57,7 +62,7 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
                   }
                   if (key == 25) //CTRL+y
                   {
-                    
+
                   }
                   if (key == 26) //CTRL+z
                   {
@@ -139,10 +144,26 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
 }
 void keyboardCallbackSpecial(int key, int x, int y)
 {
+  args_t args = mainGetArgs();
+  if (args.args.find("-keys") != std::string::npos)
+  {
+    printf("SpecialKey -> %d \n",key);
+  }
   int mod = glutGetModifiers();
   switch (key)
   {
-       case 27 :      break;
+       case 11 :
+          if (toggleFullscreen)
+          {
+            glutFullScreen();
+
+          }
+          else
+          {
+            glutReshapeWindow(WINDOW_WIDTH, WINDOW_HEIGHT);
+          }
+          toggleFullscreen = !toggleFullscreen;
+          break; //F11
        case 100 : D printf("GLUT_KEY_LEFT %d\n",key); if (mod == GLUT_ACTIVE_CTRL) sceneIncViewAngle(0, -5, 0); break;
        case 102: D printf("GLUT_KEY_RIGHT %d\n",key); if (mod == GLUT_ACTIVE_CTRL) sceneIncViewAngle(0, +5, 0); break;
        case 101   : D printf("GLUT_KEY_UP %d\n",key); if (mod == GLUT_ACTIVE_CTRL) sceneIncViewAngle(-5, 0, 0); break;

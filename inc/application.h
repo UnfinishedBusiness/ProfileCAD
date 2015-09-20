@@ -47,6 +47,13 @@
 #define ARC_CW true
 #define ARC_CCW false
 
+struct args_t{
+  int argc;
+  std::string args;
+};
+
+args_t mainGetArgs();
+
 struct point_t{
   float x,y,z;
   bool operator==(const point_t& rhs)
