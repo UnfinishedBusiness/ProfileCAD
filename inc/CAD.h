@@ -25,9 +25,21 @@ struct cadEntity{
   int Index;
   int SelectionIndex;
   std::vector<point_t> Vector;
+
+  /*cadEntity& operator=(const cadEntity& a)
+  {
+
+    return *this;
+  }*/
+};
+
+struct cadUndoStructure{
+  std::vector<cadEntity> e;
+  int Index;
 };
 
 void cadInit();
+void cadUndo();
 void cadAppend(cadEntity);
 void cadEdit(int, cadEntity);
 void cadRemoveSelected();

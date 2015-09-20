@@ -55,6 +55,14 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
                   {
                     cliFilePutCurrent();
                   }
+                  if (key == 25) //CTRL+y
+                  {
+                    
+                  }
+                  if (key == 26) //CTRL+z
+                  {
+                    cadUndo();
+                  }
                   break;
                case 4 :  D printf("ALT   key %d\n",mod);  break;
                mod=0;

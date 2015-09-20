@@ -7,6 +7,8 @@ using namespace std;
 
 cadSelectionBox_t cadSelectionBox;
 
+vector<cadUndoStructure> cadUndoArray;
+
 vector<cadEntity> cadEntityArray;
 int cadEntityArrayIndex;
 color_t cadColorAttribute = GREEN;
@@ -15,6 +17,20 @@ void cadInit()
 {
   cadEntityArrayIndex = 0;
 }
+
+void cadUndo()
+{
+  if (cadUndoArray.size() > 1)
+  {
+    cadUndoArray.pop_back();
+    cadEntityArray.clear();
+    cadEntityArray = cadUndoArray.back().e;
+    cadEntityArrayIndex = cadEntityArray.size();
+    cadRedraw();
+  }
+  cliScreenUnSelectAll();
+}
+
 void cadAppend(cadEntity e)
 {
   e.Selected = false;
@@ -22,15 +38,45 @@ void cadAppend(cadEntity e)
   e.Index = cadEntityArrayIndex;
   cadEntityArray.push_back(cadEntity());
   cadEntityArray[cadEntityArrayIndex] = e;
+  if (cadUndoArray.size() > 9) //Only keep ten elements
+  {
+    cadUndoArray.erase(cadUndoArray.begin());
+  }
+  cadUndoArray.push_back(cadUndoStructure{cadEntityArray, cadEntityArrayIndex});
   cadEntityArrayIndex++;
   glutPostRedisplay();
 }
 void cadEdit(int i, cadEntity e)
 {
+  /*
+  int SelectionIndex;
+  */
+  bool OpEdit = true;
   if (cadEntityArrayIndex > i)
   {
+    if (e.Removed != cadEntityArray[i].Removed ||
+        e.Color != cadEntityArray[i].Color ||
+        e.Line.start != cadEntityArray[i].Line.start ||
+        e.Line.end != cadEntityArray[i].Line.end ||
+        e.Arc.start != cadEntityArray[i].Arc.start ||
+        e.Arc.end != cadEntityArray[i].Arc.end ||
+        e.Arc.radius != cadEntityArray[i].Arc.radius ||
+        e.Arc.direction != cadEntityArray[i].Arc.direction)
+    {
+      OpEdit = false;
+    }
     cadEntityArray[i] = e;
   }
+  if (OpEdit == false)//Dont waste undo buffer!
+  {
+    //D cout << KRED << "(cadEdit)Actual Edit!" << KNORMAL << endl;
+    if (cadUndoArray.size() > 9) //Only keep ten elements
+    {
+      cadUndoArray.erase(cadUndoArray.begin());
+    }
+    cadUndoArray.push_back(cadUndoStructure{cadEntityArray, cadEntityArrayIndex});
+  }
+
   glutPostRedisplay();
 }
 void cadDrawLine(line_t l)
@@ -63,11 +109,14 @@ int cadGetEntityArrayIndex()
 }
 void cadRemoveSelected()
 {
+  cadEntity e;
   for (int i = 0; i < cadEntityArrayIndex; i++)
   {
       if (cadEntityArray[i].Selected && !cadEntityArray[i].Removed) //Make sure were selected and not removed
       {
-        cadEntityArray[i].Removed = true;
+        //cadEntityArray[i].Removed = true;
+        e.Removed = true;
+        cadEdit(i, e);
       }
   }
 }

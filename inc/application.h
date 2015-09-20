@@ -81,6 +81,10 @@ struct color_t{
   {
     return r == rhs.r && g == rhs.g && b == rhs.b && a == rhs.a;
   }
+  bool operator!=(const color_t& rhs)
+  {
+    return r != rhs.r && g != rhs.g && b != rhs.b && a != rhs.a;
+  }
 };
 #define BACKGROUND color_t{0, 0, 0.05, 1}
 
