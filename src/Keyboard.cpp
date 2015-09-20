@@ -106,7 +106,13 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
         case 47 : cliPush("/"); break;
 
         case 8 : cliBackup(); break; //Normal backspace
-        case 127 : cliBackup(); break; //Mac delete
+
+        #ifdef __APPLE__
+          case 127 : cliBackup(); break; //Mac delete
+        #else
+          case 127 :cliScreenDeleteSelected(); cadRedraw(); break; //Mac delete
+        #endif
+
         case 27 : cliBackup(); break; //Escape
 
         case 46 : cliPush("."); break;
