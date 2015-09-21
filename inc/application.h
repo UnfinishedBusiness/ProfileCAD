@@ -44,6 +44,8 @@
  #define D for(;0;)
 #endif
 
+#define V if(mainVerbose())
+
 #define ARC_CW true
 #define ARC_CCW false
 
@@ -53,6 +55,7 @@ struct args_t{
 };
 
 args_t mainGetArgs();
+bool mainVerbose();
 
 struct point_t{
   float x,y,z;

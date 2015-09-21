@@ -42,6 +42,8 @@ void sceneIncZoom(float inc)
   }
   //scale = scale + inc;
   //cout << "Scale: " << scale << endl;
+  V cout << KRED << "(sceneIncZoom) scale = " <<  KGREEN << scale << KNORMAL << "\r";
+  V fflush(stdout);
   glutPostRedisplay();
 }
 void sceneZoomToMouse(float inc, point_t pos)
@@ -75,7 +77,7 @@ point_t sceneGetPanOffset()
 }
 void sceneDraw(void)
 {
-  //D printf("(sceneDraw) %d\r", s++);
+  //V printf("(sceneDraw) %d\r", s++);
   //D fflush(stdout);
 
   glClearColor(BackgroundColor.r, BackgroundColor.g, BackgroundColor.b, BackgroundColor.a);
@@ -89,7 +91,7 @@ void sceneDraw(void)
   glRotatef(ax, 1.0, 0.0, 0.0);
   glRotatef(-ay, 0.0, 1.0, 0.0);
 
-  //D printf("\nscale = %f\n", scale);
+  //V printf("\nscale = %f\n", scale);
 
   glScalef(scale, scale, scale);
   glTranslatef(tx, ty, tz);

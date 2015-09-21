@@ -234,7 +234,7 @@ void *cliCreateLineParallel()
     std::vector<cadEntity> e = cadGetSelected();
     if (e.size() == 1) //Make sure we have only one entity seleced
     {
-      //D printf("(cliCreateLinePerpendicular) %d Entitys selected!\n", e.size());
+      //V printf("(cliCreateLinePerpendicular) %d Entitys selected!\n", e.size());
       line_t p = geoGetParallelLine(line_t{ e[0].Line.start,  e[0].Line.end}, mouseCadLastClickPos(), input);
       point_t Start = p.start;
       point_t End = p.end;
@@ -606,31 +606,30 @@ void *cliXformTrim1()
   {
     return NULL;
   }
-  if (e[0].SelectionIndex < e[1].SelectionIndex) //Get line that was clicked first
+  point_t new_endpoint = geoGetIntersection(line_t{e[0].Line.start, e[0].Line.end}, line_t{e[1].Line.start, e[1].Line.end});
+  V cout << KRED << "(cliXformTrim1) Intersection = ";
+  V debugDumpPointStructure(new_endpoint);
+  if (isnan(new_endpoint.x) || isnan(new_endpoint.y) || isnan(new_endpoint.z))
   {
-    index = 0;
+    V cout << KRED << "(cliXformTrim1) No Intersection!" << KNORMAL << endl;
+    return NULL;
   }
-  else
-  {
-    index = 1;
-  }
-  point_t new_endpoint = geoGetLineIntersection(line_t{e[0].Line.start, e[0].Line.end}, line_t{e[1].Line.start, e[1].Line.end});
-  //D printf("(cliXformTrim1) Intersection point is (%.6f, %.6f)\n", new_endpoint.x, new_endpoint.y);
+  //V printf("(cliXformTrim1) Intersection point is (%.6f, %.6f)\n", new_endpoint.x, new_endpoint.y);
 
   //Find which end of first selected line is closest to the Intersection point, then replace with intersection point
-  float start_d = geoGetLineLength(line_t{ e[index].Line.start, new_endpoint });
-  float end_d = geoGetLineLength(line_t{ e[index].Line.end, new_endpoint });
+  float start_d = geoGetLineLength(line_t{ e[0].Line.start, new_endpoint });
+  float end_d = geoGetLineLength(line_t{ e[0].Line.end, new_endpoint });
   //Doesnt work because were looking at first in array not first clicked
-  //D printf("e[0].SelectionIndex = %d\ne[1].SelectionIndex = %d\n", e[0].SelectionIndex, e[1].SelectionIndex);
+  //V printf("e[0].SelectionIndex = %d\ne[1].SelectionIndex = %d\n", e[0].SelectionIndex, e[1].SelectionIndex);
   if (start_d < end_d)
   {
-      e[index].Line.start = new_endpoint;
+      e[0].Line.start = new_endpoint;
   }
   else
   {
-    e[index].Line.end = new_endpoint;
+    e[0].Line.end = new_endpoint;
   }
-  cadEdit(e[index].Index, e[index]);
+  cadEdit(e[0].Index, e[0]);
   cliScreenUnSelectAll();
   return NULL;
 }
@@ -697,6 +696,75 @@ void *cliXformTrimCircle()
   TextInput = true;
   cliPush("> ");
   uiEdit(3, uiEntity{UI_TEXT, RED, "Select Circle and two line endpoints and press enter!", UI_HINT_POSITION});
+  return NULL;
+}
+void *cliXformFilletRadius()
+{
+  if (TextReady == true)
+  {
+    TextReady = false;
+    arc_t fillet;
+    fillet.radius = cliGetInput();
+    std::vector<cadEntity> e = cadGetSelected();
+    if (e.empty())
+    {
+      return NULL;
+    }
+    if (e.size() == 2) //Make sure we have two selections
+    {
+      if (e[0].Type == CAD_LINE && e[1].Type == CAD_LINE) //Make sure both selections are lines
+      {
+        point_t relative_center = geoGetLineMidpoint(line_t{point_t{e[0].SelectedAt}, point_t{e[1].SelectedAt}});
+        V cout << KRED << "(cliXformFilletRadius) Relative Center = ";
+        V debugDumpPointStructure(relative_center);
+        line_t p_line_zero = geoGetParallelLine(e[0].Line, relative_center, fillet.radius);
+        //cadDrawLine(p_line_zero);
+        line_t p_line_one = geoGetParallelLine(e[1].Line, relative_center, fillet.radius);
+        //cadDrawLine(p_line_one);
+        //Get intersection point of both lines to get fillet arc center point
+        fillet.center = geoGetLineIntersection(p_line_zero, p_line_one);
+        V cout << KRED << "(cliXformFilletRadius) Arc Center = ";
+        V debugDumpPointStructure(fillet.center);
+
+        //Draw circle and find where each line intersects with circle and replace line and circle end points to create fillet
+        fillet.start = point_t{fillet.center.x + fillet.radius, fillet.center.y};
+        fillet.end = point_t{fillet.center.x + fillet.radius, fillet.center.y};
+        point_t fillet_start = geoGetIntersection(e[0].Line, fillet);
+        point_t fillet_end = geoGetIntersection(e[1].Line, fillet);
+        fillet.start = fillet_start;
+        fillet.end = fillet_end;
+        fillet.direction = ARC_CW; //Asume for now
+        //Figure out which end of line 0 is closest to fillet start
+        if (geoGetLineLength(line_t{ e[0].Line.start, fillet.start }) < geoGetLineLength(line_t{ e[0].Line.end, fillet.start }))
+        {
+          e[0].Line.start = fillet_start;
+        }
+        else
+        {
+          e[0].Line.start = fillet_end;
+        }
+        //Figure out which end of line 1 is closest to fillet end
+        point_t line_one_endpoint;
+        if (geoGetLineLength(line_t{ e[1].Line.start, fillet.end }) < geoGetLineLength(line_t{ e[1].Line.end, fillet.end }))
+        {
+          e[1].Line.start = fillet.end;
+        }
+        else
+        {
+          e[1].Line.start = fillet.end;
+        }
+        cadEdit(e[0].Index, e[0]); //Edit line 0
+        cadEdit(e[1].Index, e[1]); //Edit line 1
+        cadDrawArc(fillet); //Draw arc
+        cliScreenUnSelectAll();
+      }
+    }
+    return NULL;
+  }
+  textCallback = &cliXformFilletRadius;
+  TextInput = true;
+  cliPush("> ");
+  uiEdit(0, uiEntity{UI_TEXT, RED, "Radius?", UI_MENU_POSITION});
   return NULL;
 }
 
@@ -767,7 +835,7 @@ menu_item_t menu[CLI_MENU_ITEMS] = {
       sub_sub_menu_item_t{ "c", "chain" },
       },
       sub_menu_item_t{ "f", "fillet",
-          sub_sub_menu_item_t{ "r", "radius" },
+          sub_sub_menu_item_t{ "r", "radius" , &cliXformFilletRadius },
           sub_sub_menu_item_t{ "d", "diameter" },
       },
       sub_menu_item_t{ "c", "chamfer",

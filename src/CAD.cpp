@@ -69,7 +69,7 @@ void cadEdit(int i, cadEntity e)
   }
   if (OpEdit == false)//Dont waste undo buffer!
   {
-    //D cout << KRED << "(cadEdit)Actual Edit!" << KNORMAL << endl;
+    //V cout << KRED << "(cadEdit)Actual Edit!" << KNORMAL << endl;
     if (cadUndoArray.size() > 9) //Only keep ten elements
     {
       cadUndoArray.erase(cadUndoArray.begin());
@@ -85,7 +85,7 @@ void cadDrawLine(line_t l)
 }
 void cadDrawLine(point_t start, point_t end)
 {
-  //D printf("(cadDrawLine) Drawing line at (%.6f, %.6f, %.6f) ===== (%.6f, %.6f, %.6f)\n", start.x, start.y, start.z, end.x, end.y, end.z);
+  //V printf("(cadDrawLine) Drawing line at (%.6f, %.6f, %.6f) ===== (%.6f, %.6f, %.6f)\n", start.x, start.y, start.z, end.x, end.y, end.z);
   cadAppend(cadEntity{CAD_LINE, cadColorAttribute, line_t{ start, end }, arc_t{} });
 }
 void cadDrawArc(arc_t a)
@@ -203,7 +203,7 @@ void cadRender()
       }
       if (cadEntityArray[i].Type == CAD_ARC && !cadEntityArray[i].Removed && cadEntityArray[i].Arc.radius > 0)
       {
-        //D printf("(cadRender) Found arc!\n");
+        //V printf("(cadRender) Found arc!\n");
         if (cadEntityArray[i].Selected || cadEntityArray[i].MouseOver)
         {
           sceneColor(WHITE);

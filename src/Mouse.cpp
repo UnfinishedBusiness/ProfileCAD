@@ -84,14 +84,14 @@ void mouseCallback(int btn, int state, int x, int y)
         }
 
     }
-    //D printf("Scroll %s At %d %d\n", (btn == 3) ? "Up" : "Down", x, y);
+    //V printf("Scroll %s At %d %d\n", (btn == 3) ? "Up" : "Down", x, y);
     if(btn==GLUT_LEFT_BUTTON && state==GLUT_DOWN && mod == GLUT_ACTIVE_CTRL)
     {
-        //D printf("Left + Ctrl button at X: %d, Y: %d\n", x, y);
+        //V printf("Left + Ctrl button at X: %d, Y: %d\n", x, y);
     }
     if(btn==GLUT_LEFT_BUTTON && state==GLUT_DOWN)
     {
-        //D printf("Left button at X: %d, Y: %d\n", x, y);
+        //V printf("Left button at X: %d, Y: %d\n", x, y);
         mouseLast.x = x;
         mouseLast.y = y;
         cadEntity e;
@@ -151,7 +151,7 @@ void mouseCallback(int btn, int state, int x, int y)
           }
           if (geoInTolerance(pos.x, e.Line.start.x, mouseTolerance()) && geoInTolerance(pos.y, e.Line.start.y, mouseTolerance()) && !e.Removed && e.Type == CAD_LINE && snapLineEndpoints)
           {
-            //D printf("\t%s Entity #%d Start point Clicked!%s\n", KGREEN, a, KNORMAL);
+            V printf("\t%s Entity #%d Start point Clicked!%s\n", KGREEN, a, KNORMAL);
             if (mod == GLUT_ACTIVE_CTRL)
             {
               e.Selected = false;
@@ -162,14 +162,14 @@ void mouseCallback(int btn, int state, int x, int y)
               e.SelectionIndex = cadCountSelection() + 1;
             }
             e.SelectedAt = e.Line.start;
-            //D printf("\t%s Entity #%d Start point Clicked! X: %.6f, Y: %.6f%s\n", KGREEN, a, e.Line.start.x, e.Line.start.y, KNORMAL);
+            //V printf("\t%s Entity #%d Start point Clicked! X: %.6f, Y: %.6f%s\n", KGREEN, a, e.Line.start.x, e.Line.start.y, KNORMAL);
             mouseLastSnapClick = e.SelectedAt;
             cadEdit(a, e);
             return;
           }
           if (geoInTolerance(pos.x, e.Line.end.x, mouseTolerance()) && geoInTolerance(pos.y, e.Line.end.y, mouseTolerance()) && !e.Removed && e.Type == CAD_LINE && snapLineEndpoints)
           {
-            //D printf("\t%s Entity #%d End point Clicked!%s\n", KGREEN, a, KNORMAL);
+            V printf("\t%s Entity #%d End point Clicked!%s\n", KGREEN, a, KNORMAL);
             if (mod == GLUT_ACTIVE_CTRL)
             {
               e.Selected = false;
@@ -180,7 +180,7 @@ void mouseCallback(int btn, int state, int x, int y)
               e.SelectionIndex = cadCountSelection() + 1;
             }
             e.SelectedAt = e.Line.end;
-            //D printf("\t%s Entity #%d End point Clicked! X: %.6f, Y: %.6f%s\n", KGREEN, a, e.Line.end.x, e.Line.end.y, KNORMAL);
+            //V printf("\t%s Entity #%d End point Clicked! X: %.6f, Y: %.6f%s\n", KGREEN, a, e.Line.end.x, e.Line.end.y, KNORMAL);
             mouseLastSnapClick = e.SelectedAt;
             cadEdit(a, e);
             return;
@@ -232,7 +232,7 @@ void mouseCallback(int btn, int state, int x, int y)
               e.SelectionIndex = cadCountSelection() + 1;
             }
             e.SelectedAt = mouseLastMouseOver;
-            //D printf("\t%s Entity #%d Clicked!\n", KGREEN, e.Index ,KNORMAL);
+            V printf("\t%s Entity #%d Clicked!\n", KGREEN, e.Index ,KNORMAL);
             cadEdit(a, e);
             cadRedraw();
           }
@@ -240,7 +240,7 @@ void mouseCallback(int btn, int state, int x, int y)
     }
     if(btn==GLUT_RIGHT_BUTTON && state==GLUT_DOWN)
     {
-        //D printf("Right button at X: %d, Y: %d\n", x, y);
+        //V printf("Right button at X: %d, Y: %d\n", x, y);
     }
 }
 void mouseMotionCallback(int x, int y)
@@ -250,7 +250,7 @@ void mouseMotionCallback(int x, int y)
     if (button == 1) //Middle mouse button
     {
       mouse_t inc{x - mouseLast.x , y - mouseLast.y};
-      //D printf("\rPan %d, %d", inc.x, inc.y);
+      //V printf("\rPan %d, %d", inc.x, inc.y);
       //D fflush(stdout);
       if (abs(inc.x) < 30  && abs(inc.y) < 30)
       {
@@ -261,7 +261,7 @@ void mouseMotionCallback(int x, int y)
     else if (mod == GLUT_ACTIVE_CTRL)
     {
       mouse_t inc{x - mouseLast.x , y - mouseLast.y};
-      //D printf("\rOrbit %d, %d", inc.x, inc.y);
+      //V printf("\rOrbit %d, %d", inc.x, inc.y);
       //D fflush(stdout);
       if (abs(inc.x) < 10  && abs(inc.y) < 10)
       {
@@ -272,7 +272,7 @@ void mouseMotionCallback(int x, int y)
     }
     else
     {
-      //D printf("\rMouse %d, %d", x, y);
+      //V printf("\rMouse %d, %d", x, y);
       //D fflush(stdout);
     }
     mouseLast.x = x;
@@ -282,7 +282,7 @@ void mousePassiveMotionCallback(int x, int y)
 {
   point_t pos = cadScreenCordToCadCord(x, y);
   mouseCurrent = pos;
-  //D printf("%sX: %.6f, Y: %.6f, Z: %.6f%s\r", KGREEN, pos.x, pos.y, pos.z, KNORMAL);
+  //V printf("%sX: %.6f, Y: %.6f, Z: %.6f%s\r", KGREEN, pos.x, pos.y, pos.z, KNORMAL);
   string m;
   if (pos.z > 0)
   {

@@ -4,7 +4,6 @@ using namespace std;
 
 void debugDumpArcStructure(arc_t a)
 {
-  #ifdef DEBUG
   cout << KMAGENTA;
   cout << "arc_t{\n";
   cout << KGREEN;
@@ -24,5 +23,30 @@ void debugDumpArcStructure(arc_t a)
   cout << KMAGENTA;
   cout << "};\n";
   cout << KNORMAL;
-  #endif
+  cout << endl;
+}
+void debugDumpLineStructure(line_t l)
+{
+  cout << KMAGENTA;
+  cout << "line_t{\n";
+  cout << KGREEN;
+  cout << "\tstart=point_t{" << l.start.x << ", "<< l.start.y << "},\n";
+  cout << "\tend=point_t{" << l.end.x << ", "<< l.end.y << "},\n";
+  cout << KMAGENTA;
+  cout << "};\n";
+  cout << KNORMAL;
+  cout << endl;
+}
+void debugDumpPointStructure(point_t p)
+{
+  cout << KMAGENTA;
+  cout << "point_t{\n";
+  cout << KGREEN;
+  cout << "\tx=float(" << p.x << "),\n";
+  cout << "\ty=float(" << p.y << "),\n";
+  cout << "\tz=float(" << p.z << "),\n";
+  cout << KMAGENTA;
+  cout << "};\n";
+  cout << KNORMAL;
+  cout << endl;
 }

@@ -4,9 +4,21 @@
 
 //Angle 0 degrees is on x horizon
 
+bool geoInTolerance(point_t, point_t, float);
 bool geoInTolerance(float, float, float);
+
+
+point_t geoGetIntersection(line_t, line_t);
+point_t geoGetIntersection(arc_t, line_t);
+point_t geoGetIntersection(line_t, arc_t);
+point_t geoGetIntersection(arc_t, arc_t);
+
 point_t geoGetLineIntersection(line_t, line_t);
+point_t geoGetLineArcIntersection(arc_t, line_t);
+point_t geoGetArcIntersection(arc_t, arc_t);
+
 std::vector<point_t> geoGetPointsOfLine(line_t);
+std::vector<point_t> geoGetPointsOfLine(line_t, float);
 line_t geoGetPerpendicularLine(line_t, point_t, float);
 line_t geoGetParallelLine(line_t, point_t, float);
 float geoGetLineLength(line_t);

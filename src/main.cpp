@@ -2,6 +2,11 @@
 
 using namespace std;
 
+bool isVerbose = false;
+bool mainVerbose()
+{
+  return isVerbose;
+}
 args_t args;
 args_t mainGetArgs()
 {
@@ -17,6 +22,10 @@ int main(int argc, char **argv)
   }
   args.argc = argc;
   args.args = a;
+  if (args.args.find("-verbose") != std::string::npos)
+  {
+    isVerbose = true;
+  }
   glutInit(&argc, argv);
   windowInit();
   sceneInit();

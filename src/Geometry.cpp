@@ -2,6 +2,10 @@
 
 using namespace std;
 
+bool geoInTolerance(point_t a, point_t b, float t)
+{
+  return (geoInTolerance(a.x, b.x, t) && geoInTolerance(a.y, b.y, t) && geoInTolerance(a.z, b.z, t));
+}
 bool geoInTolerance(float a, float b, float t)
 {
   float diff;
@@ -23,28 +27,129 @@ bool geoInTolerance(float a, float b, float t)
     return false;
   }
 }
+point_t geoGetIntersection(arc_t a, line_t l)
+{
+  return geoGetLineArcIntersection(a, l);
+}
+point_t geoGetIntersection(line_t l, arc_t a)
+{
+  return geoGetLineArcIntersection(a, l);
+}
+point_t geoGetIntersection(arc_t a1, arc_t a2)
+{
+  return geoGetArcIntersection(a1, a2);
+}
+point_t geoGetIntersection(line_t l1, line_t l2)
+{
+  return geoGetLineIntersection(l1, l2);
+}
 point_t geoGetLineIntersection(line_t l1, line_t l2)
 {
-  float a1 = (l1.start.y - l1.end.y) / (l1.start.x - l1.end.x);
+  //Below only seems to work for lines that dont already intersect each other
+  /*float a1 = (l1.start.y - l1.end.y) / (l1.start.x - l1.end.x);
   float b1 = l1.start.y - a1 * l1.start.x;
   float a2 = (l2.start.y - l2.end.y) / (l2.start.x - l2.end.x);
   float b2 = l2.start.y - a2 * l2.start.x;
   if (fabs(a1 - a2) < 0.000001)
   {
-    D printf("(geoGetLineIntersection) Lines dont intersect!\n");
+    V printf("(geoGetLineIntersection) Lines dont intersect!\n");
   }
   float x = (b2 - b1) / (a1 - a2);
   float y = a1 * x + b1;
-  return point_t{x, y};
+  if (!isnan(x) && !isnan(y))
+  {
+    V cout << KRED << "(geoGetLineIntersection) Projected intersection = ";
+    V debugDumpPointStructure(point_t{x, y});
+    return point_t{(float)x, (float)y};
+  }
+  vector<point_t> lp1 = geoGetPointsOfLine(l1, 0.0001);
+  vector<point_t> lp2 = geoGetPointsOfLine(l2, 0.0001);
+
+  for (int x = 0; x < lp1.size(); x++)
+  {
+    for (int y = 0; y < lp2.size(); y++)
+    {
+      if (geoInTolerance(lp1[x], lp2[y], 0.0002))
+      {
+        V cout << KRED << "(geoGetLineIntersection) Non-Projected intersection = ";
+        V debugDumpPointStructure(lp1[x]);
+        return lp1[x];
+      }
+    }
+  }
+  return point_t{NAN, NAN, NAN}; //No intersection;*/
+  float a1 = l1.end.y - l1.start.y;
+  float b1 = l1.start.x - l1.end.x;
+  float c1 = a1 * l1.start.x + b1 * l1.start.y;
+  float a2 = l2.end.y - l2.start.y;
+  float b2 = l2.start.x - l2.end.x;
+  float c2 = a2 * l2.start.x + b2 * l2.start.y;
+  float det = a1 * b2 - a2 * b1;
+  if (det == 0)
+  {
+        return point_t{NAN, NAN, NAN}; //Lines are parallel
+  }
+  float x = (b2 * c1 - b1 * c2) / det;
+  float y = (a1 * c2 - a2 * c1) / det;
+  return point_t{x, y, 0};
 }
+point_t geoGetLineArcIntersection(arc_t a, line_t l)
+{
+  vector<point_t> av = geoGetPointsOfArc(a);
+  vector<point_t> lv = geoGetPointsOfLine(l, 0.0005);
+  for (int x = 0; x < lv.size(); x++)
+  {
+    for (int y = 0; y < av.size(); y++)
+    {
+      if (geoInTolerance(lv[x], av[y], 0.0001))
+      {
+        return lv[x];
+      }
+    }
+  }
+  return point_t{NAN, NAN, NAN}; //No intersection;
+}
+point_t geoGetArcIntersection(arc_t a1, arc_t a2)
+{
+  vector<point_t> av1 = geoGetPointsOfArc(a1);
+  vector<point_t> av2 = geoGetPointsOfArc(a2);
+  for (int x = 0; x < av1.size(); x++)
+  {
+    for (int y = 0; y < av2.size(); y++)
+    {
+      if (geoInTolerance(av1[x], av2[y], 0.0001))
+      {
+        return av1[x];
+      }
+    }
+  }
+  return point_t{NAN, NAN, NAN}; //No intersection;
+}
+
 vector<point_t> geoGetPointsOfLine(line_t l)
 {
-  //D printf("(geoGetPointsOfLine) Start(%.6f, %.6f) End(%.6f, %.6f)\n", start.x, start.y, end.x, end.y);
+  float scale = 0.005 / sceneGetScale();
+  if (scale < 0.002)
+  {
+    V cout << KRED << "(geoGetPointsOfLine) Min scale reached - scale = " <<  KGREEN << scale << KNORMAL << "\r";
+    scale = 0.002;
+  }
+  return geoGetPointsOfLine(l, scale);
+}
+vector<point_t> geoGetPointsOfLine(line_t l, float scale)
+{
+  if (scale < 0.0001)
+  {
+    scale = 0.0001;
+  }
+  //V printf("(geoGetPointsOfLine) Start(%.6f, %.6f) End(%.6f, %.6f)\n", start.x, start.y, end.x, end.y);
   vector<point_t> p;
   float x = l.end.x - l.start.x;
 	float y = l.end.y - l.start.y;
 	float length = sqrtf( x*x + y*y );
-  float scale = 0.005;
+  //float scale = 0.005;
+
+
 	float addx = (x / length) * scale;
 	float addy = (y / length) * scale;
 	x = l.start.x;
@@ -74,7 +179,7 @@ point_t geoGetLineMidpoint(line_t l)
   m.x = (l.end.x + l.start.x) / 2;
   m.y = (l.end.y + l.start.y) / 2;
   m.z = (l.end.z + l.start.z) / 2;
-  //D printf("(geoGetLineMidpoint) Midpoint of (%.6f, %.6f) --- (%.6f, %.6f) is (%.6f, %.6f)\n", l.start.x, l.start.y, l.end.x, l.end.y, m.x, m.y);
+  //V printf("(geoGetLineMidpoint) Midpoint of (%.6f, %.6f) --- (%.6f, %.6f) is (%.6f, %.6f)\n", l.start.x, l.start.y, l.end.x, l.end.y, m.x, m.y);
   return m;
 }
 point_t geoRotatePointAroundPoint(point_t p, point_t o, float angle) //angle is in degrees!
@@ -110,12 +215,12 @@ line_t geoExtendLine(line_t l, float d)
   float new_endpoint_distance = geoGetLineLength(line_t{ l.end, new_endpoint });
   if (new_startpoint_distance > new_endpoint_distance)
   {
-    D printf("(geoExtendLine) Entending from start point\n");
+    V printf("(geoExtendLine) Entending from start point\n");
     return line_t{ new_startpoint, l.end };
   }
   else
   {
-    D printf("(geoExtendLine) Entending from end point\n");
+    V printf("(geoExtendLine) Entending from end point\n");
     return line_t{ l.start, new_endpoint };
   }
 }
@@ -134,15 +239,15 @@ line_t geoGetPerpendicularLine(line_t l, point_t direction, float d)
   line_t r90 = line_t{ midpoint, geoRotatePointAroundPoint(l.start, midpoint, 90) };
   float r270_d = geoGetLineLength(line_t{ r270.end, direction });
   float r90_d = geoGetLineLength(line_t{ r90.end, direction });
-  //D printf("(geoGetPerpendicularLine) R270 Distance: %.6f, R90 Distance: %.6f\n", r270_d, r90_d);
+  //V printf("(geoGetPerpendicularLine) R270 Distance: %.6f, R90 Distance: %.6f\n", r270_d, r90_d);
   if ( r90_d < r270_d )
   {
-    //D printf("(geoGetPerpendicularLine) R270 is closer!\n");
+    //V printf("(geoGetPerpendicularLine) R270 is closer!\n");
     r = r270;
   }
   else
   {
-    //D printf("(geoGetPerpendicularLine) R90 is closer!\n");
+    //V printf("(geoGetPerpendicularLine) R90 is closer!\n");
     r = r90;
   }
   float a = geoGetLineAngle(r);
