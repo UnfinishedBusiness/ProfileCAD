@@ -734,7 +734,7 @@ menu_item_t menu[CLI_MENU_ITEMS] = {
          sub_sub_menu_item_t{ "s", "side distance", &cliCreateLineParallel },
     },
   },
-  { "a", "arcs & circles",
+  { "a", "arcs",
     sub_menu_item_t{ "c", "circle",
          sub_sub_menu_item_t{ "d", "center & diameter", &cliCreateCircleCenterDiameter },
          sub_sub_menu_item_t{ "r", "center & radius", &cliCreateCircleCenterRadius },
