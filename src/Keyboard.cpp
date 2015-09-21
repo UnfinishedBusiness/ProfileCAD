@@ -21,7 +21,17 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
       {
             switch(mod)
             {
-               case 1 :  D printf("SHIFT key %d\n",mod);  break;
+               case 1 :
+                 //D printf("SHIFT key %d\n",mod);
+                 if (key == 43) //Shift +
+                 {
+                   sceneIncZoom(+(0.05 * sceneGetScale()));
+                 }
+                 if (key == 95) //Shift -
+                 {
+                   sceneIncZoom(-(0.05 * sceneGetScale()));
+                 }
+                 break;
                case 2 :
                   //printf("CTRL  key %d\n",mod);
                   if (key == 1) //CTRL+a
@@ -123,7 +133,7 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
         #ifdef __APPLE__
           case 127 : cliBackup(); break; //Mac delete
         #else
-          case 127 :cliScreenDeleteSelected(); cadRedraw(); break; //Mac delete
+          case 127 : cliScreenDeleteSelected(); cadRedraw(); break; //Mac delete
         #endif
 
         case 27 : cliBackup(); break; //Escape
@@ -163,9 +173,9 @@ void keyboardCallbackSpecial(int key, int x, int y)
           }
           toggleFullscreen = !toggleFullscreen;
           break; //F11
-       case 100 : D printf("GLUT_KEY_LEFT %d\n",key); if (mod == GLUT_ACTIVE_CTRL) sceneIncViewAngle(0, -5, 0); break;
-       case 102: D printf("GLUT_KEY_RIGHT %d\n",key); if (mod == GLUT_ACTIVE_CTRL) sceneIncViewAngle(0, +5, 0); break;
-       case 101   : D printf("GLUT_KEY_UP %d\n",key); if (mod == GLUT_ACTIVE_CTRL) sceneIncViewAngle(-5, 0, 0); break;
-       case 103 : D printf("GLUT_KEY_DOWN %d\n",key); if (mod == GLUT_ACTIVE_CTRL) sceneIncViewAngle(+5, 0, 0); break;
+       case 100: if (mod == GLUT_ACTIVE_CTRL) sceneIncViewAngle(0, -5, 0); else sceneIncPan(-(0.01 / sceneGetScale()), 0, 0); break; //Up
+       case 102: if (mod == GLUT_ACTIVE_CTRL) sceneIncViewAngle(0, +5, 0); else sceneIncPan(+(0.01 / sceneGetScale()), 0, 0); break; //Down
+       case 101: if (mod == GLUT_ACTIVE_CTRL) sceneIncViewAngle(-5, 0, 0); else sceneIncPan(0, +(0.01 / sceneGetScale()), 0); break; //Left
+       case 103: if (mod == GLUT_ACTIVE_CTRL) sceneIncViewAngle(+5, 0, 0); else sceneIncPan(0, -(0.01 / sceneGetScale()), 0); break; //Right
   }
 }

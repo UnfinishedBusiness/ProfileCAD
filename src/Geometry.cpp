@@ -44,7 +44,7 @@ vector<point_t> geoGetPointsOfLine(line_t l)
   float x = l.end.x - l.start.x;
 	float y = l.end.y - l.start.y;
 	float length = sqrtf( x*x + y*y );
-  float scale = 0.001;
+  float scale = 0.005;
 	float addx = (x / length) * scale;
 	float addy = (y / length) * scale;
 	x = l.start.x;

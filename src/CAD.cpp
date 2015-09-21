@@ -252,6 +252,7 @@ void cadRenderArc(arc_t a)
   }
   cadEntityArray[a.parentIndex].Vector.clear();
   float inc_angle = 1; //Degrees
+  steps++;
   for (int x=0; x < steps; x++)
   {
     if (a.direction == ARC_CW)

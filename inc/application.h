@@ -93,7 +93,11 @@ struct color_t{
     return r != rhs.r && g != rhs.g && b != rhs.b && a != rhs.a;
   }
 };
-#define BACKGROUND color_t{0, 0, 0.05, 1}
+#ifdef __APPLE__
+  #define BACKGROUND color_t{0, 0, 0.10, 1}
+#else
+  #define BACKGROUND color_t{0, 0, 0.05, 1}
+#endif
 
 #define WHITE color_t{1, 1, 1, 1}
 #define BLACK color_t{0, 0, 0, 1}
