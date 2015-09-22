@@ -27,6 +27,20 @@ bool geoInTolerance(float a, float b, float t)
     return false;
   }
 }
+line_t geoReplaceClosestEndpoint(line_t l, point_t p)
+{
+  line_t r = l;
+  if (geoGetLineLength(line_t{ l.start, p }) < geoGetLineLength(line_t{ l.end, p}))
+  {
+    //V cout << KRED << "(cliXformFilletRadius)\t" << KGREEN << "Selection 1 start is closest to fillet start!" << KNORMAL << endl;
+    r.start = p;
+  }
+  else
+  {
+    r.end = p;
+  }
+  return r;
+}
 point_t geoGetIntersection(arc_t a, line_t l)
 {
   return geoGetLineArcIntersection(a, l);
@@ -45,39 +59,6 @@ point_t geoGetIntersection(line_t l1, line_t l2)
 }
 point_t geoGetLineIntersection(line_t l1, line_t l2)
 {
-  //Below only seems to work for lines that dont already intersect each other
-  /*float a1 = (l1.start.y - l1.end.y) / (l1.start.x - l1.end.x);
-  float b1 = l1.start.y - a1 * l1.start.x;
-  float a2 = (l2.start.y - l2.end.y) / (l2.start.x - l2.end.x);
-  float b2 = l2.start.y - a2 * l2.start.x;
-  if (fabs(a1 - a2) < 0.000001)
-  {
-    V printf("(geoGetLineIntersection) Lines dont intersect!\n");
-  }
-  float x = (b2 - b1) / (a1 - a2);
-  float y = a1 * x + b1;
-  if (!isnan(x) && !isnan(y))
-  {
-    V cout << KRED << "(geoGetLineIntersection) Projected intersection = ";
-    V debugDumpPointStructure(point_t{x, y});
-    return point_t{(float)x, (float)y};
-  }
-  vector<point_t> lp1 = geoGetPointsOfLine(l1, 0.0001);
-  vector<point_t> lp2 = geoGetPointsOfLine(l2, 0.0001);
-
-  for (int x = 0; x < lp1.size(); x++)
-  {
-    for (int y = 0; y < lp2.size(); y++)
-    {
-      if (geoInTolerance(lp1[x], lp2[y], 0.0002))
-      {
-        V cout << KRED << "(geoGetLineIntersection) Non-Projected intersection = ";
-        V debugDumpPointStructure(lp1[x]);
-        return lp1[x];
-      }
-    }
-  }
-  return point_t{NAN, NAN, NAN}; //No intersection;*/
   float a1 = l1.end.y - l1.start.y;
   float b1 = l1.start.x - l1.end.x;
   float c1 = a1 * l1.start.x + b1 * l1.start.y;
@@ -93,7 +74,7 @@ point_t geoGetLineIntersection(line_t l1, line_t l2)
   float y = (a1 * c2 - a2 * c1) / det;
   return point_t{x, y, 0};
 }
-point_t geoGetLineArcIntersection(arc_t a, line_t l)
+point_t geoGetLineArcIntersection(arc_t a, line_t l) //Not really the best way
 {
   vector<point_t> av = geoGetPointsOfArc(a);
   vector<point_t> lv = geoGetPointsOfLine(l, 0.0005);
@@ -107,7 +88,7 @@ point_t geoGetLineArcIntersection(arc_t a, line_t l)
       }
     }
   }
-  return point_t{NAN, NAN, NAN}; //No intersection;
+  return point_t{NAN, NAN, NAN}; //No intersection;*/
 }
 point_t geoGetArcIntersection(arc_t a1, arc_t a2)
 {

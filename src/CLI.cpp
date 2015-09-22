@@ -721,53 +721,43 @@ void *cliXformFilletRadius()
         //cadDrawLine(p_line_zero);
         line_t p_line_one = geoGetParallelLine(e[1].Line, relative_center, fillet.radius);
         //cadDrawLine(p_line_one);
-        //Get intersection point of both lines to get fillet arc center point
+        //Get intersection point of both parallel lines to get fillet arc center point
         fillet.center = geoGetLineIntersection(p_line_zero, p_line_one);
         V cout << KRED << "(cliXformFilletRadius) Arc Center = ";
         V debugDumpPointStructure(fillet.center);
 
-        //Draw circle and find where each line intersects with circle and replace line and circle end points to create fillet
-        fillet.start = point_t{fillet.center.x + fillet.radius, fillet.center.y};
-        fillet.end = point_t{fillet.center.x + fillet.radius, fillet.center.y};
-        point_t fillet_start = geoGetIntersection(e[0].Line, fillet);
-        point_t fillet_end = geoGetIntersection(e[1].Line, fillet);
-        fillet.start = fillet_start;
-        fillet.end = fillet_end;
+        //Get intersection of line_zero and p_line_one for fillet start point
+        fillet.start = geoGetLineIntersection(e[0].Line, p_line_one);
+
+        //Get intersection of line_one and p_line_zero for fillet start point
+        fillet.end = geoGetLineIntersection(e[1].Line, p_line_zero);
+
+        V cout << KRED << "(cliXformFilletRadius) fillet.start = ";
+        V debugDumpPointStructure(fillet.start);
+        V cout << KRED << "(cliXformFilletRadius) fillet.end = ";
+        V debugDumpPointStructure(fillet.end);
 
         //Determine direction of fillet by drawing a line from center to start and end point, if included angle is positive were CW
-        float start_angle = geoGetLineAngle(line_t{fillet.center, fillet.start});
-        float end_angle = geoGetLineAngle(line_t{fillet.center, fillet.end});
+
+        float start_angle = geoRadiansToDegrees(geoGetLineAngle(line_t{fillet.center, fillet.start}));
+        float end_angle = geoRadiansToDegrees(geoGetLineAngle(line_t{fillet.center, fillet.end}));
         V cout << KRED << "(cliXformFilletRadius) Arc Start Angle = " << start_angle << KNORMAL << endl;
         V cout << KRED << "(cliXformFilletRadius) Arc End Angle = " << end_angle << KNORMAL << endl;
         if ((start_angle - end_angle) > 0)
         {
-          fillet.direction = ARC_CW;
+          fillet.direction = ARC_CCW;
           V cout << KRED << "(cliXformFilletRadius)\t Arc is CW" << KNORMAL << endl;
         }
         else
         {
-          fillet.direction = ARC_CCW;
+          fillet.direction = ARC_CW;
           V cout << KRED << "(cliXformFilletRadius)\t Arc is CCW" << KNORMAL << endl;
         }
-        //Figure out which end of line 0 is closest to fillet start
-        if (geoGetLineLength(line_t{ e[0].Line.start, fillet.start }) < geoGetLineLength(line_t{ e[0].Line.end, fillet.start }))
-        {
-          e[0].Line.start = fillet_start;
-        }
-        else
-        {
-          e[0].Line.start = fillet_end;
-        }
-        //Figure out which end of line 1 is closest to fillet end
-        point_t line_one_endpoint;
-        if (geoGetLineLength(line_t{ e[1].Line.start, fillet.end }) < geoGetLineLength(line_t{ e[1].Line.end, fillet.end }))
-        {
-          e[1].Line.start = fillet.end;
-        }
-        else
-        {
-          e[1].Line.start = fillet.end;
-        }
+        
+        e[0].Line = geoReplaceClosestEndpoint(e[0].Line, fillet.start);
+        e[1].Line = geoReplaceClosestEndpoint(e[1].Line, fillet.end);
+
+
         cadEdit(e[0].Index, e[0]); //Edit line 0
         cadEdit(e[1].Index, e[1]); //Edit line 1
         cadDrawArc(fillet); //Draw arc
@@ -1036,7 +1026,7 @@ void cliInit()
     vector<string> array = split(args.args, ' ');
     for (int x = 0; x < array.size(); x++)
     {
-      if (array[x] == "-file")
+      if (array[x].find("-file") != std::string::npos)
       {
         CurrentFile = array[x+1];
         fileOpen(CurrentFile);

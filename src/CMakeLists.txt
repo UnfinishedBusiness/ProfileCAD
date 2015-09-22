@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 # Project Name
 PROJECT(ProfileCAD)
 
-add_definitions("-std=c++11")
+add_definitions("-std=c++11 -g")
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_definitions("-w")
 endif()
