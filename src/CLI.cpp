@@ -714,7 +714,7 @@ void *cliXformFilletRadius()
     {
       if (e[0].Type == CAD_LINE && e[1].Type == CAD_LINE) //Make sure both selections are lines
       {
-        point_t relative_center = geoGetLineMidpoint(line_t{point_t{e[0].SelectedAt}, point_t{e[1].SelectedAt}});
+        point_t relative_center = geoGetLineMidpoint(line_t{e[0].SelectedAt, e[1].SelectedAt});
         V cout << KRED << "(cliXformFilletRadius) Relative Center = ";
         V debugDumpPointStructure(relative_center);
         line_t p_line_zero = geoGetParallelLine(e[0].Line, relative_center, fillet.radius);
