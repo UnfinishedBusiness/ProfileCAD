@@ -733,7 +733,22 @@ void *cliXformFilletRadius()
         point_t fillet_end = geoGetIntersection(e[1].Line, fillet);
         fillet.start = fillet_start;
         fillet.end = fillet_end;
-        fillet.direction = ARC_CW; //Asume for now
+
+        //Determine direction of fillet by drawing a line from center to start and end point, if included angle is positive were CW
+        float start_angle = geoGetLineAngle(line_t{fillet.center, fillet.start});
+        float end_angle = geoGetLineAngle(line_t{fillet.center, fillet.end});
+        V cout << KRED << "(cliXformFilletRadius) Arc Start Angle = " << start_angle << KNORMAL << endl;
+        V cout << KRED << "(cliXformFilletRadius) Arc End Angle = " << end_angle << KNORMAL << endl;
+        if ((start_angle - end_angle) > 0)
+        {
+          fillet.direction = ARC_CW;
+          V cout << KRED << "(cliXformFilletRadius)\t Arc is CW" << KNORMAL << endl;
+        }
+        else
+        {
+          fillet.direction = ARC_CCW;
+          V cout << KRED << "(cliXformFilletRadius)\t Arc is CCW" << KNORMAL << endl;
+        }
         //Figure out which end of line 0 is closest to fillet start
         if (geoGetLineLength(line_t{ e[0].Line.start, fillet.start }) < geoGetLineLength(line_t{ e[0].Line.end, fillet.start }))
         {
