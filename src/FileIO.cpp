@@ -13,9 +13,13 @@ int fileOpen(string f)
   ifs.open(f);
   if (ifs.is_open())
   {
-    if (f.find("dxf") != std::string::npos)
+    if (f.find(".dxf") != std::string::npos)
     {
       fileReadDXF();
+    }
+    else if (f.find(".nc") != std::string::npos)
+    {
+      fileReadNC();
     }
     else
     {
@@ -398,5 +402,89 @@ void fileReadDXF()
           }
         }
     }
+  }
+}
+void fileReadNC()
+{
+  string line;
+  line_t l;
+  bool PostLine = false;
+  point_t CurrentPosition;
+  auto getXYZ = [](string s, point_t c)
+  {
+    string Word = "";
+    string Value;
+    point_t p = c;
+    for (int x = 0; x < s.length(); x++)
+    {
+      if (Word != "")
+      {
+        while(x < s.length())
+        {
+          if (isdigit(s[x]) || s[x] == '.' )
+          {
+            Value.push_back(s[x]);
+          }
+          else
+          {
+            break;
+          }
+          x++;
+        }
+        V cout << KBLUE << "\t\t Word ==> " << KGREEN << Word << KNORMAL << endl;
+        V cout << KBLUE << "\t\t Value ==> " << KGREEN << Value << KNORMAL << endl;
+        if (Word == "X")
+        {
+          p.x = atof((char *)Value.c_str());
+          V cout << KBLUE << "\t\t\t Found X ==> " << KGREEN << p.x << KNORMAL << endl;
+        }
+        if (Word == "Y")
+        {
+          p.y = atof((char *)Value.c_str());
+          V cout << KBLUE << "\t\t\t Found Y ==> " << KGREEN << p.y << KNORMAL << endl;
+        }
+        if (Word == "Z")
+        {
+          p.z = atof((char *)Value.c_str());
+          V cout << KBLUE << "\t\t\t Found Z ==> " << KGREEN << p.z << KNORMAL << endl;
+        }
+        Word = "";
+        Value.erase();
+      }
+      if (!isdigit(s[x]) && s[x] != '.')
+      {
+        Word = s[x];
+      }
+    }
+    return p;
+  };
+  while (getline (ifs, line))
+  {
+    line.erase(std::remove(line.begin(), line.end(), ' '), line.end()); //Remove all whitespaces
+    line.erase(std::remove(line.begin(), line.end(), '\n'), line.end()); //Remove all newline characters
+    line.erase(std::remove(line.begin(), line.end(), '\r'), line.end()); //Remove all carage return characters
+    V cout << KRED << "(fileReadNC) ==> " << KGREEN << line << KNORMAL << endl;
+    if (line.find("G0") != std::string::npos || line.find("G00") != std::string::npos)
+    {
+      V cout << KCYAN << "\t==> " << KGREEN << "Found Rapid!" << KNORMAL << endl;
+      CurrentPosition = getXYZ(line, CurrentPosition);
+      V debugDumpPointStructure(CurrentPosition);
+    }
+    if (line.find("G1") != std::string::npos || line.find("G01") != std::string::npos)
+    {
+      V cout << KCYAN << "\t==> " << KGREEN << "Found Line!" << KNORMAL << endl;
+      CurrentPosition = getXYZ(line, CurrentPosition);
+      V debugDumpPointStructure(CurrentPosition);
+    }
+    if (PostLine)
+    {
+      l.end = CurrentPosition;
+      cadDrawLine(l);
+    }
+    else
+    {
+      l.start = CurrentPosition;
+    }
+    PostLine = !PostLine;
   }
 }

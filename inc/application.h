@@ -14,6 +14,7 @@
 #include <algorithm>
 #include <array>
 #include <iomanip>
+#include <locale>
 
 #include <CAD.h>
 #include <CLI.h>
@@ -119,7 +120,7 @@ struct color_t{
 #define KYELLOW  "\x1B[33m"
 #define KBLUE  "\x1B[34m"
 #define KMAGENTA  "\x1B[35m"
-#define KCYNAN  "\x1B[36m"
+#define KCYAN  "\x1B[36m"
 #define KWHITE  "\x1B[37m"
 
 

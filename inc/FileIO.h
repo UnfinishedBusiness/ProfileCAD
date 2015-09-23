@@ -10,6 +10,12 @@
 
 int fileOpen(std::string);
 int fileSave(std::string);
+
+//Dxf Methods
 void fileReadDXF();
 void fileWriteDXF();
+
+//NC Methods
+void fileReadNC();
+
 #endif
