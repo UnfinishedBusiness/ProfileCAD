@@ -407,23 +407,27 @@ void fileReadDXF()
 void fileReadNC()
 {
   string line;
+  string Word = "";
+  int Gword = -1;
+  string Value;
   line_t l;
   bool PostLine = false;
   point_t CurrentPosition;
-  auto getXYZ = [](string s, point_t c)
+  while (getline (ifs, line))
   {
-    string Word = "";
-    string Value;
-    point_t p = c;
-    for (int x = 0; x < s.length(); x++)
+    line.erase(std::remove(line.begin(), line.end(), ' '), line.end()); //Remove all whitespaces
+    line.erase(std::remove(line.begin(), line.end(), '\n'), line.end()); //Remove all newline characters
+    line.erase(std::remove(line.begin(), line.end(), '\r'), line.end()); //Remove all carage return characters
+    V cout << KRED << "(fileReadNC) ==> " << KGREEN << line << KNORMAL << endl;
+    for (int x = 0; x < line.length(); x++)
     {
       if (Word != "")
       {
-        while(x < s.length())
+        while(x < line.length())
         {
-          if (isdigit(s[x]) || s[x] == '.' )
+          if (isdigit(line[x]) || line[x] == '.' || line[x] == '-')
           {
-            Value.push_back(s[x]);
+            Value.push_back(line[x]);
           }
           else
           {
@@ -435,49 +439,57 @@ void fileReadNC()
         V cout << KBLUE << "\t\t Value ==> " << KGREEN << Value << KNORMAL << endl;
         if (Word == "X")
         {
-          p.x = atof((char *)Value.c_str());
-          V cout << KBLUE << "\t\t\t Found X ==> " << KGREEN << p.x << KNORMAL << endl;
+          CurrentPosition.x = atof((char *)Value.c_str());
+          V cout << KBLUE << "\t\t\t Found X ==> " << KGREEN << CurrentPosition.x << KNORMAL << endl;
         }
         if (Word == "Y")
         {
-          p.y = atof((char *)Value.c_str());
-          V cout << KBLUE << "\t\t\t Found Y ==> " << KGREEN << p.y << KNORMAL << endl;
+          CurrentPosition.y = atof((char *)Value.c_str());
+          V cout << KBLUE << "\t\t\t Found Y ==> " << KGREEN << CurrentPosition.y << KNORMAL << endl;
         }
         if (Word == "Z")
         {
-          p.z = atof((char *)Value.c_str());
-          V cout << KBLUE << "\t\t\t Found Z ==> " << KGREEN << p.z << KNORMAL << endl;
+          CurrentPosition.z = atof((char *)Value.c_str());
+          V cout << KBLUE << "\t\t\t Found Z ==> " << KGREEN << CurrentPosition.z << KNORMAL << endl;
         }
         Word = "";
         Value.erase();
       }
-      if (!isdigit(s[x]) && s[x] != '.')
+      if (!isdigit(line[x]) && line[x] != '.' && line[x] != '-')
       {
-        Word = s[x];
+        Word = line[x];
+        if (Word == "G")
+        {
+          V cout << KBLUE << "\t\t\t Found Gword! ==> " << KGREEN << Word << KRED << " With value ==> " <<  Value << KNORMAL << endl;
+          if (Value == "00" || Value == "0") //Rapid
+          {
+            V cout << KMAGENTA << "\t\t\t\t Gword is Rapid!" << KNORMAL << endl;
+            Gword = 0;
+          }
+          else if (Value == "01" || Value == "1") //Line
+          {
+            V cout << KMAGENTA << "\t\t\t\t Gword is Line!" << KNORMAL << endl;
+            Gword = 1;
+          }
+          else
+          {
+            Gword = -1;
+          }
+        }
       }
     }
-    return p;
-  };
-  while (getline (ifs, line))
-  {
-    line.erase(std::remove(line.begin(), line.end(), ' '), line.end()); //Remove all whitespaces
-    line.erase(std::remove(line.begin(), line.end(), '\n'), line.end()); //Remove all newline characters
-    line.erase(std::remove(line.begin(), line.end(), '\r'), line.end()); //Remove all carage return characters
-    V cout << KRED << "(fileReadNC) ==> " << KGREEN << line << KNORMAL << endl;
-    if (line.find("G0") != std::string::npos || line.find("G00") != std::string::npos)
+    if (Gword == 0)
     {
-      V cout << KCYAN << "\t==> " << KGREEN << "Found Rapid!" << KNORMAL << endl;
-      CurrentPosition = getXYZ(line, CurrentPosition);
-      V debugDumpPointStructure(CurrentPosition);
+      cadSetColor(RED);
     }
-    if (line.find("G1") != std::string::npos || line.find("G01") != std::string::npos)
+    if (Gword == 1)
     {
-      V cout << KCYAN << "\t==> " << KGREEN << "Found Line!" << KNORMAL << endl;
-      CurrentPosition = getXYZ(line, CurrentPosition);
-      V debugDumpPointStructure(CurrentPosition);
+      cadSetColor(GREEN);
     }
+
     if (PostLine)
     {
+      V cout << KRED << "(fileReadNC) Posting Line" << KNORMAL << endl;
       l.end = CurrentPosition;
       cadDrawLine(l);
     }
