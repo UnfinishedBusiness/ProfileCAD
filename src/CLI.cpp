@@ -773,7 +773,11 @@ void *cliXformFilletRadius()
         fillet.direction = ARC_CCW;
         vector<point_t> ccw_ap = geoGetPointsOfArc(fillet);
         float ccw_distance_to_corner = geoGetLineLength(line_t{original_corner, ccw_ap.at(ccw_ap.size()/2)});
-
+        if (cw_ap.size() > 180 || cw_ap.size() > 180)
+        {
+          V cout << KRED << "(cliXformFilletRadius) Fillet 180 error!" << KNORMAL << endl;
+          return NULL;
+        }
         if (cw_distance_to_corner < ccw_distance_to_corner)
         {
           fillet.direction = ARC_CW;
