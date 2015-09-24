@@ -748,13 +748,14 @@ void *cliXformFilletRadius()
         V cout << KRED << "(cliXformFilletRadius) Relative center Angle = " << relative_center_angle << KNORMAL << endl;
         //if ((start_angle - end_angle) < start_angle)
         //if X vector has positive direction and
-        fillet.direction = ARC_CW;
+        //This approach is about 90% of the time
+        /*fillet.direction = ARC_CW;
         vector<point_t> cw_ap = geoGetPointsOfArc(fillet);
-        float cw_endpoint_distance = geoGetLineLength(line_t{e[1].Line.end, cw_ap.back()});
+        float cw_endpoint_distance = geoGetLineLength(line_t{fillet.end, cw_ap.back()});
 
         fillet.direction = ARC_CCW;
         vector<point_t> ccw_ap = geoGetPointsOfArc(fillet);
-        float ccw_endpoint_distance = geoGetLineLength(line_t{e[1].Line.end, ccw_ap.back()});
+        float ccw_endpoint_distance = geoGetLineLength(line_t{fillet.end, ccw_ap.back()});
 
         if (cw_endpoint_distance < ccw_endpoint_distance )
         {
@@ -763,8 +764,24 @@ void *cliXformFilletRadius()
         else
         {
           fillet.direction = ARC_CCW;
-        }
+        }*/
+        point_t original_corner = geoGetLineIntersection(e[0].Line, e[1].Line);
+        fillet.direction = ARC_CW;
+        vector<point_t> cw_ap = geoGetPointsOfArc(fillet);
+        float cw_distance_to_corner = geoGetLineLength(line_t{original_corner, cw_ap.at(cw_ap.size()/2)});
 
+        fillet.direction = ARC_CCW;
+        vector<point_t> ccw_ap = geoGetPointsOfArc(fillet);
+        float ccw_distance_to_corner = geoGetLineLength(line_t{original_corner, ccw_ap.at(ccw_ap.size()/2)});
+
+        if (cw_distance_to_corner < ccw_distance_to_corner)
+        {
+          fillet.direction = ARC_CW;
+        }
+        else
+        {
+          fillet.direction = ARC_CCW;
+        }
 
         V debugDumpArcStructure(fillet);
         e[0].Line = geoReplaceClosestEndpoint(e[0].Line, fillet.start);
