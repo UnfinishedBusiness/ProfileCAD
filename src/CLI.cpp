@@ -739,21 +739,34 @@ void *cliXformFilletRadius()
 
         //Determine direction of fillet by drawing a line from center to start and end point, if included angle is positive were CW
 
-        float start_angle = geoRadiansToDegrees(geoGetLineAngle(line_t{fillet.center, fillet.start}));
-        float end_angle = geoRadiansToDegrees(geoGetLineAngle(line_t{fillet.center, fillet.end}));
+        float start_angle = geoGetLineAngle(line_t{fillet.center, fillet.start});
+        float end_angle = geoGetLineAngle(line_t{fillet.center, fillet.end});
+        float relative_center_angle = geoGetLineAngle(line_t{e[0].SelectedAt, e[1].SelectedAt});
+        V cout << KRED << "(cliXformFilletRadius) Arc Angle Difference = " << (start_angle - end_angle) << KNORMAL << endl;
         V cout << KRED << "(cliXformFilletRadius) Arc Start Angle = " << start_angle << KNORMAL << endl;
         V cout << KRED << "(cliXformFilletRadius) Arc End Angle = " << end_angle << KNORMAL << endl;
-        if ((start_angle - end_angle) > 0)
+        V cout << KRED << "(cliXformFilletRadius) Relative center Angle = " << relative_center_angle << KNORMAL << endl;
+        //if ((start_angle - end_angle) < start_angle)
+        //if X vector has positive direction and
+        fillet.direction = ARC_CW;
+        vector<point_t> cw_ap = geoGetPointsOfArc(fillet);
+        float cw_endpoint_distance = geoGetLineLength(line_t{e[1].Line.end, cw_ap.back()});
+
+        fillet.direction = ARC_CCW;
+        vector<point_t> ccw_ap = geoGetPointsOfArc(fillet);
+        float ccw_endpoint_distance = geoGetLineLength(line_t{e[1].Line.end, ccw_ap.back()});
+
+        if (cw_endpoint_distance < ccw_endpoint_distance )
         {
-          fillet.direction = ARC_CCW;
-          V cout << KRED << "(cliXformFilletRadius)\t Arc is CW" << KNORMAL << endl;
+          fillet.direction = ARC_CW;
         }
         else
         {
-          fillet.direction = ARC_CW;
-          V cout << KRED << "(cliXformFilletRadius)\t Arc is CCW" << KNORMAL << endl;
+          fillet.direction = ARC_CCW;
         }
 
+
+        V debugDumpArcStructure(fillet);
         e[0].Line = geoReplaceClosestEndpoint(e[0].Line, fillet.start);
         e[1].Line = geoReplaceClosestEndpoint(e[1].Line, fillet.end);
 

@@ -32,7 +32,6 @@ line_t geoReplaceClosestEndpoint(line_t l, point_t p)
   line_t r = l;
   if (geoGetLineLength(line_t{ l.start, p }) < geoGetLineLength(line_t{ l.end, p}))
   {
-    //V cout << KRED << "(cliXformFilletRadius)\t" << KGREEN << "Selection 1 start is closest to fillet start!" << KNORMAL << endl;
     r.start = p;
   }
   else
