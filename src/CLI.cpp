@@ -753,7 +753,7 @@ void *cliXformFilletRadius()
           fillet.direction = ARC_CW;
           V cout << KRED << "(cliXformFilletRadius)\t Arc is CCW" << KNORMAL << endl;
         }
-        
+
         e[0].Line = geoReplaceClosestEndpoint(e[0].Line, fillet.start);
         e[1].Line = geoReplaceClosestEndpoint(e[1].Line, fillet.end);
 
@@ -1020,6 +1020,17 @@ void cliInit()
   if (args.args.find("-fullscreen") != std::string::npos)
   {
     glutFullScreen();
+  }
+  if (args.args.find("-tinyg") != std::string::npos)
+  {
+    vector<string> array = split(args.args, ' ');
+    for (int x = 0; x < array.size(); x++)
+    {
+      if (array[x].find("-tinyg") != std::string::npos)
+      {
+         machineTinyGCommand(array[x+1]);
+      }
+    }
   }
   if (args.args.find("-file") != std::string::npos)
   {

@@ -3,6 +3,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include <errno.h>
+#include <termios.h>
+#include <fcntl.h>
+
 #include <GL/glut.h>
 #include <iostream>
 #include <vector>
@@ -22,6 +27,7 @@
 #include <FileIO.h>
 #include <Geometry.h>
 #include <Keyboard.h>
+#include <Machine.h>
 #include <Menu.h>
 #include <Mouse.h>
 #include <Scene.h>
@@ -57,6 +63,8 @@ struct args_t{
 
 args_t mainGetArgs();
 bool mainVerbose();
+int set_interface_attribs (int, int, int);
+void set_blocking (int, int);
 
 struct point_t{
   float x,y,z;

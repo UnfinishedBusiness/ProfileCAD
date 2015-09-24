@@ -1,5 +1,7 @@
 # ProfileCAD
-2D/3D CAD/CAM Software with a MasterCam like menu driven workflow
+2D/3D CAD/CAM Software with a MasterCam 8 like menu driven workflow
+
+Built in TinyG control interface
 
 Controls
 --------

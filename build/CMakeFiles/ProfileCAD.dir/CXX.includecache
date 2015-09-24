@@ -32,6 +32,10 @@ application.h
 application.h
 -
 
+/root/Projects/ProfileCAD/src/../inc/Machine.h
+application.h
+-
+
 /root/Projects/ProfileCAD/src/../inc/Menu.h
 application.h
 -
@@ -60,6 +64,14 @@ stdio.h
 stdlib.h
 -
 string.h
+-
+unistd.h
+-
+errno.h
+-
+termios.h
+-
+fcntl.h
 -
 GL/glut.h
 -
@@ -97,6 +109,8 @@ Geometry.h
 -
 Keyboard.h
 -
+Machine.h
+-
 Menu.h
 -
 Mouse.h
@@ -130,6 +144,10 @@ Geometry.h
 
 /root/Projects/ProfileCAD/src/Keyboard.cpp
 Keyboard.h
+-
+
+/root/Projects/ProfileCAD/src/Machine.cpp
+Machine.h
 -
 
 /root/Projects/ProfileCAD/src/Menu.cpp
