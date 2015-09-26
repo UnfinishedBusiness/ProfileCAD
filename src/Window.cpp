@@ -7,11 +7,16 @@
 
 using namespace std;
 
+int mainWindow;
+int windowGetMain()
+{
+  return mainWindow;
+}
 void windowInit()
 {
   glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
   glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
-  glutCreateWindow(WINDOW_TITLE);
+  mainWindow = glutCreateWindow(WINDOW_TITLE);
   glutReshapeFunc(windowResize);
 }
 void windowResize(int width, int height)

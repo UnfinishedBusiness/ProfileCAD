@@ -4,4 +4,5 @@
 
 void windowInit();
 void windowResize(int, int);
+int windowGetMain();
 #endif

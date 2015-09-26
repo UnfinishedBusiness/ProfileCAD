@@ -168,6 +168,15 @@ CMAKE_USE_RELATIVE_PATHS:BOOL=OFF
 // Studio IDE projects all commands are done without /nologo.
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
+//The directory containing a CMake configuration file for GLUI.
+GLUI_DIR:PATH=GLUI_DIR-NOTFOUND
+
+//GLUI include directory
+GLUI_INCLUDE_DIR:PATH=/usr/include
+
+//GLUI library
+GLUI_LIBRARY:FILEPATH=/usr/lib64/libglui.a
+
 //Path to a file.
 GLUT_INCLUDE_DIR:PATH=/usr/include
 
@@ -209,6 +218,18 @@ ProfileCAD_BINARY_DIR:STATIC=/root/Projects/ProfileCAD/build
 
 //Value Computed by CMake
 ProfileCAD_SOURCE_DIR:STATIC=/root/Projects/ProfileCAD/src
+
+//The directory containing a CMake configuration file for Qt5Core.
+Qt5Core_DIR:PATH=/usr/lib64/cmake/Qt5Core
+
+//The directory containing a CMake configuration file for Qt5Gui.
+Qt5Gui_DIR:PATH=/usr/lib64/cmake/Qt5Gui
+
+//The directory containing a CMake configuration file for Qt5Widgets.
+Qt5Widgets_DIR:PATH=/usr/lib64/cmake/Qt5Widgets
+
+//The directory containing a CMake configuration file for glui.
+glui_DIR:PATH=glui_DIR-NOTFOUND
 
 
 ########################
@@ -344,6 +365,8 @@ CMAKE_UNAME:INTERNAL=/usr/sbin/uname
 CMAKE_USE_RELATIVE_PATHS-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_VERBOSE_MAKEFILE
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
+//Details about finding GLUI
+FIND_PACKAGE_MESSAGE_DETAILS_GLUI:INTERNAL=[/usr/include][/usr/lib64/libglui.a][TRUE][TRUE][v()]
 //Details about finding GLUT
 FIND_PACKAGE_MESSAGE_DETAILS_GLUT:INTERNAL=[/usr/lib64/libglut.so][/usr/include][v()]
 //Details about finding Lua
@@ -352,6 +375,10 @@ FIND_PACKAGE_MESSAGE_DETAILS_Lua:INTERNAL=[/usr/lib64/liblua.so;/usr/lib64/libm.
 FIND_PACKAGE_MESSAGE_DETAILS_Lua51:INTERNAL=[/usr/lib64/liblua.so;/usr/lib64/libm.so][/usr/include][v()]
 //Details about finding OpenGL
 FIND_PACKAGE_MESSAGE_DETAILS_OpenGL:INTERNAL=[/usr/lib64/libGL.so][/usr/include][v()]
+//ADVANCED property for variable: GLUI_INCLUDE_DIR
+GLUI_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GLUI_LIBRARY
+GLUI_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: GLUT_INCLUDE_DIR
 GLUT_INCLUDE_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: GLUT_Xi_LIBRARY

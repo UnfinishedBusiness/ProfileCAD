@@ -7,6 +7,8 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_definitions("-w")
 endif()
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/../cmake")
+
 set(CMAKE_BUILD_TYPE Debug)
 #########################################################
 # FIND GLUT
@@ -33,7 +35,8 @@ endif(NOT OPENGL_FOUND)
 #########################################################
 find_package(Lua REQUIRED)
 include_directories(${Lua_INCLUDE_DIRS})
-link_directories(${Lua_LIBRARY_DIRS})
+link_directories(${Lua_LIBRARY_DIRS}
+)
 add_definitions(${Lua_DEFINITIONS})
 if(NOT LUA_FOUND)
     message(ERROR " Lua not found!")

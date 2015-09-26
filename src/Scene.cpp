@@ -100,7 +100,7 @@ void sceneDraw(void)
   cadRender();
   glPopMatrix();
 
-  //Render 2D overlay
+  //Render 2D overlay for Indicators
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
   glMatrixMode(GL_PROJECTION);
@@ -111,6 +111,7 @@ void sceneDraw(void)
   glPopMatrix();
   glPopMatrix();
   glMatrixMode(GL_MODELVIEW);
+
 
   //glDisable(GL_STENCIL_TEST);
   glutSwapBuffers();

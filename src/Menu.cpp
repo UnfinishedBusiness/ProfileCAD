@@ -4,9 +4,12 @@
 #include <GL/glut.h>
 #include <iostream>
 #include <Menu.h>
-
 using namespace std;
 
+void Test()
+{
+  
+}
 void menuInit()
 {
   glutCreateMenu(menuCallback);
@@ -17,6 +20,7 @@ void menuInit()
   glutAddMenuEntry("Toggle Snap Midpoint", 5);
   glutAddMenuEntry("Toggle Snap Intersection", 6);
   glutAddMenuEntry("Toggle Snap Vector", 7);
+  glutAddMenuEntry("Test", 8);
   glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 void menuCallback(int choice)
@@ -30,6 +34,7 @@ void menuCallback(int choice)
     case 5: mouseToggleMidpointSnap(); break;
     case 6: mouseToggleIntersectionSnap(); break;
     case 7: mouseToggleVectorSnap(); break;
+    case 8: Test(); break;
   }
   uiSnapIndicator();
 }
