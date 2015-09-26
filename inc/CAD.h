@@ -44,6 +44,7 @@ void cadAppend(cadEntity);
 void cadEdit(int, cadEntity);
 void cadRemoveSelected();
 std::vector<cadEntity> cadGetSelected();
+std::vector<cadEntity>  cadGetMouseOver();
 int cadCountSelection();
 void cadSetColor(color_t);
 void cadRenderLine(line_t);
@@ -62,5 +63,7 @@ void cadDrawLine(point_t start, point_t end);
 void cadDrawLine(line_t);
 
 void cadDrawArc(arc_t);
+
+
 
 #endif

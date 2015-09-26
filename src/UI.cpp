@@ -10,8 +10,10 @@ void uiInit()
   uiEntityArrayIndex = 0;
   uiAppend(uiEntity{UI_TEXT, WHITE, "", UI_MENU_POSITION}); //Msg text - index 0
   uiAppend(uiEntity{UI_TEXT, WHITE, "", UI_INPUT_POSITION}); //Msg text - index 1
-  uiAppend(uiEntity{UI_TEXT, WHITE, "", UI_INPUT_POSITION}); //Mouse Position - index 2
-  uiAppend(uiEntity{UI_TEXT, WHITE, "", UI_HINT_POSITION}); //Mouse Position - index 3
+  uiAppend(uiEntity{UI_TEXT, WHITE, "", UI_HINT_POSITION}); //Mouse Position - index 2
+  uiAppend(uiEntity{UI_TEXT, WHITE, "", UI_MOUSE_POSITION}); //Mouse Position - index 3
+  uiAppend(uiEntity{UI_TEXT, WHITE, "", UI_SNAP_POSITION}); //Snap Position - index 4
+  uiSnapIndicator();
   cliMenu();
 }
 void uiAppend(uiEntity e)
@@ -38,6 +40,23 @@ void uiDrawText(void * font, char *s, float x, float y, float z)
   {
     glutBitmapCharacter (font, s[i]);
   }
+}
+void uiSnapIndicator()
+{
+  std::vector<std::string> snap = mouseUISnapIndicator();
+  std::string s = "";
+  if (snap.size() > 0)
+  {
+    s = snap[0];
+    for (int x = 1; x < snap.size(); x++)
+    {
+      s.append(" | ");
+      s.append(snap[x]);
+      //cout << snap[x] << endl;
+    }
+  }
+  V cout << KRED << "(uiSnapIndicator) => " << KGREEN << s << KNORMAL << endl;
+  uiEdit(4, uiEntity{UI_TEXT, RED, s , UI_SNAP_POSITION});
 }
 void uiRender()
 {

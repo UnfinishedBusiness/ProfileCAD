@@ -13,6 +13,8 @@ void mouseToggleArcEndpointSnap();
 void mouseToggleCenterSnap();
 void mouseToggleMidpointSnap();
 void mouseToggleVectorSnap();
+void mouseToggleIntersectionSnap();
+std::vector<std::string> mouseUISnapIndicator();
 
 point_t mouseCadGetCurrentPos();
 point_t mouseCadLastClickPos();

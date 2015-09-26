@@ -111,7 +111,7 @@ vector<point_t> geoGetPointsOfLine(line_t l)
   float scale = 0.005 / sceneGetScale();
   if (scale < 0.002)
   {
-    V cout << KRED << "(geoGetPointsOfLine) Min scale reached - scale = " <<  KGREEN << scale << KNORMAL << "\r";
+    //V cout << KRED << "(geoGetPointsOfLine) Min scale reached - scale = " <<  KGREEN << scale << KNORMAL << "\r";
     scale = 0.002;
   }
   return geoGetPointsOfLine(l, scale);

@@ -162,6 +162,18 @@ int cadCountSelection()
   }
   return r;
 }
+std::vector<cadEntity> cadGetMouseOver()
+{
+  std::vector<cadEntity> e; //Unordered
+  for (int i = 0; i < cadEntityArrayIndex; i++)
+  {
+      if (cadEntityArray[i].MouseOver && !cadEntityArray[i].Removed) //Make sure were selected and not removed
+      {
+        e.push_back(cadEntityArray[i]);
+      }
+  }
+  return e;
+}
 void cadShowSelectionBox(point_t p)
 {
   //line_t geoGetPerpendicularLine(line_t, point_t, float);

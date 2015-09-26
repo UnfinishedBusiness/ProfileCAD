@@ -20,7 +20,7 @@ bool snapArcEndpoints = true;
 bool snapLineMidpoint = true;
 bool snapLineEndpoints = true;
 bool snapVector = true;
-bool snapIntersection = true; //Not yet implemented
+bool snapIntersection = true;
 
 int mod;
 int button;
@@ -28,6 +28,60 @@ point_t mouseCurrent;
 mouse_t mouseLast;
 point_t mouseLastSnapClick;
 point_t mouseLastMouseOver;
+
+std::vector<string> mouseUISnapIndicator()
+{
+  std::vector<string> r;
+  if (snapArcCenter)
+  {
+    r.push_back(string("Arc Center - T"));
+  }
+  else
+  {
+    r.push_back(string("Arc Center - F"));
+  }
+  if (snapArcEndpoints)
+  {
+    r.push_back(string("Arc Endpoints - T"));
+  }
+  else
+  {
+    r.push_back(string("Arc Endpoints - F"));
+  }
+  if (snapLineMidpoint)
+  {
+    r.push_back(string("Line Midpoint - T"));
+  }
+  else
+  {
+    r.push_back(string("Line Midpoint - F"));
+  }
+  if (snapLineEndpoints)
+  {
+    r.push_back(string("Line Endpoints - T"));
+  }
+  else
+  {
+    r.push_back(string("Line Endpoints - F"));
+  }
+  if (snapVector)
+  {
+    r.push_back(string("Snap Vector - T"));
+  }
+  else
+  {
+    r.push_back(string("Snap Vector - F"));
+  }
+  if (snapIntersection)
+  {
+    r.push_back(string("Intersection - T"));
+  }
+  else
+  {
+    r.push_back(string("Intersection - F"));
+  }
+  return r;
+}
 point_t mouseCadGetCurrentPos()
 {
   return mouseCurrent;
@@ -66,6 +120,10 @@ void mouseToggleVectorSnap()
 {
   snapVector = !snapVector;
 }
+void mouseToggleIntersectionSnap()
+{
+  snapIntersection = !snapIntersection;
+}
 void mouseCallback(int btn, int state, int x, int y)
 {
     point_t pos = cadScreenCordToCadCord(x, y);
@@ -95,6 +153,31 @@ void mouseCallback(int btn, int state, int x, int y)
         mouseLast.x = x;
         mouseLast.y = y;
         cadEntity e;
+
+        std::vector<cadEntity> MouseOver = cadGetMouseOver();
+        //V cout << KRED << "(mousePassiveMotionCallback) MouseOver Size => " << KGREEN << MouseOver.size() << KNORMAL << endl;
+        if (MouseOver.size() == 2 && snapIntersection)
+        {
+          //V cout << KRED << "(mousePassiveMotionCallback) MouseOver => " << KGREEN << "Calculating intersection point!" << KNORMAL << endl;
+          point_t intersection = geoGetIntersection(MouseOver[0].Line, MouseOver[1].Line);
+          if (geoInTolerance(pos.x, intersection.x, mouseTolerance()) && geoInTolerance(pos.y, intersection.y, mouseTolerance()))
+          {
+            if (mod == GLUT_ACTIVE_CTRL)
+            {
+              MouseOver[0].Selected = false;
+            }
+            else
+            {
+              MouseOver[0].Selected = true;
+              MouseOver[0].SelectionIndex = cadCountSelection() + 1;
+              //debugDumpArcStructure(e.Arc);
+            }
+            MouseOver[0].SelectedAt = intersection;
+            mouseLastSnapClick = intersection;
+            cadEdit(MouseOver[0].Index, MouseOver[0]);
+            return;
+          }
+        }
         for (int a = 0; a < cadGetEntityArrayIndex(); a++)
         {
           e = cadGetEntityArray(a);
@@ -293,6 +376,25 @@ void mousePassiveMotionCallback(int x, int y)
     m = "X: " + to_string(pos.x) + " Y: " + to_string(pos.y);
   }
   uiEdit(2, uiEntity{UI_TEXT, WHITE, m, UI_MOUSE_POSITION});
+
+  std::vector<cadEntity> MouseOver = cadGetMouseOver();
+  //V cout << KRED << "(mousePassiveMotionCallback) MouseOver Size => " << KGREEN << MouseOver.size() << KNORMAL << endl;
+  if (MouseOver.size() == 2 && snapIntersection)
+  {
+    //V cout << KRED << "(mousePassiveMotionCallback) MouseOver => " << KGREEN << "Calculating intersection point!" << KNORMAL << endl;
+    point_t intersection = geoGetIntersection(MouseOver[0].Line, MouseOver[1].Line);
+    if (geoInTolerance(pos.x, intersection.x, mouseTolerance()) && geoInTolerance(pos.y, intersection.y, mouseTolerance()))
+    {
+      cadShowSelectionBox(intersection);
+      mouseLastMouseOver = intersection;
+      return;
+    }
+    else
+    {
+      cadHideSelectionBox();
+    }
+  }
+
   cadEntity e;
   for (int a = 0; a < cadGetEntityArrayIndex(); a++)
   {
@@ -377,5 +479,5 @@ void mousePassiveMotionCallback(int x, int y)
       }
     }
   }
-  fflush(stdout);
+  V fflush(stdout);
 }

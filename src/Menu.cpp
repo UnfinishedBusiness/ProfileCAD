@@ -15,7 +15,8 @@ void menuInit()
   glutAddMenuEntry("Toggle Snap Arc Enpoints", 3);
   glutAddMenuEntry("Toggle Snap Line Enpoints", 4);
   glutAddMenuEntry("Toggle Snap Midpoint", 5);
-  glutAddMenuEntry("Toggle Snap Vector", 6);
+  glutAddMenuEntry("Toggle Snap Intersection", 6);
+  glutAddMenuEntry("Toggle Snap Vector", 7);
   glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 void menuCallback(int choice)
@@ -27,6 +28,8 @@ void menuCallback(int choice)
     case 3: mouseToggleArcEndpointSnap(); break;
     case 4: mouseToggleLineEndpointSnap(); break;
     case 5: mouseToggleMidpointSnap(); break;
-    case 6: mouseToggleVectorSnap(); break;
+    case 6: mouseToggleIntersectionSnap(); break;
+    case 7: mouseToggleVectorSnap(); break;
   }
+  uiSnapIndicator();
 }

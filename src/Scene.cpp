@@ -42,8 +42,8 @@ void sceneIncZoom(float inc)
   }
   //scale = scale + inc;
   //cout << "Scale: " << scale << endl;
-  V cout << KRED << "(sceneIncZoom) scale = " <<  KGREEN << scale << KNORMAL << "\r";
-  V fflush(stdout);
+  //V cout << KRED << "(sceneIncZoom) scale = " <<  KGREEN << scale << KNORMAL << "\r";
+  //V fflush(stdout);
   glutPostRedisplay();
 }
 void sceneZoomToMouse(float inc, point_t pos)
