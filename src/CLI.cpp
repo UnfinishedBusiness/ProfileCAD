@@ -1079,4 +1079,16 @@ void cliInit()
       }
     }
   }
+  if (args.args.find("-run") != std::string::npos)
+  {
+    vector<string> array = split(args.args, ' ');
+    for (int x = 0; x < array.size(); x++)
+    {
+      if (array[x].find("-run") != std::string::npos)
+      {
+        cout << KGREEN << "-> Runing " << array[x+1] << KNORMAL << endl;
+        luaExec(array[x+1]);
+      }
+    }
+  }
 }

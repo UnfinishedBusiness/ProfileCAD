@@ -181,6 +181,18 @@ GLUT_Xmu_LIBRARY:FILEPATH=/usr/lib64/libXmu.so
 GLUT_glut_LIBRARY:FILEPATH=/usr/lib64/libglut.so
 
 //Path to a file.
+LUA_INCLUDE_DIR:PATH=/usr/include
+
+//Lua Libraries
+LUA_LIBRARIES:STRING=/usr/lib64/liblua.so;/usr/lib64/libm.so
+
+//Path to a library.
+LUA_LIBRARY:FILEPATH=/usr/lib64/liblua.so
+
+//Path to a library.
+LUA_MATH_LIBRARY:FILEPATH=/usr/lib64/libm.so
+
+//Path to a file.
 OPENGL_INCLUDE_DIR:PATH=/usr/include
 
 //Path to a library.
@@ -334,6 +346,10 @@ CMAKE_USE_RELATIVE_PATHS-ADVANCED:INTERNAL=1
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 //Details about finding GLUT
 FIND_PACKAGE_MESSAGE_DETAILS_GLUT:INTERNAL=[/usr/lib64/libglut.so][/usr/include][v()]
+//Details about finding Lua
+FIND_PACKAGE_MESSAGE_DETAILS_Lua:INTERNAL=[/usr/lib64/liblua.so;/usr/lib64/libm.so][/usr/include][v5.3.1()]
+//Details about finding Lua51
+FIND_PACKAGE_MESSAGE_DETAILS_Lua51:INTERNAL=[/usr/lib64/liblua.so;/usr/lib64/libm.so][/usr/include][v()]
 //Details about finding OpenGL
 FIND_PACKAGE_MESSAGE_DETAILS_OpenGL:INTERNAL=[/usr/lib64/libGL.so][/usr/include][v()]
 //ADVANCED property for variable: GLUT_INCLUDE_DIR
@@ -344,6 +360,14 @@ GLUT_Xi_LIBRARY-ADVANCED:INTERNAL=1
 GLUT_Xmu_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: GLUT_glut_LIBRARY
 GLUT_glut_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LUA_INCLUDE_DIR
+LUA_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LUA_LIBRARIES
+LUA_LIBRARIES-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LUA_LIBRARY
+LUA_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LUA_MATH_LIBRARY
+LUA_MATH_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: OPENGL_INCLUDE_DIR
 OPENGL_INCLUDE_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: OPENGL_gl_LIBRARY

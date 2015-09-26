@@ -91,6 +91,7 @@ int main(int argc, char **argv)
   uiInit();
   cadInit();
   cliInit();
+  luaInit();
   sceneSetViewAngle(0, 0, 0); //Set plane to XY
   glutMainLoop();
   return 0;             /* ANSI C requires main to return int. */

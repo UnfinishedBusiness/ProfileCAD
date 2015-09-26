@@ -285,6 +285,33 @@ Keyboard.cpp.s:
 	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/Keyboard.cpp.s
 .PHONY : Keyboard.cpp.s
 
+Lua.o: Lua.cpp.o
+
+.PHONY : Lua.o
+
+# target to build an object file
+Lua.cpp.o:
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/Lua.cpp.o
+.PHONY : Lua.cpp.o
+
+Lua.i: Lua.cpp.i
+
+.PHONY : Lua.i
+
+# target to preprocess a source file
+Lua.cpp.i:
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/Lua.cpp.i
+.PHONY : Lua.cpp.i
+
+Lua.s: Lua.cpp.s
+
+.PHONY : Lua.s
+
+# target to generate assembly for a file
+Lua.cpp.s:
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/Lua.cpp.s
+.PHONY : Lua.cpp.s
+
 Machine.o: Machine.cpp.o
 
 .PHONY : Machine.o
@@ -501,6 +528,9 @@ help:
 	@echo "... Keyboard.o"
 	@echo "... Keyboard.i"
 	@echo "... Keyboard.s"
+	@echo "... Lua.o"
+	@echo "... Lua.i"
+	@echo "... Lua.s"
 	@echo "... Machine.o"
 	@echo "... Machine.i"
 	@echo "... Machine.s"

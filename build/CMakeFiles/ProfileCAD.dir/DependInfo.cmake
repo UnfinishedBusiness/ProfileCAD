@@ -10,6 +10,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/root/Projects/ProfileCAD/src/FileIO.cpp" "/root/Projects/ProfileCAD/build/CMakeFiles/ProfileCAD.dir/FileIO.cpp.o"
   "/root/Projects/ProfileCAD/src/Geometry.cpp" "/root/Projects/ProfileCAD/build/CMakeFiles/ProfileCAD.dir/Geometry.cpp.o"
   "/root/Projects/ProfileCAD/src/Keyboard.cpp" "/root/Projects/ProfileCAD/build/CMakeFiles/ProfileCAD.dir/Keyboard.cpp.o"
+  "/root/Projects/ProfileCAD/src/Lua.cpp" "/root/Projects/ProfileCAD/build/CMakeFiles/ProfileCAD.dir/Lua.cpp.o"
   "/root/Projects/ProfileCAD/src/Machine.cpp" "/root/Projects/ProfileCAD/build/CMakeFiles/ProfileCAD.dir/Machine.cpp.o"
   "/root/Projects/ProfileCAD/src/Menu.cpp" "/root/Projects/ProfileCAD/build/CMakeFiles/ProfileCAD.dir/Menu.cpp.o"
   "/root/Projects/ProfileCAD/src/Mouse.cpp" "/root/Projects/ProfileCAD/build/CMakeFiles/ProfileCAD.dir/Mouse.cpp.o"

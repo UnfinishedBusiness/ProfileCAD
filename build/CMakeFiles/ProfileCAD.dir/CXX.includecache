@@ -32,6 +32,10 @@ application.h
 application.h
 -
 
+/root/Projects/ProfileCAD/src/../inc/Lua.h
+application.h
+-
+
 /root/Projects/ProfileCAD/src/../inc/Machine.h
 application.h
 -
@@ -109,6 +113,8 @@ Geometry.h
 -
 Keyboard.h
 -
+Lua.h
+-
 Machine.h
 -
 Menu.h
@@ -121,6 +127,12 @@ UI.h
 -
 Window.h
 -
+lua.h
+/root/Projects/ProfileCAD/src/../inc/lua.h
+lualib.h
+/root/Projects/ProfileCAD/src/../inc/lualib.h
+lauxlib.h
+/root/Projects/ProfileCAD/src/../inc/lauxlib.h
 
 /root/Projects/ProfileCAD/src/CAD.cpp
 CAD.h
@@ -144,6 +156,10 @@ Geometry.h
 
 /root/Projects/ProfileCAD/src/Keyboard.cpp
 Keyboard.h
+-
+
+/root/Projects/ProfileCAD/src/Lua.cpp
+Lua.h
 -
 
 /root/Projects/ProfileCAD/src/Machine.cpp

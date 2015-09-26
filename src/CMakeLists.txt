@@ -29,14 +29,24 @@ if(NOT OPENGL_FOUND)
     message(ERROR " OPENGL not found!")
 endif(NOT OPENGL_FOUND)
 #########################################################
+# FIND LUA
+#########################################################
+find_package(Lua REQUIRED)
+include_directories(${Lua_INCLUDE_DIRS})
+link_directories(${Lua_LIBRARY_DIRS})
+add_definitions(${Lua_DEFINITIONS})
+if(NOT LUA_FOUND)
+    message(ERROR " Lua not found!")
+endif(NOT LUA_FOUND)
+#########################################################
 # Include Files
 #########################################################
 
-add_executable(ProfileCAD MACOSX_BUNDLE main Scene Keyboard Machine Menu Window Mouse CAD UI Geometry CLI FileIO Debug)
+add_executable(ProfileCAD MACOSX_BUNDLE main Scene Keyboard Machine Menu Window Mouse CAD UI Geometry CLI FileIO Debug Lua)
 include_directories(../inc)
 ########################################################
 # Linking & stuff
 #########################################################
 
   # create the program "ProfileCAD"
-  target_link_libraries(ProfileCAD ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
+  target_link_libraries(ProfileCAD ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${LUA_LIBRARY})

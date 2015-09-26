@@ -27,12 +27,19 @@
 #include <FileIO.h>
 #include <Geometry.h>
 #include <Keyboard.h>
+#include <Lua.h>
 #include <Machine.h>
 #include <Menu.h>
 #include <Mouse.h>
 #include <Scene.h>
 #include <UI.h>
 #include <Window.h>
+
+extern "C" {
+#include "lua.h"
+#include "lualib.h"
+#include "lauxlib.h"
+}
 
 #ifndef APPLICATION_
 #define  APPLICATION_
