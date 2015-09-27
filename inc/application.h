@@ -9,7 +9,8 @@
 #include <termios.h>
 #include <fcntl.h>
 #include <png.h>
-#include <GL/glut.h>
+#include <GL/freeglut.h>
+#include <GL/freeglut_ext.h>
 #include <iostream>
 #include <vector>
 #include <cmath>

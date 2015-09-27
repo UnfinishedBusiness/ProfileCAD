@@ -168,6 +168,15 @@ CMAKE_USE_RELATIVE_PATHS:BOOL=OFF
 // Studio IDE projects all commands are done without /nologo.
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
+//The directory containing a CMake configuration file for FREEGLUT.
+FREEGLUT_DIR:PATH=FREEGLUT_DIR-NOTFOUND
+
+//Path to a file.
+FREEGLUT_INCLUDE_DIR:PATH=/usr/include
+
+//Path to a library.
+FREEGLUT_LIBRARY:FILEPATH=FREEGLUT_LIBRARY-NOTFOUND
+
 //Path to a file.
 FREETYPE_INCLUDE_DIR_freetype2:PATH=/usr/include/freetype2
 
@@ -374,6 +383,9 @@ OPENGL_glu_LIBRARY:FILEPATH=/usr/lib64/libGLU.so
 
 //Path to a file.
 OPENGL_xmesa_INCLUDE_DIR:PATH=OPENGL_xmesa_INCLUDE_DIR-NOTFOUND
+
+//pkg-config executable
+PKG_CONFIG_EXECUTABLE:FILEPATH=/usr/sbin/pkg-config
 
 //Path to a library.
 PNG_LIBRARY_DEBUG:FILEPATH=PNG_LIBRARY_DEBUG-NOTFOUND
@@ -749,6 +761,8 @@ FIND_PACKAGE_MESSAGE_DETAILS_Lua51:INTERNAL=[/usr/lib64/liblua.so;/usr/lib64/lib
 FIND_PACKAGE_MESSAGE_DETAILS_OpenGL:INTERNAL=[/usr/lib64/libGL.so][/usr/include][v()]
 //Details about finding PNG
 FIND_PACKAGE_MESSAGE_DETAILS_PNG:INTERNAL=[/usr/lib64/libpng.so][/usr/include][v1.6.18()]
+//Details about finding PkgConfig
+FIND_PACKAGE_MESSAGE_DETAILS_PkgConfig:INTERNAL=[/usr/sbin/pkg-config][v0.28()]
 //Details about finding X11
 FIND_PACKAGE_MESSAGE_DETAILS_X11:INTERNAL=[/usr/lib64/libX11.so][/usr/include]
 //Details about finding ZLIB
@@ -783,8 +797,12 @@ GTK2_CAIRO_INCLUDE_DIR-ADVANCED:INTERNAL=1
 GTK2_CAIRO_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: GTK2_CAIRO_LIBRARY_RELEASE
 GTK2_CAIRO_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
+GTK2_CFLAGS:INTERNAL=-pthread;-I/usr/include/gtk-2.0;-I/usr/lib/gtk-2.0/include;-I/usr/include/pango-1.0;-I/usr/include/atk-1.0;-I/usr/include/cairo;-I/usr/include/pixman-1;-I/usr/include/libdrm;-I/usr/include/gdk-pixbuf-2.0;-I/usr/include/libpng16;-I/usr/include/pango-1.0;-I/usr/include/freetype2;-I/usr/include/libpng16;-I/usr/include/harfbuzz;-I/usr/include/freetype2;-I/usr/include/libpng16;-I/usr/include/harfbuzz;-I/usr/include/glib-2.0;-I/usr/lib/glib-2.0/include
+GTK2_CFLAGS_I:INTERNAL=
+GTK2_CFLAGS_OTHER:INTERNAL=-pthread
 //ADVANCED property for variable: GTK2_FONTCONFIG_INCLUDE_DIR
 GTK2_FONTCONFIG_INCLUDE_DIR-ADVANCED:INTERNAL=1
+GTK2_FOUND:INTERNAL=1
 //ADVANCED property for variable: GTK2_GDKCONFIG_INCLUDE_DIR
 GTK2_GDKCONFIG_INCLUDE_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: GTK2_GDK_INCLUDE_DIR
@@ -831,6 +849,17 @@ GTK2_GTK_INCLUDE_DIR-ADVANCED:INTERNAL=1
 GTK2_GTK_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: GTK2_GTK_LIBRARY_RELEASE
 GTK2_GTK_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
+GTK2_INCLUDEDIR:INTERNAL=/usr/include
+GTK2_INCLUDE_DIRS:INTERNAL=/usr/include/gtk-2.0;/usr/lib/gtk-2.0/include;/usr/include/pango-1.0;/usr/include/atk-1.0;/usr/include/cairo;/usr/include/pixman-1;/usr/include/libdrm;/usr/include/gdk-pixbuf-2.0;/usr/include/libpng16;/usr/include/pango-1.0;/usr/include/freetype2;/usr/include/libpng16;/usr/include/harfbuzz;/usr/include/freetype2;/usr/include/libpng16;/usr/include/harfbuzz;/usr/include/glib-2.0;/usr/lib/glib-2.0/include
+GTK2_LDFLAGS:INTERNAL=-lgtk-x11-2.0;-lgdk-x11-2.0;-lpangocairo-1.0;-latk-1.0;-lcairo;-lgdk_pixbuf-2.0;-lgio-2.0;-lpangoft2-1.0;-lpango-1.0;-lgobject-2.0;-lglib-2.0;-lfontconfig;-lfreetype
+GTK2_LDFLAGS_OTHER:INTERNAL=
+GTK2_LIBDIR:INTERNAL=/usr/lib
+GTK2_LIBRARIES:INTERNAL=gtk-x11-2.0;gdk-x11-2.0;pangocairo-1.0;atk-1.0;cairo;gdk_pixbuf-2.0;gio-2.0;pangoft2-1.0;pango-1.0;gobject-2.0;glib-2.0;fontconfig;freetype
+GTK2_LIBRARY_DIRS:INTERNAL=
+GTK2_LIBS:INTERNAL=
+GTK2_LIBS_L:INTERNAL=
+GTK2_LIBS_OTHER:INTERNAL=
+GTK2_LIBS_PATHS:INTERNAL=
 //ADVANCED property for variable: GTK2_PANGOCAIRO_LIBRARY_DEBUG
 GTK2_PANGOCAIRO_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: GTK2_PANGOCAIRO_LIBRARY_RELEASE
@@ -849,8 +878,27 @@ GTK2_PANGO_INCLUDE_DIR-ADVANCED:INTERNAL=1
 GTK2_PANGO_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: GTK2_PANGO_LIBRARY_RELEASE
 GTK2_PANGO_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
+GTK2_PREFIX:INTERNAL=/usr
+GTK2_STATIC_CFLAGS:INTERNAL=-pthread;-I/usr/include/gtk-2.0;-I/usr/lib/gtk-2.0/include;-I/usr/include/pango-1.0;-I/usr/include/atk-1.0;-I/usr/include/cairo;-I/usr/include/pixman-1;-I/usr/include/libdrm;-I/usr/include/gdk-pixbuf-2.0;-I/usr/include/libpng16;-I/usr/include/pango-1.0;-I/usr/include/freetype2;-I/usr/include/libpng16;-I/usr/include/harfbuzz;-I/usr/include/freetype2;-I/usr/include/libpng16;-I/usr/include/harfbuzz;-I/usr/include/glib-2.0;-I/usr/lib/glib-2.0/include
+GTK2_STATIC_CFLAGS_I:INTERNAL=
+GTK2_STATIC_CFLAGS_OTHER:INTERNAL=-pthread
+GTK2_STATIC_INCLUDE_DIRS:INTERNAL=/usr/include/gtk-2.0;/usr/lib/gtk-2.0/include;/usr/include/pango-1.0;/usr/include/atk-1.0;/usr/include/cairo;/usr/include/pixman-1;/usr/include/libdrm;/usr/include/gdk-pixbuf-2.0;/usr/include/libpng16;/usr/include/pango-1.0;/usr/include/freetype2;/usr/include/libpng16;/usr/include/harfbuzz;/usr/include/freetype2;/usr/include/libpng16;/usr/include/harfbuzz;/usr/include/glib-2.0;/usr/lib/glib-2.0/include
+GTK2_STATIC_LDFLAGS:INTERNAL=-L/usr/lib/../lib;-L/usr/lib;-lgtk-x11-2.0;-lgdk-x11-2.0;-lpangocairo-1.0;-latk-1.0;-lcairo;-lz;-lGL;-lpixman-1;-lEGL;-lm;-lpthread;-ldl;-lGL;-lm;-lpthread;-ldl;-ldrm;-lXdamage;-lXfixes;-lX11-xcb;-lxcb-glx;-lxcb-dri2;-lxcb-dri3;-lxcb-present;-lxcb-randr;-lxcb-xfixes;-lxcb-shape;-lxcb-sync;-lxshmfence;-lXxf86vm;-lxcb-shm;-lxcb-render;-lXrender;-lXext;-lX11;-lpthread;-lxcb;-lXau;-lXdmcp;-lgdk_pixbuf-2.0;-lm;-lpng16;-lm;-lz;-lm;-lgio-2.0;-lz;-lresolv;-lpangoft2-1.0;-lpango-1.0;-lgmodule-2.0;-pthread;-ldl;-lgobject-2.0;-lffi;-lfontconfig;-lexpat;-lfreetype;-lexpat;-lfreetype;-lbz2;-lz;-lpng16;-lm;-lz;-lm;-lharfbuzz;-lglib-2.0;-pthread;-lpcre;-pthread;-lgraphite2
+GTK2_STATIC_LDFLAGS_OTHER:INTERNAL=-pthread
+GTK2_STATIC_LIBDIR:INTERNAL=
+GTK2_STATIC_LIBRARIES:INTERNAL=gtk-x11-2.0;gdk-x11-2.0;pangocairo-1.0;atk-1.0;cairo;z;GL;pixman-1;EGL;m;pthread;dl;GL;m;pthread;dl;drm;Xdamage;Xfixes;X11-xcb;xcb-glx;xcb-dri2;xcb-dri3;xcb-present;xcb-randr;xcb-xfixes;xcb-shape;xcb-sync;xshmfence;Xxf86vm;xcb-shm;xcb-render;Xrender;Xext;X11;pthread;xcb;Xau;Xdmcp;gdk_pixbuf-2.0;m;png16;m;z;m;gio-2.0;z;resolv;pangoft2-1.0;pango-1.0;gmodule-2.0;dl;gobject-2.0;ffi;fontconfig;expat;freetype;expat;freetype;bz2;z;png16;m;z;m;harfbuzz;glib-2.0;pcre;graphite2
+GTK2_STATIC_LIBRARY_DIRS:INTERNAL=/usr/lib/../lib;/usr/lib
+GTK2_STATIC_LIBS:INTERNAL=
+GTK2_STATIC_LIBS_L:INTERNAL=
+GTK2_STATIC_LIBS_OTHER:INTERNAL=
+GTK2_STATIC_LIBS_PATHS:INTERNAL=
+GTK2_VERSION:INTERNAL=2.24.28
 //ADVANCED property for variable: GTK2_X11_INCLUDE_DIR
 GTK2_X11_INCLUDE_DIR-ADVANCED:INTERNAL=1
+GTK2_gtk+-2.0_INCLUDEDIR:INTERNAL=
+GTK2_gtk+-2.0_LIBDIR:INTERNAL=
+GTK2_gtk+-2.0_PREFIX:INTERNAL=
+GTK2_gtk+-2.0_VERSION:INTERNAL=
 //ADVANCED property for variable: GTK_Xi_LIBRARY
 GTK_Xi_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: GTK_gdk_LIBRARY
@@ -889,6 +937,8 @@ OPENGL_gl_LIBRARY-ADVANCED:INTERNAL=1
 OPENGL_glu_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: OPENGL_xmesa_INCLUDE_DIR
 OPENGL_xmesa_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: PKG_CONFIG_EXECUTABLE
+PKG_CONFIG_EXECUTABLE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: PNG_LIBRARY_DEBUG
 PNG_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: PNG_LIBRARY_RELEASE
@@ -1023,4 +1073,5 @@ X11_xf86vmode_INCLUDE_PATH-ADVANCED:INTERNAL=1
 ZLIB_INCLUDE_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: ZLIB_LIBRARY
 ZLIB_LIBRARY-ADVANCED:INTERNAL=1
+__pkg_config_checked_GTK2:INTERNAL=1
 

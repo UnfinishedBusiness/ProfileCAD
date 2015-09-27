@@ -8,7 +8,6 @@
 using namespace std;
 
 int mainWindow;
-int subWindow;
 int windowGetMain()
 {
   return mainWindow;
@@ -18,6 +17,7 @@ void windowInit()
   glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
   glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
   mainWindow = glutCreateWindow(WINDOW_TITLE);
+  V cout << KRED << "(windowInit) Mainwindow" << KCYAN << " => " << KGREEN << mainWindow << KNORMAL << endl;
   glutReshapeFunc(windowResize);
 }
 void windowResize(int width, int height)

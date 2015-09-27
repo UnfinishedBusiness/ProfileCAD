@@ -6,8 +6,16 @@
 #include <Menu.h>
 using namespace std;
 
+void testOK()
+{
+  cout << "Test Textbox had value: " << dialogTextboxGetString("Test") << endl;
+  dialogClose();
+}
 void Test()
 {
+  dialogAddLabel(point_t{-0.45, 0.32}, "Test?");
+  dialogAddTextBox(point_t{-0.45, 0.2}, 0.5, 0.1, "Test");
+  dialogAddButton(point_t{-0.45, -0.35}, 0.2, 0.1, "OK", testOK);
   dialogOpen();
 }
 void menuInit()

@@ -7,6 +7,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/root/Projects/ProfileCAD/src/CAD.cpp" "/root/Projects/ProfileCAD/build/CMakeFiles/ProfileCAD.dir/CAD.cpp.o"
   "/root/Projects/ProfileCAD/src/CLI.cpp" "/root/Projects/ProfileCAD/build/CMakeFiles/ProfileCAD.dir/CLI.cpp.o"
   "/root/Projects/ProfileCAD/src/Debug.cpp" "/root/Projects/ProfileCAD/build/CMakeFiles/ProfileCAD.dir/Debug.cpp.o"
+  "/root/Projects/ProfileCAD/src/Dialog.cpp" "/root/Projects/ProfileCAD/build/CMakeFiles/ProfileCAD.dir/Dialog.cpp.o"
   "/root/Projects/ProfileCAD/src/FileIO.cpp" "/root/Projects/ProfileCAD/build/CMakeFiles/ProfileCAD.dir/FileIO.cpp.o"
   "/root/Projects/ProfileCAD/src/Geometry.cpp" "/root/Projects/ProfileCAD/build/CMakeFiles/ProfileCAD.dir/Geometry.cpp.o"
   "/root/Projects/ProfileCAD/src/Keyboard.cpp" "/root/Projects/ProfileCAD/build/CMakeFiles/ProfileCAD.dir/Keyboard.cpp.o"
@@ -23,15 +24,6 @@ set(CMAKE_CXX_COMPILER_ID "GNU")
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
-  "/usr/include/freetype2"
-  "/usr/include/glib-2.0"
-  "/usr/lib64/glib-2.0/include"
-  "/usr/include/atk-1.0"
-  "/usr/include/gdk-pixbuf-2.0"
-  "/usr/include/cairo"
-  "/usr/include/pango-1.0"
-  "/usr/include/gtk-2.0"
-  "/usr/lib64/gtk-2.0/include"
   "/root/Projects/ProfileCAD/src/../inc"
   )
 

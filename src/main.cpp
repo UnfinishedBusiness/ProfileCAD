@@ -97,6 +97,8 @@ int main(int argc, char **argv)
   cliInit();
   luaInit();
   sceneSetViewAngle(0, 0, 0); //Set plane to XY
+  dialogInit();
+  glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_CONTINUE_EXECUTION);
   glutMainLoop();
   return 0;             /* ANSI C requires main to return int. */
 }
