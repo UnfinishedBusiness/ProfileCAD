@@ -81,7 +81,9 @@ fcntl.h
 -
 png.h
 -
-GL/glut.h
+GL/freeglut.h
+-
+GL/freeglut_ext.h
 -
 iostream
 -
@@ -222,6 +224,16 @@ Window.h
 
 /Users/admin/Documents/Projects/ProfileCAD/src/main.cpp
 application.h
+-
+
+/usr/local/include/GL/freeglut.h
+freeglut_std.h
+/usr/local/include/GL/freeglut_std.h
+freeglut_ext.h
+/usr/local/include/GL/freeglut_ext.h
+
+/usr/local/include/GL/freeglut_ext.h
+stdarg.h
 -
 
 /usr/local/include/GL/freeglut_std.h

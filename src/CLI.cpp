@@ -841,7 +841,7 @@ void cliXformRotateAll_Callback()
   V cout << KRED << "Angle" << KCYAN << " => " << KGREEN << Angle << KNORMAL << endl;
   V cout << KRED << "Operator" << KCYAN << " => " << KGREEN << dialogTextboxGetString("Operator") << KNORMAL << endl;
   V cout << KRED << "Origin" << KCYAN << " => ";
-  debugDumpPointStructure(Origin);
+  V debugDumpPointStructure(Origin);
 
   cliScreenSelectAll();
   cadEntity e;

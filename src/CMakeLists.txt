@@ -4,7 +4,7 @@ PROJECT(ProfileCAD)
 
 add_definitions("-std=c++11 -g")
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  add_definitions("-w")
+  add_definitions("-w -L/usr/local/Cellar/freeglut/2.8.1/lib")
 endif()
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/../cmake")
@@ -61,4 +61,7 @@ include_directories(../inc)
 #########################################################
 
   # create the program "ProfileCAD"
+  if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    set(GLUT_LIBRARY -lglut)
+  endif()
   target_link_libraries(ProfileCAD ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${LUA_LIBRARY} ${PNG_LIBRARY})

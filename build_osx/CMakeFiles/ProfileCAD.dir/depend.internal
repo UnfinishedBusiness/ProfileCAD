@@ -18,8 +18,9 @@ CMakeFiles/ProfileCAD.dir/CAD.cpp.o
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/application.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/lua.h
  /Users/admin/Documents/Projects/ProfileCAD/src/CAD.cpp
+ /usr/local/include/GL/freeglut.h
+ /usr/local/include/GL/freeglut_ext.h
  /usr/local/include/GL/freeglut_std.h
- /usr/local/include/GL/glut.h
  /usr/local/include/Lua.h
  /usr/local/include/lauxlib.h
  /usr/local/include/luaconf.h
@@ -44,8 +45,9 @@ CMakeFiles/ProfileCAD.dir/CLI.cpp.o
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/application.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/lua.h
  /Users/admin/Documents/Projects/ProfileCAD/src/CLI.cpp
+ /usr/local/include/GL/freeglut.h
+ /usr/local/include/GL/freeglut_ext.h
  /usr/local/include/GL/freeglut_std.h
- /usr/local/include/GL/glut.h
  /usr/local/include/Lua.h
  /usr/local/include/lauxlib.h
  /usr/local/include/luaconf.h
@@ -70,8 +72,9 @@ CMakeFiles/ProfileCAD.dir/Debug.cpp.o
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/application.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/lua.h
  /Users/admin/Documents/Projects/ProfileCAD/src/Debug.cpp
+ /usr/local/include/GL/freeglut.h
+ /usr/local/include/GL/freeglut_ext.h
  /usr/local/include/GL/freeglut_std.h
- /usr/local/include/GL/glut.h
  /usr/local/include/Lua.h
  /usr/local/include/lauxlib.h
  /usr/local/include/luaconf.h
@@ -96,8 +99,9 @@ CMakeFiles/ProfileCAD.dir/Dialog.cpp.o
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/application.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/lua.h
  /Users/admin/Documents/Projects/ProfileCAD/src/Dialog.cpp
+ /usr/local/include/GL/freeglut.h
+ /usr/local/include/GL/freeglut_ext.h
  /usr/local/include/GL/freeglut_std.h
- /usr/local/include/GL/glut.h
  /usr/local/include/Lua.h
  /usr/local/include/lauxlib.h
  /usr/local/include/luaconf.h
@@ -122,8 +126,9 @@ CMakeFiles/ProfileCAD.dir/FileIO.cpp.o
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/application.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/lua.h
  /Users/admin/Documents/Projects/ProfileCAD/src/FileIO.cpp
+ /usr/local/include/GL/freeglut.h
+ /usr/local/include/GL/freeglut_ext.h
  /usr/local/include/GL/freeglut_std.h
- /usr/local/include/GL/glut.h
  /usr/local/include/Lua.h
  /usr/local/include/lauxlib.h
  /usr/local/include/luaconf.h
@@ -148,8 +153,9 @@ CMakeFiles/ProfileCAD.dir/Geometry.cpp.o
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/application.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/lua.h
  /Users/admin/Documents/Projects/ProfileCAD/src/Geometry.cpp
+ /usr/local/include/GL/freeglut.h
+ /usr/local/include/GL/freeglut_ext.h
  /usr/local/include/GL/freeglut_std.h
- /usr/local/include/GL/glut.h
  /usr/local/include/Lua.h
  /usr/local/include/lauxlib.h
  /usr/local/include/luaconf.h
@@ -174,8 +180,9 @@ CMakeFiles/ProfileCAD.dir/Keyboard.cpp.o
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/application.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/lua.h
  /Users/admin/Documents/Projects/ProfileCAD/src/Keyboard.cpp
+ /usr/local/include/GL/freeglut.h
+ /usr/local/include/GL/freeglut_ext.h
  /usr/local/include/GL/freeglut_std.h
- /usr/local/include/GL/glut.h
  /usr/local/include/Lua.h
  /usr/local/include/lauxlib.h
  /usr/local/include/luaconf.h
@@ -204,8 +211,9 @@ CMakeFiles/ProfileCAD.dir/Machine.cpp.o
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/application.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/lua.h
  /Users/admin/Documents/Projects/ProfileCAD/src/Machine.cpp
+ /usr/local/include/GL/freeglut.h
+ /usr/local/include/GL/freeglut_ext.h
  /usr/local/include/GL/freeglut_std.h
- /usr/local/include/GL/glut.h
  /usr/local/include/Lua.h
  /usr/local/include/lauxlib.h
  /usr/local/include/luaconf.h
@@ -230,6 +238,8 @@ CMakeFiles/ProfileCAD.dir/Menu.cpp.o
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/application.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/lua.h
  /Users/admin/Documents/Projects/ProfileCAD/src/Menu.cpp
+ /usr/local/include/GL/freeglut.h
+ /usr/local/include/GL/freeglut_ext.h
  /usr/local/include/GL/freeglut_std.h
  /usr/local/include/GL/glut.h
  /usr/local/include/Lua.h
@@ -256,8 +266,9 @@ CMakeFiles/ProfileCAD.dir/Mouse.cpp.o
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/application.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/lua.h
  /Users/admin/Documents/Projects/ProfileCAD/src/Mouse.cpp
+ /usr/local/include/GL/freeglut.h
+ /usr/local/include/GL/freeglut_ext.h
  /usr/local/include/GL/freeglut_std.h
- /usr/local/include/GL/glut.h
  /usr/local/include/Lua.h
  /usr/local/include/lauxlib.h
  /usr/local/include/luaconf.h
@@ -282,8 +293,9 @@ CMakeFiles/ProfileCAD.dir/Scene.cpp.o
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/application.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/lua.h
  /Users/admin/Documents/Projects/ProfileCAD/src/Scene.cpp
+ /usr/local/include/GL/freeglut.h
+ /usr/local/include/GL/freeglut_ext.h
  /usr/local/include/GL/freeglut_std.h
- /usr/local/include/GL/glut.h
  /usr/local/include/Lua.h
  /usr/local/include/lauxlib.h
  /usr/local/include/luaconf.h
@@ -308,8 +320,9 @@ CMakeFiles/ProfileCAD.dir/UI.cpp.o
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/application.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/lua.h
  /Users/admin/Documents/Projects/ProfileCAD/src/UI.cpp
+ /usr/local/include/GL/freeglut.h
+ /usr/local/include/GL/freeglut_ext.h
  /usr/local/include/GL/freeglut_std.h
- /usr/local/include/GL/glut.h
  /usr/local/include/Lua.h
  /usr/local/include/lauxlib.h
  /usr/local/include/luaconf.h
@@ -334,6 +347,8 @@ CMakeFiles/ProfileCAD.dir/Window.cpp.o
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/application.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/lua.h
  /Users/admin/Documents/Projects/ProfileCAD/src/Window.cpp
+ /usr/local/include/GL/freeglut.h
+ /usr/local/include/GL/freeglut_ext.h
  /usr/local/include/GL/freeglut_std.h
  /usr/local/include/GL/glut.h
  /usr/local/include/Lua.h
@@ -360,8 +375,9 @@ CMakeFiles/ProfileCAD.dir/main.cpp.o
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/application.h
  /Users/admin/Documents/Projects/ProfileCAD/src/../inc/lua.h
  /Users/admin/Documents/Projects/ProfileCAD/src/main.cpp
+ /usr/local/include/GL/freeglut.h
+ /usr/local/include/GL/freeglut_ext.h
  /usr/local/include/GL/freeglut_std.h
- /usr/local/include/GL/glut.h
  /usr/local/include/Lua.h
  /usr/local/include/lauxlib.h
  /usr/local/include/luaconf.h
