@@ -2,6 +2,12 @@
 
 using namespace std;
 
+pthread_t gtk_thread;
+void mainJoinThreads()
+{
+  gtk_main_quit();
+  pthread_join(gtk_thread, NULL);
+}
 bool isVerbose = false;
 bool mainVerbose()
 {
@@ -67,8 +73,14 @@ void set_blocking (int fd, int should_block)
         if (tcsetattr (fd, TCSANOW, &tty) != 0)
                 printf ("error %d setting term attributes", errno);
 }
+void *gtkThread(void *)
+{
+  gtk_main();
+}
 int main(int argc, char **argv)
 {
+  XInitThreads();
+  gtk_init(&argc, &argv);
   string a = "";
   for (int x = 1; x < argc; x++)
   {
@@ -93,6 +105,16 @@ int main(int argc, char **argv)
   cliInit();
   luaInit();
   sceneSetViewAngle(0, 0, 0); //Set plane to XY
+
+  if(pthread_create(&gtk_thread, NULL, gtkThread, NULL)) {
+
+    fprintf(stderr, "Error creating thread\n");
+    return 1;
+
+  }
+
   glutMainLoop();
+
+
   return 0;             /* ANSI C requires main to return int. */
 }

@@ -42,9 +42,28 @@ if(NOT LUA_FOUND)
     message(ERROR " Lua not found!")
 endif(NOT LUA_FOUND)
 #########################################################
+# FIND PNG
+#########################################################
+find_package(PNG REQUIRED)
+include_directories(${PNG_INCLUDE_DIRS})
+link_directories(${PNG_LIBRARY_DIRS})
+add_definitions(${PNG_DEFINITIONS})
+if(NOT PNG_FOUND)
+    message(ERROR " PNG not found!")
+endif(NOT PNG_FOUND)
+#########################################################
+# FIND GTK
+#########################################################
+find_package(GTK2 REQUIRED)
+include_directories(${GTK2_INCLUDE_DIRS})
+link_directories(${GTK2_LIBRARY_DIRS})
+add_definitions(${GTK2_DEFINITIONS})
+if(NOT GTK2_FOUND)
+    message(ERROR " GTK2 not found!")
+endif(NOT GTK2_FOUND)
+#########################################################
 # Include Files
 #########################################################
-
 add_executable(ProfileCAD MACOSX_BUNDLE main Scene Keyboard Machine Menu Window Mouse CAD UI Geometry CLI FileIO Debug Lua)
 include_directories(../inc)
 ########################################################
@@ -52,4 +71,4 @@ include_directories(../inc)
 #########################################################
 
   # create the program "ProfileCAD"
-  target_link_libraries(ProfileCAD ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${LUA_LIBRARY})
+  target_link_libraries(ProfileCAD ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${LUA_LIBRARY} ${PNG_LIBRARY} ${GTK2_LIBRARY} -lX11 -lgtk-x11-2.0 -lgdk-x11-2.0 -lpangocairo-1.0 -latk-1.0 -lcairo -lgdk_pixbuf-2.0 -lgio-2.0 -lpangoft2-1.0 -lpango-1.0 -lgobject-2.0 -lglib-2.0 -lfontconfig -lfreetype -pthread )

@@ -8,7 +8,11 @@ using namespace std;
 
 void Test()
 {
-  
+  GtkWidget *window;
+  window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+  g_signal_connect (window, "destroy", G_CALLBACK(gtk_widget_hide_on_delete), NULL);
+  gtk_widget_show(window);
+  gtk_window_present(GTK_WINDOW(window));
 }
 void menuInit()
 {

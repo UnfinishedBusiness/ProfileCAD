@@ -24,6 +24,8 @@ void uiInit();
 void uiAppend(uiEntity);
 void uiEdit(int, uiEntity);
 void uiDrawText(void *, char *, float, float, float);
+void uiDrawPNG(std::string, int,  int);
+GLuint uiLoadPNG(const char *, int, int); //Untested
 void uiRender();
 void uiSnapIndicator();
 #endif

@@ -1,5 +1,7 @@
 #define _USE_MATH_DEFINES
 
+#include <pthread.h>
+#include <sys/signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -7,7 +9,9 @@
 #include <errno.h>
 #include <termios.h>
 #include <fcntl.h>
-
+#include <gtk/gtk.h>
+#include <X11/Xlib.h>
+#include <png.h>
 #include <GL/glut.h>
 #include <iostream>
 #include <vector>
@@ -44,7 +48,7 @@ extern "C" {
 #ifndef APPLICATION_
 #define  APPLICATION_
 
-#define EXIT cout << "Bye!\n"; exit(0);
+#define EXIT cout << "Bye!\n"; mainJoinThreads(); exit(0);
 
 #define WINDOW_HEIGHT 800
 #define WINDOW_WIDTH 1100
@@ -70,6 +74,7 @@ struct args_t{
 
 args_t mainGetArgs();
 bool mainVerbose();
+void mainJoinThreads();
 int set_interface_attribs (int, int, int);
 void set_blocking (int, int);
 

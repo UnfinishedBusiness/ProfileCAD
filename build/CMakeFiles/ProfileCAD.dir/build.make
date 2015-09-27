@@ -434,6 +434,7 @@ ProfileCAD: /usr/lib64/libglut.so
 ProfileCAD: /usr/lib64/libXmu.so
 ProfileCAD: /usr/lib64/libXi.so
 ProfileCAD: /usr/lib64/liblua.so
+ProfileCAD: /usr/lib64/libpng.so
 ProfileCAD: CMakeFiles/ProfileCAD.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/root/Projects/ProfileCAD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Linking CXX executable ProfileCAD"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/ProfileCAD.dir/link.txt --verbose=$(VERBOSE)
