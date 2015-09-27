@@ -30,7 +30,6 @@ void cadUndo()
   }
   cliScreenUnSelectAll();
 }
-
 void cadAppend(cadEntity e)
 {
   e.Selected = false;

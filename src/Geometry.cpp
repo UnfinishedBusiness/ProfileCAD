@@ -162,12 +162,22 @@ point_t geoGetLineMidpoint(line_t l)
   //V printf("(geoGetLineMidpoint) Midpoint of (%.6f, %.6f) --- (%.6f, %.6f) is (%.6f, %.6f)\n", l.start.x, l.start.y, l.end.x, l.end.y, m.x, m.y);
   return m;
 }
+point_t geoRotatePointAroundPoint(point_t p, point_t o, float angle, bool dir) //angle is in degrees!
+{
+  //Clockwise is negative and ccw is positive, backword to logic!
+  float a;
+  if (dir == ARC_CW)
+  {
+    a = -angle;
+  }
+  else
+  {
+    a = POSITIVE(angle);
+  }
+  return geoRotatePointAroundPoint(p, o, a);
+}
 point_t geoRotatePointAroundPoint(point_t p, point_t o, float angle) //angle is in degrees!
 {
-  if (angle < 0) //We gotta go counter clockwise
-  {
-    angle = 360 - angle;
-  }
   float rad = angle * (3.14159265359 / 180.0);
   return point_t{ geoRound(cosf(rad) * (p.x - o.x) - sinf(rad) * (p.y - o.y) + o.x),
                   geoRound(sinf(rad) * (p.x - o.x) + cosf(rad) * (p.y - o.y) + o.y), 0 };
@@ -286,7 +296,7 @@ float geoGetArcEndAngleAbs(arc_t a)
   float angle = geoRadiansToDegrees(geoGetLineAngle(line_t{ a.center, a.end}));
   //cout << KRED << "(geoGetArcStartAngleAbs) Angle = " << angle << KNORMAL << endl;
   return angle;
-}``
+}
 point_t geoGetArcPoint(arc_t a, float angle) //Angle is in degrees
 {
   point_t e = point_t{ a.radius + a.center.x, a.center.y, 0 };

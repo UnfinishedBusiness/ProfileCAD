@@ -151,4 +151,5 @@ struct color_t{
 #define isSame(A, B) ( ((A-B) < ZERO) && ((A-B) > -ZERO) )
 #define isSimilar(A, B) ( ((A-B) < SMALL) && ((A-B) > -SMALL) )
 #define isBetween(A, B, C) ( ((A-B) > -ZERO) && ((A-C) < ZERO) )
+#define POSITIVE(n) ((n) < 0 ? 0 - (n) : (n))
 #endif
