@@ -57,4 +57,7 @@ void *cliXformTrim1();
 void *cliXformTrim2();
 void *cliXformTrimCircle();
 void *cliXformFilletRadius();
+
+void *cliXformRotateAll();
+void cliXformRotateAll_Callback();
 #endif

@@ -7,9 +7,13 @@
 #define DIALOG_BACKGROUND color_t{0.8, 0.8, 0.8, 1}
 int DIALOG_WIDTH = 300;
 int DIALOG_HEIGHT = 200;
+float dialogScale = 0.001;
 
 using namespace std;
 int dialogWindow;
+int dialogPositionX = 500;
+int dialogPositionY = 300;
+string dialogTitle = WINDOW_TITLE;
 
 int CurrentFocus = -1;
 
@@ -57,9 +61,10 @@ void dialogAddButton(point_t p, float w, float h, std::string t, void (*c)(void)
 {
   button_t b;
   b.Text = t;
-  b.Position = p;
-  b.Width = w;
-  b.Height = h;
+  b.Position.x = p.x * dialogScale;
+  b.Position.y = p.y * dialogScale;
+  b.Width = w * dialogScale;
+  b.Height = h * dialogScale;
   b.ClickCallback = c;
   DialogWidget widget;
   widget.Type = BUTTON;
@@ -68,10 +73,16 @@ void dialogAddButton(point_t p, float w, float h, std::string t, void (*c)(void)
 }
 void dialogAddTextBox(point_t p, float w, float h, string id)
 {
+  dialogAddTextBox(p, w, h, id, "");
+}
+void dialogAddTextBox(point_t p, float w, float h, string id, string d)
+{
   textbox_t t;
-  t.Position = p;
-  t.Width = w;
-  t.Height = h;
+  t.Position.x = p.x * dialogScale;
+  t.Position.y = p.y * dialogScale;
+  t.Width = w * dialogScale;
+  t.Height = h * dialogScale;
+  t.Text = d;
   t.ID = id;
   DialogWidget widget;
   widget.Type = TEXTBOX;
@@ -81,7 +92,8 @@ void dialogAddTextBox(point_t p, float w, float h, string id)
 void dialogAddLabel(point_t p, string t)
 {
   label_t l;
-  l.Position = p;
+  l.Position.x = p.x * dialogScale;
+  l.Position.y = p.y * dialogScale;
   l.Text = t;
   DialogWidget widget;
   widget.Type = LABEL;
@@ -108,8 +120,60 @@ void dialogKeyBackspace()
     glutPostRedisplay();
   }
 }
+void dialogKeyTab()
+{
+  int LastFocus = CurrentFocus;
+  int FirstFocus = -1;
+  for (int x = 0; x < Dialog.size(); x++)
+  {
+    if (Dialog[x].Type == TEXTBOX || Dialog[x].Type == BUTTON)
+    {
+      FirstFocus = x;
+      break;
+    }
+  }
+
+  if (CurrentFocus > -1)
+  {
+    for (int x = 0; x < Dialog.size(); x++)
+    {
+      if (Dialog[x].Type == TEXTBOX || Dialog[x].Type == BUTTON)
+      {
+        if (x > CurrentFocus)
+        {
+          CurrentFocus = x;
+          break;
+        }
+      }
+    }
+    if (LastFocus == CurrentFocus)
+    {
+      CurrentFocus = FirstFocus;
+    }
+  }
+  else
+  {
+    CurrentFocus = FirstFocus;
+  }
+  glutPostRedisplay();
+}
+void dialogKeyReturn()
+{
+  if (CurrentFocus > -1)
+  {
+    if (Dialog[CurrentFocus].Type == BUTTON)
+    {
+      Dialog[CurrentFocus].Button.ClickCallback();
+    }
+    if (Dialog[CurrentFocus].Type == TEXTBOX)
+    {
+      dialogKeyTab();
+    }
+  }
+}
 void dialogMouse(int btn, int state, int x, int y)
 {
+  int LastFocus = CurrentFocus;
   if(btn==GLUT_LEFT_BUTTON && state==GLUT_UP)
   {
     point_t pos = cadScreenCordToCadCord(x, y);
@@ -130,14 +194,14 @@ void dialogMouse(int btn, int state, int x, int y)
       {
         if ((pos.x > Dialog[x].Textbox.Position.x && pos.y > Dialog[x].Textbox.Position.y ) && (pos.x < (Dialog[x].Textbox.Position.x + Dialog[x].Textbox.Width) && pos.y < (Dialog[x].Textbox.Position.y + Dialog[x].Textbox.Height) ))
         {
-          cout << "Clicked textbox " << x << endl;
+          //cout << "Clicked textbox " << x << endl;
           CurrentFocus = x;
         }
-        else
-        {
-          CurrentFocus = -1;
-        }
       }
+    }
+    if (LastFocus == CurrentFocus)
+    {
+      CurrentFocus = -1;
     }
   }
   if (glutGetWindow() == dialogWindow)
@@ -201,10 +265,12 @@ void dialogKeyboard(unsigned char key, int x, int y)
         case 27 : dialogClose(); break; //Escape
 
         case 46 : dialogKeyPush("."); break;
+        case 44 : dialogKeyPush(","); break;
 
         case 32 : dialogKeyPush(" "); break;
 
-        case 13 : break; //Enter key
+        case 13 : dialogKeyReturn(); break; //Enter key
+        case 9 : dialogKeyTab(); break;
 
         case 96 : dialogKeyPush("`"); break; //backtick key
       }
@@ -229,6 +295,7 @@ void dialogResize(int width, int height)
 void dialogRender()
 {
   //V cout << "Rendering!" << endl;
+  float LineWidth = 0.005;
   glClearColor(DIALOG_BACKGROUND.r, DIALOG_BACKGROUND.g, DIALOG_BACKGROUND.b, DIALOG_BACKGROUND.a);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   for (int x = 0; x < Dialog.size(); x++)
@@ -242,6 +309,11 @@ void dialogRender()
     }
     if (Dialog[x].Type == BUTTON)
     {
+      if (CurrentFocus == x)
+      {
+        sceneColor(BLUE);
+        glRectf(Dialog[x].Button.Position.x - LineWidth, Dialog[x].Button.Position.y - LineWidth, (Dialog[x].Button.Position.x + Dialog[x].Button.Width) + LineWidth, (Dialog[x].Button.Position.y + Dialog[x].Button.Height) + LineWidth);
+      }
       sceneColor(LIGHTGREY);
       glRectf(Dialog[x].Button.Position.x, Dialog[x].Button.Position.y, (Dialog[x].Button.Position.x + Dialog[x].Button.Width), (Dialog[x].Button.Position.y + Dialog[x].Button.Height));
 
@@ -253,7 +325,6 @@ void dialogRender()
     if (Dialog[x].Type == TEXTBOX)
     {
       //cout << "Found Text box!" << endl;
-      float LineWidth = 0.005;
       if (CurrentFocus == x)
       {
         sceneColor(BLUE);
@@ -283,13 +354,29 @@ void dialogDestroy()
 {
   Dialog.clear();
 }
+void dialogSetPosition(int x, int y)
+{
+  dialogPositionX = x;
+  dialogPositionY = y;
+}
+void dialogSetTitle(string t)
+{
+  dialogTitle = t;
+}
+void dialogOpen(string t)
+{
+  dialogSetTitle(t);
+  dialogOpen();
+}
 void dialogOpen()
 {
   //glutSetWindow(dialogWindow);
   //glutShowWindow();
   glutInitWindowSize(DIALOG_WIDTH, DIALOG_HEIGHT);
-  dialogWindow = glutCreateWindow(WINDOW_TITLE);
+  glutInitWindowPosition(dialogPositionX, dialogPositionY);
+  dialogWindow = glutCreateWindow(dialogTitle.c_str());
   V cout << KRED << "(dialogInit) Dialogwindow" << KCYAN << " => " << KGREEN << dialogWindow << KNORMAL << endl;
+  glutSetWindow(dialogWindow);
   glutCloseFunc(dialogDestroy);
   glutDisplayFunc(dialogRender);
   glutReshapeFunc(dialogResize);

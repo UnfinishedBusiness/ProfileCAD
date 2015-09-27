@@ -806,7 +806,76 @@ void *cliXformFilletRadius()
   uiEdit(0, uiEntity{UI_TEXT, RED, "Radius?", UI_MENU_POSITION});
   return NULL;
 }
+void cliXformRotateAll_Callback()
+{
+  float Steps = atof(dialogTextboxGetString("Steps").c_str());
+  float Angle = atof(dialogTextboxGetString("Angle").c_str());
+  string OriginString = dialogTextboxGetString("Origin");
+  vector<string> OriginArray = split(OriginString, ',');
+  if (OriginArray.size() < 1)
+  {
+    //Implement some msg box dialog!
+    //Origin error!
+    return;
+  }
+  point_t Origin = point_t{(float)atof(OriginArray[0].c_str()), (float)atof(OriginArray[1].c_str())};
+  V cout << KRED << "Steps" << KCYAN << " => " << KGREEN << Steps << KNORMAL << endl;
+  V cout << KRED << "Angle" << KCYAN << " => " << KGREEN << Angle << KNORMAL << endl;
+  V cout << KRED << "Origin" << KCYAN << " => ";
+  debugDumpPointStructure(Origin);
 
+  cliScreenSelectAll();
+  cadEntity e;
+  for (int x = 0; x < cadGetEntityArrayIndex(); x++)
+  {
+      e = cadGetEntityArray(x);
+      if (e.Selected && !e.Removed) //Make sure were selected and not removed
+      {
+        if (e.Type == CAD_LINE)
+        {
+          e.Line.start = geoRotatePointAroundPoint(e.Line.start, Origin, Angle);
+          e.Line.end = geoRotatePointAroundPoint(e.Line.end, Origin, Angle);
+          cadEdit(x, e);
+        }
+        if (e.Type == CAD_ARC)
+        {
+          e.Arc.start = geoRotatePointAroundPoint(e.Arc.start, Origin, Angle);
+          e.Arc.end = geoRotatePointAroundPoint(e.Arc.end, Origin, Angle);
+          e.Arc.center = geoRotatePointAroundPoint(e.Arc.center, Origin, Angle);
+          cadEdit(x, e);
+        }
+      }
+  }
+  cliScreenUnSelectAll();
+  dialogClose();
+}
+void *cliXformRotateAll()
+{
+  point_t snap = mouseCadLastSnapClick();
+  string o;
+  o.append(to_string(snap.x));
+  o.append(", ");
+  o.append(to_string(snap.y));
+
+  point_t pos = point_t{-450, 320};
+  dialogAddLabel(pos, "Steps?");
+  pos.y -= 120;
+  dialogAddTextBox(pos, 500, 100, "Steps");
+  pos.y -= 50;
+
+  dialogAddLabel(pos, "Angle?");
+  pos.y -= 120;
+  dialogAddTextBox(pos, 500, 100, "Angle");
+  pos.y -= 50;
+
+  dialogAddLabel(pos, "Origin?");
+  pos.y -= 120;
+  dialogAddTextBox(pos, 500, 100, "Origin", o);
+  pos.y -= 50;
+
+  dialogAddButton(point_t{-450, -350}, 200, 100, "OK", cliXformRotateAll_Callback);
+  dialogOpen("Xform Rotate");
+}
 #define CLI_MENU_ITEMS 6
 menu_item_t menu[CLI_MENU_ITEMS] = {
   { "f", "file",
@@ -863,8 +932,8 @@ menu_item_t menu[CLI_MENU_ITEMS] = {
           sub_sub_menu_item_t{ "l", "across line" },
       },
       sub_menu_item_t{ "r", "rotate",
-        sub_sub_menu_item_t{ "o", "origin" },
-        sub_sub_menu_item_t{ "p", "point" },
+        sub_sub_menu_item_t{ "a", "all entitys", &cliXformRotateAll},
+        sub_sub_menu_item_t{ "s", "selected entitys" },
       },
       sub_menu_item_t{ "l", "translate",
         sub_sub_menu_item_t{ "o", "origin" },

@@ -13,9 +13,9 @@ void testOK()
 }
 void Test()
 {
-  dialogAddLabel(point_t{-0.45, 0.32}, "Test?");
-  dialogAddTextBox(point_t{-0.45, 0.2}, 0.5, 0.1, "Test");
-  dialogAddButton(point_t{-0.45, -0.35}, 0.2, 0.1, "OK", testOK);
+  dialogAddLabel(point_t{-450, 320}, "Test?");
+  dialogAddTextBox(point_t{-450, 200}, 500, 100, "Test");
+  dialogAddButton(point_t{-450, -350}, 200, 100, "OK", testOK);
   dialogOpen();
 }
 void menuInit()
