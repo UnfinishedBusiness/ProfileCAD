@@ -204,6 +204,33 @@ Debug.cpp.s:
 	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/Debug.cpp.s
 .PHONY : Debug.cpp.s
 
+Dialog.o: Dialog.cpp.o
+
+.PHONY : Dialog.o
+
+# target to build an object file
+Dialog.cpp.o:
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/Dialog.cpp.o
+.PHONY : Dialog.cpp.o
+
+Dialog.i: Dialog.cpp.i
+
+.PHONY : Dialog.i
+
+# target to preprocess a source file
+Dialog.cpp.i:
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/Dialog.cpp.i
+.PHONY : Dialog.cpp.i
+
+Dialog.s: Dialog.cpp.s
+
+.PHONY : Dialog.s
+
+# target to generate assembly for a file
+Dialog.cpp.s:
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/Dialog.cpp.s
+.PHONY : Dialog.cpp.s
+
 FileIO.o: FileIO.cpp.o
 
 .PHONY : FileIO.o
@@ -519,6 +546,9 @@ help:
 	@echo "... Debug.o"
 	@echo "... Debug.i"
 	@echo "... Debug.s"
+	@echo "... Dialog.o"
+	@echo "... Dialog.i"
+	@echo "... Dialog.s"
 	@echo "... FileIO.o"
 	@echo "... FileIO.i"
 	@echo "... FileIO.s"

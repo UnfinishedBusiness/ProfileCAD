@@ -1,6 +1,5 @@
 #define _USE_MATH_DEFINES
 
-#include <pthread.h>
 #include <sys/signal.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,8 +8,6 @@
 #include <errno.h>
 #include <termios.h>
 #include <fcntl.h>
-#include <gtk/gtk.h>
-#include <X11/Xlib.h>
 #include <png.h>
 #include <GL/glut.h>
 #include <iostream>
@@ -28,6 +25,7 @@
 #include <CAD.h>
 #include <CLI.h>
 #include <Debug.h>
+#include <Dialog.h>
 #include <FileIO.h>
 #include <Geometry.h>
 #include <Keyboard.h>
@@ -48,7 +46,7 @@ extern "C" {
 #ifndef APPLICATION_
 #define  APPLICATION_
 
-#define EXIT cout << "Bye!\n"; mainJoinThreads(); exit(0);
+#define EXIT cout << "Bye!\n"; exit(0);
 
 #define WINDOW_HEIGHT 800
 #define WINDOW_WIDTH 1100

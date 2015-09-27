@@ -8,6 +8,7 @@
 using namespace std;
 
 int mainWindow;
+int subWindow;
 int windowGetMain()
 {
   return mainWindow;
