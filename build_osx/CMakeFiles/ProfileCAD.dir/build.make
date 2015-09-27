@@ -129,9 +129,33 @@ CMakeFiles/ProfileCAD.dir/Keyboard.cpp.o.provides: CMakeFiles/ProfileCAD.dir/Key
 CMakeFiles/ProfileCAD.dir/Keyboard.cpp.o.provides.build: CMakeFiles/ProfileCAD.dir/Keyboard.cpp.o
 
 
+CMakeFiles/ProfileCAD.dir/Machine.cpp.o: CMakeFiles/ProfileCAD.dir/flags.make
+CMakeFiles/ProfileCAD.dir/Machine.cpp.o: /Users/admin/Documents/Projects/ProfileCAD/src/Machine.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/ProfileCAD.dir/Machine.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/ProfileCAD.dir/Machine.cpp.o -c /Users/admin/Documents/Projects/ProfileCAD/src/Machine.cpp
+
+CMakeFiles/ProfileCAD.dir/Machine.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ProfileCAD.dir/Machine.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /Users/admin/Documents/Projects/ProfileCAD/src/Machine.cpp > CMakeFiles/ProfileCAD.dir/Machine.cpp.i
+
+CMakeFiles/ProfileCAD.dir/Machine.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ProfileCAD.dir/Machine.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /Users/admin/Documents/Projects/ProfileCAD/src/Machine.cpp -o CMakeFiles/ProfileCAD.dir/Machine.cpp.s
+
+CMakeFiles/ProfileCAD.dir/Machine.cpp.o.requires:
+
+.PHONY : CMakeFiles/ProfileCAD.dir/Machine.cpp.o.requires
+
+CMakeFiles/ProfileCAD.dir/Machine.cpp.o.provides: CMakeFiles/ProfileCAD.dir/Machine.cpp.o.requires
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/Machine.cpp.o.provides.build
+.PHONY : CMakeFiles/ProfileCAD.dir/Machine.cpp.o.provides
+
+CMakeFiles/ProfileCAD.dir/Machine.cpp.o.provides.build: CMakeFiles/ProfileCAD.dir/Machine.cpp.o
+
+
 CMakeFiles/ProfileCAD.dir/Menu.cpp.o: CMakeFiles/ProfileCAD.dir/flags.make
 CMakeFiles/ProfileCAD.dir/Menu.cpp.o: /Users/admin/Documents/Projects/ProfileCAD/src/Menu.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/ProfileCAD.dir/Menu.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/ProfileCAD.dir/Menu.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/ProfileCAD.dir/Menu.cpp.o -c /Users/admin/Documents/Projects/ProfileCAD/src/Menu.cpp
 
 CMakeFiles/ProfileCAD.dir/Menu.cpp.i: cmake_force
@@ -155,7 +179,7 @@ CMakeFiles/ProfileCAD.dir/Menu.cpp.o.provides.build: CMakeFiles/ProfileCAD.dir/M
 
 CMakeFiles/ProfileCAD.dir/Window.cpp.o: CMakeFiles/ProfileCAD.dir/flags.make
 CMakeFiles/ProfileCAD.dir/Window.cpp.o: /Users/admin/Documents/Projects/ProfileCAD/src/Window.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/ProfileCAD.dir/Window.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/ProfileCAD.dir/Window.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/ProfileCAD.dir/Window.cpp.o -c /Users/admin/Documents/Projects/ProfileCAD/src/Window.cpp
 
 CMakeFiles/ProfileCAD.dir/Window.cpp.i: cmake_force
@@ -179,7 +203,7 @@ CMakeFiles/ProfileCAD.dir/Window.cpp.o.provides.build: CMakeFiles/ProfileCAD.dir
 
 CMakeFiles/ProfileCAD.dir/Mouse.cpp.o: CMakeFiles/ProfileCAD.dir/flags.make
 CMakeFiles/ProfileCAD.dir/Mouse.cpp.o: /Users/admin/Documents/Projects/ProfileCAD/src/Mouse.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/ProfileCAD.dir/Mouse.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/ProfileCAD.dir/Mouse.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/ProfileCAD.dir/Mouse.cpp.o -c /Users/admin/Documents/Projects/ProfileCAD/src/Mouse.cpp
 
 CMakeFiles/ProfileCAD.dir/Mouse.cpp.i: cmake_force
@@ -203,7 +227,7 @@ CMakeFiles/ProfileCAD.dir/Mouse.cpp.o.provides.build: CMakeFiles/ProfileCAD.dir/
 
 CMakeFiles/ProfileCAD.dir/CAD.cpp.o: CMakeFiles/ProfileCAD.dir/flags.make
 CMakeFiles/ProfileCAD.dir/CAD.cpp.o: /Users/admin/Documents/Projects/ProfileCAD/src/CAD.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/ProfileCAD.dir/CAD.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/ProfileCAD.dir/CAD.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/ProfileCAD.dir/CAD.cpp.o -c /Users/admin/Documents/Projects/ProfileCAD/src/CAD.cpp
 
 CMakeFiles/ProfileCAD.dir/CAD.cpp.i: cmake_force
@@ -227,7 +251,7 @@ CMakeFiles/ProfileCAD.dir/CAD.cpp.o.provides.build: CMakeFiles/ProfileCAD.dir/CA
 
 CMakeFiles/ProfileCAD.dir/UI.cpp.o: CMakeFiles/ProfileCAD.dir/flags.make
 CMakeFiles/ProfileCAD.dir/UI.cpp.o: /Users/admin/Documents/Projects/ProfileCAD/src/UI.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/ProfileCAD.dir/UI.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/ProfileCAD.dir/UI.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/ProfileCAD.dir/UI.cpp.o -c /Users/admin/Documents/Projects/ProfileCAD/src/UI.cpp
 
 CMakeFiles/ProfileCAD.dir/UI.cpp.i: cmake_force
@@ -251,7 +275,7 @@ CMakeFiles/ProfileCAD.dir/UI.cpp.o.provides.build: CMakeFiles/ProfileCAD.dir/UI.
 
 CMakeFiles/ProfileCAD.dir/Geometry.cpp.o: CMakeFiles/ProfileCAD.dir/flags.make
 CMakeFiles/ProfileCAD.dir/Geometry.cpp.o: /Users/admin/Documents/Projects/ProfileCAD/src/Geometry.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/ProfileCAD.dir/Geometry.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/ProfileCAD.dir/Geometry.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/ProfileCAD.dir/Geometry.cpp.o -c /Users/admin/Documents/Projects/ProfileCAD/src/Geometry.cpp
 
 CMakeFiles/ProfileCAD.dir/Geometry.cpp.i: cmake_force
@@ -275,7 +299,7 @@ CMakeFiles/ProfileCAD.dir/Geometry.cpp.o.provides.build: CMakeFiles/ProfileCAD.d
 
 CMakeFiles/ProfileCAD.dir/CLI.cpp.o: CMakeFiles/ProfileCAD.dir/flags.make
 CMakeFiles/ProfileCAD.dir/CLI.cpp.o: /Users/admin/Documents/Projects/ProfileCAD/src/CLI.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/ProfileCAD.dir/CLI.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/ProfileCAD.dir/CLI.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/ProfileCAD.dir/CLI.cpp.o -c /Users/admin/Documents/Projects/ProfileCAD/src/CLI.cpp
 
 CMakeFiles/ProfileCAD.dir/CLI.cpp.i: cmake_force
@@ -299,7 +323,7 @@ CMakeFiles/ProfileCAD.dir/CLI.cpp.o.provides.build: CMakeFiles/ProfileCAD.dir/CL
 
 CMakeFiles/ProfileCAD.dir/FileIO.cpp.o: CMakeFiles/ProfileCAD.dir/flags.make
 CMakeFiles/ProfileCAD.dir/FileIO.cpp.o: /Users/admin/Documents/Projects/ProfileCAD/src/FileIO.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/ProfileCAD.dir/FileIO.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/ProfileCAD.dir/FileIO.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/ProfileCAD.dir/FileIO.cpp.o -c /Users/admin/Documents/Projects/ProfileCAD/src/FileIO.cpp
 
 CMakeFiles/ProfileCAD.dir/FileIO.cpp.i: cmake_force
@@ -323,7 +347,7 @@ CMakeFiles/ProfileCAD.dir/FileIO.cpp.o.provides.build: CMakeFiles/ProfileCAD.dir
 
 CMakeFiles/ProfileCAD.dir/Debug.cpp.o: CMakeFiles/ProfileCAD.dir/flags.make
 CMakeFiles/ProfileCAD.dir/Debug.cpp.o: /Users/admin/Documents/Projects/ProfileCAD/src/Debug.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/ProfileCAD.dir/Debug.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/ProfileCAD.dir/Debug.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/ProfileCAD.dir/Debug.cpp.o -c /Users/admin/Documents/Projects/ProfileCAD/src/Debug.cpp
 
 CMakeFiles/ProfileCAD.dir/Debug.cpp.i: cmake_force
@@ -345,11 +369,36 @@ CMakeFiles/ProfileCAD.dir/Debug.cpp.o.provides: CMakeFiles/ProfileCAD.dir/Debug.
 CMakeFiles/ProfileCAD.dir/Debug.cpp.o.provides.build: CMakeFiles/ProfileCAD.dir/Debug.cpp.o
 
 
+CMakeFiles/ProfileCAD.dir/Lua.cpp.o: CMakeFiles/ProfileCAD.dir/flags.make
+CMakeFiles/ProfileCAD.dir/Lua.cpp.o: /Users/admin/Documents/Projects/ProfileCAD/src/Lua.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/ProfileCAD.dir/Lua.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/ProfileCAD.dir/Lua.cpp.o -c /Users/admin/Documents/Projects/ProfileCAD/src/Lua.cpp
+
+CMakeFiles/ProfileCAD.dir/Lua.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ProfileCAD.dir/Lua.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /Users/admin/Documents/Projects/ProfileCAD/src/Lua.cpp > CMakeFiles/ProfileCAD.dir/Lua.cpp.i
+
+CMakeFiles/ProfileCAD.dir/Lua.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ProfileCAD.dir/Lua.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /Users/admin/Documents/Projects/ProfileCAD/src/Lua.cpp -o CMakeFiles/ProfileCAD.dir/Lua.cpp.s
+
+CMakeFiles/ProfileCAD.dir/Lua.cpp.o.requires:
+
+.PHONY : CMakeFiles/ProfileCAD.dir/Lua.cpp.o.requires
+
+CMakeFiles/ProfileCAD.dir/Lua.cpp.o.provides: CMakeFiles/ProfileCAD.dir/Lua.cpp.o.requires
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/Lua.cpp.o.provides.build
+.PHONY : CMakeFiles/ProfileCAD.dir/Lua.cpp.o.provides
+
+CMakeFiles/ProfileCAD.dir/Lua.cpp.o.provides.build: CMakeFiles/ProfileCAD.dir/Lua.cpp.o
+
+
 # Object files for target ProfileCAD
 ProfileCAD_OBJECTS = \
 "CMakeFiles/ProfileCAD.dir/main.cpp.o" \
 "CMakeFiles/ProfileCAD.dir/Scene.cpp.o" \
 "CMakeFiles/ProfileCAD.dir/Keyboard.cpp.o" \
+"CMakeFiles/ProfileCAD.dir/Machine.cpp.o" \
 "CMakeFiles/ProfileCAD.dir/Menu.cpp.o" \
 "CMakeFiles/ProfileCAD.dir/Window.cpp.o" \
 "CMakeFiles/ProfileCAD.dir/Mouse.cpp.o" \
@@ -358,7 +407,8 @@ ProfileCAD_OBJECTS = \
 "CMakeFiles/ProfileCAD.dir/Geometry.cpp.o" \
 "CMakeFiles/ProfileCAD.dir/CLI.cpp.o" \
 "CMakeFiles/ProfileCAD.dir/FileIO.cpp.o" \
-"CMakeFiles/ProfileCAD.dir/Debug.cpp.o"
+"CMakeFiles/ProfileCAD.dir/Debug.cpp.o" \
+"CMakeFiles/ProfileCAD.dir/Lua.cpp.o"
 
 # External object files for target ProfileCAD
 ProfileCAD_EXTERNAL_OBJECTS =
@@ -366,6 +416,7 @@ ProfileCAD_EXTERNAL_OBJECTS =
 ProfileCAD.app/Contents/MacOS/ProfileCAD: CMakeFiles/ProfileCAD.dir/main.cpp.o
 ProfileCAD.app/Contents/MacOS/ProfileCAD: CMakeFiles/ProfileCAD.dir/Scene.cpp.o
 ProfileCAD.app/Contents/MacOS/ProfileCAD: CMakeFiles/ProfileCAD.dir/Keyboard.cpp.o
+ProfileCAD.app/Contents/MacOS/ProfileCAD: CMakeFiles/ProfileCAD.dir/Machine.cpp.o
 ProfileCAD.app/Contents/MacOS/ProfileCAD: CMakeFiles/ProfileCAD.dir/Menu.cpp.o
 ProfileCAD.app/Contents/MacOS/ProfileCAD: CMakeFiles/ProfileCAD.dir/Window.cpp.o
 ProfileCAD.app/Contents/MacOS/ProfileCAD: CMakeFiles/ProfileCAD.dir/Mouse.cpp.o
@@ -375,9 +426,22 @@ ProfileCAD.app/Contents/MacOS/ProfileCAD: CMakeFiles/ProfileCAD.dir/Geometry.cpp
 ProfileCAD.app/Contents/MacOS/ProfileCAD: CMakeFiles/ProfileCAD.dir/CLI.cpp.o
 ProfileCAD.app/Contents/MacOS/ProfileCAD: CMakeFiles/ProfileCAD.dir/FileIO.cpp.o
 ProfileCAD.app/Contents/MacOS/ProfileCAD: CMakeFiles/ProfileCAD.dir/Debug.cpp.o
+ProfileCAD.app/Contents/MacOS/ProfileCAD: CMakeFiles/ProfileCAD.dir/Lua.cpp.o
 ProfileCAD.app/Contents/MacOS/ProfileCAD: CMakeFiles/ProfileCAD.dir/build.make
+ProfileCAD.app/Contents/MacOS/ProfileCAD: /opt/X11/lib/libSM.dylib
+ProfileCAD.app/Contents/MacOS/ProfileCAD: /opt/X11/lib/libICE.dylib
+ProfileCAD.app/Contents/MacOS/ProfileCAD: /opt/X11/lib/libX11.dylib
+ProfileCAD.app/Contents/MacOS/ProfileCAD: /opt/X11/lib/libXext.dylib
+ProfileCAD.app/Contents/MacOS/ProfileCAD: /usr/local/lib/liblua.dylib
+ProfileCAD.app/Contents/MacOS/ProfileCAD: /usr/local/lib/libpng.dylib
+ProfileCAD.app/Contents/MacOS/ProfileCAD: /opt/X11/lib/libSM.dylib
+ProfileCAD.app/Contents/MacOS/ProfileCAD: /opt/X11/lib/libICE.dylib
+ProfileCAD.app/Contents/MacOS/ProfileCAD: /opt/X11/lib/libX11.dylib
+ProfileCAD.app/Contents/MacOS/ProfileCAD: /opt/X11/lib/libXext.dylib
+ProfileCAD.app/Contents/MacOS/ProfileCAD: /usr/local/lib/liblua.dylib
+ProfileCAD.app/Contents/MacOS/ProfileCAD: /usr/local/lib/libpng.dylib
 ProfileCAD.app/Contents/MacOS/ProfileCAD: CMakeFiles/ProfileCAD.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Linking CXX executable ProfileCAD.app/Contents/MacOS/ProfileCAD"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Linking CXX executable ProfileCAD.app/Contents/MacOS/ProfileCAD"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/ProfileCAD.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -388,6 +452,7 @@ CMakeFiles/ProfileCAD.dir/build: ProfileCAD.app/Contents/MacOS/ProfileCAD
 CMakeFiles/ProfileCAD.dir/requires: CMakeFiles/ProfileCAD.dir/main.cpp.o.requires
 CMakeFiles/ProfileCAD.dir/requires: CMakeFiles/ProfileCAD.dir/Scene.cpp.o.requires
 CMakeFiles/ProfileCAD.dir/requires: CMakeFiles/ProfileCAD.dir/Keyboard.cpp.o.requires
+CMakeFiles/ProfileCAD.dir/requires: CMakeFiles/ProfileCAD.dir/Machine.cpp.o.requires
 CMakeFiles/ProfileCAD.dir/requires: CMakeFiles/ProfileCAD.dir/Menu.cpp.o.requires
 CMakeFiles/ProfileCAD.dir/requires: CMakeFiles/ProfileCAD.dir/Window.cpp.o.requires
 CMakeFiles/ProfileCAD.dir/requires: CMakeFiles/ProfileCAD.dir/Mouse.cpp.o.requires
@@ -397,6 +462,7 @@ CMakeFiles/ProfileCAD.dir/requires: CMakeFiles/ProfileCAD.dir/Geometry.cpp.o.req
 CMakeFiles/ProfileCAD.dir/requires: CMakeFiles/ProfileCAD.dir/CLI.cpp.o.requires
 CMakeFiles/ProfileCAD.dir/requires: CMakeFiles/ProfileCAD.dir/FileIO.cpp.o.requires
 CMakeFiles/ProfileCAD.dir/requires: CMakeFiles/ProfileCAD.dir/Debug.cpp.o.requires
+CMakeFiles/ProfileCAD.dir/requires: CMakeFiles/ProfileCAD.dir/Lua.cpp.o.requires
 
 .PHONY : CMakeFiles/ProfileCAD.dir/requires
 

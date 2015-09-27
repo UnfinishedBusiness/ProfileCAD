@@ -112,9 +112,6 @@ int main(int argc, char **argv)
     return 1;
 
   }
-
   glutMainLoop();
-
-
   return 0;             /* ANSI C requires main to return int. */
 }

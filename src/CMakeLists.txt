@@ -4,12 +4,22 @@ PROJECT(ProfileCAD)
 
 add_definitions("-std=c++11 -g")
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  add_definitions("-w")
+  add_definitions("-w -I/opt/X11/include")
 endif()
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/../cmake")
 
 set(CMAKE_BUILD_TYPE Debug)
+#########################################################
+# FIND X11
+#########################################################
+FIND_PACKAGE ( X11 REQUIRED )
+IF ( X11_FOUND )
+      INCLUDE_DIRECTORIES ( ${X11_INCLUDE_DIR} )
+      LINK_LIBRARIES ( ${X11_LIBRARIES} )
+      MESSAGE ( STATUS " X11_INCLUDE_DIR: " ${X11_INCLUDE_DIR} )
+      MESSAGE ( STATUS " X11_LIBRARIES: " ${X11_LIBRARIES} )
+ENDIF ( X11_FOUND )
 #########################################################
 # FIND GLUT
 #########################################################
@@ -54,13 +64,12 @@ endif(NOT PNG_FOUND)
 #########################################################
 # FIND GTK
 #########################################################
-find_package(GTK2 REQUIRED)
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(GTK2 REQUIRED gtk+-2.0)
 include_directories(${GTK2_INCLUDE_DIRS})
 link_directories(${GTK2_LIBRARY_DIRS})
-add_definitions(${GTK2_DEFINITIONS})
-if(NOT GTK2_FOUND)
-    message(ERROR " GTK2 not found!")
-endif(NOT GTK2_FOUND)
+# Add other flags to the compiler
+add_definitions(${GTK2_CFLAGS_OTHER})
 #########################################################
 # Include Files
 #########################################################
@@ -71,4 +80,4 @@ include_directories(../inc)
 #########################################################
 
   # create the program "ProfileCAD"
-  target_link_libraries(ProfileCAD ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${LUA_LIBRARY} ${PNG_LIBRARY} ${GTK2_LIBRARY} -lX11 -lgtk-x11-2.0 -lgdk-x11-2.0 -lpangocairo-1.0 -latk-1.0 -lcairo -lgdk_pixbuf-2.0 -lgio-2.0 -lpangoft2-1.0 -lpango-1.0 -lgobject-2.0 -lglib-2.0 -lfontconfig -lfreetype -pthread )
+  target_link_libraries(ProfileCAD ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${LUA_LIBRARY} ${PNG_LIBRARY} ${GTK2_LIBRARIES} ${X11_LIBRARIES} -pthread )

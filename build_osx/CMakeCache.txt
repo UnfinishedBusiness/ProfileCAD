@@ -183,6 +183,15 @@ CMAKE_USE_RELATIVE_PATHS:BOOL=OFF
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
 //Path to a file.
+FREETYPE_INCLUDE_DIR_freetype2:PATH=/usr/local/include/freetype2
+
+//Path to a file.
+FREETYPE_INCLUDE_DIR_ft2build:PATH=/usr/local/include/freetype2
+
+//Path to a library.
+FREETYPE_LIBRARY:FILEPATH=/usr/local/lib/libfreetype.dylib
+
+//Path to a file.
 GLUT_INCLUDE_DIR:PATH=/System/Library/Frameworks/GLUT.framework/Headers
 
 //Cocoa framework for OSX
@@ -190,6 +199,141 @@ GLUT_cocoa_LIBRARY:FILEPATH=/System/Library/Frameworks/Cocoa.framework
 
 //GLUT library for OSX
 GLUT_glut_LIBRARY:FILEPATH=/System/Library/Frameworks/GLUT.framework
+
+//Path to a file.
+GTK2_ATK_INCLUDE_DIR:PATH=/usr/local/include/atk-1.0
+
+//Path to a library.
+GTK2_ATK_LIBRARY_DEBUG:FILEPATH=GTK2_ATK_LIBRARY_DEBUG-NOTFOUND
+
+//Path to a library.
+GTK2_ATK_LIBRARY_RELEASE:FILEPATH=/usr/local/lib/libatk-1.0.dylib
+
+//Path to a file.
+GTK2_CAIRO_INCLUDE_DIR:PATH=/usr/local/include/cairo
+
+//Path to a library.
+GTK2_CAIRO_LIBRARY_DEBUG:FILEPATH=GTK2_CAIRO_LIBRARY_DEBUG-NOTFOUND
+
+//Path to a library.
+GTK2_CAIRO_LIBRARY_RELEASE:FILEPATH=/usr/local/lib/libcairo.dylib
+
+//Path to a file.
+GTK2_FONTCONFIG_INCLUDE_DIR:PATH=/usr/local/include
+
+//Path to a file.
+GTK2_GDKCONFIG_INCLUDE_DIR:PATH=/usr/local/lib/gtk-2.0/include
+
+//Path to a file.
+GTK2_GDK_INCLUDE_DIR:PATH=/usr/local/include/gtk-2.0
+
+//Path to a library.
+GTK2_GDK_LIBRARY_DEBUG:FILEPATH=GTK2_GDK_LIBRARY_DEBUG-NOTFOUND
+
+//Path to a library.
+GTK2_GDK_LIBRARY_RELEASE:FILEPATH=/usr/local/lib/libgdk-quartz-2.0.dylib
+
+//Path to a file.
+GTK2_GDK_PIXBUF_INCLUDE_DIR:PATH=/usr/local/include/gdk-pixbuf-2.0
+
+//Path to a library.
+GTK2_GDK_PIXBUF_LIBRARY_DEBUG:FILEPATH=GTK2_GDK_PIXBUF_LIBRARY_DEBUG-NOTFOUND
+
+//Path to a library.
+GTK2_GDK_PIXBUF_LIBRARY_RELEASE:FILEPATH=/usr/local/lib/libgdk_pixbuf-2.0.dylib
+
+//Path to a library.
+GTK2_GIO_LIBRARY_DEBUG:FILEPATH=GTK2_GIO_LIBRARY_DEBUG-NOTFOUND
+
+//Path to a library.
+GTK2_GIO_LIBRARY_RELEASE:FILEPATH=/usr/local/lib/libgio-2.0.dylib
+
+//Path to a file.
+GTK2_GLADE_INCLUDE_DIR:PATH=GTK2_GLADE_INCLUDE_DIR-NOTFOUND
+
+//Path to a library.
+GTK2_GLADE_LIBRARY_DEBUG:FILEPATH=GTK2_GLADE_LIBRARY_DEBUG-NOTFOUND
+
+//Path to a library.
+GTK2_GLADE_LIBRARY_RELEASE:FILEPATH=GTK2_GLADE_LIBRARY_RELEASE-NOTFOUND
+
+//Path to a file.
+GTK2_GLIBCONFIG_INCLUDE_DIR:PATH=/usr/local/lib/glib-2.0/include
+
+//Path to a file.
+GTK2_GLIB_INCLUDE_DIR:PATH=/usr/local/include/glib-2.0
+
+//Path to a library.
+GTK2_GLIB_LIBRARY_DEBUG:FILEPATH=GTK2_GLIB_LIBRARY_DEBUG-NOTFOUND
+
+//Path to a library.
+GTK2_GLIB_LIBRARY_RELEASE:FILEPATH=/usr/local/lib/libglib-2.0.dylib
+
+//Path to a library.
+GTK2_GMODULE_LIBRARY_DEBUG:FILEPATH=GTK2_GMODULE_LIBRARY_DEBUG-NOTFOUND
+
+//Path to a library.
+GTK2_GMODULE_LIBRARY_RELEASE:FILEPATH=/usr/local/lib/libgmodule-2.0.dylib
+
+//Path to a file.
+GTK2_GOBJECT_INCLUDE_DIR:PATH=/usr/local/include/glib-2.0
+
+//Path to a library.
+GTK2_GOBJECT_LIBRARY_DEBUG:FILEPATH=GTK2_GOBJECT_LIBRARY_DEBUG-NOTFOUND
+
+//Path to a library.
+GTK2_GOBJECT_LIBRARY_RELEASE:FILEPATH=/usr/local/lib/libgobject-2.0.dylib
+
+//Path to a library.
+GTK2_GTHREAD_LIBRARY_DEBUG:FILEPATH=GTK2_GTHREAD_LIBRARY_DEBUG-NOTFOUND
+
+//Path to a library.
+GTK2_GTHREAD_LIBRARY_RELEASE:FILEPATH=/usr/local/lib/libgthread-2.0.dylib
+
+//Path to a file.
+GTK2_GTK_INCLUDE_DIR:PATH=/usr/local/include/gtk-2.0
+
+//Path to a library.
+GTK2_GTK_LIBRARY_DEBUG:FILEPATH=GTK2_GTK_LIBRARY_DEBUG-NOTFOUND
+
+//Path to a library.
+GTK2_GTK_LIBRARY_RELEASE:FILEPATH=/usr/local/lib/libgtk-quartz-2.0.dylib
+
+//Path to a library.
+GTK2_PANGOCAIRO_LIBRARY_DEBUG:FILEPATH=GTK2_PANGOCAIRO_LIBRARY_DEBUG-NOTFOUND
+
+//Path to a library.
+GTK2_PANGOCAIRO_LIBRARY_RELEASE:FILEPATH=/usr/local/lib/libpangocairo-1.0.dylib
+
+//Path to a library.
+GTK2_PANGOFT2_LIBRARY_DEBUG:FILEPATH=GTK2_PANGOFT2_LIBRARY_DEBUG-NOTFOUND
+
+//Path to a library.
+GTK2_PANGOFT2_LIBRARY_RELEASE:FILEPATH=/usr/local/lib/libpangoft2-1.0.dylib
+
+//Path to a library.
+GTK2_PANGOXFT_LIBRARY_DEBUG:FILEPATH=GTK2_PANGOXFT_LIBRARY_DEBUG-NOTFOUND
+
+//Path to a library.
+GTK2_PANGOXFT_LIBRARY_RELEASE:FILEPATH=GTK2_PANGOXFT_LIBRARY_RELEASE-NOTFOUND
+
+//Path to a file.
+GTK2_PANGO_INCLUDE_DIR:PATH=/usr/local/include/pango-1.0
+
+//Path to a library.
+GTK2_PANGO_LIBRARY_DEBUG:FILEPATH=GTK2_PANGO_LIBRARY_DEBUG-NOTFOUND
+
+//Path to a library.
+GTK2_PANGO_LIBRARY_RELEASE:FILEPATH=/usr/local/lib/libpango-1.0.dylib
+
+//Path to a file.
+GTK2_X11_INCLUDE_DIR:PATH=/System/Library/Frameworks/Tk.framework/Headers/X11
+
+//Path to a file.
+LUA_INCLUDE_DIR:PATH=/usr/local/include
+
+//Path to a library.
+LUA_LIBRARY:FILEPATH=/usr/local/lib/liblua.dylib
 
 //Include for OpenGL on OSX
 OPENGL_INCLUDE_DIR:PATH=/System/Library/Frameworks/OpenGL.framework
@@ -200,11 +344,212 @@ OPENGL_gl_LIBRARY:FILEPATH=/System/Library/Frameworks/OpenGL.framework
 //AGL lib for OSX
 OPENGL_glu_LIBRARY:FILEPATH=/System/Library/Frameworks/AGL.framework
 
+//pkg-config executable
+PKG_CONFIG_EXECUTABLE:FILEPATH=/usr/local/bin/pkg-config
+
+//Path to a library.
+PNG_LIBRARY_DEBUG:FILEPATH=PNG_LIBRARY_DEBUG-NOTFOUND
+
+//Path to a library.
+PNG_LIBRARY_RELEASE:FILEPATH=/usr/local/lib/libpng.dylib
+
+//Path to a file.
+PNG_PNG_INCLUDE_DIR:PATH=/usr/local/include
+
 //Value Computed by CMake
 ProfileCAD_BINARY_DIR:STATIC=/Users/admin/Documents/Projects/ProfileCAD/build_osx
 
 //Value Computed by CMake
 ProfileCAD_SOURCE_DIR:STATIC=/Users/admin/Documents/Projects/ProfileCAD/src
+
+//Path to a file.
+X11_ICE_INCLUDE_PATH:PATH=/opt/X11/include
+
+//Path to a library.
+X11_ICE_LIB:FILEPATH=/opt/X11/lib/libICE.dylib
+
+//Path to a file.
+X11_SM_INCLUDE_PATH:PATH=/opt/X11/include
+
+//Path to a library.
+X11_SM_LIB:FILEPATH=/opt/X11/lib/libSM.dylib
+
+//Path to a file.
+X11_X11_INCLUDE_PATH:PATH=/opt/X11/include
+
+//Path to a library.
+X11_X11_LIB:FILEPATH=/opt/X11/lib/libX11.dylib
+
+//Path to a file.
+X11_XRes_INCLUDE_PATH:PATH=/opt/X11/include
+
+//Path to a library.
+X11_XRes_LIB:FILEPATH=/opt/X11/lib/libXRes.dylib
+
+//Path to a file.
+X11_XShm_INCLUDE_PATH:PATH=/opt/X11/include
+
+//Path to a file.
+X11_XSync_INCLUDE_PATH:PATH=/opt/X11/include
+
+//Path to a file.
+X11_XTest_INCLUDE_PATH:PATH=/opt/X11/include
+
+//Path to a library.
+X11_XTest_LIB:FILEPATH=/opt/X11/lib/libXtst.dylib
+
+//Path to a file.
+X11_Xaccessrules_INCLUDE_PATH:PATH=/opt/X11/include
+
+//Path to a file.
+X11_Xaccessstr_INCLUDE_PATH:PATH=/opt/X11/include
+
+//Path to a file.
+X11_Xau_INCLUDE_PATH:PATH=/opt/X11/include
+
+//Path to a library.
+X11_Xau_LIB:FILEPATH=/opt/X11/lib/libXau.dylib
+
+//Path to a file.
+X11_Xcomposite_INCLUDE_PATH:PATH=/opt/X11/include
+
+//Path to a library.
+X11_Xcomposite_LIB:FILEPATH=/opt/X11/lib/libXcomposite.dylib
+
+//Path to a file.
+X11_Xcursor_INCLUDE_PATH:PATH=/opt/X11/include
+
+//Path to a library.
+X11_Xcursor_LIB:FILEPATH=/opt/X11/lib/libXcursor.dylib
+
+//Path to a file.
+X11_Xdamage_INCLUDE_PATH:PATH=/opt/X11/include
+
+//Path to a library.
+X11_Xdamage_LIB:FILEPATH=/opt/X11/lib/libXdamage.dylib
+
+//Path to a file.
+X11_Xdmcp_INCLUDE_PATH:PATH=/opt/X11/include
+
+//Path to a library.
+X11_Xdmcp_LIB:FILEPATH=/opt/X11/lib/libXdmcp.dylib
+
+//Path to a library.
+X11_Xext_LIB:FILEPATH=/opt/X11/lib/libXext.dylib
+
+//Path to a file.
+X11_Xfixes_INCLUDE_PATH:PATH=/opt/X11/include
+
+//Path to a library.
+X11_Xfixes_LIB:FILEPATH=/opt/X11/lib/libXfixes.dylib
+
+//Path to a file.
+X11_Xft_INCLUDE_PATH:PATH=/opt/X11/include
+
+//Path to a library.
+X11_Xft_LIB:FILEPATH=/opt/X11/lib/libXft.dylib
+
+//Path to a file.
+X11_Xi_INCLUDE_PATH:PATH=/opt/X11/include
+
+//Path to a library.
+X11_Xi_LIB:FILEPATH=/opt/X11/lib/libXi.dylib
+
+//Path to a file.
+X11_Xinerama_INCLUDE_PATH:PATH=/opt/X11/include
+
+//Path to a library.
+X11_Xinerama_LIB:FILEPATH=/opt/X11/lib/libXinerama.dylib
+
+//Path to a file.
+X11_Xinput_INCLUDE_PATH:PATH=/opt/X11/include
+
+//Path to a library.
+X11_Xinput_LIB:FILEPATH=/opt/X11/lib/libXi.dylib
+
+//Path to a file.
+X11_Xkb_INCLUDE_PATH:PATH=/opt/X11/include
+
+//Path to a file.
+X11_Xkbfile_INCLUDE_PATH:PATH=/opt/X11/include
+
+//Path to a library.
+X11_Xkbfile_LIB:FILEPATH=/opt/X11/lib/libxkbfile.dylib
+
+//Path to a file.
+X11_Xkblib_INCLUDE_PATH:PATH=/opt/X11/include
+
+//Path to a file.
+X11_Xlib_INCLUDE_PATH:PATH=/opt/X11/include
+
+//Path to a file.
+X11_Xmu_INCLUDE_PATH:PATH=/opt/X11/include
+
+//Path to a library.
+X11_Xmu_LIB:FILEPATH=/opt/X11/lib/libXmu.dylib
+
+//Path to a file.
+X11_Xpm_INCLUDE_PATH:PATH=/opt/X11/include
+
+//Path to a library.
+X11_Xpm_LIB:FILEPATH=/opt/X11/lib/libXpm.dylib
+
+//Path to a file.
+X11_Xrandr_INCLUDE_PATH:PATH=/opt/X11/include
+
+//Path to a library.
+X11_Xrandr_LIB:FILEPATH=/opt/X11/lib/libXrandr.dylib
+
+//Path to a file.
+X11_Xrender_INCLUDE_PATH:PATH=/opt/X11/include
+
+//Path to a library.
+X11_Xrender_LIB:FILEPATH=/opt/X11/lib/libXrender.dylib
+
+//Path to a file.
+X11_Xscreensaver_INCLUDE_PATH:PATH=/opt/X11/include
+
+//Path to a library.
+X11_Xscreensaver_LIB:FILEPATH=/opt/X11/lib/libXss.dylib
+
+//Path to a file.
+X11_Xshape_INCLUDE_PATH:PATH=/opt/X11/include
+
+//Path to a file.
+X11_Xt_INCLUDE_PATH:PATH=/opt/X11/include
+
+//Path to a library.
+X11_Xt_LIB:FILEPATH=/opt/X11/lib/libXt.dylib
+
+//Path to a file.
+X11_Xutil_INCLUDE_PATH:PATH=/opt/X11/include
+
+//Path to a file.
+X11_Xv_INCLUDE_PATH:PATH=/opt/X11/include
+
+//Path to a library.
+X11_Xv_LIB:FILEPATH=/opt/X11/lib/libXv.dylib
+
+//Path to a library.
+X11_Xxf86misc_LIB:FILEPATH=/opt/X11/lib/libXxf86misc.dylib
+
+//Path to a library.
+X11_Xxf86vm_LIB:FILEPATH=/opt/X11/lib/libXxf86vm.dylib
+
+//Path to a file.
+X11_dpms_INCLUDE_PATH:PATH=/opt/X11/include
+
+//Path to a file.
+X11_xf86misc_INCLUDE_PATH:PATH=/opt/X11/include
+
+//Path to a file.
+X11_xf86vmode_INCLUDE_PATH:PATH=/opt/X11/include
+
+//Path to a file.
+ZLIB_INCLUDE_DIR:PATH=/usr/include
+
+//Path to a library.
+ZLIB_LIBRARY:FILEPATH=/usr/lib/libz.dylib
 
 
 ########################
@@ -277,11 +622,21 @@ CMAKE_GENERATOR:INTERNAL=Unix Makefiles
 CMAKE_GENERATOR_PLATFORM:INTERNAL=
 //Name of generator toolset.
 CMAKE_GENERATOR_TOOLSET:INTERNAL=
+//Have function connect
+CMAKE_HAVE_CONNECT:INTERNAL=1
+//Have function gethostbyname
+CMAKE_HAVE_GETHOSTBYNAME:INTERNAL=1
+//Have function remove
+CMAKE_HAVE_REMOVE:INTERNAL=1
+//Have function shmat
+CMAKE_HAVE_SHMAT:INTERNAL=1
 //Source directory with the top level CMakeLists.txt file for this
 // project
 CMAKE_HOME_DIRECTORY:INTERNAL=/Users/admin/Documents/Projects/ProfileCAD/src
 //ADVANCED property for variable: CMAKE_INSTALL_NAME_TOOL
 CMAKE_INSTALL_NAME_TOOL-ADVANCED:INTERNAL=1
+//Have library ICE
+CMAKE_LIB_ICE_HAS_ICECONNECTIONNUMBER:INTERNAL=1
 //ADVANCED property for variable: CMAKE_LINKER
 CMAKE_LINKER-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_MAKE_PROGRAM
@@ -342,16 +697,295 @@ CMAKE_USE_RELATIVE_PATHS-ADVANCED:INTERNAL=1
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 //Details about finding GLUT
 FIND_PACKAGE_MESSAGE_DETAILS_GLUT:INTERNAL=[/System/Library/Frameworks/GLUT.framework][/System/Library/Frameworks/GLUT.framework/Headers][v()]
+//Details about finding GTK2_GTK
+FIND_PACKAGE_MESSAGE_DETAILS_GTK2_GTK:INTERNAL=[/usr/local/lib/libgtk-quartz-2.0.dylib][/usr/local/include/gtk-2.0][/usr/local/include/gtk-2.0][/usr/local/lib/gtk-2.0/include][/usr/local/lib/libgdk-quartz-2.0.dylib][/usr/local/include/glib-2.0][/usr/local/lib/glib-2.0/include][/usr/local/lib/libglib-2.0.dylib][v()]
+//Details about finding Lua
+FIND_PACKAGE_MESSAGE_DETAILS_Lua:INTERNAL=[/usr/local/lib/liblua.dylib][/usr/local/include][v5.2.4()]
 //Details about finding OpenGL
 FIND_PACKAGE_MESSAGE_DETAILS_OpenGL:INTERNAL=[/System/Library/Frameworks/OpenGL.framework][/System/Library/Frameworks/OpenGL.framework][v()]
+//Details about finding PNG
+FIND_PACKAGE_MESSAGE_DETAILS_PNG:INTERNAL=[/usr/local/lib/libpng.dylib][/usr/local/include][v1.6.18()]
+//Details about finding PkgConfig
+FIND_PACKAGE_MESSAGE_DETAILS_PkgConfig:INTERNAL=[/usr/local/bin/pkg-config][v0.28()]
+//Details about finding X11
+FIND_PACKAGE_MESSAGE_DETAILS_X11:INTERNAL=[/opt/X11/lib/libX11.dylib][/opt/X11/include]
+//Details about finding ZLIB
+FIND_PACKAGE_MESSAGE_DETAILS_ZLIB:INTERNAL=[/usr/lib/libz.dylib][/usr/include][v1.2.5()]
+//ADVANCED property for variable: FREETYPE_INCLUDE_DIR_freetype2
+FREETYPE_INCLUDE_DIR_freetype2-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: FREETYPE_INCLUDE_DIR_ft2build
+FREETYPE_INCLUDE_DIR_ft2build-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: FREETYPE_LIBRARY
+FREETYPE_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: GLUT_INCLUDE_DIR
 GLUT_INCLUDE_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: GLUT_glut_LIBRARY
 GLUT_glut_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_ATK_INCLUDE_DIR
+GTK2_ATK_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_ATK_LIBRARY_DEBUG
+GTK2_ATK_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_ATK_LIBRARY_RELEASE
+GTK2_ATK_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_CAIRO_INCLUDE_DIR
+GTK2_CAIRO_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_CAIRO_LIBRARY_DEBUG
+GTK2_CAIRO_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_CAIRO_LIBRARY_RELEASE
+GTK2_CAIRO_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
+GTK2_CFLAGS:INTERNAL=-D_REENTRANT;-I/usr/local/Cellar/gtk+/2.24.28_2/include/gtk-2.0;-I/usr/local/Cellar/gtk+/2.24.28_2/lib/gtk-2.0/include;-I/usr/local/Cellar/pango/1.38.0/include/pango-1.0;-I/usr/local/Cellar/harfbuzz/1.0.3/include/harfbuzz;-I/usr/local/Cellar/pango/1.38.0/include/pango-1.0;-I/usr/local/Cellar/atk/2.18.0/include/atk-1.0;-I/usr/local/Cellar/cairo/1.14.2_1/include/cairo;-I/usr/local/Cellar/pixman/0.32.6/include/pixman-1;-I/usr/local/Cellar/fontconfig/2.11.1/include;-I/usr/local/Cellar/freetype/2.5.3_1/include/freetype2;-I/usr/local/Cellar/freetype/2.6_1/include/freetype2;-I/usr/local/Cellar/libpng/1.6.18/include/libpng16;-I/usr/local/Cellar/gdk-pixbuf/2.32.0/include/gdk-pixbuf-2.0;-I/usr/local/Cellar/libpng/1.6.18/include/libpng16;-I/usr/local/Cellar/glib/2.46.0/include/glib-2.0;-I/usr/local/Cellar/glib/2.46.0/lib/glib-2.0/include;-I/usr/local/opt/gettext/include
+GTK2_CFLAGS_I:INTERNAL=
+GTK2_CFLAGS_OTHER:INTERNAL=-D_REENTRANT
+//ADVANCED property for variable: GTK2_FONTCONFIG_INCLUDE_DIR
+GTK2_FONTCONFIG_INCLUDE_DIR-ADVANCED:INTERNAL=1
+GTK2_FOUND:INTERNAL=1
+//ADVANCED property for variable: GTK2_GDKCONFIG_INCLUDE_DIR
+GTK2_GDKCONFIG_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_GDK_INCLUDE_DIR
+GTK2_GDK_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_GDK_LIBRARY_DEBUG
+GTK2_GDK_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_GDK_LIBRARY_RELEASE
+GTK2_GDK_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_GDK_PIXBUF_INCLUDE_DIR
+GTK2_GDK_PIXBUF_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_GDK_PIXBUF_LIBRARY_DEBUG
+GTK2_GDK_PIXBUF_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_GDK_PIXBUF_LIBRARY_RELEASE
+GTK2_GDK_PIXBUF_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_GIO_LIBRARY_DEBUG
+GTK2_GIO_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_GIO_LIBRARY_RELEASE
+GTK2_GIO_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_GLADE_INCLUDE_DIR
+GTK2_GLADE_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_GLADE_LIBRARY_DEBUG
+GTK2_GLADE_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_GLADE_LIBRARY_RELEASE
+GTK2_GLADE_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_GLIBCONFIG_INCLUDE_DIR
+GTK2_GLIBCONFIG_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_GLIB_INCLUDE_DIR
+GTK2_GLIB_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_GLIB_LIBRARY_DEBUG
+GTK2_GLIB_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_GLIB_LIBRARY_RELEASE
+GTK2_GLIB_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_GMODULE_LIBRARY_DEBUG
+GTK2_GMODULE_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_GMODULE_LIBRARY_RELEASE
+GTK2_GMODULE_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_GOBJECT_INCLUDE_DIR
+GTK2_GOBJECT_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_GOBJECT_LIBRARY_DEBUG
+GTK2_GOBJECT_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_GOBJECT_LIBRARY_RELEASE
+GTK2_GOBJECT_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_GTHREAD_LIBRARY_DEBUG
+GTK2_GTHREAD_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_GTHREAD_LIBRARY_RELEASE
+GTK2_GTHREAD_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_GTK_INCLUDE_DIR
+GTK2_GTK_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_GTK_LIBRARY_DEBUG
+GTK2_GTK_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_GTK_LIBRARY_RELEASE
+GTK2_GTK_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
+GTK2_INCLUDEDIR:INTERNAL=/usr/local/Cellar/gtk+/2.24.28_2/include
+GTK2_INCLUDE_DIRS:INTERNAL=/usr/local/Cellar/gtk+/2.24.28_2/include/gtk-2.0;/usr/local/Cellar/gtk+/2.24.28_2/lib/gtk-2.0/include;/usr/local/Cellar/pango/1.38.0/include/pango-1.0;/usr/local/Cellar/harfbuzz/1.0.3/include/harfbuzz;/usr/local/Cellar/pango/1.38.0/include/pango-1.0;/usr/local/Cellar/atk/2.18.0/include/atk-1.0;/usr/local/Cellar/cairo/1.14.2_1/include/cairo;/usr/local/Cellar/pixman/0.32.6/include/pixman-1;/usr/local/Cellar/fontconfig/2.11.1/include;/usr/local/Cellar/freetype/2.5.3_1/include/freetype2;/usr/local/Cellar/freetype/2.6_1/include/freetype2;/usr/local/Cellar/libpng/1.6.18/include/libpng16;/usr/local/Cellar/gdk-pixbuf/2.32.0/include/gdk-pixbuf-2.0;/usr/local/Cellar/libpng/1.6.18/include/libpng16;/usr/local/Cellar/glib/2.46.0/include/glib-2.0;/usr/local/Cellar/glib/2.46.0/lib/glib-2.0/include;/usr/local/opt/gettext/include
+GTK2_LDFLAGS:INTERNAL=-L/usr/local/Cellar/gtk+/2.24.28_2/lib;-L/usr/local/Cellar/pango/1.38.0/lib;-L/usr/local/Cellar/atk/2.18.0/lib;-L/usr/local/Cellar/cairo/1.14.2_1/lib;-L/usr/local/Cellar/gdk-pixbuf/2.32.0/lib;-L/usr/local/Cellar/glib/2.46.0/lib;-L/usr/local/opt/gettext/lib;-lgtk-quartz-2.0;-lgdk-quartz-2.0;-lpangocairo-1.0;-lpango-1.0;-latk-1.0;-lcairo;-lgdk_pixbuf-2.0;-lgio-2.0;-lgobject-2.0;-lglib-2.0;-lintl
+GTK2_LDFLAGS_OTHER:INTERNAL=
+GTK2_LIBDIR:INTERNAL=/usr/local/Cellar/gtk+/2.24.28_2/lib
+GTK2_LIBRARIES:INTERNAL=gtk-quartz-2.0;gdk-quartz-2.0;pangocairo-1.0;pango-1.0;atk-1.0;cairo;gdk_pixbuf-2.0;gio-2.0;gobject-2.0;glib-2.0;intl
+GTK2_LIBRARY_DIRS:INTERNAL=/usr/local/Cellar/gtk+/2.24.28_2/lib;/usr/local/Cellar/pango/1.38.0/lib;/usr/local/Cellar/atk/2.18.0/lib;/usr/local/Cellar/cairo/1.14.2_1/lib;/usr/local/Cellar/gdk-pixbuf/2.32.0/lib;/usr/local/Cellar/glib/2.46.0/lib;/usr/local/opt/gettext/lib
+GTK2_LIBS:INTERNAL=
+GTK2_LIBS_L:INTERNAL=
+GTK2_LIBS_OTHER:INTERNAL=
+GTK2_LIBS_PATHS:INTERNAL=
+//ADVANCED property for variable: GTK2_PANGOCAIRO_LIBRARY_DEBUG
+GTK2_PANGOCAIRO_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_PANGOCAIRO_LIBRARY_RELEASE
+GTK2_PANGOCAIRO_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_PANGOFT2_LIBRARY_DEBUG
+GTK2_PANGOFT2_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_PANGOFT2_LIBRARY_RELEASE
+GTK2_PANGOFT2_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_PANGOXFT_LIBRARY_DEBUG
+GTK2_PANGOXFT_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_PANGOXFT_LIBRARY_RELEASE
+GTK2_PANGOXFT_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_PANGO_INCLUDE_DIR
+GTK2_PANGO_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_PANGO_LIBRARY_DEBUG
+GTK2_PANGO_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTK2_PANGO_LIBRARY_RELEASE
+GTK2_PANGO_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
+GTK2_PREFIX:INTERNAL=/usr/local/Cellar/gtk+/2.24.28_2
+GTK2_STATIC_CFLAGS:INTERNAL=-D_REENTRANT;-I/usr/local/Cellar/gtk+/2.24.28_2/include/gtk-2.0;-I/usr/local/Cellar/gtk+/2.24.28_2/lib/gtk-2.0/include;-I/usr/local/Cellar/pango/1.38.0/include/pango-1.0;-I/usr/local/Cellar/harfbuzz/1.0.3/include/harfbuzz;-I/usr/local/Cellar/pango/1.38.0/include/pango-1.0;-I/usr/local/Cellar/atk/2.18.0/include/atk-1.0;-I/usr/local/Cellar/cairo/1.14.2_1/include/cairo;-I/usr/local/Cellar/pixman/0.32.6/include/pixman-1;-I/usr/local/Cellar/fontconfig/2.11.1/include;-I/usr/local/Cellar/freetype/2.5.3_1/include/freetype2;-I/usr/local/Cellar/freetype/2.6_1/include/freetype2;-I/usr/local/Cellar/libpng/1.6.18/include/libpng16;-I/usr/local/Cellar/gdk-pixbuf/2.32.0/include/gdk-pixbuf-2.0;-I/usr/local/Cellar/libpng/1.6.18/include/libpng16;-I/usr/local/Cellar/glib/2.46.0/include/glib-2.0;-I/usr/local/Cellar/glib/2.46.0/lib/glib-2.0/include;-I/usr/local/opt/gettext/include
+GTK2_STATIC_CFLAGS_I:INTERNAL=
+GTK2_STATIC_CFLAGS_OTHER:INTERNAL=-D_REENTRANT
+GTK2_STATIC_INCLUDE_DIRS:INTERNAL=/usr/local/Cellar/gtk+/2.24.28_2/include/gtk-2.0;/usr/local/Cellar/gtk+/2.24.28_2/lib/gtk-2.0/include;/usr/local/Cellar/pango/1.38.0/include/pango-1.0;/usr/local/Cellar/harfbuzz/1.0.3/include/harfbuzz;/usr/local/Cellar/pango/1.38.0/include/pango-1.0;/usr/local/Cellar/atk/2.18.0/include/atk-1.0;/usr/local/Cellar/cairo/1.14.2_1/include/cairo;/usr/local/Cellar/pixman/0.32.6/include/pixman-1;/usr/local/Cellar/fontconfig/2.11.1/include;/usr/local/Cellar/freetype/2.5.3_1/include/freetype2;/usr/local/Cellar/freetype/2.6_1/include/freetype2;/usr/local/Cellar/libpng/1.6.18/include/libpng16;/usr/local/Cellar/gdk-pixbuf/2.32.0/include/gdk-pixbuf-2.0;/usr/local/Cellar/libpng/1.6.18/include/libpng16;/usr/local/Cellar/glib/2.46.0/include/glib-2.0;/usr/local/Cellar/glib/2.46.0/lib/glib-2.0/include;/usr/local/opt/gettext/include
+GTK2_STATIC_LDFLAGS:INTERNAL=-L/usr/local/Cellar/gtk+/2.24.28_2/lib;-L/usr/local/Cellar/pango/1.38.0/lib;-L/usr/local/Cellar/harfbuzz/1.0.3/lib;-L/usr/local/Cellar/pango/1.38.0/lib;-L/usr/local/Cellar/atk/2.18.0/lib;-L/usr/local/Cellar/cairo/1.14.2_1/lib;-L/usr/local/Cellar/pixman/0.32.6/lib;-L/usr/local/Cellar/fontconfig/2.11.1/lib;-L/usr/local/Cellar/freetype/2.5.3_1/lib;-L/usr/local/Cellar/freetype/2.6_1/lib;-L/usr/local/Cellar/libpng/1.6.17/lib;-L/usr/local/Cellar/libpng/1.6.18/lib;-L/usr/local/Cellar/gdk-pixbuf/2.32.0/lib;-L/usr/local/Cellar/libpng/1.6.18/lib;-L/usr/local/Cellar/glib/2.46.0/lib;-L/usr/local/Cellar/libffi/3.0.13/lib;-L/usr/local/Cellar/glib/2.46.0/lib;-L/usr/local/opt/gettext/lib;-lgtk-quartz-2.0;-lgdk-quartz-2.0;-lpangocairo-1.0;-lpangoft2-1.0;-lharfbuzz;-framework;ApplicationServices;-lpango-1.0;-lm;-latk-1.0;-lcairo;-lz;-lpixman-1;-lfontconfig;-lexpat;-lfreetype;-lz;-lbz2;-lpng16;-lz;-lpng16;-lz;-lgdk_pixbuf-2.0;-lm;-lpng16;-lz;-lgio-2.0;-lz;-lresolv;-Wl,-framework,Foundation;-Wl,-framework,Carbon;-lgmodule-2.0;-lgobject-2.0;-lffi;-lglib-2.0;-lintl;-liconv;-Wl,-framework,Carbon;-Wl,-framework,Foundation
+GTK2_STATIC_LDFLAGS_OTHER:INTERNAL=-framework;ApplicationServices;-Wl,-framework,Foundation;-Wl,-framework,Carbon;-Wl,-framework,Foundation
+GTK2_STATIC_LIBDIR:INTERNAL=
+GTK2_STATIC_LIBRARIES:INTERNAL=gtk-quartz-2.0;gdk-quartz-2.0;pangocairo-1.0;pangoft2-1.0;harfbuzz;pango-1.0;m;atk-1.0;cairo;z;pixman-1;fontconfig;expat;freetype;z;bz2;png16;z;png16;z;gdk_pixbuf-2.0;m;png16;z;gio-2.0;z;resolv;gmodule-2.0;gobject-2.0;ffi;glib-2.0;intl;iconv
+GTK2_STATIC_LIBRARY_DIRS:INTERNAL=/usr/local/Cellar/gtk+/2.24.28_2/lib;/usr/local/Cellar/pango/1.38.0/lib;/usr/local/Cellar/harfbuzz/1.0.3/lib;/usr/local/Cellar/pango/1.38.0/lib;/usr/local/Cellar/atk/2.18.0/lib;/usr/local/Cellar/cairo/1.14.2_1/lib;/usr/local/Cellar/pixman/0.32.6/lib;/usr/local/Cellar/fontconfig/2.11.1/lib;/usr/local/Cellar/freetype/2.5.3_1/lib;/usr/local/Cellar/freetype/2.6_1/lib;/usr/local/Cellar/libpng/1.6.17/lib;/usr/local/Cellar/libpng/1.6.18/lib;/usr/local/Cellar/gdk-pixbuf/2.32.0/lib;/usr/local/Cellar/libpng/1.6.18/lib;/usr/local/Cellar/glib/2.46.0/lib;/usr/local/Cellar/libffi/3.0.13/lib;/usr/local/Cellar/glib/2.46.0/lib;/usr/local/opt/gettext/lib
+GTK2_STATIC_LIBS:INTERNAL=
+GTK2_STATIC_LIBS_L:INTERNAL=
+GTK2_STATIC_LIBS_OTHER:INTERNAL=
+GTK2_STATIC_LIBS_PATHS:INTERNAL=
+GTK2_VERSION:INTERNAL=2.24.28
+//ADVANCED property for variable: GTK2_X11_INCLUDE_DIR
+GTK2_X11_INCLUDE_DIR-ADVANCED:INTERNAL=1
+GTK2_gtk+-2.0_INCLUDEDIR:INTERNAL=
+GTK2_gtk+-2.0_LIBDIR:INTERNAL=
+GTK2_gtk+-2.0_PREFIX:INTERNAL=
+GTK2_gtk+-2.0_VERSION:INTERNAL=
+//ADVANCED property for variable: LUA_INCLUDE_DIR
+LUA_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LUA_LIBRARY
+LUA_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: OPENGL_INCLUDE_DIR
 OPENGL_INCLUDE_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: OPENGL_gl_LIBRARY
 OPENGL_gl_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: OPENGL_glu_LIBRARY
 OPENGL_glu_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: PKG_CONFIG_EXECUTABLE
+PKG_CONFIG_EXECUTABLE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: PNG_LIBRARY_DEBUG
+PNG_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: PNG_LIBRARY_RELEASE
+PNG_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: PNG_PNG_INCLUDE_DIR
+PNG_PNG_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_ICE_INCLUDE_PATH
+X11_ICE_INCLUDE_PATH-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_ICE_LIB
+X11_ICE_LIB-ADVANCED:INTERNAL=1
+//Have library /opt/X11/lib/libX11.dylib;/opt/X11/lib/libXext.dylib
+X11_LIB_X11_SOLO:INTERNAL=1
+//ADVANCED property for variable: X11_SM_INCLUDE_PATH
+X11_SM_INCLUDE_PATH-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_SM_LIB
+X11_SM_LIB-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_X11_INCLUDE_PATH
+X11_X11_INCLUDE_PATH-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_X11_LIB
+X11_X11_LIB-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_XRes_INCLUDE_PATH
+X11_XRes_INCLUDE_PATH-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_XRes_LIB
+X11_XRes_LIB-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_XShm_INCLUDE_PATH
+X11_XShm_INCLUDE_PATH-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_XSync_INCLUDE_PATH
+X11_XSync_INCLUDE_PATH-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_XTest_INCLUDE_PATH
+X11_XTest_INCLUDE_PATH-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_XTest_LIB
+X11_XTest_LIB-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xaccessrules_INCLUDE_PATH
+X11_Xaccessrules_INCLUDE_PATH-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xaccessstr_INCLUDE_PATH
+X11_Xaccessstr_INCLUDE_PATH-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xau_INCLUDE_PATH
+X11_Xau_INCLUDE_PATH-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xau_LIB
+X11_Xau_LIB-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xcomposite_INCLUDE_PATH
+X11_Xcomposite_INCLUDE_PATH-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xcomposite_LIB
+X11_Xcomposite_LIB-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xcursor_INCLUDE_PATH
+X11_Xcursor_INCLUDE_PATH-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xcursor_LIB
+X11_Xcursor_LIB-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xdamage_INCLUDE_PATH
+X11_Xdamage_INCLUDE_PATH-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xdamage_LIB
+X11_Xdamage_LIB-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xdmcp_INCLUDE_PATH
+X11_Xdmcp_INCLUDE_PATH-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xdmcp_LIB
+X11_Xdmcp_LIB-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xext_LIB
+X11_Xext_LIB-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xfixes_INCLUDE_PATH
+X11_Xfixes_INCLUDE_PATH-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xfixes_LIB
+X11_Xfixes_LIB-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xft_INCLUDE_PATH
+X11_Xft_INCLUDE_PATH-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xft_LIB
+X11_Xft_LIB-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xi_INCLUDE_PATH
+X11_Xi_INCLUDE_PATH-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xi_LIB
+X11_Xi_LIB-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xinerama_INCLUDE_PATH
+X11_Xinerama_INCLUDE_PATH-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xinerama_LIB
+X11_Xinerama_LIB-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xinput_INCLUDE_PATH
+X11_Xinput_INCLUDE_PATH-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xinput_LIB
+X11_Xinput_LIB-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xkb_INCLUDE_PATH
+X11_Xkb_INCLUDE_PATH-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xkbfile_INCLUDE_PATH
+X11_Xkbfile_INCLUDE_PATH-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xkbfile_LIB
+X11_Xkbfile_LIB-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xkblib_INCLUDE_PATH
+X11_Xkblib_INCLUDE_PATH-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xlib_INCLUDE_PATH
+X11_Xlib_INCLUDE_PATH-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xmu_INCLUDE_PATH
+X11_Xmu_INCLUDE_PATH-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xmu_LIB
+X11_Xmu_LIB-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xpm_INCLUDE_PATH
+X11_Xpm_INCLUDE_PATH-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xpm_LIB
+X11_Xpm_LIB-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xrandr_INCLUDE_PATH
+X11_Xrandr_INCLUDE_PATH-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xrandr_LIB
+X11_Xrandr_LIB-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xrender_INCLUDE_PATH
+X11_Xrender_INCLUDE_PATH-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xrender_LIB
+X11_Xrender_LIB-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xscreensaver_INCLUDE_PATH
+X11_Xscreensaver_INCLUDE_PATH-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xscreensaver_LIB
+X11_Xscreensaver_LIB-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xshape_INCLUDE_PATH
+X11_Xshape_INCLUDE_PATH-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xt_INCLUDE_PATH
+X11_Xt_INCLUDE_PATH-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xt_LIB
+X11_Xt_LIB-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xutil_INCLUDE_PATH
+X11_Xutil_INCLUDE_PATH-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xv_INCLUDE_PATH
+X11_Xv_INCLUDE_PATH-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xv_LIB
+X11_Xv_LIB-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xxf86misc_LIB
+X11_Xxf86misc_LIB-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_Xxf86vm_LIB
+X11_Xxf86vm_LIB-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_dpms_INCLUDE_PATH
+X11_dpms_INCLUDE_PATH-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_xf86misc_INCLUDE_PATH
+X11_xf86misc_INCLUDE_PATH-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: X11_xf86vmode_INCLUDE_PATH
+X11_xf86vmode_INCLUDE_PATH-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: ZLIB_INCLUDE_DIR
+ZLIB_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: ZLIB_LIBRARY
+ZLIB_LIBRARY-ADVANCED:INTERNAL=1
+__pkg_config_checked_GTK2:INTERNAL=1
 

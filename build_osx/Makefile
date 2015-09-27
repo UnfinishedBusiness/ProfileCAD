@@ -285,6 +285,60 @@ Keyboard.cpp.s:
 	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/Keyboard.cpp.s
 .PHONY : Keyboard.cpp.s
 
+Lua.o: Lua.cpp.o
+
+.PHONY : Lua.o
+
+# target to build an object file
+Lua.cpp.o:
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/Lua.cpp.o
+.PHONY : Lua.cpp.o
+
+Lua.i: Lua.cpp.i
+
+.PHONY : Lua.i
+
+# target to preprocess a source file
+Lua.cpp.i:
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/Lua.cpp.i
+.PHONY : Lua.cpp.i
+
+Lua.s: Lua.cpp.s
+
+.PHONY : Lua.s
+
+# target to generate assembly for a file
+Lua.cpp.s:
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/Lua.cpp.s
+.PHONY : Lua.cpp.s
+
+Machine.o: Machine.cpp.o
+
+.PHONY : Machine.o
+
+# target to build an object file
+Machine.cpp.o:
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/Machine.cpp.o
+.PHONY : Machine.cpp.o
+
+Machine.i: Machine.cpp.i
+
+.PHONY : Machine.i
+
+# target to preprocess a source file
+Machine.cpp.i:
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/Machine.cpp.i
+.PHONY : Machine.cpp.i
+
+Machine.s: Machine.cpp.s
+
+.PHONY : Machine.s
+
+# target to generate assembly for a file
+Machine.cpp.s:
+	$(MAKE) -f CMakeFiles/ProfileCAD.dir/build.make CMakeFiles/ProfileCAD.dir/Machine.cpp.s
+.PHONY : Machine.cpp.s
+
 Menu.o: Menu.cpp.o
 
 .PHONY : Menu.o
@@ -474,6 +528,12 @@ help:
 	@echo "... Keyboard.o"
 	@echo "... Keyboard.i"
 	@echo "... Keyboard.s"
+	@echo "... Lua.o"
+	@echo "... Lua.i"
+	@echo "... Lua.s"
+	@echo "... Machine.o"
+	@echo "... Machine.i"
+	@echo "... Machine.s"
 	@echo "... Menu.o"
 	@echo "... Menu.i"
 	@echo "... Menu.s"

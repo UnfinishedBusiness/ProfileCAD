@@ -451,3 +451,75 @@ Linking CXX executable cmTC_c8bac
     Feature record: CXX_FEATURE:0cxx_variable_templates
     Feature record: CXX_FEATURE:0cxx_variadic_macros
     Feature record: CXX_FEATURE:0cxx_variadic_templates
+Determining if the function XOpenDisplay exists in the /opt/X11/lib/libX11.dylib;/opt/X11/lib/libXext.dylib passed with the following output:
+Change Dir: /Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_a034d/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_a034d.dir/build.make CMakeFiles/cmTC_a034d.dir/build
+Building C object CMakeFiles/cmTC_a034d.dir/CheckFunctionExists.c.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=XOpenDisplay   -o CMakeFiles/cmTC_a034d.dir/CheckFunctionExists.c.o   -c /usr/local/Cellar/cmake/3.3.1/share/cmake/Modules/CheckFunctionExists.c
+Linking C executable cmTC_a034d
+/usr/local/Cellar/cmake/3.3.1/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a034d.dir/link.txt --verbose=1
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=XOpenDisplay -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_a034d.dir/CheckFunctionExists.c.o  -o cmTC_a034d  -L/opt/X11/lib  /opt/X11/lib/libX11.dylib /opt/X11/lib/libXext.dylib -Wl,-rpath,/opt/X11/lib 
+
+
+Determining if the function gethostbyname exists passed with the following output:
+Change Dir: /Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_1dfdf/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_1dfdf.dir/build.make CMakeFiles/cmTC_1dfdf.dir/build
+Building C object CMakeFiles/cmTC_1dfdf.dir/CheckFunctionExists.c.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=gethostbyname   -o CMakeFiles/cmTC_1dfdf.dir/CheckFunctionExists.c.o   -c /usr/local/Cellar/cmake/3.3.1/share/cmake/Modules/CheckFunctionExists.c
+Linking C executable cmTC_1dfdf
+/usr/local/Cellar/cmake/3.3.1/bin/cmake -E cmake_link_script CMakeFiles/cmTC_1dfdf.dir/link.txt --verbose=1
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=gethostbyname -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_1dfdf.dir/CheckFunctionExists.c.o  -o cmTC_1dfdf  
+
+
+Determining if the function connect exists passed with the following output:
+Change Dir: /Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_72617/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_72617.dir/build.make CMakeFiles/cmTC_72617.dir/build
+Building C object CMakeFiles/cmTC_72617.dir/CheckFunctionExists.c.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=connect   -o CMakeFiles/cmTC_72617.dir/CheckFunctionExists.c.o   -c /usr/local/Cellar/cmake/3.3.1/share/cmake/Modules/CheckFunctionExists.c
+Linking C executable cmTC_72617
+/usr/local/Cellar/cmake/3.3.1/bin/cmake -E cmake_link_script CMakeFiles/cmTC_72617.dir/link.txt --verbose=1
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=connect -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_72617.dir/CheckFunctionExists.c.o  -o cmTC_72617  
+
+
+Determining if the function remove exists passed with the following output:
+Change Dir: /Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_becdd/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_becdd.dir/build.make CMakeFiles/cmTC_becdd.dir/build
+Building C object CMakeFiles/cmTC_becdd.dir/CheckFunctionExists.c.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=remove   -o CMakeFiles/cmTC_becdd.dir/CheckFunctionExists.c.o   -c /usr/local/Cellar/cmake/3.3.1/share/cmake/Modules/CheckFunctionExists.c
+Linking C executable cmTC_becdd
+/usr/local/Cellar/cmake/3.3.1/bin/cmake -E cmake_link_script CMakeFiles/cmTC_becdd.dir/link.txt --verbose=1
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=remove -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_becdd.dir/CheckFunctionExists.c.o  -o cmTC_becdd  
+
+
+Determining if the function shmat exists passed with the following output:
+Change Dir: /Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_84b22/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_84b22.dir/build.make CMakeFiles/cmTC_84b22.dir/build
+Building C object CMakeFiles/cmTC_84b22.dir/CheckFunctionExists.c.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=shmat   -o CMakeFiles/cmTC_84b22.dir/CheckFunctionExists.c.o   -c /usr/local/Cellar/cmake/3.3.1/share/cmake/Modules/CheckFunctionExists.c
+Linking C executable cmTC_84b22
+/usr/local/Cellar/cmake/3.3.1/bin/cmake -E cmake_link_script CMakeFiles/cmTC_84b22.dir/link.txt --verbose=1
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=shmat -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_84b22.dir/CheckFunctionExists.c.o  -o cmTC_84b22  
+
+
+Determining if the function IceConnectionNumber exists in the ICE passed with the following output:
+Change Dir: /Users/admin/Documents/Projects/ProfileCAD/build_osx/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_506b4/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_506b4.dir/build.make CMakeFiles/cmTC_506b4.dir/build
+Building C object CMakeFiles/cmTC_506b4.dir/CheckFunctionExists.c.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=IceConnectionNumber   -o CMakeFiles/cmTC_506b4.dir/CheckFunctionExists.c.o   -c /usr/local/Cellar/cmake/3.3.1/share/cmake/Modules/CheckFunctionExists.c
+Linking C executable cmTC_506b4
+/usr/local/Cellar/cmake/3.3.1/bin/cmake -E cmake_link_script CMakeFiles/cmTC_506b4.dir/link.txt --verbose=1
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=IceConnectionNumber -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_506b4.dir/CheckFunctionExists.c.o  -o cmTC_506b4  -L/opt/X11/lib  -lICE -Wl,-rpath,/opt/X11/lib 
+
+
