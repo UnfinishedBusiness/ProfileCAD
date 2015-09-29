@@ -6,14 +6,6 @@ float mouseClose = 0.010;
 float mouseTolerance()
 {
   float t = mouseClose / sceneGetScale();
-  /*if (t < 0.0005) //we dont want to be less than vector point spacing!
-  {
-    return 0.0005;
-  }
-  else
-  {
-    return t;
-  }*/
 }
 point_t mouseVectorIntersection;
 bool mouseVector(cadEntity e, point_t p)
@@ -27,7 +19,7 @@ bool mouseVector(cadEntity e, point_t p)
       return false; //Mouse is outside of segment box
     }
     float floater_distance = geoGetLineLength(line_t{geoGetLineMidpoint(floater), geoGetLineMidpoint(e.Line)});
-    if (floater_distance > mouseTolerance() + .1)
+    if (floater_distance > mouseTolerance() + mouseClose)
     {
       return false; //Floater is two far away from Line
     }
@@ -38,6 +30,56 @@ bool mouseVector(cadEntity e, point_t p)
       mouseVectorIntersection = geoGetIntersection(intersection_line, e.Line);
       return true; //Mouse is within Selection tolerance
     }
+  }
+  if (e.Type == CAD_ARC)
+  {
+    arc_t floater = e.Arc;
+    floater.radius = geoGetLineLength(line_t{floater.center, p});
+
+    //floater.direction = !floater.direction; //This is the vodo arc bug i still havnt traced
+    floater.start = geoGetArcPoint(floater, geoRadiansToDegrees(geoGetLineAngle(line_t{floater.center, floater.start})) + 180);
+    floater.end = geoGetArcPoint(floater, geoRadiansToDegrees(geoGetLineAngle(line_t{floater.center, floater.end})) + 180);
+
+    //float start_angle = geoRadiansToDegrees(geoGetLineAngle(line_t{floater.center, floater.start})) - 90;
+    //float end_angle = geoRadiansToDegrees(geoGetLineAngle(line_t{floater.center, floater.end})) - 90;
+    float start_angle = geoRadiansToDegrees(geoGetArcStartAngle(floater));
+    float end_angle = geoRadiansToDegrees(geoGetArcEndAngle(floater));
+    float current_angle = 360 - fabs(geoRadiansToDegrees(geoGetLineAngle(line_t{floater.center, p})) -180);
+
+    /*if (floater.radius < e.Arc.radius + mouseTolerance() && floater.radius > e.Arc.radius - mouseTolerance() )
+    {
+      //e.Arc = floater;
+      //cadShowLiveEntity(e);
+      cout << "Start angle: " << start_angle << " End Angle: " << end_angle << " Current angle: " << current_angle << "\r";
+      fflush(stdout);
+      return true;
+    }
+    else
+    {
+      return false;
+    }*/
+
+
+    if (current_angle >= start_angle && current_angle <= end_angle || floater.start == floater.end )
+    {
+      if (floater.radius < e.Arc.radius + mouseTolerance() && floater.radius > e.Arc.radius - mouseTolerance() )
+      {
+        //cout << "+";
+        //fflush(stdout);
+        cout << "Start angle: " << start_angle << " End Angle: " << end_angle << " Current angle: " << current_angle << "\r";
+        fflush(stdout);
+
+        //e.Arc = floater;
+        //cadShowLiveEntity(e);
+        return true;
+      }
+      else
+      {
+        return false;
+      }
+    }
+    //return true;
+
   }
   return false;
 }
@@ -351,7 +393,7 @@ void mousePassiveMotionCallback(int x, int y)
       e.MouseOver = false;
       cadEdit(a, e);
       cadHideSelectionBox();
-      //cadHideLiveEntity();
+      cadHideLiveEntity();
       cadRedraw();
     }
   }
