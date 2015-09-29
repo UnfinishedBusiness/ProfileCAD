@@ -24,13 +24,6 @@ struct cadEntity{
   bool Removed;
   int Index;
   int SelectionIndex;
-  std::vector<point_t> Vector;
-
-  /*cadEntity& operator=(const cadEntity& a)
-  {
-
-    return *this;
-  }*/
 };
 
 struct cadUndoStructure{
@@ -56,6 +49,8 @@ int cadGetEntityArrayIndex();
 point_t cadScreenCordToCadCord(int x, int y);
 point_t cadCadCordToScreenCord(point_t);
 
+void cadShowLiveEntity(cadEntity);
+void cadHideLiveEntity();
 void cadShowSelectionBox(point_t);
 void cadHideSelectionBox();
 

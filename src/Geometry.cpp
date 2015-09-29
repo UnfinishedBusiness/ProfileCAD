@@ -223,6 +223,15 @@ line_t geoExtendLineAngle(point_t s, float angle, float d)
   point_t new_endpoint = point_t{ s.x + (fabs(d) * cosf(angle)), s.y + (fabs(d) * sinf(angle)) };
   return line_t{ s, new_endpoint };
 }
+float geoGetPerpendicularDistance(line_t l , point_t p)
+{
+  line_t perp = geoGetPerpendicularLine(l, p, 1); //Just give it any length, we have to find the intersection point
+  float l_length = geoGetLineLength(l);
+  float angle = geoGetLineAngle(l);
+  line_t parallel_line = geoExtendLineAngle(p, angle, l_length / 2);
+  point_t intersection = geoGetIntersection(parallel_line, perp);
+  return geoGetLineLength(line_t{intersection, geoGetLineMidpoint(l)});
+}
 line_t geoGetPerpendicularLine(line_t l, point_t direction, float d)
 {
   int angle;

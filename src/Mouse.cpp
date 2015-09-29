@@ -15,6 +15,17 @@ float mouseTolerance()
     return t;
   }
 }
+bool mouseVector(cadEntity e, point_t p)
+{
+  if (e.Type == CAD_LINE)
+  {
+    //line_t perpendicular = geoGetPerpendicularLine(e.Line, p, 1);
+    //line_t parallel = geoGetParallelLine(e.Line, p, geoGetLineLength(line_t{geoGetIntersection(perpendicular, e.Line), geoGetLineMidpoint(e.Line)}));
+    e.Line = geoGetParallelLine(e.Line, p, mouseTolerance());
+    return true;
+  }
+  return false;
+}
 bool snapArcCenter = true;
 bool snapArcEndpoints = true;
 bool snapLineMidpoint = true;
@@ -284,7 +295,7 @@ void mouseCallback(int btn, int state, int x, int y)
             cadEdit(a, e);
             return;
           }
-          bool selected = false;
+          /*bool selected = false;
           if (snapVector)
           {
             for (x = 0; x < e.Vector.size(); x++)
@@ -318,7 +329,7 @@ void mouseCallback(int btn, int state, int x, int y)
             V printf("\t%s Entity #%d Clicked!\n", KGREEN, e.Index ,KNORMAL);
             cadEdit(a, e);
             cadRedraw();
-          }
+          }*/
         }
     }
     if(btn==GLUT_RIGHT_BUTTON && state==GLUT_DOWN)
@@ -450,9 +461,25 @@ void mousePassiveMotionCallback(int x, int y)
       cadEdit(a, e);
       return; //Only highlight one entity
     }
+    else if (mouseVector(e, pos) && snapVector)
+    {
+      //mouseLastMouseOver = e.Vector[x];
+      //e.MouseOver = true;
+      //cadEdit(a, e);
+      line_t floater = geoGetParallelLine(e.Line, pos, geoGetPerpendicularDistance(e.Line , pos));
+      e.Line = floater;
+      cadShowLiveEntity(e);
+      cadRedraw();
+      break;
+    }
     else
     {
-      bool selected = false;
+      e.MouseOver = false;
+      cadEdit(a, e);
+      cadHideSelectionBox();
+      //cadHideLiveEntity();
+      cadRedraw();
+      /*bool selected = false;
       if (snapVector)
       {
         for (x = 0; x < e.Vector.size(); x++)
@@ -476,8 +503,8 @@ void mousePassiveMotionCallback(int x, int y)
         cadEdit(a, e);
         cadHideSelectionBox();
         cadRedraw();
-      }
+      }*/
     }
   }
-  V fflush(stdout);
+  //V fflush(stdout);
 }

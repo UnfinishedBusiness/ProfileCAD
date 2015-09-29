@@ -22,6 +22,7 @@ std::vector<point_t> geoGetPointsOfLine(line_t, float);
 
 line_t geoReplaceClosestEndpoint(line_t, point_t);
 
+float geoGetPerpendicularDistance(line_t, point_t);
 line_t geoGetPerpendicularLine(line_t, point_t, float);
 line_t geoGetParallelLine(line_t, point_t, float);
 float geoGetLineLength(line_t);

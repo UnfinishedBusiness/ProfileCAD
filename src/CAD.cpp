@@ -6,6 +6,7 @@ using namespace std;
 #define CAD_LINE 0x01
 
 cadSelectionBox_t cadSelectionBox;
+cadEntity cadLiveEntity;
 
 vector<cadUndoStructure> cadUndoArray;
 
@@ -189,6 +190,17 @@ void cadHideSelectionBox()
 {
   cadSelectionBox.visable = false;
 }
+
+void cadShowLiveEntity(cadEntity e)
+{
+  e.Removed = false;
+  cadLiveEntity = e;
+}
+void cadHideLiveEntity()
+{
+  cadLiveEntity.Removed = true;
+}
+
 void cadRender()
 {
   if (cadSelectionBox.visable == true)
@@ -196,6 +208,20 @@ void cadRender()
     //printf("Rendering selection box!\n");
     sceneColor(DARKGREY);
     cadRenderArc(cadSelectionBox.a);
+  }
+  if (cadLiveEntity.Removed == false)
+  {
+    //printf("Rendering live entity!\n");
+    if (cadLiveEntity.Type == CAD_LINE)
+    {
+      sceneColor(DARKGREY);
+      cadRenderLine(cadLiveEntity.Line);
+    }
+    if (cadLiveEntity.Type == CAD_ARC)
+    {
+      sceneColor(DARKGREY);
+      cadRenderArc(cadLiveEntity.Arc);
+    }
   }
   for (int i = 0; i < cadEntityArrayIndex; i++)
   {
@@ -235,15 +261,6 @@ void cadRenderLine(line_t l)
   glVertex3f((GLfloat) l.start.x, l.start.y, l.start.z);
   glVertex3f((GLfloat) l.end.x, l.end.y, l.end.z);
   glEnd();
-
-  //glBegin(GL_POINTS);
-  cadEntityArray[l.parentIndex].Vector.clear();
-  cadEntityArray[l.parentIndex].Vector = geoGetPointsOfLine(l);
-  /*for (int x = 0; x < cadEntityArray[l.parentIndex].Vector.size(); x++)
-  {
-      glVertex3f((GLfloat) cadEntityArray[l.parentIndex].Vector[x].x, (GLfloat) cadEntityArray[l.parentIndex].Vector[x].y, 0);
-  }
-  glEnd();*/
 }
 void cadRenderArc(arc_t a)
 {
@@ -261,7 +278,6 @@ void cadRenderArc(arc_t a)
     glVertex3f(a.start.x, a.start.y, a.start.z);
     steps = geoGetIncludedAngle(a);
   }
-  cadEntityArray[a.parentIndex].Vector.clear();
   float inc_angle = 1; //Degrees
   steps++;
   for (int x=0; x < steps; x++)
@@ -275,11 +291,6 @@ void cadRenderArc(arc_t a)
       l = geoRotateLine(l, a.center, inc_angle);
     }
     glVertex3f(l.end.x, l.end.y, 0);
-    if (cadEntityArray[a.parentIndex].Vector.size() != steps) //Populate vector if it hasnt already been
-    {
-      cadEntityArray[a.parentIndex].Vector.push_back(point_t());
-      cadEntityArray[a.parentIndex].Vector[x] = l.end;
-    }
   }
   if (a.start != a.end)
   {
