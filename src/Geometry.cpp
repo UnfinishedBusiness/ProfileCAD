@@ -225,12 +225,51 @@ line_t geoExtendLineAngle(point_t s, float angle, float d)
 }
 float geoGetPerpendicularDistance(line_t l , point_t p)
 {
-  line_t perp = geoGetPerpendicularLine(l, p, 1); //Just give it any length, we have to find the intersection point
+  /*line_t perp = geoGetPerpendicularLine(l, p, 1); //Just give it any length, we have to find the intersection point
   float l_length = geoGetLineLength(l);
   float angle = geoGetLineAngle(l);
   line_t parallel_line = geoExtendLineAngle(p, angle, l_length / 2);
   point_t intersection = geoGetIntersection(parallel_line, perp);
-  return geoGetLineLength(line_t{intersection, geoGetLineMidpoint(l)});
+  return geoGetLineLength(line_t{intersection, geoGetLineMidpoint(l)});*/
+  // Return minimum distance between line segment vw and point p
+
+  //double FindDistanceToSegment(double x1, double y1, double x2, double y2, double pointX, double pointY)
+  float x1 = l.start.x;
+  float y1 = l.start.y;
+  float x2 = l.end.x;
+  float y2 = l.end.y;
+  float pointX = p.x;
+  float pointY = p.y;
+  float diffX = x2 - x1;
+  float diffY = y2 - y1;
+  if ((diffX == 0) && (diffY == 0))
+  {
+      diffX = pointX - x1;
+      diffY = pointY - y1;
+      return sqrtf(diffX * diffX + diffY * diffY);
+  }
+  float t = ((pointX - x1) * diffX + (pointY - y1) * diffY) / (diffX * diffX + diffY * diffY);
+  if (t < 0)
+  {
+      //point is nearest to the first point i.e x1 and y1
+      diffX = pointX - x1;
+      diffY = pointY - y1;
+  }
+  else if (t > 1)
+  {
+      //point is nearest to the end point i.e x2 and y2
+      diffX = pointX - x2;
+      diffY = pointY - y2;
+  }
+  else
+  {
+      //if perpendicular line intersect the line segment.
+      diffX = pointX - (x1 + t * diffX);
+      diffY = pointY - (y1 + t * diffY);
+  }
+  //returning shortest distance
+  return sqrtf(diffX * diffX + diffY * diffY);
+
 }
 line_t geoGetPerpendicularLine(line_t l, point_t direction, float d)
 {

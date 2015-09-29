@@ -19,12 +19,13 @@ bool mouseVector(cadEntity e, point_t p)
 {
   if (e.Type == CAD_LINE)
   {
-    //line_t perpendicular = geoGetPerpendicularLine(e.Line, p, 1);
-    //line_t parallel = geoGetParallelLine(e.Line, p, geoGetLineLength(line_t{geoGetIntersection(perpendicular, e.Line), geoGetLineMidpoint(e.Line)}));
-    e.Line = geoGetParallelLine(e.Line, p, mouseTolerance());
-    return true;
+    line_t floater = geoGetParallelLine(e.Line, p, geoGetPerpendicularDistance(e.Line , p));
+    if (geoGetLineLength(line_t{geoGetLineMidpoint(floater), geoGetLineMidpoint(e.Line)}) < mouseTolerance())
+    {
+      return true;
+    }
   }
-  return false;
+  return true;
 }
 bool snapArcCenter = true;
 bool snapArcEndpoints = true;
@@ -477,7 +478,7 @@ void mousePassiveMotionCallback(int x, int y)
       e.MouseOver = false;
       cadEdit(a, e);
       cadHideSelectionBox();
-      //cadHideLiveEntity();
+      cadHideLiveEntity();
       cadRedraw();
       /*bool selected = false;
       if (snapVector)
