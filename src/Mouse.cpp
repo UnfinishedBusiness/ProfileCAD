@@ -53,7 +53,8 @@ int button;
 point_t mouseCurrent;
 mouse_t mouseLast;
 point_t mouseLastSnapClick;
-point_t mouseLastMouseOver;
+point_t mouseLastMouseOverPoint;
+cadEntity mouseLastMouseOverEntity;
 
 std::vector<string> mouseUISnapIndicator()
 {
@@ -175,177 +176,26 @@ void mouseCallback(int btn, int state, int x, int y)
     }
     if(btn==GLUT_LEFT_BUTTON && state==GLUT_DOWN)
     {
-        //V printf("Left button at X: %d, Y: %d\n", x, y);
-        mouseLast.x = x;
-        mouseLast.y = y;
-        cadEntity e;
-
-        std::vector<cadEntity> MouseOver = cadGetMouseOver();
-        //V cout << KRED << "(mousePassiveMotionCallback) MouseOver Size => " << KGREEN << MouseOver.size() << KNORMAL << endl;
-        if (MouseOver.size() == 2 && snapIntersection)
+      if (cadGetEntityArray(mouseLastMouseOverEntity.Index).MouseOver == true)
+      {
+        if (mod == GLUT_ACTIVE_CTRL)
         {
-          //V cout << KRED << "(mousePassiveMotionCallback) MouseOver => " << KGREEN << "Calculating intersection point!" << KNORMAL << endl;
-          point_t intersection = geoGetIntersection(MouseOver[0].Line, MouseOver[1].Line);
-          if (geoInTolerance(pos.x, intersection.x, mouseTolerance()) && geoInTolerance(pos.y, intersection.y, mouseTolerance()))
-          {
-            if (mod == GLUT_ACTIVE_CTRL)
-            {
-              MouseOver[0].Selected = false;
-            }
-            else
-            {
-              MouseOver[0].Selected = true;
-              MouseOver[0].SelectionIndex = cadCountSelection() + 1;
-              //debugDumpArcStructure(e.Arc);
-            }
-            MouseOver[0].SelectedAt = intersection;
-            mouseLastSnapClick = intersection;
-            cadEdit(MouseOver[0].Index, MouseOver[0]);
-            return;
-          }
+          mouseLastMouseOverEntity.Selected = false;
         }
-        for (int a = 0; a < cadGetEntityArrayIndex(); a++)
+        else
         {
-          e = cadGetEntityArray(a);
-          if (geoInTolerance(pos.x, e.Arc.start.x, mouseTolerance()) && geoInTolerance(pos.y, e.Arc.start.y, mouseTolerance()) && !e.Removed && e.Type == CAD_ARC && snapArcEndpoints)
-          {
-            if (mod == GLUT_ACTIVE_CTRL)
-            {
-              e.Selected = false;
-            }
-            else
-            {
-              e.Selected = true;
-              e.SelectionIndex = cadCountSelection() + 1;
-              //debugDumpArcStructure(e.Arc);
-            }
-            e.SelectedAt = e.Arc.start;
-            mouseLastSnapClick = e.SelectedAt;
-            cadEdit(a, e);
-            return;
-          }
-          if (geoInTolerance(pos.x, e.Arc.end.x, mouseTolerance()) && geoInTolerance(pos.y, e.Arc.end.y, mouseTolerance()) && !e.Removed && e.Type == CAD_ARC && snapArcEndpoints)
-          {
-            if (mod == GLUT_ACTIVE_CTRL)
-            {
-              e.Selected = false;
-            }
-            else
-            {
-              e.Selected = true;
-              e.SelectionIndex = cadCountSelection() + 1;
-              //debugDumpArcStructure(e.Arc);
-            }
-            e.SelectedAt = e.Arc.end;
-            mouseLastSnapClick = e.SelectedAt;
-            cadEdit(a, e);
-            return;
-          }
-          if (geoInTolerance(pos.x, e.Arc.center.x, mouseTolerance()) && geoInTolerance(pos.y, e.Arc.center.y, mouseTolerance()) && !e.Removed && e.Type == CAD_ARC && snapArcCenter)
-          {
-            if (mod == GLUT_ACTIVE_CTRL)
-            {
-              e.Selected = false;
-            }
-            else
-            {
-              e.Selected = true;
-              e.SelectionIndex = cadCountSelection() + 1;
-              //debugDumpArcStructure(e.Arc);
-            }
-            e.SelectedAt = e.Arc.center;
-            mouseLastSnapClick = e.SelectedAt;
-            cadEdit(a, e);
-            return;
-          }
-          if (geoInTolerance(pos.x, e.Line.start.x, mouseTolerance()) && geoInTolerance(pos.y, e.Line.start.y, mouseTolerance()) && !e.Removed && e.Type == CAD_LINE && snapLineEndpoints)
-          {
-            V printf("\t%s Entity #%d Start point Clicked!%s\n", KGREEN, a, KNORMAL);
-            if (mod == GLUT_ACTIVE_CTRL)
-            {
-              e.Selected = false;
-            }
-            else
-            {
-              e.Selected = true;
-              e.SelectionIndex = cadCountSelection() + 1;
-            }
-            e.SelectedAt = e.Line.start;
-            //V printf("\t%s Entity #%d Start point Clicked! X: %.6f, Y: %.6f%s\n", KGREEN, a, e.Line.start.x, e.Line.start.y, KNORMAL);
-            mouseLastSnapClick = e.SelectedAt;
-            cadEdit(a, e);
-            return;
-          }
-          if (geoInTolerance(pos.x, e.Line.end.x, mouseTolerance()) && geoInTolerance(pos.y, e.Line.end.y, mouseTolerance()) && !e.Removed && e.Type == CAD_LINE && snapLineEndpoints)
-          {
-            V printf("\t%s Entity #%d End point Clicked!%s\n", KGREEN, a, KNORMAL);
-            if (mod == GLUT_ACTIVE_CTRL)
-            {
-              e.Selected = false;
-            }
-            else
-            {
-              e.Selected = true;
-              e.SelectionIndex = cadCountSelection() + 1;
-            }
-            e.SelectedAt = e.Line.end;
-            //V printf("\t%s Entity #%d End point Clicked! X: %.6f, Y: %.6f%s\n", KGREEN, a, e.Line.end.x, e.Line.end.y, KNORMAL);
-            mouseLastSnapClick = e.SelectedAt;
-            cadEdit(a, e);
-            return;
-          }
-          if (geoInTolerance(pos.x, geoGetLineMidpoint(e.Line).x, mouseTolerance()) && geoInTolerance(pos.y, geoGetLineMidpoint(e.Line).y, mouseTolerance()) && !e.Removed && e.Type == CAD_LINE && snapLineMidpoint)
-          {
-            if (mod == GLUT_ACTIVE_CTRL)
-            {
-              e.Selected = false;
-            }
-            else
-            {
-              e.Selected = true;
-              e.SelectionIndex = cadCountSelection() + 1;
-            }
-            e.SelectedAt = geoGetLineMidpoint(e.Line);
-            mouseLastSnapClick = e.SelectedAt;
-            cadEdit(a, e);
-            return;
-          }
-          /*bool selected = false;
-          if (snapVector)
-          {
-            for (x = 0; x < e.Vector.size(); x++)
-            {
-              if ( geoInTolerance(pos.x, e.Vector[x].x, mouseTolerance()) && geoInTolerance(pos.y, e.Vector[x].y, mouseTolerance()) )
-              {
-                //cout << KRED << "Vecter[" << x << "] = " << e.Vector[x].x << ", " << e.Vector[x].y << KNORMAL << endl;
-                selected = true;
-                //cadShowSelectionBox(e.Vector[x]);
-                mouseLastMouseOver = e.Vector[x];
-                e.MouseOver = true;
-                cadEdit(a, e);
-                cadRedraw();
-                break;
-              }
-            }
-          }
-          if (selected)
-          {
-            e.MouseOver = false;
-            if (mod == GLUT_ACTIVE_CTRL)
-            {
-              e.Selected = false;
-            }
-            else
-            {
-              e.Selected = true;
-              e.SelectionIndex = cadCountSelection() + 1;
-            }
-            e.SelectedAt = mouseLastMouseOver;
-            V printf("\t%s Entity #%d Clicked!\n", KGREEN, e.Index ,KNORMAL);
-            cadEdit(a, e);
-            cadRedraw();
-          }*/
+          mouseLastMouseOverEntity.Selected = true;
+          mouseLastMouseOverEntity.SelectionIndex = cadCountSelection() + 1;
+          //debugDumpArcStructure(e.Arc);
         }
+        cadEdit(mouseLastMouseOverEntity.Index, mouseLastMouseOverEntity);
+      }
+      if (cadGetSelectionBox().visable == true)
+      {
+        mouseLastSnapClick = cadGetSelectionBox().a.center;
+        mouseLastMouseOverEntity.SelectedAt = mouseLastSnapClick;
+        cadEdit(mouseLastMouseOverEntity.Index, mouseLastMouseOverEntity);
+      }
     }
     if(btn==GLUT_RIGHT_BUTTON && state==GLUT_DOWN)
     {
@@ -412,7 +262,7 @@ void mousePassiveMotionCallback(int x, int y)
     if (geoInTolerance(pos.x, intersection.x, mouseTolerance()) && geoInTolerance(pos.y, intersection.y, mouseTolerance()))
     {
       cadShowSelectionBox(intersection);
-      mouseLastMouseOver = intersection;
+      mouseLastMouseOverPoint = intersection;
       return;
     }
     else
@@ -429,7 +279,8 @@ void mousePassiveMotionCallback(int x, int y)
     {
       //uiEdit(0, uiEntity{UI_TEXT, RED, "Start point", UI_MENU_POSITION});
       cadShowSelectionBox(e.Arc.start);
-      mouseLastMouseOver = e.Arc.start;
+      mouseLastMouseOverPoint = e.Arc.start;
+      mouseLastMouseOverEntity = e;
       e.MouseOver = true;
       cadEdit(a, e);
       return;
@@ -438,7 +289,8 @@ void mousePassiveMotionCallback(int x, int y)
     {
       //uiEdit(0, uiEntity{UI_TEXT, RED, "End point", UI_MENU_POSITION});
       cadShowSelectionBox(e.Arc.end);
-      mouseLastMouseOver = e.Arc.end;
+      mouseLastMouseOverPoint = e.Arc.end;
+      mouseLastMouseOverEntity = e;
       e.MouseOver = true;
       cadEdit(a, e);
       return;
@@ -447,7 +299,8 @@ void mousePassiveMotionCallback(int x, int y)
     {
       //uiEdit(0, uiEntity{UI_TEXT, RED, "Center point", UI_MENU_POSITION});
       cadShowSelectionBox(e.Arc.center);
-      mouseLastMouseOver = e.Arc.center;
+      mouseLastMouseOverPoint = e.Arc.center;
+      mouseLastMouseOverEntity = e;
       e.MouseOver = true;
       cadEdit(a, e);
       return;
@@ -455,7 +308,8 @@ void mousePassiveMotionCallback(int x, int y)
     else if (geoInTolerance(pos.x, e.Line.start.x, mouseTolerance()) && geoInTolerance(pos.y, e.Line.start.y, mouseTolerance()) && !e.Removed && e.Type == CAD_LINE && snapArcCenter)
     {
       cadShowSelectionBox(e.Line.start);
-      mouseLastMouseOver = e.Line.start;
+      mouseLastMouseOverPoint = e.Line.start;
+      mouseLastMouseOverEntity = e;
       e.MouseOver = true;
       cadEdit(a, e);
       return;
@@ -463,7 +317,8 @@ void mousePassiveMotionCallback(int x, int y)
     else if (geoInTolerance(pos.x, e.Line.end.x, mouseTolerance()) && geoInTolerance(pos.y, e.Line.end.y, mouseTolerance()) && !e.Removed && e.Type == CAD_LINE && snapLineEndpoints)
     {
       cadShowSelectionBox(e.Line.end);
-      mouseLastMouseOver = e.Line.end;
+      mouseLastMouseOverPoint = e.Line.end;
+      mouseLastMouseOverEntity = e;
       e.MouseOver = true;
       cadEdit(a, e);
       return;
@@ -471,14 +326,16 @@ void mousePassiveMotionCallback(int x, int y)
     else if (geoInTolerance(pos.x, geoGetLineMidpoint(e.Line).x, mouseTolerance()) && geoInTolerance(pos.y, geoGetLineMidpoint(e.Line).y, mouseTolerance()) && !e.Removed && e.Type == CAD_LINE && snapLineMidpoint)
     {
       cadShowSelectionBox(geoGetLineMidpoint(e.Line));
-      mouseLastMouseOver = geoGetLineMidpoint(e.Line);
+      mouseLastMouseOverPoint = geoGetLineMidpoint(e.Line);
+      mouseLastMouseOverEntity = e;
       e.MouseOver = true;
       cadEdit(a, e);
       return; //Only highlight one entity
     }
     else if (mouseVector(e, pos) && snapVector)
     {
-      mouseLastMouseOver = mouseVectorIntersection;
+      mouseLastMouseOverPoint = mouseVectorIntersection;
+      mouseLastMouseOverEntity = e;
       e.MouseOver = true;
       cadEdit(a, e);
 

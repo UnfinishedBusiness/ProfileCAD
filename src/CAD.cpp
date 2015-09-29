@@ -174,6 +174,10 @@ std::vector<cadEntity> cadGetMouseOver()
   }
   return e;
 }
+cadSelectionBox_t cadGetSelectionBox()
+{
+  return cadSelectionBox;
+}
 void cadShowSelectionBox(point_t p)
 {
   //line_t geoGetPerpendicularLine(line_t, point_t, float);

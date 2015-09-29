@@ -51,6 +51,8 @@ point_t cadCadCordToScreenCord(point_t);
 
 void cadShowLiveEntity(cadEntity);
 void cadHideLiveEntity();
+
+cadSelectionBox_t cadGetSelectionBox();
 void cadShowSelectionBox(point_t);
 void cadHideSelectionBox();
 
