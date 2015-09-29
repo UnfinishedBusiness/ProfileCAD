@@ -218,7 +218,7 @@ line_t geoExtendLine(line_t l, float d)
     return line_t{ l.start, new_endpoint };
   }
 }
-line_t geoExtendLineAngle(point_t s, float angle, float d)
+line_t geoExtendLineAngle(point_t s, float angle, float d) //Angle is in radians
 {
   point_t new_endpoint = point_t{ s.x + (fabs(d) * cosf(angle)), s.y + (fabs(d) * sinf(angle)) };
   return line_t{ s, new_endpoint };

@@ -6,26 +6,40 @@ float mouseClose = 0.010;
 float mouseTolerance()
 {
   float t = mouseClose / sceneGetScale();
-  if (t < 0.0005) //we dont want to be less than vector point spacing!
+  /*if (t < 0.0005) //we dont want to be less than vector point spacing!
   {
     return 0.0005;
   }
   else
   {
     return t;
-  }
+  }*/
 }
+point_t mouseVectorIntersection;
 bool mouseVector(cadEntity e, point_t p)
 {
   if (e.Type == CAD_LINE)
   {
     line_t floater = geoGetParallelLine(e.Line, p, geoGetPerpendicularDistance(e.Line , p));
-    if (geoGetLineLength(line_t{geoGetLineMidpoint(floater), geoGetLineMidpoint(e.Line)}) < mouseTolerance())
+    float distance_from_midpoint = geoGetLineLength(line_t{geoGetLineMidpoint(floater), p});
+    if (distance_from_midpoint > (geoGetLineLength(floater) / 2))
     {
-      return true;
+      return false; //Mouse is outside of segment box
+    }
+    float floater_distance = geoGetLineLength(line_t{geoGetLineMidpoint(floater), geoGetLineMidpoint(e.Line)});
+    if (floater_distance > mouseTolerance() + .1)
+    {
+      return false; //Floater is two far away from Line
+    }
+    if ( floater_distance < mouseTolerance())
+    {
+      line_t intersection_line = line_t{p, p};
+      intersection_line = geoExtendLineAngle(p, geoGetLineAngle(floater) + geoDegreesToRadians(90), 1);
+      mouseVectorIntersection = geoGetIntersection(intersection_line, e.Line);
+      return true; //Mouse is within Selection tolerance
     }
   }
-  return true;
+  return false;
 }
 bool snapArcCenter = true;
 bool snapArcEndpoints = true;
@@ -464,12 +478,14 @@ void mousePassiveMotionCallback(int x, int y)
     }
     else if (mouseVector(e, pos) && snapVector)
     {
-      //mouseLastMouseOver = e.Vector[x];
-      //e.MouseOver = true;
-      //cadEdit(a, e);
-      line_t floater = geoGetParallelLine(e.Line, pos, geoGetPerpendicularDistance(e.Line , pos));
-      e.Line = floater;
-      cadShowLiveEntity(e);
+      mouseLastMouseOver = mouseVectorIntersection;
+      e.MouseOver = true;
+      cadEdit(a, e);
+
+      //line_t floater = geoGetParallelLine(e.Line, pos, geoGetPerpendicularDistance(e.Line , pos));
+      //line_t floater = line_t{pos, mouseVectorIntersection};
+      //e.Line = floater;
+      //cadShowLiveEntity(e);
       cadRedraw();
       break;
     }
@@ -478,33 +494,8 @@ void mousePassiveMotionCallback(int x, int y)
       e.MouseOver = false;
       cadEdit(a, e);
       cadHideSelectionBox();
-      cadHideLiveEntity();
+      //cadHideLiveEntity();
       cadRedraw();
-      /*bool selected = false;
-      if (snapVector)
-      {
-        for (x = 0; x < e.Vector.size(); x++)
-        {
-          if ( geoInTolerance(pos.x, e.Vector[x].x, mouseTolerance()) && geoInTolerance(pos.y, e.Vector[x].y, mouseTolerance()) )
-          {
-            //cout << KRED << "Vecter[" << x << "] = " << e.Vector[x].x << ", " << e.Vector[x].y << KNORMAL << endl;
-            selected = true;
-            //cadShowSelectionBox(e.Vector[x]);
-            mouseLastMouseOver = e.Vector[x];
-            e.MouseOver = true;
-            cadEdit(a, e);
-            cadRedraw();
-            break;
-          }
-        }
-      }
-      if (!selected)
-      {
-        e.MouseOver = false;
-        cadEdit(a, e);
-        cadHideSelectionBox();
-        cadRedraw();
-      }*/
     }
   }
   //V fflush(stdout);
