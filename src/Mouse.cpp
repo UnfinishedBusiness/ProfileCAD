@@ -8,6 +8,8 @@ float mouseTolerance()
   float t = mouseClose / sceneGetScale();
 }
 point_t mouseVectorIntersection;
+vector<cadEntity> mouseLive;
+
 bool mouseVector(cadEntity e, point_t p)
 {
   if (e.Type == CAD_LINE)
@@ -46,29 +48,50 @@ bool mouseVector(cadEntity e, point_t p)
     float end_angle = geoRadiansToDegrees(geoGetArcEndAngle(floater));
     float current_angle = 360 - fabs(geoRadiansToDegrees(geoGetLineAngle(line_t{floater.center, p})) -180);
 
-    /*if (floater.radius < e.Arc.radius + mouseTolerance() && floater.radius > e.Arc.radius - mouseTolerance() )
+
+    /*
+    mouseLive.clear();
+    e.Arc = floater;
+    mouseLive.push_back(e);
+    e.Type = CAD_LINE;
+    e.Line = line_t{floater.center, p};
+    mouseLive.push_back(e);
+    e.Line = line_t{floater.center, floater.start};
+    mouseLive.push_back(e);
+
+    e.Line = line_t{floater.center, floater.end};
+    mouseLive.push_back(e);
+
+    e.Type = CAD_NOTE;
+    e.Note.size = 12;
+    e.Note.text = to_string(current_angle);
+    e.Note.pos = geoGetLineMidpoint(line_t{floater.center, p});
+    e.Note.pos.x += 0.010;
+    e.Note.pos.y += 0.010;
+    mouseLive.push_back(e);
+
+    line_t midpoint_intersector = line_t{geoGetLineMidpoint(line_t{floater.center, floater.start}),  geoGetLineMidpoint({floater.center, floater.end})};
+
+    e.Type = CAD_LINE;
+    e.Line = midpoint_intersector;
+    mouseLive.push_back(e);
+
+    if (geoDoLinesIntersect(midpoint_intersector, line_t{floater.center, p}))
     {
-      //e.Arc = floater;
-      //cadShowLiveEntity(e);
-      cout << "Start angle: " << start_angle << " End Angle: " << end_angle << " Current angle: " << current_angle << "\r";
+      cout << "+";
       fflush(stdout);
-      return true;
     }
-    else
-    {
-      return false;
-    }*/
+    cadShowLiveEntity(mouseLive);
+    */
 
-
-    if (current_angle >= start_angle && current_angle <= end_angle || floater.start == floater.end )
+    //if (current_angle >= start_angle && current_angle <= end_angle || floater.start == floater.end )
+    line_t midpoint_intersector = line_t{geoGetLineMidpoint(line_t{floater.center, floater.start}),  geoGetLineMidpoint({floater.center, floater.end})};
+    if (geoDoLinesIntersect(midpoint_intersector, line_t{floater.center, p}) || current_angle <= end_angle || floater.start == floater.end)
     {
       if (floater.radius < e.Arc.radius + mouseTolerance() && floater.radius > e.Arc.radius - mouseTolerance() )
       {
         //cout << "+";
         //fflush(stdout);
-        cout << "Start angle: " << start_angle << " End Angle: " << end_angle << " Current angle: " << current_angle << "\r";
-        fflush(stdout);
-
         //e.Arc = floater;
         //cadShowLiveEntity(e);
         return true;

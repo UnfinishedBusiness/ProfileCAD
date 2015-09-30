@@ -105,6 +105,13 @@ struct arc_t{
   //Operation data
   int parentIndex;
 };
+struct note_t{
+  int size;
+  point_t pos;
+  std::string text;
+
+  int parentIndex;
+};
 struct color_t{
   float r, g, b, a;
   bool operator==(const color_t& rhs)

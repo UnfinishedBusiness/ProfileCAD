@@ -13,6 +13,7 @@ point_t geoGetIntersection(arc_t, line_t);
 point_t geoGetIntersection(line_t, arc_t);
 point_t geoGetIntersection(arc_t, arc_t);
 
+bool geoDoLinesIntersect(line_t, line_t);
 point_t geoGetLineIntersection(line_t, line_t);
 point_t geoGetLineArcIntersection(arc_t, line_t);
 point_t geoGetArcIntersection(arc_t, arc_t);

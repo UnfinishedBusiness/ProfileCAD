@@ -105,7 +105,35 @@ point_t geoGetArcIntersection(arc_t a1, arc_t a2)
   }
   return point_t{NAN, NAN, NAN}; //No intersection;
 }
+bool geoDoLinesIntersect(line_t l1, line_t l2)
+{
+  // Store the values for fast access and easy
+  // equations-to-code conversion
+  point_t p1 = l1.start;
+  point_t p2 = l1.end;
+  point_t p3 = l2.start;
+  point_t p4 = l2.end;
+  
+  float x1 = p1.x, x2 = p2.x, x3 = p3.x, x4 = p4.x;
+  float y1 = p1.y, y2 = p2.y, y3 = p3.y, y4 = p4.y;
 
+  float d = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+  // If d is zero, there is no intersection
+  if (d == 0) return false;
+
+  // Get the x and y
+  float pre = (x1*y2 - y1*x2), post = (x3*y4 - y3*x4);
+  float x = ( pre * (x3 - x4) - (x1 - x2) * post ) / d;
+  float y = ( pre * (y3 - y4) - (y1 - y2) * post ) / d;
+
+  // Check if the x and y coordinates are within both lines
+  if ( x < min(x1, x2) || x > max(x1, x2) ||
+  x < min(x3, x4) || x > max(x3, x4) ) return false;
+  if ( y < min(y1, y2) || y > max(y1, y2) ||
+  y < min(y3, y4) || y > max(y3, y4) ) return false;
+
+  return true;
+}
 vector<point_t> geoGetPointsOfLine(line_t l)
 {
   float scale = 0.005 / sceneGetScale();

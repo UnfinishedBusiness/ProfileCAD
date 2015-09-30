@@ -5,6 +5,7 @@
 
 #define CAD_ARC 0x00
 #define CAD_LINE 0x01
+#define CAD_NOTE 0x02
 
 struct cadSelectionBox_t{
   arc_t a;
@@ -16,6 +17,7 @@ struct cadEntity{
   color_t Color;
   line_t Line;
   arc_t Arc;
+  note_t Note;
 
   //Operational data
   bool Selected;
@@ -40,8 +42,11 @@ std::vector<cadEntity> cadGetSelected();
 std::vector<cadEntity>  cadGetMouseOver();
 int cadCountSelection();
 void cadSetColor(color_t);
+
 void cadRenderLine(line_t);
 void cadRenderArc(arc_t);
+void cadRenderNote(note_t);
+
 void cadRender();
 void cadRedraw();
 cadEntity cadGetEntityArray(int);
@@ -49,7 +54,7 @@ int cadGetEntityArrayIndex();
 point_t cadScreenCordToCadCord(int x, int y);
 point_t cadCadCordToScreenCord(point_t);
 
-void cadShowLiveEntity(cadEntity);
+void cadShowLiveEntity(std::vector<cadEntity>);
 void cadHideLiveEntity();
 
 cadSelectionBox_t cadGetSelectionBox();

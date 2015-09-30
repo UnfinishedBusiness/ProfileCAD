@@ -2,11 +2,8 @@
 
 using namespace std;
 
-#define CAD_ARC 0x00
-#define CAD_LINE 0x01
-
 cadSelectionBox_t cadSelectionBox;
-cadEntity cadLiveEntity;
+vector<cadEntity> cadLiveEntity;
 
 vector<cadUndoStructure> cadUndoArray;
 
@@ -195,14 +192,18 @@ void cadHideSelectionBox()
   cadSelectionBox.visable = false;
 }
 
-void cadShowLiveEntity(cadEntity e)
+void cadShowLiveEntity(vector<cadEntity> e)
 {
-  e.Removed = false;
-  cadLiveEntity = e;
+  cadLiveEntity.clear();
+  for (int x = 0; x < e.size(); x++)
+  {
+    e[x].Removed = false;
+    cadLiveEntity.push_back(e[x]);
+  }
 }
 void cadHideLiveEntity()
 {
-  cadLiveEntity.Removed = true;
+  cadLiveEntity.clear();
 }
 
 void cadRender()
@@ -213,22 +214,43 @@ void cadRender()
     sceneColor(DARKGREY);
     cadRenderArc(cadSelectionBox.a);
   }
-  if (cadLiveEntity.Removed == false)
+  for (int x = 0; x < cadLiveEntity.size(); x++)
   {
-    //printf("Rendering live entity!\n");
-    if (cadLiveEntity.Type == CAD_LINE)
+    if (cadLiveEntity[x].Removed == false)
     {
-      sceneColor(DARKGREY);
-      cadRenderLine(cadLiveEntity.Line);
-    }
-    if (cadLiveEntity.Type == CAD_ARC)
-    {
-      sceneColor(DARKGREY);
-      cadRenderArc(cadLiveEntity.Arc);
+      //printf("Rendering live entity!\n");
+      if (cadLiveEntity[x].Type == CAD_LINE)
+      {
+        sceneColor(DARKGREY);
+        cadRenderLine(cadLiveEntity[x].Line);
+      }
+      if (cadLiveEntity[x].Type == CAD_ARC)
+      {
+        sceneColor(DARKGREY);
+        cadRenderArc(cadLiveEntity[x].Arc);
+      }
+      if (cadLiveEntity[x].Type == CAD_NOTE)
+      {
+        sceneColor(DARKGREY);
+        cadRenderNote(cadLiveEntity[x].Note);
+      }
     }
   }
   for (int i = 0; i < cadEntityArrayIndex; i++)
   {
+      if (cadEntityArray[i].Type == CAD_NOTE && !cadEntityArray[i].Removed) //Where a line and its not been removed
+      {
+        if (cadEntityArray[i].Selected || cadEntityArray[i].MouseOver)
+        {
+          sceneColor(WHITE);
+        }
+        else
+        {
+          sceneColor(cadEntityArray[i].Color);
+        }
+        cadEntityArray[i].Note.parentIndex = i;
+        cadRenderNote(cadEntityArray[i].Note);
+      }
       if (cadEntityArray[i].Type == CAD_LINE && !cadEntityArray[i].Removed) //Where a line and its not been removed
       {
         if (cadEntityArray[i].Selected || cadEntityArray[i].MouseOver)
@@ -258,6 +280,24 @@ void cadRender()
       }
   }
 }
+void cadRenderNote(note_t n)
+{
+  //cout << "Render note!" << endl;
+  void *font;
+  if (n.size == 12)
+  {
+    font = GLUT_BITMAP_HELVETICA_12;
+  }
+  else
+  {
+    return;
+  }
+  glRasterPos3f(n.pos.x, n.pos.y, n.pos.z);
+  for (int i = 0; i < n.text.length(); i++)
+  {
+    glutBitmapCharacter (font, n.text[i]);
+  }
+}
 void cadRenderLine(line_t l)
 {
   glLineWidth(1);
@@ -283,7 +323,7 @@ void cadRenderArc(arc_t a)
     steps = geoGetIncludedAngle(a);
   }
   float inc_angle = 1; //Degrees
-  steps++;
+  steps++; //Shifts plus one
   for (int x=0; x < steps; x++)
   {
     if (a.direction == ARC_CW)
