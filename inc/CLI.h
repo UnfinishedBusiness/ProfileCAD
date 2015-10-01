@@ -58,6 +58,12 @@ void *cliXformTrim2();
 void *cliXformTrimCircle();
 void *cliXformFilletRadius();
 
+void *cliXformRotateSelected();
 void *cliXformRotateAll();
-void cliXformRotateAll_Callback();
+void cliXformRotate_Callback(); //We use the same callback for both methods
+
+void *cliXformTranslateSelected();
+void *cliXformTranslateAll();
+void cliXformTranslate_Callback(); //We use the same callback for both methods
+
 #endif
