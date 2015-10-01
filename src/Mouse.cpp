@@ -5,7 +5,7 @@ using namespace std;
 float mouseClose = 0.010;
 float mouseTolerance()
 {
-  float t = mouseClose / sceneGetScale();
+  return mouseClose / sceneGetScale();
 }
 point_t mouseVectorIntersection;
 vector<cadEntity> mouseLive;
