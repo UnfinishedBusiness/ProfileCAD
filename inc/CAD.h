@@ -41,6 +41,7 @@ void cadRemoveSelected();
 std::vector<cadEntity> cadGetSelected();
 std::vector<cadEntity>  cadGetMouseOver();
 int cadCountSelection();
+int cadCountEntitys();
 void cadSetColor(color_t);
 
 void cadRenderLine(line_t);

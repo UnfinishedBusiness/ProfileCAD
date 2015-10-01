@@ -159,6 +159,18 @@ int cadCountSelection()
   }
   return r;
 }
+int cadCountEntitys()
+{
+  int r = 0;
+  for (int i = 0; i < cadEntityArrayIndex; i++)
+  {
+      if (!cadEntityArray[i].Removed) //Make sure were selected and not removed
+      {
+        r++;
+      }
+  }
+  return r;
+}
 std::vector<cadEntity> cadGetMouseOver()
 {
   std::vector<cadEntity> e; //Unordered
