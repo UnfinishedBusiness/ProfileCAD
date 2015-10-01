@@ -176,9 +176,16 @@ void dialogMouse(int btn, int state, int x, int y)
   int LastFocus = CurrentFocus;
   if(btn==GLUT_LEFT_BUTTON && state==GLUT_UP)
   {
-    point_t pos = cadScreenCordToCadCord(x, y);
-    pos.x = pos.x * 0.1;
-    pos.y = pos.y * 0.1;
+    //point_t pos = point_t{ (x - ((float)DIALOG_WIDTH/2)), -1*(y - ((float)DIALOG_HEIGHT/2)) };
+    //pos.x = pos.x * (1/(float)DIALOG_WIDTH);
+    //pos.y = pos.y * (1/(float)DIALOG_HEIGHT) - 0.050;
+
+    glutSetWindow(dialogWindow);
+    point_t pos = dialogMouseUnproject(x, y);
+    //pos.x = pos.x * 0.1;
+    //pos.y = pos.y * 0.1;
+
+    V cout << KRED << "(dialogMouse) Clicked raw" << KCYAN << " => " << KGREEN << "X: " << x << " Y: " << y << KNORMAL << endl;
     V cout << KRED << "(dialogMouse) Clicked" << KCYAN << " => " << KGREEN << "X: " << pos.x << " Y: " << pos.y << KNORMAL << endl;
     for (int x = 0; x < Dialog.size(); x++)
     {
@@ -195,6 +202,7 @@ void dialogMouse(int btn, int state, int x, int y)
         if ((pos.x > Dialog[x].Textbox.Position.x && pos.y > Dialog[x].Textbox.Position.y ) && (pos.x < (Dialog[x].Textbox.Position.x + Dialog[x].Textbox.Width) && pos.y < (Dialog[x].Textbox.Position.y + Dialog[x].Textbox.Height) ))
         {
           //cout << "Clicked textbox " << x << endl;
+          Dialog[x].Textbox.Text = "";
           CurrentFocus = x;
         }
       }
@@ -208,6 +216,27 @@ void dialogMouse(int btn, int state, int x, int y)
   {
     glutPostRedisplay();
   }
+}
+point_t dialogMouseUnproject(int x, int y)
+{
+  GLint viewport[4]; //var to hold the viewport info
+  GLdouble modelview[16]; //var to hold the modelview info
+  GLdouble projection[16]; //var to hold the projection matrix info
+  GLfloat winX, winY, winZ; //variables to hold screen x,y,z coordinates
+  GLdouble worldX, worldY, worldZ; //variables to hold world x,y,z coordinates
+  glGetDoublev( GL_MODELVIEW_MATRIX, modelview ); //get the modelview info
+  glGetDoublev( GL_PROJECTION_MATRIX, projection ); //get the projection matrix info
+  glGetIntegerv( GL_VIEWPORT, viewport ); //get the viewport info
+  winX = (float)x;
+  winY = (float)viewport[3] - (float)y;
+  winZ = 0;
+  //get the world coordinates from the screen coordinates
+  gluUnProject( winX, winY, winZ, modelview, projection, viewport, &worldX, &worldY, &worldZ);
+  //printf("tx: %.6f, ty: %.6f\n", sceneGetPanOffset().x, sceneGetPanOffset().y);
+  //worldX = (worldX/sceneGetScale());
+  //worldY = (worldY/sceneGetScale());
+  //point_t panOffset = sceneGetPanOffset();
+  return point_t{(float)worldX, (float)worldY, 0};
 }
 void dialogKeyboard(unsigned char key, int x, int y)
 {

@@ -21,4 +21,5 @@ void dialogInit();
 void dialogOpen(std::string);
 void dialogOpen();
 
+point_t dialogMouseUnproject(int x, int y);
 #endif

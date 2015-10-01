@@ -845,6 +845,8 @@ void cliXformRotateAll_Callback()
 
   cliScreenSelectAll();
   cadEntity e;
+  int start = 0;
+  if (!Operator) start = 1;
   for (int x = 0; x < cadGetEntityArrayIndex(); x++)
   {
       //cout << "X => " << x << " Index is => " << cadGetEntityArrayIndex() << endl;
@@ -853,7 +855,7 @@ void cliXformRotateAll_Callback()
       {
         if (e.Type == CAD_LINE)
         {
-          for (int i = 0; i < Steps; i++)
+          for (int i = start; i < Steps; i++)
           {
             e.Line.start = geoRotatePointAroundPoint(e.Line.start, Origin, Angle, Direction);
             e.Line.end = geoRotatePointAroundPoint(e.Line.end, Origin, Angle, Direction);
@@ -869,7 +871,7 @@ void cliXformRotateAll_Callback()
         }
         if (e.Type == CAD_ARC)
         {
-          for (int i = 0; i < Steps; i++)
+          for (int i = start; i < Steps; i++)
           {
             e.Arc.start = geoRotatePointAroundPoint(e.Arc.start, Origin, Angle, Direction);
             e.Arc.end = geoRotatePointAroundPoint(e.Arc.end, Origin, Angle, Direction);
