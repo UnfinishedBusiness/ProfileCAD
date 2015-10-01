@@ -72,12 +72,13 @@ void uiSnapIndicator()
       //cout << snap[x] << endl;
     }
   }
-  V cout << KRED << "(uiSnapIndicator) => " << KGREEN << s << KNORMAL << endl;
+  //V cout << KRED << "(uiSnapIndicator) => " << KGREEN << s << KNORMAL << endl;
   uiEdit(4, uiEntity{UI_TEXT, RED, s , UI_SNAP_POSITION});
 }
 void uiRender()
 {
   //D printf("(uiRender)\n");
+  uiSnapIndicator();
   for (int i = 0; i < uiEntityArrayIndex; i++)
   {
       if (uiEntityArray[i].Type == UI_TEXT)

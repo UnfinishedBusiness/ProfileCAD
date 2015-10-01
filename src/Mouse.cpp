@@ -172,6 +172,15 @@ std::vector<string> mouseUISnapIndicator()
   {
     r.push_back(string("Intersection - F"));
   }
+  r.push_back(string("Entitys - " + to_string(cadGetEntityArrayIndex())));
+
+  cadEntity e;
+  for (int a = 0; a < cadGetEntityArrayIndex(); a++)
+  {
+    e = cadGetEntityArray(a);
+  }
+
+  r.push_back(string("Selected - " + to_string(cadGetSelected().size())));
   return r;
 }
 point_t mouseCadGetCurrentPos()

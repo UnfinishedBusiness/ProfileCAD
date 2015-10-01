@@ -44,5 +44,5 @@ void menuCallback(int choice)
     case 7: mouseToggleVectorSnap(); break;
     case 8: Test(); break;
   }
-  uiSnapIndicator();
+  //uiSnapIndicator();
 }
