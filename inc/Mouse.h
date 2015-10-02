@@ -22,4 +22,8 @@ point_t mouseCadLastSnapClick();
 void mouseCallback(int, int, int, int);
 void mouseMotionCallback(int, int);
 void mousePassiveMotionCallback(int , int);
+
+void mouseLiveShow(std::string);
+void mouseLiveClear();
+
 #endif

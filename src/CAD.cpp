@@ -30,16 +30,23 @@ void cadUndo()
 }
 void cadAppend(cadEntity e)
 {
+  cadAppend(e, true);
+}
+void cadAppend(cadEntity e, bool undo)
+{
   e.Selected = false;
   e.Removed = false;
   e.Index = cadEntityArrayIndex;
   cadEntityArray.push_back(cadEntity());
   cadEntityArray[cadEntityArrayIndex] = e;
-  if (cadUndoArray.size() > 9) //Only keep ten elements
+  if (undo == true)
   {
-    cadUndoArray.erase(cadUndoArray.begin());
+    if (cadUndoArray.size() > 9) //Only keep ten elements
+    {
+      cadUndoArray.erase(cadUndoArray.begin());
+    }
+    cadUndoArray.push_back(cadUndoStructure{cadEntityArray, cadEntityArrayIndex});
   }
-  cadUndoArray.push_back(cadUndoStructure{cadEntityArray, cadEntityArrayIndex});
   cadEntityArrayIndex++;
   glutPostRedisplay();
 }

@@ -12,22 +12,6 @@ struct cadSelectionBox_t{
   bool visable;
 };
 
-struct cadEntity{
-  int Type; //Line or Arc
-  color_t Color;
-  line_t Line;
-  arc_t Arc;
-  note_t Note;
-
-  //Operational data
-  bool Selected;
-  bool MouseOver;
-  point_t SelectedAt;
-  bool Removed;
-  int Index;
-  int SelectionIndex;
-};
-
 struct cadUndoStructure{
   std::vector<cadEntity> e;
   int Index;
@@ -36,6 +20,7 @@ struct cadUndoStructure{
 void cadInit();
 void cadUndo();
 void cadAppend(cadEntity);
+void cadAppend(cadEntity, bool);
 void cadEdit(int, cadEntity);
 void cadRemoveSelected();
 std::vector<cadEntity> cadGetSelected();

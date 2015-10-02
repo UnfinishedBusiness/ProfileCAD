@@ -173,10 +173,12 @@ void *cliCreateLineVerticalOrigin()
       point_t End = { 0 , input };
       cadSetColor(CurrentColor);
       cadDrawLine(Start, End);
+      mouseLiveClear();
       return NULL;
     }
     textCallback = &cliCreateLineVerticalOrigin;
     TextInput = true;
+    mouseLiveShow("LineVerticalOrigin");
     cliPush("> ");
     uiEdit(0, uiEntity{UI_TEXT, RED, "Input Y coordinant!", UI_MENU_POSITION});
     return NULL;
@@ -195,6 +197,7 @@ void *cliCreateLineHorizontalOrigin()
   }
   textCallback = &cliCreateLineHorizontalOrigin;
   TextInput = true;
+  mouseLiveShow("LineHorizontalOrigin");
   cliPush("> ");
   uiEdit(0, uiEntity{UI_TEXT, RED, "Input X coordinant!", UI_MENU_POSITION});
   return NULL;
@@ -806,16 +809,24 @@ void *cliXformFilletRadius()
   uiEdit(0, uiEntity{UI_TEXT, RED, "Radius?", UI_MENU_POSITION});
   return NULL;
 }
+void cliXform_CopyClicked(bool c)
+{
+  dialogCheckboxSet("Move?", !c);
+}
+void cliXform_MoveClicked(bool c)
+{
+  dialogCheckboxSet("Copy?", !c);
+}
 void cliXformRotate_Callback()
 {
   bool Operator;
-  if (dialogTextboxGetString("Operator") == "move")
-  {
-    Operator = true;
-  }
-  else
+  if (dialogCheckboxGet("Copy?"))
   {
     Operator = false;
+  }
+  if (dialogCheckboxGet("Move?"))
+  {
+    Operator = true;
   }
   float Steps = fabs(atof(dialogTextboxGetString("Steps").c_str()));
   float Angle = atof(dialogTextboxGetString("Angle").c_str());
@@ -846,6 +857,7 @@ void cliXformRotate_Callback()
   cadEntity e;
   int start = 0;
   if (!Operator) start = 1;
+  if (!Operator) Steps++;
   for (int x = 0; x < cadGetEntityArrayIndex(); x++)
   {
       //cout << "X => " << x << " Index is => " << cadGetEntityArrayIndex() << endl;
@@ -854,7 +866,7 @@ void cliXformRotate_Callback()
       {
         if (e.Type == CAD_LINE)
         {
-          for (int i = start; i < Steps + 1; i++)
+          for (int i = start; i < Steps; i++)
           {
             e.Line.start = geoRotatePointAroundPoint(e.Line.start, Origin, Angle, Direction);
             e.Line.end = geoRotatePointAroundPoint(e.Line.end, Origin, Angle, Direction);
@@ -864,13 +876,13 @@ void cliXformRotate_Callback()
             }
             else
             {
-              cadAppend(e);
+              cadAppend(e, false);
             }
           }
         }
         if (e.Type == CAD_ARC)
         {
-          for (int i = start; i < Steps + 1; i++)
+          for (int i = start; i < Steps; i++)
           {
             e.Arc.start = geoRotatePointAroundPoint(e.Arc.start, Origin, Angle, Direction);
             e.Arc.end = geoRotatePointAroundPoint(e.Arc.end, Origin, Angle, Direction);
@@ -881,7 +893,7 @@ void cliXformRotate_Callback()
             }
             else
             {
-              cadAppend(e);
+              cadAppend(e, false);
             }
           }
         }
@@ -906,7 +918,7 @@ void *cliXformRotateSelected()
   point_t pos = point_t{-450, 320};
   dialogAddLabel(pos, "Steps?");
   pos.y -= 120;
-  dialogAddTextBox(pos, 500, 100, "Steps");
+  dialogAddTextBox(pos, 500, 100, "Steps", "1");
   pos.y -= 50;
 
   dialogAddLabel(pos, "Angle?");
@@ -917,11 +929,12 @@ void *cliXformRotateSelected()
   dialogAddLabel(pos, "Origin?");
   pos.y -= 120;
   dialogAddTextBox(pos, 500, 100, "Origin", o);
-  pos.y -= 50;
+  pos.y -= 100;
 
-  dialogAddLabel(pos, "Copy or Move?");
+  dialogAddCheckbox(pos, "Copy?", false, cliXform_CopyClicked);
   pos.y -= 120;
-  dialogAddTextBox(pos, 500, 100, "Operator", "move");
+
+  dialogAddCheckbox(pos, "Move?", true, cliXform_MoveClicked);
   pos.y -= 50;
 
   dialogAddButton(point_t{200, -350}, 200, 100, "OK", cliXformRotate_Callback);
@@ -930,13 +943,13 @@ void *cliXformRotateSelected()
 void cliXformTranslate_Callback()
 {
   bool Operator;
-  if (dialogTextboxGetString("Operator") == "move")
-  {
-    Operator = true;
-  }
-  else
+  if (dialogCheckboxGet("Copy?"))
   {
     Operator = false;
+  }
+  if (dialogCheckboxGet("Move?"))
+  {
+    Operator = true;
   }
   float Steps = fabs(atof(dialogTextboxGetString("Steps").c_str()));
   string FromString = dialogTextboxGetString("From");
@@ -964,6 +977,7 @@ void cliXformTranslate_Callback()
   cadEntity e;
   int start = 0;
   if (!Operator) start = 1;
+  if (!Operator) Steps++;
   for (int x = 0; x < cadGetEntityArrayIndex(); x++)
   {
       //cout << "X => " << x << " Index is => " << cadGetEntityArrayIndex() << endl;
@@ -972,7 +986,7 @@ void cliXformTranslate_Callback()
       {
         if (e.Type == CAD_LINE)
         {
-          for (int i = start; i < Steps + 1; i++)
+          for (int i = start; i < Steps; i++)
           {
             //e.Line.start = geoRotatePointAroundPoint(e.Line.start, Origin, Angle, Direction);
             //e.Line.end = geoRotatePointAroundPoint(e.Line.end, Origin, Angle, Direction);
@@ -985,13 +999,13 @@ void cliXformTranslate_Callback()
             }
             else
             {
-              cadAppend(e);
+              cadAppend(e, false);
             }
           }
         }
         if (e.Type == CAD_ARC)
         {
-          for (int i = start; i < Steps + 1; i++)
+          for (int i = start; i < Steps; i++)
           {
             //e.Arc.start = geoRotatePointAroundPoint(e.Arc.start, Origin, Angle, Direction);
             //e.Arc.end = geoRotatePointAroundPoint(e.Arc.end, Origin, Angle, Direction);
@@ -1006,7 +1020,7 @@ void cliXformTranslate_Callback()
             }
             else
             {
-              cadAppend(e);
+              cadAppend(e, false);
             }
           }
         }
@@ -1042,11 +1056,12 @@ void *cliXformTranslateSelected()
   dialogAddLabel(pos, "To?");
   pos.y -= 120;
   dialogAddTextBox(pos, 500, 100, "To");
-  pos.y -= 50;
+  pos.y -= 100;
 
-  dialogAddLabel(pos, "Copy or Move?");
+  dialogAddCheckbox(pos, "Copy?", false, cliXform_CopyClicked);
   pos.y -= 120;
-  dialogAddTextBox(pos, 500, 100, "Operator", "move");
+
+  dialogAddCheckbox(pos, "Move?", true, cliXform_MoveClicked);
   pos.y -= 50;
 
   dialogAddButton(point_t{200, -350}, 200, 100, "OK", cliXformTranslate_Callback);
@@ -1114,7 +1129,6 @@ menu_item_t menu[CLI_MENU_ITEMS] = {
       sub_menu_item_t{ "l", "translate",
         sub_sub_menu_item_t{ "a", "all entitys",  &cliXformTranslateAll },
         sub_sub_menu_item_t{ "s", "selected entitys", &cliXformTranslateSelected },
-        sub_sub_menu_item_t{ "p", "polar" },
       },
       sub_menu_item_t{ "o", "offset",
       sub_sub_menu_item_t{ "c", "chain" },
@@ -1224,6 +1238,7 @@ void cliBackup()
     {
       TextInput = false;
       text = "";
+      mouseLiveClear();
       cliMenu();
     }
     uiEdit(1, uiEntity{UI_TEXT, UI_MENU_COLOR, text, UI_INPUT_POSITION});

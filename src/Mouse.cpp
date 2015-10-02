@@ -121,6 +121,18 @@ point_t mouseLastSnapClick;
 point_t mouseLastMouseOverPoint;
 cadEntity mouseLastMouseOverEntity;
 
+
+string mouseLiveShowInstruction;
+void mouseLiveShow(string s)
+{
+  mouseLiveShowInstruction = s;
+}
+void mouseLiveClear()
+{
+  mouseLiveShowInstruction = "";
+  mouseLive.clear();
+}
+
 std::vector<string> mouseUISnapIndicator()
 {
   std::vector<string> r;
@@ -243,6 +255,18 @@ void mouseCallback(int btn, int state, int x, int y)
     }
     if(btn==GLUT_LEFT_BUTTON && state==GLUT_DOWN)
     {
+      if (mouseLiveShowInstruction == "LineVerticalOrigin")
+      {
+        cliPush(to_string(mouseLive[0].Line.end.y));
+        cliReturn();
+        mouseLiveClear();
+      }
+      if (mouseLiveShowInstruction == "LineHorizontalOrigin")
+      {
+        cliPush(to_string(mouseLive[0].Line.end.x));
+        cliReturn();
+        mouseLiveClear();
+      }
       if (cadGetEntityArrayIndex() > 0)
       {
         if (cadGetEntityArray(mouseLastMouseOverEntity.Index).MouseOver == true)
@@ -311,6 +335,31 @@ void mousePassiveMotionCallback(int x, int y)
 {
   point_t pos = cadScreenCordToCadCord(x, y);
   mouseCurrent = pos;
+
+  cadEntity l;
+  if (mouseLiveShowInstruction == "LineVerticalOrigin")
+  {
+      //V cout << KRED << "(mouseLiveShow) LineVerticalOrigin" << KNORMAL << endl;
+      l.Type = CAD_LINE;
+      l.Line = line_t{ point_t{0,0}, point_t{0, mouseCurrent.y} };
+      mouseLive.push_back(l);
+  }
+  if (mouseLiveShowInstruction == "LineHorizontalOrigin")
+  {
+      //V cout << KRED << "(mouseLiveShow) LineVerticalOrigin" << KNORMAL << endl;
+      l.Type = CAD_LINE;
+      l.Line = line_t{ point_t{0,0}, point_t{mouseCurrent.x, 0} };
+      mouseLive.push_back(l);
+  }
+  if (mouseLive.size() > 0)
+  {
+    cadShowLiveEntity(mouseLive);
+  }
+  else
+  {
+    cadHideLiveEntity();
+  }
+  mouseLive.clear();
   //V printf("%sX: %.6f, Y: %.6f, Z: %.6f%s\r", KGREEN, pos.x, pos.y, pos.z, KNORMAL);
   string m;
   if (pos.z > 0)
@@ -408,20 +457,14 @@ void mousePassiveMotionCallback(int x, int y)
       mouseLastMouseOverEntity = e;
       e.MouseOver = true;
       cadEdit(a, e);
-
-      //line_t floater = geoGetParallelLine(e.Line, pos, geoGetPerpendicularDistance(e.Line , pos));
-      //line_t floater = line_t{pos, mouseVectorIntersection};
-      //e.Line = floater;
-      //cadShowLiveEntity(e);
       cadRedraw();
-      break;
+      return;
     }
     else
     {
       e.MouseOver = false;
       cadEdit(a, e);
       cadHideSelectionBox();
-      cadHideLiveEntity();
       cadRedraw();
     }
   }

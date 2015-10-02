@@ -218,7 +218,7 @@ point_t geoTranslatePointByVector(point_t o, point_t v)
 }
 point_t geoTranslateCalculateVector(point_t o, point_t t)
 {
-  return point_t{ (o.x - t.x)/2, (o.y - t.y)/2 };
+  return point_t{ (o.x - t.x), (o.y - t.y) };
 }
 float geoRadiansToDegrees(float r)
 {

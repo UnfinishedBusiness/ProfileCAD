@@ -73,7 +73,6 @@ struct args_t{
 
 args_t mainGetArgs();
 bool mainVerbose();
-void mainJoinThreads();
 int set_interface_attribs (int, int, int);
 void set_blocking (int, int);
 
@@ -122,6 +121,21 @@ struct color_t{
   {
     return r != rhs.r && g != rhs.g && b != rhs.b && a != rhs.a;
   }
+};
+struct cadEntity{
+  int Type; //Line or Arc
+  color_t Color;
+  line_t Line;
+  arc_t Arc;
+  note_t Note;
+
+  //Operational data
+  bool Selected;
+  bool MouseOver;
+  point_t SelectedAt;
+  bool Removed;
+  int Index;
+  int SelectionIndex;
 };
 #ifdef __APPLE__
   #define BACKGROUND color_t{0, 0, 0.10, 1}
