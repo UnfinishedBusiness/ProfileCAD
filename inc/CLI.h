@@ -66,4 +66,6 @@ void *cliXformTranslateSelected();
 void *cliXformTranslateAll();
 void cliXformTranslate_Callback(); //We use the same callback for both methods
 
+void *cliDraftingDimensionPoint();
+
 #endif

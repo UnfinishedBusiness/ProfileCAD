@@ -1067,7 +1067,34 @@ void *cliXformTranslateSelected()
   dialogAddButton(point_t{200, -350}, 200, 100, "OK", cliXformTranslate_Callback);
   dialogOpen("Xform Translate");
 }
-#define CLI_MENU_ITEMS 6
+void *cliDraftingDimensionPoint()
+{
+  if (TextReady == true)
+  {
+    TextReady = false;
+    string input = cliGetTextInput();
+    point_t snap_pos = mouseCadLastSnapClick();
+    vector<string> textPosArray = split(input, ',');
+    point_t text_pos = point_t{(float)atof(textPosArray[0].c_str()), (float)atof(textPosArray[1].c_str())};
+    V debugDumpPointStructure(text_pos);
+
+    dimension_t d;
+    d.Type = DIMENSION_POINT;
+    d.Point.snap_pos = snap_pos;
+    d.Point.text_pos = text_pos;
+    cadSetColor(CurrentColor);
+    cadDrawDimension(d);
+    mouseLiveClear();
+    return NULL;
+  }
+  textCallback = &cliDraftingDimensionPoint;
+  TextInput = true;
+  mouseLiveShow("DimensionPoint");
+  cliPush("> ");
+  uiEdit(0, uiEntity{UI_TEXT, RED, "Draw dimension!", UI_MENU_POSITION});
+  return NULL;
+}
+#define CLI_MENU_ITEMS 7
 menu_item_t menu[CLI_MENU_ITEMS] = {
   { "f", "file",
     sub_menu_item_t{ "e", "exit",
@@ -1169,6 +1196,11 @@ menu_item_t menu[CLI_MENU_ITEMS] = {
         sub_sub_menu_item_t{ "c", "cyan", &cliScreenColorCyan },
         sub_sub_menu_item_t{ "m", "magenta", &cliScreenColorMagenta },
         sub_sub_menu_item_t{ "e", "grey", &cliScreenColorGrey },
+      },
+  },
+  { "d", "drafting",
+      sub_menu_item_t{ "d", "dimension",
+        sub_sub_menu_item_t{ "p", "point", &cliDraftingDimensionPoint },
       },
   },
 };

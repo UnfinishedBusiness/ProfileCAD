@@ -111,6 +111,19 @@ struct note_t{
 
   int parentIndex;
 };
+struct dimension_point_t{
+  int size;
+  point_t snap_pos;
+  point_t text_pos;
+  std::string text;
+};
+struct dimension_t{
+  int Type;
+  int Entity;
+  dimension_point_t Point;
+
+  int parentIndex;
+};
 struct color_t{
   float r, g, b, a;
   bool operator==(const color_t& rhs)
@@ -128,7 +141,7 @@ struct cadEntity{
   line_t Line;
   arc_t Arc;
   note_t Note;
-
+  dimension_t Dimension;
   //Operational data
   bool Selected;
   bool MouseOver;

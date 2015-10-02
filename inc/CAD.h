@@ -6,6 +6,9 @@
 #define CAD_ARC 0x00
 #define CAD_LINE 0x01
 #define CAD_NOTE 0x02
+#define CAD_DIMENSION 0x03
+
+#define DIMENSION_POINT 0x00
 
 struct cadSelectionBox_t{
   arc_t a;
@@ -32,6 +35,7 @@ void cadSetColor(color_t);
 void cadRenderLine(line_t);
 void cadRenderArc(arc_t);
 void cadRenderNote(note_t);
+void cadRenderDimension(dimension_t);
 
 void cadRender();
 void cadRedraw();
@@ -51,7 +55,7 @@ void cadDrawLine(point_t start, point_t end);
 void cadDrawLine(line_t);
 
 void cadDrawArc(arc_t);
-
+void cadDrawDimension(dimension_t);
 
 
 #endif

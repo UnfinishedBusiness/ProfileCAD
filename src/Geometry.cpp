@@ -247,14 +247,26 @@ line_t geoExtendLine(line_t l, float d)
   float new_endpoint_distance = geoGetLineLength(line_t{ l.end, new_endpoint });
   if (new_startpoint_distance > new_endpoint_distance)
   {
-    V printf("(geoExtendLine) Entending from start point\n");
+    //V printf("(geoExtendLine) Entending from start point\n");
     return line_t{ new_startpoint, l.end };
   }
   else
   {
-    V printf("(geoExtendLine) Entending from end point\n");
+    //V printf("(geoExtendLine) Entending from end point\n");
     return line_t{ l.start, new_endpoint };
   }
+}
+line_t geoExtendLineEndpoint(line_t l, float d)
+{
+  float angle = geoGetLineAngle(l);
+  point_t new_endpoint = point_t{ l.end.x + (fabs(d) * cosf(angle)), l.end.y + (fabs(d) * sinf(angle)) };
+  return line_t{ l.start, new_endpoint };
+}
+line_t geoExtendLineStartpoint(line_t l, float d)
+{
+  float angle = geoGetLineAngle(l);
+  point_t new_endpoint = point_t{ l.start.x + (fabs(d) * cosf(angle)), l.start.y + (fabs(d) * sinf(angle)) };
+  return line_t{ new_endpoint, l.start };
 }
 line_t geoExtendLineAngle(point_t s, float angle, float d) //Angle is in radians
 {

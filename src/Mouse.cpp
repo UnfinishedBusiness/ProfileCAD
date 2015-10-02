@@ -267,6 +267,12 @@ void mouseCallback(int btn, int state, int x, int y)
         cliReturn();
         mouseLiveClear();
       }
+      if (mouseLiveShowInstruction == "DimensionPoint")
+      {
+        cliPush(to_string(pos.x) + ", " + to_string(pos.y));
+        cliReturn();
+        mouseLiveClear();
+      }
       if (cadGetEntityArrayIndex() > 0)
       {
         if (cadGetEntityArray(mouseLastMouseOverEntity.Index).MouseOver == true)
@@ -351,6 +357,29 @@ void mousePassiveMotionCallback(int x, int y)
       l.Line = line_t{ point_t{0,0}, point_t{mouseCurrent.x, 0} };
       mouseLive.push_back(l);
   }
+  if (mouseLiveShowInstruction == "DimensionPoint")
+  {
+      //V cout << KRED << "(mouseLiveShow) LineVerticalOrigin" << KNORMAL << endl;
+      l.Type = CAD_DIMENSION;
+      l.Dimension.Type = DIMENSION_POINT;
+      l.Dimension.Point.snap_pos = mouseCadLastSnapClick();
+      l.Dimension.Point.text_pos = mouseCurrent;
+      mouseLive.push_back(l);
+
+      l.Type = CAD_LINE;
+      line_t leader_body = geoExtendLineEndpoint(line_t{mouseCurrent, mouseCadLastSnapClick()}, 0.050);
+      leader_body = geoExtendLineEndpoint(line_t{leader_body.end, leader_body.start}, 0.050);
+      l.Line = leader_body;
+      mouseLive.push_back(l);
+
+      l.Type = CAD_LINE;
+      l.Line = geoExtendLineStartpoint(geoRotateLine(leader_body, leader_body.start, 135), 0.050);
+      mouseLive.push_back(l);
+
+      l.Type = CAD_LINE;
+      l.Line = geoExtendLineStartpoint(geoRotateLine(leader_body, leader_body.start, -135), 0.050);
+      mouseLive.push_back(l);
+  }
   if (mouseLive.size() > 0)
   {
     cadShowLiveEntity(mouseLive);
@@ -362,7 +391,7 @@ void mousePassiveMotionCallback(int x, int y)
   mouseLive.clear();
   //V printf("%sX: %.6f, Y: %.6f, Z: %.6f%s\r", KGREEN, pos.x, pos.y, pos.z, KNORMAL);
   string m;
-  if (pos.z > 0)
+  if (pos.z != 0)
   {
       m = "X: " + to_string(pos.x) + " Y: " + to_string(pos.y) + " Z: " + to_string(pos.z);
   }

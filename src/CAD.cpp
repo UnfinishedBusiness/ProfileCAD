@@ -96,6 +96,14 @@ void cadDrawArc(arc_t a)
 {
   cadAppend(cadEntity{CAD_ARC, cadColorAttribute, line_t{}, a });
 }
+void cadDrawDimension(dimension_t d)
+{
+  cadEntity e;
+  e.Type = CAD_DIMENSION;
+  e.Color = cadColorAttribute;
+  e.Dimension = d;
+  cadAppend(e);
+}
 void cadSetColor(color_t c)
 {
   cadColorAttribute = c;
@@ -253,10 +261,29 @@ void cadRender()
         sceneColor(DARKGREY);
         cadRenderNote(cadLiveEntity[x].Note);
       }
+      if (cadLiveEntity[x].Type == CAD_DIMENSION)
+      {
+        sceneColor(DARKGREY);
+        cadRenderDimension(cadLiveEntity[x].Dimension);
+      }
     }
   }
   for (int i = 0; i < cadEntityArrayIndex; i++)
   {
+      if (cadEntityArray[i].Type == CAD_DIMENSION && !cadEntityArray[i].Removed) //Where a line and its not been removed
+      {
+        if (cadEntityArray[i].Selected || cadEntityArray[i].MouseOver)
+        {
+          sceneColor(WHITE);
+        }
+        else
+        {
+          sceneColor(cadEntityArray[i].Color);
+        }
+        cadEntityArray[i].Dimension.parentIndex = i;
+        cadRenderDimension(cadEntityArray[i].Dimension);
+        //cout << "Found dimension!" << endl;
+      }
       if (cadEntityArray[i].Type == CAD_NOTE && !cadEntityArray[i].Removed) //Where a line and its not been removed
       {
         if (cadEntityArray[i].Selected || cadEntityArray[i].MouseOver)
@@ -315,6 +342,24 @@ void cadRenderNote(note_t n)
   for (int i = 0; i < n.text.length(); i++)
   {
     glutBitmapCharacter (font, n.text[i]);
+  }
+}
+void cadRenderDimension(dimension_t d)
+{
+  note_t n;
+  //cout << d.Type << endl;
+  if (d.Type == DIMENSION_POINT)
+  {
+    n.pos = d.Point.text_pos;
+    n.size = 12;
+    d.Point.text = "X: " + to_string(d.Point.snap_pos.x) + " Y: " + to_string(d.Point.snap_pos.y) + " Z: " + to_string(d.Point.snap_pos.z);
+    n.text = d.Point.text;
+    cadRenderNote(n);
+    line_t leader_body = geoExtendLineEndpoint(line_t{d.Point.text_pos, d.Point.snap_pos}, 0.050);
+    leader_body = geoExtendLineEndpoint(line_t{leader_body.end, leader_body.start}, 0.050);
+    cadRenderLine(leader_body);
+    cadRenderLine(geoExtendLineStartpoint(geoRotateLine(leader_body, leader_body.start, 135), 0.050));
+    cadRenderLine(geoExtendLineStartpoint(geoRotateLine(leader_body, leader_body.start, -135), 0.050));
   }
 }
 void cadRenderLine(line_t l)
