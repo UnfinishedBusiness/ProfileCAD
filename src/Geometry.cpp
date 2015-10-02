@@ -113,7 +113,7 @@ bool geoDoLinesIntersect(line_t l1, line_t l2)
   point_t p2 = l1.end;
   point_t p3 = l2.start;
   point_t p4 = l2.end;
-  
+
   float x1 = p1.x, x2 = p2.x, x3 = p3.x, x4 = p4.x;
   float y1 = p1.y, y2 = p2.y, y3 = p3.y, y4 = p4.y;
 
@@ -209,6 +209,16 @@ point_t geoRotatePointAroundPoint(point_t p, point_t o, float angle) //angle is 
   float rad = angle * (3.14159265359 / 180.0);
   return point_t{ geoRound(cosf(rad) * (p.x - o.x) - sinf(rad) * (p.y - o.y) + o.x),
                   geoRound(sinf(rad) * (p.x - o.x) + cosf(rad) * (p.y - o.y) + o.y), 0 };
+}
+point_t geoTranslatePointByVector(point_t o, point_t v)
+{
+  o.x -= v.x;
+  o.y -= v.y;
+  return o;
+}
+point_t geoTranslateCalculateVector(point_t o, point_t t)
+{
+  return point_t{ (o.x - t.x)/2, (o.y - t.y)/2 };
 }
 float geoRadiansToDegrees(float r)
 {

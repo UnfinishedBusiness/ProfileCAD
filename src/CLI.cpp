@@ -939,31 +939,28 @@ void cliXformTranslate_Callback()
     Operator = false;
   }
   float Steps = fabs(atof(dialogTextboxGetString("Steps").c_str()));
-  float Angle = atof(dialogTextboxGetString("Angle").c_str());
-  bool Direction;
-  if (Angle > 0)
-  {
-    Direction = ARC_CW;
-  }
-  else
-  {
-    Direction = ARC_CCW;
-  }
-  string OriginString = dialogTextboxGetString("Origin");
-  vector<string> OriginArray = split(OriginString, ',');
-  if (OriginArray.size() < 1)
+  string FromString = dialogTextboxGetString("From");
+  vector<string> FromArray = split(FromString, ',');
+  if (FromArray.size() < 1)
   {
     //Implement some msg box dialog!
     //Origin error!
     return;
   }
-  point_t Origin = point_t{(float)atof(OriginArray[0].c_str()), (float)atof(OriginArray[1].c_str())};
-  V cout << KRED << "Steps" << KCYAN << " => " << KGREEN << Steps << KNORMAL << endl;
-  V cout << KRED << "Angle" << KCYAN << " => " << KGREEN << Angle << KNORMAL << endl;
-  V cout << KRED << "Operator" << KCYAN << " => " << KGREEN << dialogTextboxGetString("Operator") << KNORMAL << endl;
-  V cout << KRED << "Origin" << KCYAN << " => ";
-  V debugDumpPointStructure(Origin);
-
+  point_t From = point_t{(float)atof(FromArray[0].c_str()), (float)atof(FromArray[1].c_str())};
+  V debugDumpPointStructure(From);
+  string ToString = dialogTextboxGetString("To");
+  vector<string> ToArray = split(ToString, ',');
+  if (ToArray.size() < 1)
+  {
+    //Implement some msg box dialog!
+    //Origin error!
+    return;
+  }
+  point_t To = point_t{(float)atof(ToArray[0].c_str()), (float)atof(ToArray[1].c_str())};
+  V debugDumpPointStructure(To);
+  point_t TranslationVector = geoTranslateCalculateVector(From, To);
+  V debugDumpPointStructure(TranslationVector);
   cadEntity e;
   int start = 0;
   if (!Operator) start = 1;
@@ -977,8 +974,11 @@ void cliXformTranslate_Callback()
         {
           for (int i = start; i < Steps + 1; i++)
           {
-            e.Line.start = geoRotatePointAroundPoint(e.Line.start, Origin, Angle, Direction);
-            e.Line.end = geoRotatePointAroundPoint(e.Line.end, Origin, Angle, Direction);
+            //e.Line.start = geoRotatePointAroundPoint(e.Line.start, Origin, Angle, Direction);
+            //e.Line.end = geoRotatePointAroundPoint(e.Line.end, Origin, Angle, Direction);
+            e.Line.start = geoTranslatePointByVector(e.Line.start, TranslationVector);
+            e.Line.end = geoTranslatePointByVector(e.Line.end, TranslationVector);
+
             if (Operator) //Default is move
             {
               cadEdit(x, e);
@@ -993,9 +993,13 @@ void cliXformTranslate_Callback()
         {
           for (int i = start; i < Steps + 1; i++)
           {
-            e.Arc.start = geoRotatePointAroundPoint(e.Arc.start, Origin, Angle, Direction);
-            e.Arc.end = geoRotatePointAroundPoint(e.Arc.end, Origin, Angle, Direction);
-            e.Arc.center = geoRotatePointAroundPoint(e.Arc.center, Origin, Angle, Direction);
+            //e.Arc.start = geoRotatePointAroundPoint(e.Arc.start, Origin, Angle, Direction);
+            //e.Arc.end = geoRotatePointAroundPoint(e.Arc.end, Origin, Angle, Direction);
+            //e.Arc.center = geoRotatePointAroundPoint(e.Arc.center, Origin, Angle, Direction);
+
+            e.Arc.start = geoTranslatePointByVector(e.Arc.start, TranslationVector);
+            e.Arc.end = geoTranslatePointByVector(e.Arc.end, TranslationVector);
+            e.Arc.center = geoTranslatePointByVector(e.Arc.center, TranslationVector);
             if (Operator) //Default is move
             {
               cadEdit(x, e);
@@ -1027,17 +1031,17 @@ void *cliXformTranslateSelected()
   point_t pos = point_t{-450, 320};
   dialogAddLabel(pos, "Steps?");
   pos.y -= 120;
-  dialogAddTextBox(pos, 500, 100, "Steps");
+  dialogAddTextBox(pos, 500, 100, "Steps", "1");
   pos.y -= 50;
 
-  dialogAddLabel(pos, "Angle?");
+  dialogAddLabel(pos, "From?");
   pos.y -= 120;
-  dialogAddTextBox(pos, 500, 100, "Angle");
+  dialogAddTextBox(pos, 500, 100, "From", o);
   pos.y -= 50;
 
-  dialogAddLabel(pos, "Origin?");
+  dialogAddLabel(pos, "To?");
   pos.y -= 120;
-  dialogAddTextBox(pos, 500, 100, "Origin", o);
+  dialogAddTextBox(pos, 500, 100, "To");
   pos.y -= 50;
 
   dialogAddLabel(pos, "Copy or Move?");

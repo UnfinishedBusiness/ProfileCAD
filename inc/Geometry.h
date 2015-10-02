@@ -27,6 +27,10 @@ float geoGetPerpendicularDistance(line_t, point_t);
 line_t geoGetPerpendicularLine(line_t, point_t, float);
 line_t geoGetParallelLine(line_t, point_t, float);
 float geoGetLineLength(line_t);
+
+point_t geoTranslatePointByVector(point_t, point_t);
+point_t geoTranslateCalculateVector(point_t, point_t);
+
 point_t geoRotatePointAroundPoint(point_t, point_t, float);
 point_t geoRotatePointAroundPoint(point_t, point_t, float, bool);
 line_t geoRotateLine(line_t, point_t, float ); //angle is in degrees!
