@@ -9,6 +9,9 @@ void dialogAddTextBox(point_t, float, float, std::string, std::string);
 void dialogAddLabel(point_t, std::string);
 
 std::string dialogTextboxGetString(std::string);
+void dialogCheckboxSet(std::string, bool);
+bool dialogCheckboxGet(std::string);
+
 void dialogSetTitle(std::string);
 void dialogSetPosition(int, int);
 

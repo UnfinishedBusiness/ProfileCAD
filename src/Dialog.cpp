@@ -9,6 +9,7 @@
 int DIALOG_WIDTH = 300;
 int DIALOG_HEIGHT = 200;
 float dialogScale = 0.001;
+float TextOffsetFactor = 0.0255;
 
 using namespace std;
 int dialogWindow;
@@ -67,15 +68,44 @@ string dialogTextboxGetString(string id)
   }
   return "";
 }
+void dialogCheckboxSet(string l, bool c)
+{
+  for (int x = 0; x < Dialog.size(); x++)
+  {
+    if (Dialog[x].Type == CHECKBOX)
+    {
+      if (Dialog[x].Checkbox.Label == l)
+      {
+        Dialog[x].Checkbox.Checked = c;
+        glutPostRedisplay();
+      }
+    }
+  }
+}
+bool dialogCheckboxGet(string l)
+{
+  for (int x = 0; x < Dialog.size(); x++)
+  {
+    if (Dialog[x].Type == CHECKBOX)
+    {
+      if (Dialog[x].Checkbox.Label == l)
+      {
+        return Dialog[x].Checkbox.Checked;
+      }
+    }
+  }
+  return NULL;
+}
 void dialogAddCheckbox(point_t p, std::string l, bool i, void (*c)(bool))
 {
   checkbox_t b;
   b.Label = l;
   b.Position.x = p.x * dialogScale;
   b.Position.y = p.y * dialogScale;
-  b.Width = 0.1 * dialogScale;
-  b.Height = 0.1 * dialogScale;
+  b.Width = 50 * dialogScale;
+  b.Height = 50 * dialogScale;
   b.ClickCallback = c;
+  b.Checked = i;
   DialogWidget widget;
   widget.Type = CHECKBOX;
   widget.Checkbox = b;
@@ -226,7 +256,10 @@ void dialogMouse(int btn, int state, int x, int y)
         if ((pos.x > Dialog[x].Button.Position.x && pos.y > Dialog[x].Button.Position.y ) && (pos.x < (Dialog[x].Button.Position.x + Dialog[x].Button.Width) && pos.y < (Dialog[x].Button.Position.y + Dialog[x].Button.Height) ))
         {
           //cout << "Clicked button " << x << endl;
-          Dialog[x].Button.ClickCallback();
+          if (Dialog[x].Button.ClickCallback != NULL)
+          {
+              Dialog[x].Button.ClickCallback();
+          }
         }
       }
       if (Dialog[x].Type == TEXTBOX)
@@ -240,11 +273,15 @@ void dialogMouse(int btn, int state, int x, int y)
       }
       if (Dialog[x].Type == CHECKBOX)
       {
-        if ((pos.x > Dialog[x].Checkbox.Position.x && pos.y > Dialog[x].Checkbox.Position.y ) && (pos.x < (Dialog[x].Checkbox.Position.x + Dialog[x].Checkbox.Width) && pos.y < (Dialog[x].Checkbox.Position.y + Dialog[x].Checkbox.Height) ))
+        float TextOffset = Dialog[x].Checkbox.Label.length() * TextOffsetFactor;
+        if ((pos.x > Dialog[x].Checkbox.Position.x + TextOffset && pos.y > Dialog[x].Checkbox.Position.y ) && (pos.x < (Dialog[x].Checkbox.Position.x + Dialog[x].Checkbox.Width + TextOffset) && pos.y < (Dialog[x].Checkbox.Position.y + Dialog[x].Checkbox.Height) ))
         {
-          //cout << "Clicked textbox " << x << endl;
+          cout << "Clicked Checkbox " << x << endl;
           Dialog[x].Checkbox.Checked = !Dialog[x].Checkbox.Checked;
-          Dialog[x].Checkbox.ClickCallback(Dialog[x].Checkbox.Checked);
+          if (Dialog[x].Checkbox.ClickCallback != NULL)
+          {
+              Dialog[x].Checkbox.ClickCallback(Dialog[x].Checkbox.Checked);
+          }
           CurrentFocus = x;
         }
       }
@@ -386,6 +423,23 @@ void dialogRender()
       uiDrawText(GLUT_BITMAP_HELVETICA_12, (char *)Dialog[x].Label.Text.c_str(),
                         Dialog[x].Label.Position.x,
                         Dialog[x].Label.Position.y, 0);
+    }
+    if (Dialog[x].Type == CHECKBOX)
+    {
+      sceneColor(BLACK);
+      uiDrawText(GLUT_BITMAP_HELVETICA_12, (char *)Dialog[x].Checkbox.Label.c_str(),
+                        Dialog[x].Checkbox.Position.x,
+                        Dialog[x].Checkbox.Position.y, 0);
+      float TextOffset = Dialog[x].Checkbox.Label.length() * TextOffsetFactor;
+      sceneColor(BLACK);
+      glRectf(TextOffset + Dialog[x].Checkbox.Position.x, Dialog[x].Checkbox.Position.y, TextOffset + (Dialog[x].Checkbox.Position.x + Dialog[x].Checkbox.Width), (Dialog[x].Checkbox.Position.y + Dialog[x].Checkbox.Height));
+      sceneColor(WHITE);
+      glRectf(TextOffset + Dialog[x].Checkbox.Position.x + LineWidth, Dialog[x].Checkbox.Position.y + (LineWidth), TextOffset + (Dialog[x].Checkbox.Position.x + Dialog[x].Checkbox.Width) - (LineWidth - 0.001), (Dialog[x].Checkbox.Position.y + Dialog[x].Checkbox.Height) - (LineWidth));
+      if (Dialog[x].Checkbox.Checked)
+      {
+        sceneColor(BLACK);
+        glRectf(TextOffset + Dialog[x].Checkbox.Position.x + (LineWidth*2), Dialog[x].Checkbox.Position.y + (LineWidth*2), TextOffset + (Dialog[x].Checkbox.Position.x + Dialog[x].Checkbox.Width - (LineWidth*2)), (Dialog[x].Checkbox.Position.y + Dialog[x].Checkbox.Height) - (LineWidth*2));
+      }
     }
     if (Dialog[x].Type == BUTTON)
     {

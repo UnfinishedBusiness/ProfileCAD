@@ -11,10 +11,20 @@ void testOK()
   cout << "Test Textbox had value: " << dialogTextboxGetString("Test") << endl;
   dialogClose();
 }
+void testCopyClicked(bool c)
+{
+  dialogCheckboxSet("Move?", !c);
+}
+void testMoveClicked(bool c)
+{
+  dialogCheckboxSet("Copy?", !c);
+}
 void Test()
 {
   dialogAddLabel(point_t{-450, 320}, "Test?");
   dialogAddTextBox(point_t{-450, 200}, 500, 100, "Test");
+  dialogAddCheckbox(point_t{-450, 50}, "Copy?", false, testCopyClicked);
+  dialogAddCheckbox(point_t{-450, -50}, "Move?", true, testMoveClicked);
   dialogAddButton(point_t{-450, -350}, 200, 100, "OK", testOK);
   dialogOpen();
 }
