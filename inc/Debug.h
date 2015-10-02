@@ -3,7 +3,8 @@
 #include <application.h>
 
 
-void debugDumpArcStructure(arc_t a);
-void debugDumpPointStructure(point_t p);
-void debugDumpLineStructure(line_t l);
+void debugDumpArcStructure(arc_t);
+void debugDumpPointStructure(point_t);
+void debugDumpLineStructure(line_t);
+void debugDumpContourStructure(contour_t);
 #endif

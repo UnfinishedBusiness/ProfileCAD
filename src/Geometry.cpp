@@ -481,3 +481,48 @@ float geoRound(float x) //Round to 6 places
 {
    return round(1000000 * x) / 1000000;
 }
+contour_t geoGetContour(std::vector<cadEntity> s)
+{
+  if (s.size() < 1) //Nothing to contour
+  {
+    return contour_t{};
+  }
+  cadEntity e;
+  contour_t contour;
+  contour.start_reference = mouseCadGetCurrentPos();
+  if (s[0].Type == CAD_LINE)
+  {
+    e.Type = CAD_LINE;
+    if (geoGetLineLength(line_t{s[0].Line.start, contour.start_reference}) < geoGetLineLength(line_t{s[0].Line.end, contour.start_reference})) //Figure out what side of the line is closest to our reference
+    {
+      e.Line.start = s[0].Line.start;
+      e.Line.end = s[0].Line.end;
+    }
+    else
+    {
+      e.Line.start = s[0].Line.end;
+      e.Line.end = s[0].Line.start;
+    }
+  }
+  contour.Entitys.push_back(e); //Push first entity
+
+  for (int x = 1; x < s.size(); x++)
+  {
+    if (s[x].Type == CAD_LINE)
+    {
+      e.Type = CAD_LINE;
+      if (geoGetLineLength(line_t{s[x].Line.start, contour.Entitys[x-1].Line.end}) < geoGetLineLength(line_t{s[x].Line.end, contour.Entitys[x-1].Line.end})) //Figure out what side of the line is closest to our reference
+      {
+          e.Line.start = contour.Entitys[x-1].Line.end;
+          e.Line.end = s[x].Line.start;
+      }
+      else
+      {
+        e.Line.start = contour.Entitys[x-1].Line.end;
+        e.Line.end = s[x].Line.end;
+      }
+    }
+    contour.Entitys.push_back(e);
+  }
+  return contour;
+}

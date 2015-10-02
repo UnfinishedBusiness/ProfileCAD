@@ -137,6 +137,10 @@ struct cadEntity{
   int Index;
   int SelectionIndex;
 };
+struct contour_t{
+  point_t start_reference;
+  std::vector<cadEntity> Entitys;
+};
 #ifdef __APPLE__
   #define BACKGROUND color_t{0, 0, 0.10, 1}
 #else

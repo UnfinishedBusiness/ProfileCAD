@@ -78,6 +78,10 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
                   {
                     cadUndo();
                   }
+                  if (key == 3) //CTRL+c
+                  {
+                    debugDumpContourStructure(geoGetContour(cadGetSelected()));
+                  }
                   break;
                case 4 :  D printf("ALT   key %d\n",mod);  break;
                mod=0;

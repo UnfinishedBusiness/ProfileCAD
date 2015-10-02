@@ -50,3 +50,28 @@ void debugDumpPointStructure(point_t p)
   cout << KNORMAL;
   cout << endl;
 }
+void debugDumpContourStructure(contour_t c)
+{
+  cout << KMAGENTA;
+  cout << "contour_t{\n";
+  cout << KGREEN;
+  cout << "\tstart_reference=";
+  debugDumpPointStructure(c.start_reference);
+  for (int x=0; x < c.Entitys.size(); x++)
+  {
+      cout << KMAGENTA;
+      cout << "\tEntitys[" << x << "]=";
+      if (c.Entitys[x].Type == CAD_LINE)
+      {
+        debugDumpLineStructure(c.Entitys[x].Line);
+      }
+      else if (c.Entitys[x].Type == CAD_ARC)
+      {
+        debugDumpArcStructure(c.Entitys[x].Arc);
+      }
+  }
+  cout << KMAGENTA;
+  cout << "};\n";
+  cout << KNORMAL;
+  cout << endl;
+}
