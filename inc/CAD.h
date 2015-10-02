@@ -32,6 +32,8 @@ int cadCountSelection();
 int cadCountEntitys();
 void cadSetColor(color_t);
 
+void cadSelectedToContour();
+
 void cadRenderLine(line_t);
 void cadRenderArc(arc_t);
 void cadRenderNote(note_t);

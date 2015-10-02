@@ -10,7 +10,7 @@ vector<cadUndoStructure> cadUndoArray;
 vector<cadEntity> cadEntityArray;
 int cadEntityArrayIndex;
 color_t cadColorAttribute = GREEN;
-
+contour_t CurrentContour;
 void cadInit()
 {
   cadEntityArrayIndex = 0;
@@ -218,7 +218,27 @@ void cadHideSelectionBox()
 {
   cadSelectionBox.visable = false;
 }
+void cadSelectedToContour()
+{
+  CurrentContour = geoGetContour(cadGetSelected());
+  debugDumpContourStructure(CurrentContour);
 
+  vector<cadEntity> l;
+  cadEntity e;
+  for (int x = 0; x < CurrentContour.Entitys.size(); x++)
+  {
+    if (CurrentContour.Entitys[x].Type = CAD_LINE)
+    {
+      e.Type = CAD_LINE;
+      //e.Line = geoExtendLineStartpoint(geoRotateLine(CurrentContour.Entitys[x].Line, geoGetLineMidpoint(CurrentContour.Entitys[x].Line), 135), 0.050);
+      e.Line = geoExtendLineAngle(geoGetLineMidpoint(CurrentContour.Entitys[x].Line), geoGetLineAngle(CurrentContour.Entitys[x].Line) + geoDegreesToRadians(45), 0.1);
+      l.push_back(e);
+      e.Line = geoExtendLineAngle(geoGetLineMidpoint(CurrentContour.Entitys[x].Line), geoGetLineAngle(CurrentContour.Entitys[x].Line) + geoDegreesToRadians(-45), 0.1);
+      l.push_back(e);
+    }
+  }
+  cadShowLiveEntity(l);
+}
 void cadShowLiveEntity(vector<cadEntity> e)
 {
   cadLiveEntity.clear();

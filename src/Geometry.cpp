@@ -273,6 +273,10 @@ line_t geoExtendLineAngle(point_t s, float angle, float d) //Angle is in radians
   point_t new_endpoint = point_t{ s.x + (fabs(d) * cosf(angle)), s.y + (fabs(d) * sinf(angle)) };
   return line_t{ s, new_endpoint };
 }
+line_t geoFlipLine(line_t l)
+{
+  return line_t{l.end, l.start};
+}
 float geoGetPerpendicularDistance(line_t l , point_t p)
 {
   /*line_t perp = geoGetPerpendicularLine(l, p, 1); //Just give it any length, we have to find the intersection point
@@ -499,42 +503,38 @@ contour_t geoGetContour(std::vector<cadEntity> s)
   {
     return contour_t{};
   }
-  cadEntity e;
   contour_t contour;
-  contour.start_reference = mouseCadGetCurrentPos();
-  if (s[0].Type == CAD_LINE)
+  int x = 0;
+  int flipped = 0;
+
+  contour.Entitys.push_back(s[0]); //Push first selection for starting point
+  while(x < s.size() && flipped < 3)
   {
-    e.Type = CAD_LINE;
-    if (geoGetLineLength(line_t{s[0].Line.start, contour.start_reference}) < geoGetLineLength(line_t{s[0].Line.end, contour.start_reference})) //Figure out what side of the line is closest to our reference
+    if (contour.Entitys.back().Line.end == s[x].Line.start)
     {
-      e.Line.start = s[0].Line.start;
-      e.Line.end = s[0].Line.end;
+      contour.Entitys.push_back(s[x]);
+      flipped = 0;
+      x++;
+    }
+    else if (contour.Entitys.back().Line.start == s[x].Line.end)
+    {
+      contour.Entitys.push_back(s[x]);
+      flipped = 0;
+      x++;
     }
     else
     {
-      e.Line.start = s[0].Line.end;
-      e.Line.end = s[0].Line.start;
+        s[x].Line = geoFlipLine(s[x].Line);
+        flipped++;
     }
-  }
-  contour.Entitys.push_back(e); //Push first entity
-
-  for (int x = 1; x < s.size(); x++)
-  {
-    if (s[x].Type == CAD_LINE)
+    if (flipped > 2) //We must be going the wrong direction
     {
-      e.Type = CAD_LINE;
-      if (geoGetLineLength(line_t{s[x].Line.start, contour.Entitys[x-1].Line.end}) < geoGetLineLength(line_t{s[x].Line.end, contour.Entitys[x-1].Line.end})) //Figure out what side of the line is closest to our reference
-      {
-          e.Line.start = contour.Entitys[x-1].Line.end;
-          e.Line.end = s[x].Line.start;
-      }
-      else
-      {
-        e.Line.start = contour.Entitys[x-1].Line.end;
-        e.Line.end = s[x].Line.end;
-      }
+      s[0].Line = geoFlipLine(s[0].Line);
+      contour.Entitys.clear();
+      contour.Entitys.push_back(s[0]);
+      x = 0;
+      cout << "Wrong Direction!" << endl;
     }
-    contour.Entitys.push_back(e);
   }
   return contour;
 }
