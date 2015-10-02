@@ -243,7 +243,7 @@ void mouseCallback(int btn, int state, int x, int y)
     }
     if(btn==GLUT_LEFT_BUTTON && state==GLUT_DOWN)
     {
-      if (cadGetEntityArray(mouseLastMouseOverEntity.Index).MouseOver == true)
+      if (cadGetEntityArrayIndex() > 0 && cadGetEntityArray(mouseLastMouseOverEntity.Index).MouseOver == true)
       {
         if (mod == GLUT_ACTIVE_CTRL)
         {
