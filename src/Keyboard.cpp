@@ -82,7 +82,11 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
                case 4 :  D printf("ALT   key %d\n",mod);  break;
                mod=0;
             }
-            return;
+            //return;
+      }
+      if (mod == 1) //Offset for shift key
+      {
+        key += 32;
       }
       switch(key)
       {

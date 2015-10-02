@@ -1163,7 +1163,15 @@ void cliPush(std::string c)
 {
   if (TextInput)
   {
-    text.append(c);
+    if (glutGetModifiers() == GLUT_ACTIVE_SHIFT)
+    {
+        text.append(string(1, toupper(c[0])));
+    }
+    else
+    {
+        text.append(c);
+    }
+
     uiEdit(1, uiEntity{UI_TEXT, UI_MENU_COLOR, text, UI_INPUT_POSITION});
   }
   else

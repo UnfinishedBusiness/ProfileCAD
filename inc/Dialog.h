@@ -2,6 +2,7 @@
 #define DIALOG_
 #include <application.h>
 
+void dialogAddCheckbox(point_t, std::string, bool , void (*c)(bool));
 void dialogAddButton(point_t, float, float, std::string , void (*c)(void));
 void dialogAddTextBox(point_t, float, float, std::string);
 void dialogAddTextBox(point_t, float, float, std::string, std::string);

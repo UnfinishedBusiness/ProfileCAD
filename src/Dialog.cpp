@@ -3,6 +3,7 @@
 #define BUTTON 0
 #define TEXTBOX 1
 #define LABEL 2
+#define CHECKBOX 3
 
 #define DIALOG_BACKGROUND color_t{0.8, 0.8, 0.8, 1}
 int DIALOG_WIDTH = 300;
@@ -24,6 +25,14 @@ struct button_t{
   float Height;
   void (*ClickCallback)(void);
 };
+struct checkbox_t{
+  string Label;
+  point_t Position;
+  float Width;
+  float Height;
+  bool Checked;
+  void (*ClickCallback)(bool);
+};
 struct textbox_t{
   string Text;
   float Width;
@@ -40,6 +49,7 @@ struct DialogWidget{
   textbox_t Textbox;
   button_t Button;
   label_t Label;
+  checkbox_t Checkbox;
 };
 vector<DialogWidget> Dialog;
 
@@ -56,6 +66,20 @@ string dialogTextboxGetString(string id)
     }
   }
   return "";
+}
+void dialogAddCheckbox(point_t p, std::string l, bool i, void (*c)(bool))
+{
+  checkbox_t b;
+  b.Label = l;
+  b.Position.x = p.x * dialogScale;
+  b.Position.y = p.y * dialogScale;
+  b.Width = 0.1 * dialogScale;
+  b.Height = 0.1 * dialogScale;
+  b.ClickCallback = c;
+  DialogWidget widget;
+  widget.Type = CHECKBOX;
+  widget.Checkbox = b;
+  Dialog.push_back(widget);
 }
 void dialogAddButton(point_t p, float w, float h, std::string t, void (*c)(void))
 {
@@ -104,7 +128,15 @@ void dialogKeyPush(string c)
 {
   if (CurrentFocus > -1)
   {
-    Dialog[CurrentFocus].Textbox.Text.append(c);
+    if (glutGetModifiers() == GLUT_ACTIVE_SHIFT)
+    {
+        Dialog[CurrentFocus].Textbox.Text.append(string(1, toupper(c[0])));
+    }
+    else
+    {
+        Dialog[CurrentFocus].Textbox.Text.append(c);
+    }
+
     glutPostRedisplay();
   }
 
@@ -206,6 +238,16 @@ void dialogMouse(int btn, int state, int x, int y)
           CurrentFocus = x;
         }
       }
+      if (Dialog[x].Type == CHECKBOX)
+      {
+        if ((pos.x > Dialog[x].Checkbox.Position.x && pos.y > Dialog[x].Checkbox.Position.y ) && (pos.x < (Dialog[x].Checkbox.Position.x + Dialog[x].Checkbox.Width) && pos.y < (Dialog[x].Checkbox.Position.y + Dialog[x].Checkbox.Height) ))
+        {
+          //cout << "Clicked textbox " << x << endl;
+          Dialog[x].Checkbox.Checked = !Dialog[x].Checkbox.Checked;
+          Dialog[x].Checkbox.ClickCallback(Dialog[x].Checkbox.Checked);
+          CurrentFocus = x;
+        }
+      }
     }
     if (LastFocus == CurrentFocus)
     {
@@ -241,6 +283,15 @@ point_t dialogMouseUnproject(int x, int y)
 void dialogKeyboard(unsigned char key, int x, int y)
 {
     int mod = glutGetModifiers();
+    args_t args = mainGetArgs();
+    if (args.args.find("-keys") != std::string::npos)
+    {
+      printf("NormalKey -> %d Mod -> %d\n",key, mod);
+    }
+    if (mod == 1)
+    {
+      key += 32;
+    }
     switch(key)
     {
         case 97 : dialogKeyPush("a"); break;
