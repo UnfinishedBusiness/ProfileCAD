@@ -347,12 +347,26 @@ void cadRenderNote(note_t n)
 void cadRenderDimension(dimension_t d)
 {
   note_t n;
+  stringstream X;
+  stringstream Y;
+  stringstream Z;
   //cout << d.Type << endl;
   if (d.Type == DIMENSION_POINT)
   {
     n.pos = d.Point.text_pos;
     n.size = 12;
-    d.Point.text = "X: " + to_string(d.Point.snap_pos.x) + " Y: " + to_string(d.Point.snap_pos.y) + " Z: " + to_string(d.Point.snap_pos.z);
+    X << d.Point.snap_pos.x;
+    Y << d.Point.snap_pos.y;
+    Z << d.Point.snap_pos.z;
+    if (d.Point.snap_pos.z != 0)
+    {
+      d.Point.text = "X: " + X.str() + " Y: " + Y.str() + " Z: " + Z.str();
+    }
+    else
+    {
+      d.Point.text = "X: " + X.str() + " Y: " + Y.str();
+    }
+
     n.text = d.Point.text;
     cadRenderNote(n);
     line_t leader_body = geoExtendLineEndpoint(line_t{d.Point.text_pos, d.Point.snap_pos}, 0.050);
