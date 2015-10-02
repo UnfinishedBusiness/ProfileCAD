@@ -243,25 +243,28 @@ void mouseCallback(int btn, int state, int x, int y)
     }
     if(btn==GLUT_LEFT_BUTTON && state==GLUT_DOWN)
     {
-      if (cadGetEntityArrayIndex() > 0 && cadGetEntityArray(mouseLastMouseOverEntity.Index).MouseOver == true)
+      if (cadGetEntityArrayIndex() > 0)
       {
-        if (mod == GLUT_ACTIVE_CTRL)
+        if (cadGetEntityArray(mouseLastMouseOverEntity.Index).MouseOver == true)
         {
-          mouseLastMouseOverEntity.Selected = false;
+          if (mod == GLUT_ACTIVE_CTRL)
+          {
+            mouseLastMouseOverEntity.Selected = false;
+          }
+          else
+          {
+            mouseLastMouseOverEntity.Selected = true;
+            mouseLastMouseOverEntity.SelectionIndex = cadCountSelection() + 1;
+            //debugDumpArcStructure(e.Arc);
+          }
+          cadEdit(mouseLastMouseOverEntity.Index, mouseLastMouseOverEntity);
         }
-        else
+        if (cadGetSelectionBox().visable == true)
         {
-          mouseLastMouseOverEntity.Selected = true;
-          mouseLastMouseOverEntity.SelectionIndex = cadCountSelection() + 1;
-          //debugDumpArcStructure(e.Arc);
+          mouseLastSnapClick = cadGetSelectionBox().a.center;
+          mouseLastMouseOverEntity.SelectedAt = mouseLastSnapClick;
+          cadEdit(mouseLastMouseOverEntity.Index, mouseLastMouseOverEntity);
         }
-        cadEdit(mouseLastMouseOverEntity.Index, mouseLastMouseOverEntity);
-      }
-      if (cadGetSelectionBox().visable == true)
-      {
-        mouseLastSnapClick = cadGetSelectionBox().a.center;
-        mouseLastMouseOverEntity.SelectedAt = mouseLastSnapClick;
-        cadEdit(mouseLastMouseOverEntity.Index, mouseLastMouseOverEntity);
       }
     }
     if(btn==GLUT_RIGHT_BUTTON && state==GLUT_DOWN)
