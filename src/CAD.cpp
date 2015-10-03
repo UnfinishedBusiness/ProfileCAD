@@ -239,7 +239,7 @@ void cadSelectedToContour()
     if (CurrentContour.Entitys[x].Type == CAD_ARC)
     {
       cout << "Found Arc!" << endl;
-      e.Type = CAD_ARC;
+      e = CurrentContour.Entitys[x];
       e.Arc = geoGetCircle(e.Arc.center, 0.1);
       l.push_back(e);
     }

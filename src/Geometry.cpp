@@ -283,6 +283,8 @@ arc_t geoFlipArc(arc_t a)
   r.direction = !a.direction;
   r.start = a.end;
   r.end = a.start;
+  r.center = a.center;
+  //V debugDumpArcStructure(r);
   return r;
 }
 float geoGetPerpendicularDistance(line_t l , point_t p)
@@ -598,6 +600,39 @@ contour_t geoGetContour(std::vector<cadEntity> s)
           break;
         }
       }
+      /*if (contour.Entitys[i].Type == CAD_ARC && s[x].Type == CAD_LINE) //If this element is a line and last element is a arc
+      {
+        if (contour.Entitys[i].Arc.start == s[x].Line.start && std::find(Used.begin(), Used.end(), s[x].Index) == Used.end())
+        {
+          V cout << KRED << "(geoGetContour {arc=>line} 1)" << KGREEN << " Contour Entity " << i << " arc startpoint is connected to Selection " << x << " line startpoint (Flipping Arc)" << KNORMAL << endl;
+          s[x].Line = geoFlipLine(s[x].Line);
+          contour.Entitys.push_back(s[x]);
+          Used.push_back(s[x].Index);
+          break;
+        }
+        else if (contour.Entitys[i].Arc.start == s[x].Line.end && std::find(Used.begin(), Used.end(), s[x].Index) == Used.end())
+        {
+          V cout << KRED << "(geoGetContour {arc=>line} 2)" << KGREEN << " Contour Entity " << i << " arc startpoint is connected to Selection " << x << " line endpoint" << KNORMAL << endl;
+          contour.Entitys.push_back(s[x]);
+          Used.push_back(s[x].Index);
+          break;
+        }
+        else if (contour.Entitys[i].Arc.end == s[x].Line.end && std::find(Used.begin(), Used.end(), s[x].Index) == Used.end())
+        {
+          V cout << KRED << "(geoGetContour {arc=>line} 3)" << KGREEN << " Contour Entity " << i << " arc endpoint is connected to Selection " << x << " line endpoint" << KNORMAL << endl;
+          s[x].Line = geoFlipLine(s[x].Line);
+          contour.Entitys.push_back(s[x]);
+          Used.push_back(s[x].Index);
+          break;
+        }
+        else if (contour.Entitys[i].Arc.end == s[x].Line.start && std::find(Used.begin(), Used.end(), s[x].Index) == Used.end())
+        {
+          V cout << KRED << "(geoGetContour {arc=>line} 4)" << KGREEN << " Contour Entity " << i << " arc endpoint is connected to Selection " << x << " line startpoint" << KNORMAL << endl;
+          contour.Entitys.push_back(s[x]);
+          Used.push_back(s[x].Index);
+          break;
+        }
+      }*/
     }
   }
   if (contour.Entitys.back().Line.end == contour.Entitys.front().Line.start) //Were a closed contour
