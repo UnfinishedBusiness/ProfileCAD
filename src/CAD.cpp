@@ -487,3 +487,11 @@ point_t cadCadCordToScreenCord(point_t s)
   gluProject(posX,posY,posZ,modelview,projection,viewport,&winX,&winY,&winZ);
   return point_t{(float)winX, (float)winY, (float)winZ,};
 }
+contour_t cadGetCurrentContour()
+{
+  return CurrentContour;
+}
+color_t cadGetCurrentColor()
+{
+  return cadColorAttribute;
+}

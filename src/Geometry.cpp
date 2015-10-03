@@ -542,14 +542,58 @@ contour_t geoGetContour(std::vector<cadEntity> s)
         Used.push_back(s[x].Index);
         break;
       }
-      /*else
-      {
-        V cout << KRED << "(geoGetContour)" << KGREEN << "Selection Segment " << x << " Has no match!" << KNORMAL << endl;
-        break;
-      }*/
     }
   }
-
-
+  if (contour.Entitys.back().Line.end == contour.Entitys.front().Line.start) //Were a closed contour
+  {
+    V cout << KRED << "(geoGetContour)" << KGREEN << "Closed contour!" << KNORMAL << endl;
+    contour.isClosed = true;
+  }
+  else
+  {
+    contour.isClosed = false;
+  }
   return contour;
+}
+std::vector<cadEntity> geoOffsetContour(contour_t c, bool s, float d)
+{
+  std::vector<cadEntity> v;
+  cadEntity e;
+  for (int x = 0; x < c.Entitys.size(); x++)
+  {
+    if ( c.Entitys[x].Type == CAD_LINE)
+    {
+      if (s == CONTOUR_RIGHT)
+      {
+        line_t l = geoExtendLineAngle(geoGetLineMidpoint(c.Entitys[x].Line), geoGetLineAngle(c.Entitys[x].Line) + geoDegreesToRadians(90), 0.1);
+        line_t p = geoGetParallelLine(c.Entitys[x].Line, l.end, d);
+        e.Type = CAD_LINE;
+        e.Line = p;
+        v.push_back(e);
+      }
+      if (s == CONTOUR_LEFT)
+      {
+        line_t l = geoExtendLineAngle(geoGetLineMidpoint(c.Entitys[x].Line), geoGetLineAngle(c.Entitys[x].Line) - geoDegreesToRadians(90), 0.1);
+        line_t p = geoGetParallelLine(c.Entitys[x].Line, l.end, d);
+        e.Type = CAD_LINE;
+        e.Line = p;
+        v.push_back(e);
+      }
+      if (x > 0 && v.size() > x)
+      {
+        //Trim last line to this line via intersection
+        point_t intersection = geoGetIntersection(v[x-1].Line, v[x].Line);
+        v[x-1].Line.end = intersection;
+        v[x].Line.start = intersection;
+      }
+    }
+  }
+  if (c.isClosed) //Were a closed contour
+  {
+    V cout << KRED << "(geoOffsetContour)" << KGREEN << "Trimming endpoints!" << KNORMAL << endl;
+    point_t intersection = geoGetIntersection(v.back().Line, v.front().Line);
+    v.back().Line.end = intersection;
+    v.front().Line.start = intersection;
+  }
+  return v;
 }

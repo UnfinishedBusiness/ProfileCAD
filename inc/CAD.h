@@ -59,5 +59,8 @@ void cadDrawLine(line_t);
 void cadDrawArc(arc_t);
 void cadDrawDimension(dimension_t);
 
+contour_t cadGetCurrentContour();
+color_t cadGetCurrentColor();
+
 
 #endif

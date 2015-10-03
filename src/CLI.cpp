@@ -817,6 +817,14 @@ void cliXform_MoveClicked(bool c)
 {
   dialogCheckboxSet("Copy?", !c);
 }
+void cliXform_LeftClicked(bool c)
+{
+  dialogCheckboxSet("Right?", !c);
+}
+void cliXform_RightClicked(bool c)
+{
+  dialogCheckboxSet("Left?", !c);
+}
 void cliXformRotate_Callback()
 {
   bool Operator;
@@ -1094,6 +1102,43 @@ void *cliDraftingDimensionPoint()
   uiEdit(0, uiEntity{UI_TEXT, RED, "Draw dimension!", UI_MENU_POSITION});
   return NULL;
 }
+void cliXformOffsetContour_Callback()
+{
+  bool Side;
+  if (dialogCheckboxGet("Right?"))
+  {
+    Side = CONTOUR_RIGHT;
+  }
+  if (dialogCheckboxGet("Left?"))
+  {
+    Side = CONTOUR_LEFT;
+  }
+  float Offset = fabs(atof(dialogTextboxGetString("Offset").c_str()));
+  vector<cadEntity> o = geoOffsetContour(cadGetCurrentContour(), Side, Offset);
+  for (int x = 0; x < o.size(); x++)
+  {
+    o[x].Color = cadGetCurrentColor();
+    cadAppend(o[x], false);
+  }
+  dialogClose();
+}
+void *cliXformOffsetContour()
+{
+  point_t pos = point_t{-450, 320};
+  dialogAddLabel(pos, "Offset?");
+  pos.y -= 120;
+  dialogAddTextBox(pos, 500, 100, "Offset");
+  pos.y -= 120;
+
+  dialogAddCheckbox(pos, "Left?", false, cliXform_LeftClicked);
+  pos.y -= 60;
+
+  dialogAddCheckbox(pos, "Right?", true, cliXform_RightClicked);
+  pos.y -= 60;
+
+  dialogAddButton(point_t{200, -350}, 200, 100, "OK", cliXformOffsetContour_Callback);
+  dialogOpen("Xform Offset Contour");
+}
 #define CLI_MENU_ITEMS 7
 menu_item_t menu[CLI_MENU_ITEMS] = {
   { "f", "file",
@@ -1158,7 +1203,7 @@ menu_item_t menu[CLI_MENU_ITEMS] = {
         sub_sub_menu_item_t{ "s", "selected entitys", &cliXformTranslateSelected },
       },
       sub_menu_item_t{ "o", "offset",
-      sub_sub_menu_item_t{ "c", "chain" },
+      sub_sub_menu_item_t{ "c", "contour", &cliXformOffsetContour },
       },
       sub_menu_item_t{ "f", "fillet",
           sub_sub_menu_item_t{ "r", "radius" , &cliXformFilletRadius },

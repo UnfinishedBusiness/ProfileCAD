@@ -57,4 +57,5 @@ float geoGetIncludedAngle(arc_t); //Returns in degrees!
 float geoRound(float);
 
 contour_t geoGetContour(std::vector<cadEntity>);
+std::vector<cadEntity> geoOffsetContour(contour_t, bool, float);
 #endif

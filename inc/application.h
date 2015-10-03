@@ -65,6 +65,8 @@ extern "C" {
 
 #define ARC_CW true
 #define ARC_CCW false
+#define CONTOUR_RIGHT true
+#define CONTOUR_LEFT false
 
 struct args_t{
   int argc;
@@ -153,6 +155,7 @@ struct cadEntity{
 struct contour_t{
   point_t start_reference;
   std::vector<cadEntity> Entitys;
+  bool isClosed;
 };
 #ifdef __APPLE__
   #define BACKGROUND color_t{0, 0, 0.10, 1}
