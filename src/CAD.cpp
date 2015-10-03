@@ -227,7 +227,7 @@ void cadSelectedToContour()
   cadEntity e;
   for (int x = 0; x < CurrentContour.Entitys.size(); x++)
   {
-    if (CurrentContour.Entitys[x].Type = CAD_LINE)
+    if (CurrentContour.Entitys[x].Type == CAD_LINE)
     {
       e.Type = CAD_LINE;
       //e.Line = geoExtendLineStartpoint(geoRotateLine(CurrentContour.Entitys[x].Line, geoGetLineMidpoint(CurrentContour.Entitys[x].Line), 135), 0.050);
@@ -236,6 +236,14 @@ void cadSelectedToContour()
       e.Line = geoExtendLineAngle(geoGetLineMidpoint(CurrentContour.Entitys[x].Line), geoGetLineAngle(CurrentContour.Entitys[x].Line) + geoDegreesToRadians(-45), 0.1);
       l.push_back(e);
     }
+    if (CurrentContour.Entitys[x].Type == CAD_ARC)
+    {
+      cout << "Found Arc!" << endl;
+      e.Type = CAD_ARC;
+      e.Arc = geoGetCircle(e.Arc.center, 0.1);
+      l.push_back(e);
+    }
+
   }
   cadShowLiveEntity(l);
 }

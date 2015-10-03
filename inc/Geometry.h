@@ -39,6 +39,8 @@ line_t geoExtendLineEndpoint(line_t, float);
 line_t geoExtendLineStartpoint(line_t, float);
 line_t geoExtendLineAngle(point_t, float, float);
 line_t geoFlipLine(line_t);
+arc_t geoFlipArc(arc_t);
+arc_t geoGetCircle(point_t, float);
 point_t geoGetLineMidpoint(line_t);
 float geoGetLineAngle(line_t);
 float geoRadiansToDegrees(float);

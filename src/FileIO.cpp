@@ -286,7 +286,7 @@ void fileReadDXF()
                 a.end.z = 0;
                 a.center.x = 0;
                 a.center.y = 0;
-                a.center.x = 0;
+                a.center.z = 0;
                 CurrentEntity = "";
               break;
             case 62: //Color
@@ -363,7 +363,7 @@ void fileReadDXF()
                 a.end.z = 0;
                 a.center.x = 0;
                 a.center.y = 0;
-                a.center.x = 0;
+                a.center.z = 0;
                 CurrentEntity = "";
               break;
             case 62: //Color
