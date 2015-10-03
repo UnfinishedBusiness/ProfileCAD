@@ -221,7 +221,7 @@ void cadHideSelectionBox()
 void cadSelectedToContour()
 {
   CurrentContour = geoGetContour(cadGetSelected());
-  debugDumpContourStructure(CurrentContour);
+  //debugDumpContourStructure(CurrentContour);
 
   vector<cadEntity> l;
   cadEntity e;
