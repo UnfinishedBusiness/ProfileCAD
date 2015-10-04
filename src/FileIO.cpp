@@ -10,48 +10,73 @@ bool isNumeric(const std::string& input) {
 }
 int fileOpen(string f)
 {
-  ifs.open(f);
-  if (ifs.is_open())
+  if (f.find(".dxf") != std::string::npos)
   {
-    if (f.find(".dxf") != std::string::npos)
-    {
-      fileReadDXF();
-    }
-    else if (f.find(".nc") != std::string::npos)
-    {
-      fileReadNC();
-    }
-    else
-    {
-      return FILE_UNKNOWN_FORMAT;
-    }
+    ifs.open(f);
+    fileReadDXF();
     ifs.close();
-    return FILE_OK;
+  }
+  else if (f.find(".nc") != std::string::npos)
+  {
+    ifs.open(f);
+    fileReadNC();
+    ifs.close();
+  }
+  else if (f.find(".pfcad") != std::string::npos)
+  {
+    ifs.open(f, std::ios::binary | std::ios::in );
+    fileReadPFCAD();
+    ifs.close();
   }
   else
   {
-    return FILE_OPEN_ERROR;
+    return FILE_UNKNOWN_FORMAT;
   }
+  return FILE_OK;
 }
 int fileSave(string f)
 {
-  ofs.open(f, std::ofstream::out );
-  if (ofs.is_open())
+  if (f.find("dxf") != std::string::npos)
   {
-    if (f.find("dxf") != std::string::npos)
-    {
-      fileWriteDXF();
-    }
-    else
-    {
-      return FILE_UNKNOWN_FORMAT;
-    }
+    ofs.open(f, std::ofstream::out );
+    fileWriteDXF();
     ofs.close();
-    return FILE_OK;
+  }
+  else if (f.find(".pfcad") != std::string::npos)
+  {
+    ofs.open(f, std::ios::binary | std::ios::out );
+    fileWritePFCAD();
+    ofs.close();
   }
   else
   {
-    return FILE_OPEN_ERROR;
+    return FILE_UNKNOWN_FORMAT;
+  }
+  return FILE_OK;
+}
+void fileWritePFCAD()
+{
+  if(!ofs) {
+    cout << "Cannot write file!\n";
+    return;
+  }
+  cadEntity e;
+  for (int x = 0; x < cadGetEntityArrayIndex(); x++)
+  {
+    e = cadGetEntityArray(x);
+    ofs.write((char *) &e, sizeof(struct cadEntity));
+  }
+}
+void fileReadPFCAD()
+{
+  if(!ifs) {
+    cout << "Cannot read file!\n";
+    return;
+  }
+  cadEntity e;
+  while(ifs.read((char *) &e, sizeof(struct cadEntity)))
+  {
+      cadAppend(e, false);
   }
 }
 void fileWriteDXF()

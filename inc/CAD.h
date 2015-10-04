@@ -3,12 +3,7 @@
 #include <application.h>
 #include <Scene.h>
 
-#define CAD_ARC 0x00
-#define CAD_LINE 0x01
-#define CAD_NOTE 0x02
-#define CAD_DIMENSION 0x03
 
-#define DIMENSION_POINT 0x00
 
 struct cadSelectionBox_t{
   arc_t a;

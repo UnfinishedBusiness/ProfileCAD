@@ -63,6 +63,11 @@ extern "C" {
 
 #define V if(mainVerbose())
 
+#define CAD_ARC 0x00
+#define CAD_LINE 0x01
+#define CAD_NOTE 0x02
+#define CAD_DIMENSION 0x03
+#define DIMENSION_POINT 0x00
 #define ARC_CW true
 #define ARC_CCW false
 #define CONTOUR_RIGHT true
@@ -144,6 +149,21 @@ struct cadEntity{
   arc_t Arc;
   note_t Note;
   dimension_t Dimension;
+  //Operational data
+  bool Selected;
+  bool MouseOver;
+  point_t SelectedAt;
+  bool Removed;
+  int Index;
+  int SelectionIndex;
+};
+struct cadEntity_{
+  int Type; //Line or Arc
+  color_t Color;
+  line_t Line;
+  arc_t Arc;
+  note_t Note;
+  //dimension_t Dimension;
   //Operational data
   bool Selected;
   bool MouseOver;

@@ -1401,6 +1401,18 @@ void cliInit()
   {
     glutFullScreen();
   }
+  if (args.args.find("-pod") != std::string::npos)
+  {
+    std::cout << std::boolalpha;
+    std::cout << "struct cadEntity => " << std::is_pod<cadEntity>::value << '\n';
+    std::cout << "struct cadEntity_ => " << std::is_pod<cadEntity_>::value << '\n';
+    std::cout << "struct point_t => " << std::is_pod<point_t>::value << '\n';
+    std::cout << "struct line_t => " << std::is_pod<line_t>::value << '\n';
+    std::cout << "struct arc_t => " << std::is_pod<arc_t>::value << '\n';
+    std::cout << "struct note_t => " << std::is_pod<note_t>::value << '\n';
+    std::cout << "struct dimension_t => " << std::is_pod<dimension_t>::value << '\n';
+    exit(0);
+  }
   if (args.args.find("-tinyg") != std::string::npos)
   {
     vector<string> array = split(args.args, ' ');
@@ -1437,4 +1449,5 @@ void cliInit()
       }
     }
   }
+
 }

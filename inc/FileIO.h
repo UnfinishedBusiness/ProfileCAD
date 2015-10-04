@@ -18,4 +18,7 @@ void fileWriteDXF();
 //NC Methods
 void fileReadNC();
 
+//PFCAD Methods
+void fileReadPFCAD();
+void fileWritePFCAD();
 #endif
