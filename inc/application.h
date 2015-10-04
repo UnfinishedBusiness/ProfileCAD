@@ -114,7 +114,7 @@ struct arc_t{
 struct note_t{
   int size;
   point_t pos;
-  std::string text;
+  char text[2048];
 
   int parentIndex;
 };
@@ -122,7 +122,7 @@ struct dimension_point_t{
   int size;
   point_t snap_pos;
   point_t text_pos;
-  std::string text;
+  char text[2048];
 };
 struct dimension_t{
   int Type;
@@ -149,21 +149,6 @@ struct cadEntity{
   arc_t Arc;
   note_t Note;
   dimension_t Dimension;
-  //Operational data
-  bool Selected;
-  bool MouseOver;
-  point_t SelectedAt;
-  bool Removed;
-  int Index;
-  int SelectionIndex;
-};
-struct cadEntity_{
-  int Type; //Line or Arc
-  color_t Color;
-  line_t Line;
-  arc_t Arc;
-  note_t Note;
-  //dimension_t Dimension;
   //Operational data
   bool Selected;
   bool MouseOver;

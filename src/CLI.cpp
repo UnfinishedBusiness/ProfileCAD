@@ -1405,7 +1405,6 @@ void cliInit()
   {
     std::cout << std::boolalpha;
     std::cout << "struct cadEntity => " << std::is_pod<cadEntity>::value << '\n';
-    std::cout << "struct cadEntity_ => " << std::is_pod<cadEntity_>::value << '\n';
     std::cout << "struct point_t => " << std::is_pod<point_t>::value << '\n';
     std::cout << "struct line_t => " << std::is_pod<line_t>::value << '\n';
     std::cout << "struct arc_t => " << std::is_pod<arc_t>::value << '\n';

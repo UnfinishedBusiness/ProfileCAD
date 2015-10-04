@@ -367,7 +367,7 @@ void cadRenderNote(note_t n)
     return;
   }
   glRasterPos3f(n.pos.x, n.pos.y, n.pos.z);
-  for (int i = 0; i < n.text.length(); i++)
+  for (int i = 0; i < strlen(n.text); i++)
   {
     glutBitmapCharacter (font, n.text[i]);
   }
@@ -386,16 +386,20 @@ void cadRenderDimension(dimension_t d)
     X << d.Point.snap_pos.x;
     Y << d.Point.snap_pos.y;
     Z << d.Point.snap_pos.z;
+    string tmp;
     if (d.Point.snap_pos.z != 0)
     {
-      d.Point.text = "X: " + X.str() + " Y: " + Y.str() + " Z: " + Z.str();
+      tmp = "X: " + X.str() + " Y: " + Y.str() + " Z: " + Z.str();
     }
     else
     {
-      d.Point.text = "X: " + X.str() + " Y: " + Y.str();
+      tmp = "X: " + X.str() + " Y: " + Y.str();
     }
+    strcpy(d.Point.text, tmp.c_str());
 
-    n.text = d.Point.text;
+    //n.text = d.Point.text;
+    strcpy(n.text, d.Point.text);
+    
     cadRenderNote(n);
     line_t leader_body = geoExtendLineEndpoint(line_t{d.Point.text_pos, d.Point.snap_pos}, 0.050);
     leader_body = geoExtendLineEndpoint(line_t{leader_body.end, leader_body.start}, 0.050);
