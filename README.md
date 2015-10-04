@@ -1,13 +1,11 @@
 # ProfileCAD
 2D/3D CAD/CAM Software with a MasterCam 8 like menu driven workflow
 
-Built in TinyG control interface
-
 Controls
 --------
-Ctrl+click orbit
-Mouse middle-click+drag panning
-Mouse scroll zoom
+Ctrl+click orbit<br>
+Mouse middle-click+drag panning<br>
+Mouse scroll zoom<br>
 
 Fileformats
 -----------
@@ -24,14 +22,14 @@ Simple 2d drawing tools are mostly working correctly
 
 Todo
 ----
-Design a un-encrypted native file format
-Settings dialog -- Background color, etc ...
-Tool Library
-Machine controller (Like bridgeport ez-path type thing)
-Toolpath generation on contours
-Lua post processors
-Dialog file selector
-Update the 1980's looking keyboard menu to something more "Pretty" << Josh's suggestion
+1. Design a un-encrypted native file format
+2. Settings dialog -- Background color, etc ...
+3. Tool Library
+4. Machine controller (Like bridgeport ez-path type thing)
+5. Toolpath generation on contours
+6. Lua post processors
+7. Dialog file selector
+8. Update the 1980's looking keyboard menu to something more "Pretty" << Josh's suggestion
 
 Building
 --------
@@ -41,23 +39,23 @@ I'm not much for libraries and I wanna keep this simple as possible with as few 
 
 Right now to build you need 4 libraries
 
-Freeglut
-OpenGL
-PNG
-Lua
+Freeglut<br>
+OpenGL<br>
+PNG<br>
+Lua<br>
 
 Linux Build Instructions
 ------------------------
-cd build/
-rm -r CMake*
-cmake ../src
-make
-./ProfileCAD
+cd build/<br>
+rm -r CMake*<br>
+cmake ../src<br>
+make<br>
+./ProfileCAD<br>
 
 OSX Build Instructions
 ------------------------
-cd build_osx/
-rm -r CMake*
-cmake ../src
-make
-open ProfileCAD.app
+cd build_osx/<br>
+rm -r CMake*<br>
+cmake ../src<br>
+make<br>
+open ProfileCAD.app<br>
