@@ -35,7 +35,7 @@ Building
 --------
 profileCAD uses cmake to make building easy. Should compile on any platform architecture combination that required libraries have been ported to.
 
-I'm not much for libraries and I wanna keep this simple as possible with as few dependencies as i combination
+I'm not much for libraries and I wanna keep this simple as possible with as few dependencies as i can
 
 Right now to build you need 4 libraries
 
