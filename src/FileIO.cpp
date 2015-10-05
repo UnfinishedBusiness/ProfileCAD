@@ -4,6 +4,7 @@ using namespace std;
 
 ofstream ofs;
 ifstream ifs;
+gzFile gz;
 
 bool isNumeric(const std::string& input) {
     return std::all_of(input.begin(), input.end(), ::isdigit);
@@ -24,9 +25,11 @@ int fileOpen(string f)
   }
   else if (f.find(".pfcad") != std::string::npos)
   {
-    ifs.open(f, std::ios::binary | std::ios::in );
+    //ifs.open(f, std::ios::binary | std::ios::in );
+    gz = gzopen(f.c_str(), "rb");
     fileReadPFCAD();
-    ifs.close();
+    gzclose(gz);
+    //ifs.close();
   }
   else
   {
@@ -44,9 +47,11 @@ int fileSave(string f)
   }
   else if (f.find(".pfcad") != std::string::npos)
   {
-    ofs.open(f, std::ios::binary | std::ios::out );
+    //ofs.open(f, std::ios::binary | std::ios::out );
+    gz = gzopen(f.c_str(), "wb");
     fileWritePFCAD();
-    ofs.close();
+    gzclose(gz);
+    //ofs.close();
   }
   else
   {
@@ -56,7 +61,7 @@ int fileSave(string f)
 }
 void fileWritePFCAD()
 {
-  if(!ofs) {
+  if(!gz) {
     cout << "Cannot write file!\n";
     return;
   }
@@ -64,19 +69,24 @@ void fileWritePFCAD()
   for (int x = 0; x < cadGetEntityArrayIndex(); x++)
   {
     e = cadGetEntityArray(x);
-    ofs.write((char *) &e, sizeof(struct cadEntity));
+    //ofs.write((char *) &e, sizeof(struct cadEntity));
+    gzwrite(gz, (char *) &e, sizeof(struct cadEntity));
   }
 }
 void fileReadPFCAD()
 {
-  if(!ifs) {
+  if(!gz) {
     cout << "Cannot read file!\n";
     return;
   }
   cadEntity e;
-  while(ifs.read((char *) &e, sizeof(struct cadEntity)))
+  /*while(ifs.read((char *) &e, sizeof(struct cadEntity)))
   {
       cadAppend(e, false);
+  }*/
+  while (gzread(gz, (char *) &e, sizeof(struct cadEntity)))
+  {
+       cadAppend(e, false);
   }
 }
 void fileWriteDXF()

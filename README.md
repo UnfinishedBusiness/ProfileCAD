@@ -37,12 +37,13 @@ profileCAD uses cmake to make building easy. Should compile on any platform arch
 
 I'm not much for libraries and I wanna keep this simple as possible with as few dependencies as i can
 
-Right now to build you need 4 libraries
+Right now to build you need 5 libraries
 
 Freeglut<br>
 OpenGL<br>
 PNG<br>
 Lua<br>
+ZLib<br>
 
 Linux Build Instructions
 ------------------------

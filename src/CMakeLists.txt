@@ -11,6 +11,16 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/../cmake")
 
 set(CMAKE_BUILD_TYPE Debug)
 #########################################################
+# FIND ZLIB
+#########################################################
+find_package(ZLIB REQUIRED)
+include_directories(${ZLIB_INCLUDE_DIRS})
+link_directories(${ZLIB_LIBRARY_DIRS})
+add_definitions(${ZLIB_DEFINITIONS})
+if(NOT ZLIB_FOUND)
+    message(ERROR " ZLIB not found!")
+endif(NOT ZLIB_FOUND)
+#########################################################
 # FIND GLUT
 #########################################################
 find_package(GLUT REQUIRED)
@@ -64,4 +74,4 @@ include_directories(../inc)
   if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     set(GLUT_LIBRARY -lglut)
   endif()
-  target_link_libraries(ProfileCAD ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${LUA_LIBRARY} ${PNG_LIBRARY})
+  target_link_libraries(ProfileCAD ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${LUA_LIBRARY} ${PNG_LIBRARY} ${ZLIB_LIBRARY})

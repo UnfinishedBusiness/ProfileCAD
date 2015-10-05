@@ -139,6 +139,8 @@ UI.h
 -
 Window.h
 -
+zlib.h
+/root/Projects/ProfileCAD/src/../inc/zlib.h
 lua.h
 /root/Projects/ProfileCAD/src/../inc/lua.h
 lualib.h

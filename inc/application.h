@@ -38,6 +38,8 @@
 #include <UI.h>
 #include <Window.h>
 
+#include "zlib.h"
+
 extern "C" {
 #include "lua.h"
 #include "lualib.h"

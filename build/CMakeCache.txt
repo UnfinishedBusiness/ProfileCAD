@@ -600,6 +600,9 @@ ZLIB_INCLUDE_DIR:PATH=/usr/include
 //Path to a library.
 ZLIB_LIBRARY:FILEPATH=/usr/lib64/libz.so
 
+//The directory containing a CMake configuration file for Z.
+Z_DIR:PATH=Z_DIR-NOTFOUND
+
 //The directory containing a CMake configuration file for glui.
 glui_DIR:PATH=glui_DIR-NOTFOUND
 
