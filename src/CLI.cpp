@@ -313,12 +313,14 @@ void *cliCreateCircleTwoPoints()
 }
 void *cliScreenSelectAll()
 {
+  cliScreenUnSelectAll();
   int m = cadGetEntityArrayIndex();
   cadEntity e;
   for (int a = 0; a < m; a++)
   {
     e = cadGetEntityArray(a);
     e.Selected = true;
+    e.SelectionIndex = a;
     cadEdit(a, e);
   }
 }

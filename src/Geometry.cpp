@@ -573,7 +573,7 @@ contour_t geoGetContour(std::vector<cadEntity> s)
   vector<int> UsedPoints;
   float greatest = 0;
   float smallest;
-  contour.start_reference = point_t{0, 0};
+  contour.start_reference = point_t{0,0};
   for (int x = 0; x < Endpoints.size(); x++)
   {
     if (std::find(UsedPoints.begin(), UsedPoints.end(), x) == UsedPoints.end())
@@ -583,12 +583,12 @@ contour_t geoGetContour(std::vector<cadEntity> s)
         if (x == 0)
         {
           Endpoints[i].tmp = geoGetLineLength(line_t{ contour.start_reference, Endpoints[i]});
+          //cout << "X=0 Distance = " << Endpoints[i].tmp << endl;
         }
         else
         {
           Endpoints[i].tmp = geoGetLineLength(line_t{ Endpoints[x], Endpoints[i]});
         }
-
         //V cout << "\tDistance => " << Endpoints[i].tmp << endl;
         if (Endpoints[i].tmp > greatest)
         {
@@ -620,7 +620,7 @@ contour_t geoGetContour(std::vector<cadEntity> s)
   for (int x = 0; x < SortedPoints.size(); x++)
   {
     //V debugDumpPointStructure(Endpoints[x]);
-    if (x > 0 && SortedPoints[x] == SortedPoints[x-1])
+    if (x > 0 && SortedPoints[x] == SortedPoints[x-1] && x != SortedPoints.size())
     {
       //cout << "(DupeSort) duplicat point!" << endl;
     }
@@ -632,8 +632,18 @@ contour_t geoGetContour(std::vector<cadEntity> s)
   SortedPoints = DupeSortedPoints;
 
   cadEntity e;
-  point_t pos = contour.start_reference;
-  for (int x = 0; x < SortedPoints.size(); x++)
+  point_t pos;
+  int start = 0;
+  if (SortedPoints.size() > 0)
+  {
+    pos = SortedPoints[0];
+    start = 1;
+  }
+  else
+  {
+    pos = contour.start_reference;
+  }
+  for (int x = start; x < SortedPoints.size(); x++)
   {
     //V debugDumpPointStructure(Endpoints[x]);
       if (cadGetEntityArray(SortedPoints[x].parrentIndex).Type == CAD_LINE)
@@ -662,126 +672,19 @@ contour_t geoGetContour(std::vector<cadEntity> s)
       }
   }
   contour.Points = SortedPoints;
-  /*contour.Entitys.push_back(s[0]); //Push Selection 0 as first contour entity
-  vector<int> Used;
-  for (int i = 0; i < contour.Entitys.size(); i++)
+  vector<cadEntity> SortedEntitys;
+  for (int x = 0; x < contour.Entitys.size(); x++)
   {
-    for (int x = 1; x < s.size(); x++)
+    if (contour.Entitys[x].Type == CAD_LINE && geoGetLineLength(contour.Entitys[x].Line) < 0.0005)
     {
-      //Which selection segment is connected to the endpoint of the last contour entity?
-      if (contour.Entitys[i].Type == CAD_LINE && s[x].Type == CAD_LINE ) //If this element and last element are lines
-      {
-        if (contour.Entitys[i].Line.end == s[x].Line.start && std::find(Used.begin(), Used.end(), s[x].Index) == Used.end())
-        {
-          V cout << KRED << "(geoGetContour {line=>line} 1)" << KGREEN << " Contour Entity " << i << " endpoint is connected to Selection " << x << " start point" << KNORMAL << endl;
-          contour.Entitys.push_back(s[x]);
-          Used.push_back(s[x].Index);
-          break;
-        }
-        else if (contour.Entitys[i].Line.end == s[x].Line.end && std::find(Used.begin(), Used.end(), s[x].Index) == Used.end())
-        {
-          V cout << KRED << "(geoGetContour {line=>line} 2)" << KGREEN << " Contour Entity " << i << " endpoint is connected to Selection " << x << " end point (Flipping)" << KNORMAL << endl;
-          s[x].Line = geoFlipLine(s[x].Line);
-          contour.Entitys.push_back(s[x]);
-          Used.push_back(s[x].Index);
-          break;
-        }
-        else if (contour.Entitys[i].Line.start == s[x].Line.end && std::find(Used.begin(), Used.end(), s[x].Index) == Used.end())
-        {
-          V cout << KRED << "(geoGetContour {line=>line} 3)" << KGREEN << " Contour Entity " << i << " startpoint is connected to Selection " << x << " end point" << KNORMAL << endl;
-          //s[x].Line = geoFlipLine(s[x].Line);
-          contour.Entitys.push_back(s[x]);
-          Used.push_back(s[x].Index);
-          break;
-        }
-        else if (contour.Entitys[i].Line.start == s[x].Line.start && std::find(Used.begin(), Used.end(), s[x].Index) == Used.end())
-        {
-          V cout << KRED << "(geoGetContour {line=>line} 4)" << KGREEN << " Contour Entity " << i << " startpoint is connected to Selection " << x << " startpoint (Flipping)" << KNORMAL << endl;
-          s[x].Line = geoFlipLine(s[x].Line);
-          contour.Entitys.push_back(s[x]);
-          Used.push_back(s[x].Index);
-          break;
-        }
-      }
-      if (contour.Entitys[i].Type == CAD_LINE && s[x].Type == CAD_ARC) //If this element is a line and last element is a arc
-      {
-        if (contour.Entitys[i].Line.start == s[x].Arc.start && std::find(Used.begin(), Used.end(), s[x].Index) == Used.end())
-        {
-          V cout << KRED << "(geoGetContour {line=>arc} 1)" << KGREEN << " Contour Entity " << i << " line startpoint is connected to Selection " << x << " arc startpoint (Flipping Arc)" << KNORMAL << endl;
-          //debugDumpEntityStructure(s[x]);
-          s[x].Arc = geoFlipArc(s[x].Arc);
-          //debugDumpEntityStructure(s[x]);
-          contour.Entitys.push_back(s[x]);
-          Used.push_back(s[x].Index);
-          break;
-        }
-        else if (contour.Entitys[i].Line.start == s[x].Arc.end && std::find(Used.begin(), Used.end(), s[x].Index) == Used.end())
-        {
-          V cout << KRED << "(geoGetContour {line=>arc} 2)" << KGREEN << " Contour Entity " << i << " line startpoint is connected to Selection " << x << " arc endpoint" << KNORMAL << endl;
-          contour.Entitys.push_back(s[x]);
-          Used.push_back(s[x].Index);
-          break;
-        }
-        else if (contour.Entitys[i].Line.end == s[x].Arc.end && std::find(Used.begin(), Used.end(), s[x].Index) == Used.end())
-        {
-          V cout << KRED << "(geoGetContour {line=>arc} 3)" << KGREEN << " Contour Entity " << i << " line endpoint is connected to Selection " << x << " arc endpoint" << KNORMAL << endl;
-          s[x].Arc = geoFlipArc(s[x].Arc);
-          contour.Entitys.push_back(s[x]);
-          Used.push_back(s[x].Index);
-          break;
-        }
-        else if (contour.Entitys[i].Line.end == s[x].Arc.start && std::find(Used.begin(), Used.end(), s[x].Index) == Used.end())
-        {
-          V cout << KRED << "(geoGetContour {line=>arc} 4)" << KGREEN << " Contour Entity " << i << " line endpoint is connected to Selection " << x << " arc startpoint" << KNORMAL << endl;
-          contour.Entitys.push_back(s[x]);
-          Used.push_back(s[x].Index);
-          break;
-        }
-      }
-      if (contour.Entitys[i].Type == CAD_ARC && s[x].Type == CAD_LINE) //If this element is a line and last element is a arc
-      {
-        if (contour.Entitys[i].Arc.start == s[x].Line.start && std::find(Used.begin(), Used.end(), s[x].Index) == Used.end())
-        {
-          V cout << KRED << "(geoGetContour {arc=>line} 1)" << KGREEN << " Contour Entity " << i << " arc startpoint is connected to Selection " << x << " line startpoint (Flipping Arc)" << KNORMAL << endl;
-          s[x].Line = geoFlipLine(s[x].Line);
-          contour.Entitys.push_back(s[x]);
-          Used.push_back(s[x].Index);
-          break;
-        }
-        else if (contour.Entitys[i].Arc.start == s[x].Line.end && std::find(Used.begin(), Used.end(), s[x].Index) == Used.end())
-        {
-          V cout << KRED << "(geoGetContour {arc=>line} 2)" << KGREEN << " Contour Entity " << i << " arc startpoint is connected to Selection " << x << " line endpoint" << KNORMAL << endl;
-          contour.Entitys.push_back(s[x]);
-          Used.push_back(s[x].Index);
-          break;
-        }
-        else if (contour.Entitys[i].Arc.end == s[x].Line.end && std::find(Used.begin(), Used.end(), s[x].Index) == Used.end())
-        {
-          V cout << KRED << "(geoGetContour {arc=>line} 3)" << KGREEN << " Contour Entity " << i << " arc endpoint is connected to Selection " << x << " line endpoint" << KNORMAL << endl;
-          s[x].Line = geoFlipLine(s[x].Line);
-          contour.Entitys.push_back(s[x]);
-          Used.push_back(s[x].Index);
-          break;
-        }
-        else if (contour.Entitys[i].Arc.end == s[x].Line.start && std::find(Used.begin(), Used.end(), s[x].Index) == Used.end())
-        {
-          V cout << KRED << "(geoGetContour {arc=>line} 4)" << KGREEN << " Contour Entity " << i << " arc endpoint is connected to Selection " << x << " line startpoint" << KNORMAL << endl;
-          contour.Entitys.push_back(s[x]);
-          Used.push_back(s[x].Index);
-          break;
-        }
-      }
+      //cout << "Cought zero length line!" << endl;
+    }
+    else
+    {
+      SortedEntitys.push_back(contour.Entitys[x]);
     }
   }
-  if (contour.Entitys.back().Line.end == contour.Entitys.front().Line.start) //Were a closed contour
-  {
-    V cout << KRED << "(geoGetContour)" << KGREEN << "Closed contour!" << KNORMAL << endl;
-    contour.isClosed = true;
-  }
-  else
-  {
-    contour.isClosed = false;
-  }*/
+  contour.Entitys = SortedEntitys;
   return contour;
 }
 std::vector<cadEntity> geoOffsetContour(contour_t c, bool s, float d)
@@ -814,6 +717,17 @@ std::vector<cadEntity> geoOffsetContour(contour_t c, bool s, float d)
         point_t intersection = geoGetIntersection(v[x-1].Line, v[x].Line);
         v[x-1].Line.end = intersection;
         v[x].Line.start = intersection;
+      }
+    }
+    if ( c.Entitys[x].Type == CAD_ARC)
+    {
+      if (s == CONTOUR_RIGHT)
+      {
+        
+      }
+      if (s == CONTOUR_LEFT)
+      {
+
       }
     }
   }

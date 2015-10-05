@@ -141,8 +141,7 @@ std::vector<cadEntity> cadGetSelected()
       if (cadEntityArray[i].Selected && !cadEntityArray[i].Removed) //Make sure were selected and not removed
       {
         //cout << "SelectionIndex = " << cadEntityArray[i].SelectionIndex << endl;
-        e.push_back(cadEntity());
-        e[e.size()-1] = cadEntityArray[i];
+        e.push_back(cadEntityArray[i]);
       }
   }
   int next = 1;
@@ -153,8 +152,7 @@ std::vector<cadEntity> cadGetSelected()
       if (e[x].SelectionIndex == next)
       {
         //cout << "Ordered = " << e[x].SelectionIndex << endl;
-        o.push_back(cadEntity());
-        o[next-1] = e[x];
+        o.push_back(e[x]);
         next++;
       }
     }
@@ -176,7 +174,7 @@ int cadCountSelection()
 }
 int cadCountEntitys()
 {
-  int r = 0;
+  int r = -1;
   for (int i = 0; i < cadEntityArrayIndex; i++)
   {
       if (!cadEntityArray[i].Removed) //Make sure were selected and not removed

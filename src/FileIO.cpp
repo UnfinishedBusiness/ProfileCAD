@@ -69,8 +69,11 @@ void fileWritePFCAD()
   for (int x = 0; x < cadGetEntityArrayIndex(); x++)
   {
     e = cadGetEntityArray(x);
-    //ofs.write((char *) &e, sizeof(struct cadEntity));
-    gzwrite(gz, (char *) &e, sizeof(struct cadEntity));
+    if (!e.Removed)
+    {
+      //ofs.write((char *) &e, sizeof(struct cadEntity));
+      gzwrite(gz, (char *) &e, sizeof(struct cadEntity));
+    }
   }
 }
 void fileReadPFCAD()

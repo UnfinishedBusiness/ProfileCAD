@@ -247,7 +247,7 @@ void mouseCallback(int btn, int state, int x, int y)
       {
         if (cadGetEntityArray(mouseLastMouseOverEntity.Index).MouseOver == true)
         {
-          if (mod == GLUT_ACTIVE_CTRL)
+          if (mouseLastMouseOverEntity.Selected == true)
           {
             mouseLastMouseOverEntity.Selected = false;
           }
@@ -325,22 +325,24 @@ void mousePassiveMotionCallback(int x, int y)
       mouseLive.push_back(CurrentContour.Entitys[x]);
       if (CurrentContour.Entitys[x].Type == CAD_LINE)
       {
-        /*l.Type = CAD_LINE;
+        l.Type = CAD_LINE;
         //e.Line = geoExtendLineStartpoint(geoRotateLine(CurrentContour.Entitys[x].Line, geoGetLineMidpoint(CurrentContour.Entitys[x].Line), 135), 0.050);
         l.Line = geoExtendLineAngle(geoGetLineMidpoint(CurrentContour.Entitys[x].Line), geoGetLineAngle(CurrentContour.Entitys[x].Line) + geoDegreesToRadians(45), 0.1);
+        l.Color = PURPLE;
+        l.LineWidth = 3;
         mouseLive.push_back(l);
         l.Line = geoExtendLineAngle(geoGetLineMidpoint(CurrentContour.Entitys[x].Line), geoGetLineAngle(CurrentContour.Entitys[x].Line) + geoDegreesToRadians(-45), 0.1);
-        mouseLive.push_back(l);*/
+        mouseLive.push_back(l);
 
       }
       if (CurrentContour.Entitys[x].Type == CAD_ARC)
       {
-        //l = CurrentContour.Entitys[x];
-        /*point_t midpoint = geoGetArcMidpoint(l.Arc);
+        l = CurrentContour.Entitys[x];
+        point_t midpoint = geoGetArcMidpoint(l.Arc);
         point_t center = l.Arc.center;
         l.Type = CAD_LINE;
         line_t arrow_body;
-        if (l.Arc.direction == ARC_CW)
+        if (l.Arc.direction == ARC_CCW)
         {
             arrow_body = geoRotateLine(line_t{midpoint, center}, midpoint, -90);
         }
@@ -349,9 +351,11 @@ void mousePassiveMotionCallback(int x, int y)
             arrow_body = geoRotateLine(line_t{midpoint, center}, midpoint, 90);
         }
         l.Line = geoExtendLineAngle(midpoint, geoGetLineAngle(arrow_body) + geoDegreesToRadians(45), 0.1);
+        l.Color = PURPLE;
+        l.LineWidth = 3;
         mouseLive.push_back(l);
         l.Line = geoExtendLineAngle(midpoint, geoGetLineAngle(arrow_body) + geoDegreesToRadians(-45), 0.1);
-        mouseLive.push_back(l);*/
+        mouseLive.push_back(l);
 
         /*line_t line = line_t{CurrentContour.Entitys[x].Arc.start, CurrentContour.Entitys[x].Arc.end};
         l.Type = CAD_LINE;
