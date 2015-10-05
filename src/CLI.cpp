@@ -897,10 +897,12 @@ void cliXformRotate_Callback()
             e.Arc.center = geoRotatePointAroundPoint(e.Arc.center, Origin, Angle, Direction);
             if (Operator) //Default is move
             {
+              e.Color = PURPLE;
               cadEdit(x, e);
             }
             else
             {
+              e.Color = PURPLE;
               cadAppend(e, false);
             }
           }
@@ -1003,10 +1005,12 @@ void cliXformTranslate_Callback()
 
             if (Operator) //Default is move
             {
+              e.Color = PURPLE;
               cadEdit(x, e);
             }
             else
             {
+              e.Color = PURPLE;
               cadAppend(e, false);
             }
           }
@@ -1117,7 +1121,8 @@ void cliXformOffsetContour_Callback()
   vector<cadEntity> o = geoOffsetContour(cadGetCurrentContour(), Side, Offset);
   for (int x = 0; x < o.size(); x++)
   {
-    o[x].Color = cadGetCurrentColor();
+    //o[x].Color = cadGetCurrentColor();
+    o[x].Color = PURPLE;
     cadAppend(o[x], false);
   }
   dialogClose();

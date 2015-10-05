@@ -223,7 +223,7 @@ void cadSelectedToContour()
   CurrentContour = geoGetContour(cadGetSelected());
   //debugDumpContourStructure(CurrentContour);
 
-  vector<cadEntity> l;
+  /*vector<cadEntity> l;
   cadEntity e;
   for (int x = 0; x < CurrentContour.Entitys.size(); x++)
   {
@@ -244,8 +244,8 @@ void cadSelectedToContour()
       l.push_back(e);
     }
 
-  }
-  cadShowLiveEntity(l);
+  }*/
+  mouseLiveShow("CurrentContour");
 }
 void cadShowLiveEntity(vector<cadEntity> e)
 {
@@ -399,7 +399,7 @@ void cadRenderDimension(dimension_t d)
 
     //n.text = d.Point.text;
     strcpy(n.text, d.Point.text);
-    
+
     cadRenderNote(n);
     line_t leader_body = geoExtendLineEndpoint(line_t{d.Point.text_pos, d.Point.snap_pos}, 0.050);
     leader_body = geoExtendLineEndpoint(line_t{leader_body.end, leader_body.start}, 0.050);
@@ -498,6 +498,15 @@ point_t cadCadCordToScreenCord(point_t s)
   glGetIntegerv( GL_VIEWPORT, viewport );
   gluProject(posX,posY,posZ,modelview,projection,viewport,&winX,&winY,&winZ);
   return point_t{(float)winX, (float)winY, (float)winZ,};
+}
+void cadReverseCurrentContour()
+{
+  for (int x = 0; x < CurrentContour.Entitys.size(); x++)
+  {
+    if (CurrentContour.Entitys[x].Type == CAD_LINE) CurrentContour.Entitys[x].Line = geoFlipLine(CurrentContour.Entitys[x].Line);
+    if (CurrentContour.Entitys[x].Type == CAD_ARC) CurrentContour.Entitys[x].Arc = geoFlipArc(CurrentContour.Entitys[x].Arc);
+  }
+  mouseLiveShow("CurrentContour");
 }
 contour_t cadGetCurrentContour()
 {

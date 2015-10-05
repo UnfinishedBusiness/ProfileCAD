@@ -56,6 +56,7 @@ void cadDrawDimension(dimension_t);
 
 contour_t cadGetCurrentContour();
 color_t cadGetCurrentColor();
+void cadReverseCurrentContour();
 
 
 #endif

@@ -49,6 +49,7 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
                   if (key == 21) //CTRL+u
                   {
                      cliScreenUnSelectAll();
+                     mouseLiveClear();
                   }
                   if (key == 4) //CTRL+d
                   {
@@ -81,6 +82,10 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
                   if (key == 3) //CTRL+c
                   {
                     cadSelectedToContour();
+                  }
+                  if (key == 18) //CTRL+r
+                  {
+                    cadReverseCurrentContour();
                   }
                   break;
                case 4 :  D printf("ALT   key %d\n",mod);  break;

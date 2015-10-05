@@ -176,6 +176,7 @@ struct contour_t{
 #define GREEN color_t{0, 1, 0, 1}
 #define BLUE  color_t{0, 0, 1, 1}
 #define YELLOW  color_t{1, 1, 0.5, 1}
+#define PURPLE  color_t{0.5, 0.1, 0.8, 1}
 #define CYAN  color_t{0, 1, 1, 1}
 #define MAGENTA color_t{1, 0, 1, 1}
 #define LIGHTGREY color_t{0.3, 0.3, 0.3, 1}

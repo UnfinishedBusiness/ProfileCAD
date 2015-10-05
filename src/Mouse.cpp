@@ -2,6 +2,8 @@
 
 using namespace std;
 
+bool passivePrime = false;
+
 float mouseClose = 0.010;
 float mouseTolerance()
 {
@@ -48,42 +50,6 @@ bool mouseVector(cadEntity e, point_t p)
     float end_angle = geoRadiansToDegrees(geoGetArcEndAngle(floater));
     float current_angle = 360 - fabs(geoRadiansToDegrees(geoGetLineAngle(line_t{floater.center, p})) -180);
 
-
-    /*
-    mouseLive.clear();
-    e.Arc = floater;
-    mouseLive.push_back(e);
-    e.Type = CAD_LINE;
-    e.Line = line_t{floater.center, p};
-    mouseLive.push_back(e);
-    e.Line = line_t{floater.center, floater.start};
-    mouseLive.push_back(e);
-
-    e.Line = line_t{floater.center, floater.end};
-    mouseLive.push_back(e);
-
-    e.Type = CAD_NOTE;
-    e.Note.size = 12;
-    e.Note.text = to_string(current_angle);
-    e.Note.pos = geoGetLineMidpoint(line_t{floater.center, p});
-    e.Note.pos.x += 0.010;
-    e.Note.pos.y += 0.010;
-    mouseLive.push_back(e);
-
-    line_t midpoint_intersector = line_t{geoGetLineMidpoint(line_t{floater.center, floater.start}),  geoGetLineMidpoint({floater.center, floater.end})};
-
-    e.Type = CAD_LINE;
-    e.Line = midpoint_intersector;
-    mouseLive.push_back(e);
-
-    if (geoDoLinesIntersect(midpoint_intersector, line_t{floater.center, p}))
-    {
-      cout << "+";
-      fflush(stdout);
-    }
-    cadShowLiveEntity(mouseLive);
-    */
-
     //if (current_angle >= start_angle && current_angle <= end_angle || floater.start == floater.end )
     line_t midpoint_intersector = line_t{geoGetLineMidpoint(line_t{floater.center, floater.start}),  geoGetLineMidpoint({floater.center, floater.end})};
     if (geoDoLinesIntersect(midpoint_intersector, line_t{floater.center, p}) || current_angle <= end_angle || floater.start == floater.end)
@@ -126,11 +92,15 @@ string mouseLiveShowInstruction;
 void mouseLiveShow(string s)
 {
   mouseLiveShowInstruction = s;
+  passivePrime = true;
+  mousePassiveMotionCallback(0, 0); //Prime show
 }
 void mouseLiveClear()
 {
   mouseLiveShowInstruction = "";
   mouseLive.clear();
+  passivePrime = true;
+  mousePassiveMotionCallback(0, 0); //Prime show
 }
 
 std::vector<string> mouseUISnapIndicator()
@@ -343,6 +313,30 @@ void mousePassiveMotionCallback(int x, int y)
   mouseCurrent = pos;
 
   cadEntity l;
+  if (mouseLiveShowInstruction == "CurrentContour")
+  {
+    contour_t CurrentContour = cadGetCurrentContour();
+    for (int x = 0; x < CurrentContour.Entitys.size(); x++)
+    {
+      if (CurrentContour.Entitys[x].Type == CAD_LINE)
+      {
+        l.Type = CAD_LINE;
+        //e.Line = geoExtendLineStartpoint(geoRotateLine(CurrentContour.Entitys[x].Line, geoGetLineMidpoint(CurrentContour.Entitys[x].Line), 135), 0.050);
+        l.Line = geoExtendLineAngle(geoGetLineMidpoint(CurrentContour.Entitys[x].Line), geoGetLineAngle(CurrentContour.Entitys[x].Line) + geoDegreesToRadians(45), 0.1);
+        mouseLive.push_back(l);
+        l.Line = geoExtendLineAngle(geoGetLineMidpoint(CurrentContour.Entitys[x].Line), geoGetLineAngle(CurrentContour.Entitys[x].Line) + geoDegreesToRadians(-45), 0.1);
+        mouseLive.push_back(l);
+      }
+      if (CurrentContour.Entitys[x].Type == CAD_ARC)
+      {
+        cout << "Found Arc!" << endl;
+        l = CurrentContour.Entitys[x];
+        l.Arc = geoGetCircle(l.Arc.center, 0.1);
+        mouseLive.push_back(l);
+      }
+
+    }
+  }
   if (mouseLiveShowInstruction == "LineVerticalOrigin")
   {
       //V cout << KRED << "(mouseLiveShow) LineVerticalOrigin" << KNORMAL << endl;
@@ -389,6 +383,11 @@ void mousePassiveMotionCallback(int x, int y)
     cadHideLiveEntity();
   }
   mouseLive.clear();
+  if (passivePrime)
+  {
+    passivePrime = false;
+    return;
+  }
   //V printf("%sX: %.6f, Y: %.6f, Z: %.6f%s\r", KGREEN, pos.x, pos.y, pos.z, KNORMAL);
   string m;
   if (pos.z != 0)
