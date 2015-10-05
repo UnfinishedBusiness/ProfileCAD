@@ -95,6 +95,8 @@ struct point_t{
   {
     return x != rhs.x && y != rhs.y && z != rhs.z;
   }
+  int parrentIndex;
+  float tmp;
 };
 struct line_t{
   point_t start;
@@ -151,6 +153,7 @@ struct cadEntity{
   arc_t Arc;
   note_t Note;
   dimension_t Dimension;
+  float LineWidth;
   //Operational data
   bool Selected;
   bool MouseOver;
@@ -162,6 +165,7 @@ struct cadEntity{
 struct contour_t{
   point_t start_reference;
   std::vector<cadEntity> Entitys;
+  std::vector<point_t> Points;
   bool isClosed;
 };
 #ifdef __APPLE__

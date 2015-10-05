@@ -464,6 +464,11 @@ float geoGetArcLength(arc_t a) //Not varified
   float angle = geoGetIncludedAngle(a);
   return a.radius * angle;
 }
+point_t geoGetArcMidpoint(arc_t a)
+{
+  float c=atan2(a.start.y + a.end.y, a.start.x + a.end.x);
+  return point_t{a.radius * cosf(c) + a.center.x, a.radius * sinf(c) + a.center.y};
+}
 float geoGetIncludedAngle(arc_t a)
 {
   float angle;
@@ -526,7 +531,138 @@ contour_t geoGetContour(std::vector<cadEntity> s)
     return contour_t{};
   }
   contour_t contour;
-  contour.Entitys.push_back(s[0]); //Push Selection 0 as first contour entity
+
+  vector<point_t> Endpoints;
+
+  point_t p;
+  for (int i = 0; i < s.size(); i++)
+  {
+    if (s[i].Type == CAD_LINE)
+    {
+      s[i].Line.start.parrentIndex = s[i].Index;
+      s[i].Line.end.parrentIndex = s[i].Index;
+      if (Endpoints.size() > 0 && geoGetLineLength(line_t{s[i].Line.start, Endpoints.back()}) < geoGetLineLength(line_t{s[i].Line.end, Endpoints.back()})) //Whic point is closest to last point?
+      {
+        Endpoints.push_back(s[i].Line.start);
+        Endpoints.push_back(s[i].Line.end);
+      }
+      else
+      {
+        Endpoints.push_back(s[i].Line.end);
+        Endpoints.push_back(s[i].Line.start);
+      }
+    }
+    if (s[i].Type == CAD_ARC)
+    {
+      s[i].Arc.start.parrentIndex = s[i].Index;
+      s[i].Arc.end.parrentIndex = s[i].Index;
+      if (Endpoints.size() > 0 && geoGetLineLength(line_t{s[i].Arc.start, Endpoints.back()}) < geoGetLineLength(line_t{s[i].Arc.end, Endpoints.back()})) //Whic point is closest to last point?
+      {
+        Endpoints.push_back(s[i].Arc.start);
+        Endpoints.push_back(s[i].Arc.end);
+      }
+      else
+      {
+        Endpoints.push_back(s[i].Arc.end);
+        Endpoints.push_back(s[i].Arc.start);
+      }
+    }
+  }
+  //Order points by this point is closest to last points
+  vector<point_t> SortedPoints;
+  vector<int> UsedPoints;
+  float greatest = 0;
+  float smallest;
+  contour.start_reference = point_t{0, 0};
+  for (int x = 0; x < Endpoints.size(); x++)
+  {
+    if (std::find(UsedPoints.begin(), UsedPoints.end(), x) == UsedPoints.end())
+    {
+      for (int i = 0; i < Endpoints.size(); i++) //populate point[i].tmp with distance from x point
+      {
+        if (x == 0)
+        {
+          Endpoints[i].tmp = geoGetLineLength(line_t{ contour.start_reference, Endpoints[i]});
+        }
+        else
+        {
+          Endpoints[i].tmp = geoGetLineLength(line_t{ Endpoints[x], Endpoints[i]});
+        }
+
+        //V cout << "\tDistance => " << Endpoints[i].tmp << endl;
+        if (Endpoints[i].tmp > greatest)
+        {
+            greatest = Endpoints[i].tmp;
+        }
+      }
+      //smallest = greatest;
+      //V cout << "Greatest => " << greatest << endl;
+      for (int i = 0; i < Endpoints.size(); i++) //Figure out which point is closest to x point
+      {
+        if ( Endpoints[i].tmp < smallest)
+        {
+          smallest = Endpoints[i].tmp;
+        }
+      }
+      //V cout << "Smallest => " << smallest << endl;
+      for (int i = 0; i < Endpoints.size(); i++) //Add smallest point to SortedPoints and remove from Endpoints
+      {
+        if (Endpoints[i].tmp == smallest)
+        {
+          SortedPoints.push_back(Endpoints[i]);
+          UsedPoints.push_back(i);
+          break;
+        }
+      }
+    }
+  }
+  vector<point_t> DupeSortedPoints;
+  for (int x = 0; x < SortedPoints.size(); x++)
+  {
+    //V debugDumpPointStructure(Endpoints[x]);
+    if (x > 0 && SortedPoints[x] == SortedPoints[x-1])
+    {
+      //cout << "(DupeSort) duplicat point!" << endl;
+    }
+    else
+    {
+      DupeSortedPoints.push_back(SortedPoints[x]);
+    }
+  }
+  SortedPoints = DupeSortedPoints;
+
+  cadEntity e;
+  point_t pos = contour.start_reference;
+  for (int x = 0; x < SortedPoints.size(); x++)
+  {
+    //V debugDumpPointStructure(Endpoints[x]);
+      if (cadGetEntityArray(SortedPoints[x].parrentIndex).Type == CAD_LINE)
+      {
+        e.Type = CAD_LINE;
+        e.Line.start = SortedPoints[x];
+        e.Line.end = pos;
+        contour.Entitys.push_back(e);
+        pos = SortedPoints[x];
+      }
+      if (cadGetEntityArray(SortedPoints[x].parrentIndex).Type == CAD_ARC)
+      {
+        e.Type = CAD_ARC;
+        e.Arc = cadGetEntityArray(SortedPoints[x].parrentIndex).Arc;
+        e.Arc.start = SortedPoints[x];
+        e.Arc.end = pos;
+        //debugDumpArcStructure(cadGetEntityArray(SortedPoints[x].parrentIndex).Arc);
+        //debugDumpArcStructure(e.Arc);
+        if (e.Arc.start.x != cadGetEntityArray(SortedPoints[x].parrentIndex).Arc.start.x && e.Arc.start.y != cadGetEntityArray(SortedPoints[x].parrentIndex).Arc.start.y)
+        {
+          //cout << "Wrong direction!" << endl;
+          e.Arc.direction = !e.Arc.direction;
+        }
+        contour.Entitys.push_back(e);
+        pos = SortedPoints[x];
+      }
+  }
+  contour.Points = SortedPoints;
+  /*contour.Entitys.push_back(s[0]); //Push Selection 0 as first contour entity
   vector<int> Used;
   for (int i = 0; i < contour.Entitys.size(); i++)
   {
@@ -572,7 +708,9 @@ contour_t geoGetContour(std::vector<cadEntity> s)
         if (contour.Entitys[i].Line.start == s[x].Arc.start && std::find(Used.begin(), Used.end(), s[x].Index) == Used.end())
         {
           V cout << KRED << "(geoGetContour {line=>arc} 1)" << KGREEN << " Contour Entity " << i << " line startpoint is connected to Selection " << x << " arc startpoint (Flipping Arc)" << KNORMAL << endl;
+          //debugDumpEntityStructure(s[x]);
           s[x].Arc = geoFlipArc(s[x].Arc);
+          //debugDumpEntityStructure(s[x]);
           contour.Entitys.push_back(s[x]);
           Used.push_back(s[x].Index);
           break;
@@ -600,7 +738,7 @@ contour_t geoGetContour(std::vector<cadEntity> s)
           break;
         }
       }
-      /*if (contour.Entitys[i].Type == CAD_ARC && s[x].Type == CAD_LINE) //If this element is a line and last element is a arc
+      if (contour.Entitys[i].Type == CAD_ARC && s[x].Type == CAD_LINE) //If this element is a line and last element is a arc
       {
         if (contour.Entitys[i].Arc.start == s[x].Line.start && std::find(Used.begin(), Used.end(), s[x].Index) == Used.end())
         {
@@ -632,7 +770,7 @@ contour_t geoGetContour(std::vector<cadEntity> s)
           Used.push_back(s[x].Index);
           break;
         }
-      }*/
+      }
     }
   }
   if (contour.Entitys.back().Line.end == contour.Entitys.front().Line.start) //Were a closed contour
@@ -643,7 +781,7 @@ contour_t geoGetContour(std::vector<cadEntity> s)
   else
   {
     contour.isClosed = false;
-  }
+  }*/
   return contour;
 }
 std::vector<cadEntity> geoOffsetContour(contour_t c, bool s, float d)

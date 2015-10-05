@@ -274,24 +274,21 @@ void cadRender()
     if (cadLiveEntity[x].Removed == false)
     {
       //printf("Rendering live entity!\n");
+      sceneColor(cadLiveEntity[x].Color);
       if (cadLiveEntity[x].Type == CAD_LINE)
       {
-        sceneColor(DARKGREY);
-        cadRenderLine(cadLiveEntity[x].Line);
+        cadRenderLine(cadLiveEntity[x].Line, cadLiveEntity[x].LineWidth);
       }
       if (cadLiveEntity[x].Type == CAD_ARC)
       {
-        sceneColor(DARKGREY);
-        cadRenderArc(cadLiveEntity[x].Arc);
+        cadRenderArc(cadLiveEntity[x].Arc, cadLiveEntity[x].LineWidth);
       }
       if (cadLiveEntity[x].Type == CAD_NOTE)
       {
-        sceneColor(DARKGREY);
         cadRenderNote(cadLiveEntity[x].Note);
       }
       if (cadLiveEntity[x].Type == CAD_DIMENSION)
       {
-        sceneColor(DARKGREY);
         cadRenderDimension(cadLiveEntity[x].Dimension);
       }
     }
@@ -408,16 +405,25 @@ void cadRenderDimension(dimension_t d)
     cadRenderLine(geoExtendLineStartpoint(geoRotateLine(leader_body, leader_body.start, -135), 0.050));
   }
 }
-void cadRenderLine(line_t l)
+void cadRenderLine(line_t l, float w)
 {
-  glLineWidth(1);
+  glLineWidth(w);
   glBegin(GL_LINE_LOOP);
   glVertex3f((GLfloat) l.start.x, l.start.y, l.start.z);
   glVertex3f((GLfloat) l.end.x, l.end.y, l.end.z);
   glEnd();
 }
+void cadRenderLine(line_t l)
+{
+  cadRenderLine(l, 1);
+}
 void cadRenderArc(arc_t a)
 {
+  cadRenderArc(a, 1);
+}
+void cadRenderArc(arc_t a, float w)
+{
+  glLineWidth(w);
   float includedAngle = geoGetIncludedAngle(a);
   line_t l = line_t{ point_t{a.center.x, a.center.y,} , point_t{a.start.x, a.start.y} };
   glBegin(GL_LINE_STRIP);
@@ -503,6 +509,7 @@ void cadReverseCurrentContour()
 {
   for (int x = 0; x < CurrentContour.Entitys.size(); x++)
   {
+    //V debugDumpEntityStructure(CurrentContour.Entitys[x]);
     if (CurrentContour.Entitys[x].Type == CAD_LINE) CurrentContour.Entitys[x].Line = geoFlipLine(CurrentContour.Entitys[x].Line);
     if (CurrentContour.Entitys[x].Type == CAD_ARC) CurrentContour.Entitys[x].Arc = geoFlipArc(CurrentContour.Entitys[x].Arc);
   }

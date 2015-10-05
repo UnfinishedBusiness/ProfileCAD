@@ -30,7 +30,9 @@ void cadSetColor(color_t);
 void cadSelectedToContour();
 
 void cadRenderLine(line_t);
+void cadRenderLine(line_t, float);
 void cadRenderArc(arc_t);
+void cadRenderArc(arc_t, float);
 void cadRenderNote(note_t);
 void cadRenderDimension(dimension_t);
 

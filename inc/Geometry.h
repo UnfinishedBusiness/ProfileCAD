@@ -42,6 +42,7 @@ line_t geoFlipLine(line_t);
 arc_t geoFlipArc(arc_t);
 arc_t geoGetCircle(point_t, float);
 point_t geoGetLineMidpoint(line_t);
+point_t geoGetArcMidpoint(arc_t); //Always returns the midpoint of the shortest arc between both endpoints
 float geoGetLineAngle(line_t);
 float geoRadiansToDegrees(float);
 float geoDegreesToRadians(float);

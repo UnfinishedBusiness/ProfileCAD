@@ -880,10 +880,12 @@ void cliXformRotate_Callback()
             e.Line.end = geoRotatePointAroundPoint(e.Line.end, Origin, Angle, Direction);
             if (Operator) //Default is move
             {
+              e.Color = PURPLE;
               cadEdit(x, e);
             }
             else
             {
+              e.Color = PURPLE;
               cadAppend(e, false);
             }
           }
@@ -1028,10 +1030,12 @@ void cliXformTranslate_Callback()
             e.Arc.center = geoTranslatePointByVector(e.Arc.center, TranslationVector);
             if (Operator) //Default is move
             {
+              e.Color = PURPLE;
               cadEdit(x, e);
             }
             else
             {
+              e.Color = PURPLE;
               cadAppend(e, false);
             }
           }

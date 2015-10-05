@@ -37,6 +37,26 @@ void debugDumpLineStructure(line_t l)
   cout << KNORMAL;
   cout << endl;
 }
+void debugDumpEntityStructure(cadEntity e)
+{
+  cout << KMAGENTA;
+  cout << "cadEntity{\n";
+  cout << KGREEN;
+  if (e.Type == CAD_ARC)
+  {
+    cout << "\tarc_t=";
+    debugDumpArcStructure(e.Arc);
+  }
+  if (e.Type == CAD_LINE)
+  {
+    cout << "\tline_t=";
+    debugDumpLineStructure(e.Line);
+  }
+  cout << KMAGENTA;
+  cout << "};\n";
+  cout << KNORMAL;
+  cout << endl;
+}
 void debugDumpPointStructure(point_t p)
 {
   cout << KMAGENTA;
