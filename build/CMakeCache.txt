@@ -14,6 +14,21 @@
 # EXTERNAL cache entries
 ########################
 
+//The directory containing a CMake configuration file for BOOST.
+BOOST_DIR:PATH=BOOST_DIR-NOTFOUND
+
+//Boost *boost library (debug)
+Boost_*BOOST_LIBRARY_DEBUG:FILEPATH=Boost_*BOOST_LIBRARY_DEBUG-NOTFOUND
+
+//Boost *boost library (release)
+Boost_*BOOST_LIBRARY_RELEASE:FILEPATH=Boost_*BOOST_LIBRARY_RELEASE-NOTFOUND
+
+//The directory containing a CMake configuration file for Boost.
+Boost_DIR:PATH=Boost_DIR-NOTFOUND
+
+//Path to a file.
+Boost_INCLUDE_DIR:PATH=/usr/include
+
 //Path to a program.
 CMAKE_AR:FILEPATH=/usr/sbin/ar
 
@@ -611,6 +626,8 @@ glui_DIR:PATH=glui_DIR-NOTFOUND
 # INTERNAL cache entries
 ########################
 
+//ADVANCED property for variable: Boost_DIR
+Boost_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_AR
 CMAKE_AR-ADVANCED:INTERNAL=1
 //This is the directory where this CMakeCache.txt was created

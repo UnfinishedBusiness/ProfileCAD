@@ -49,3 +49,24 @@ void luaExec(string f)
   report_errors(L, s);
   lua_close(L);
 }
+string luaEval(string c)
+{
+  //string expresion = "return " + c;
+  string expresion = "e = load('return " + c + "');";
+  string r;
+  lua_State *L = luaL_newstate();
+  luaopen_io(L); // provides io.*
+  luaopen_base(L);
+  luaopen_table(L);
+  luaopen_string(L);
+  luaopen_math(L);
+  luaL_openlibs(L);
+
+  luaL_dostring(L, expresion.c_str());
+  luaL_dostring(L, "out = e();");
+  lua_getglobal(L, "out");
+  r = lua_tostring(L, -1);
+
+  lua_close(L);
+  return r;
+}

@@ -712,7 +712,7 @@ std::vector<cadEntity> geoOffsetContour(contour_t c, bool s, float d)
         v.push_back(e);
       }
       if (x > 0 && v.size() > x)
-      { 
+      {
         //Trim last line to this line via intersection
         point_t intersection = geoGetIntersection(v[x-1].Line, v[x].Line);
         v[x-1].Line.end = intersection;
@@ -739,4 +739,27 @@ std::vector<cadEntity> geoOffsetContour(contour_t c, bool s, float d)
     v.front().Line.start = intersection;
   }
   return v;
+}
+point_t geoScalePoint(point_t p, float s)
+{
+  p.x = p.x * s;
+  p.y = p.y * s;
+  p.z = p.z * s;
+  return p;
+}
+cadEntity geoScaleEntity(cadEntity e, float s)
+{
+  if (e.Type == CAD_LINE)
+  {
+    e.Line.start = geoScalePoint(e.Line.start, s);
+    e.Line.end = geoScalePoint(e.Line.end, s);
+  }
+  if (e.Type == CAD_ARC)
+  {
+    e.Arc.start = geoScalePoint(e.Arc.start, s);
+    e.Arc.end = geoScalePoint(e.Arc.end, s);
+    e.Arc.center = geoScalePoint(e.Arc.center, s);
+    e.Arc.radius = e.Arc.radius * s;
+  }
+  return e;
 }

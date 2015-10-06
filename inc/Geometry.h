@@ -61,4 +61,7 @@ float geoRound(float);
 
 contour_t geoGetContour(std::vector<cadEntity>);
 std::vector<cadEntity> geoOffsetContour(contour_t, bool, float);
+
+cadEntity geoScaleEntity(cadEntity, float);
+point_t geoScalePoint(point_t, float);
 #endif

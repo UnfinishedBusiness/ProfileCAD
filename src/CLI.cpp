@@ -59,30 +59,7 @@ float cliGetInput()
   }
   text.replace(text.find("> "), sizeof("> ")-1, "");
   float input;
-  if (text.find("*") != std::string::npos) //Evaluate multiplication
-  {
-    std::vector<std::string> factors = split(text, '*');
-    input = 0;
-    if (factors.size() > 1)
-    {
-      input = atof(factors[0].c_str()) * atof(factors[1].c_str());
-    }
-    //printf("(cliGetInput) Mult Eval: %.6f\n", input);
-  }
-  else if(text.find("/") != std::string::npos) //Evaluate division
-  {
-    std::vector<std::string> factors = split(text, '/');
-    input = 0;
-    if (factors.size() > 1)
-    {
-      input = atof(factors[0].c_str()) / atof(factors[1].c_str());
-    }
-    //printf("(cliGetInput) Div Eval: %.6f\n", input);
-  }
-  else
-  {
-    input = (float)atof(text.c_str());
-  }
+  input = (float)atof(luaEval(text).c_str());
   if (!isnan(input))
   {
     return input;
@@ -1190,6 +1167,39 @@ void *cliXformTranslateSelected()
   dialogAddButton(point_t{200, -350}, 200, 100, "OK", cliXformTranslate_Callback);
   dialogOpen("Xform Translate");
 }
+void cliXformScale_Callback()
+{
+  cadEntity e;
+  float Scale = fabs(atof(luaEval(dialogTextboxGetString("Scale")).c_str()));
+  //cout << "luaEval returned => " << luaEval(dialogTextboxGetString("Scale")) << endl;
+  for (int x = 0; x < cadGetEntityArrayIndex(); x++)
+  {
+      e = cadGetEntityArray(x);
+      if (e.Selected && !e.Removed) //Make sure were selected and not removed
+      {
+        e = geoScaleEntity(e, Scale);
+        cadEdit(x, e);
+      }
+  }
+  cliScreenUnSelectAll();
+  dialogClose();
+}
+void *cliXformScaleAll()
+{
+  cliScreenSelectAll();
+  cliXformScaleSelected();
+}
+void *cliXformScaleSelected()
+{
+  point_t pos = point_t{-450, 320};
+  dialogAddLabel(pos, "Scale Factor?");
+  pos.y -= 120;
+  dialogAddTextBox(pos, 500, 100, "Scale", "1");
+  pos.y -= 50;
+
+  dialogAddButton(point_t{200, -350}, 200, 100, "OK", cliXformScale_Callback);
+  dialogOpen("Xform Scale");
+}
 void *cliDraftingDimensionPoint()
 {
   if (TextReady == true)
@@ -1317,6 +1327,10 @@ menu_item_t menu[CLI_MENU_ITEMS] = {
       sub_menu_item_t{ "l", "translate",
         sub_sub_menu_item_t{ "a", "all entitys",  &cliXformTranslateAll },
         sub_sub_menu_item_t{ "s", "selected entitys", &cliXformTranslateSelected },
+      },
+      sub_menu_item_t{ "s", "scale",
+        sub_sub_menu_item_t{ "a", "all entitys",  &cliXformScaleAll },
+        sub_sub_menu_item_t{ "s", "selected entitys", &cliXformScaleSelected },
       },
       sub_menu_item_t{ "o", "offset",
       sub_sub_menu_item_t{ "c", "contour", &cliXformOffsetContour },
