@@ -35,6 +35,7 @@ int fileOpen(string f)
   {
     return FILE_UNKNOWN_FORMAT;
   }
+  cadUndoPushState();
   return FILE_OK;
 }
 int fileSave(string f)

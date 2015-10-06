@@ -15,7 +15,15 @@ void cadInit()
 {
   cadEntityArrayIndex = 0;
 }
-
+void cadUndoPushState()
+{
+  if (cadUndoArray.size() > 9) //Only keep ten elements
+  {
+    cadUndoArray.erase(cadUndoArray.begin());
+  }
+  cadUndoArray.push_back(cadUndoStructure{cadEntityArray, cadEntityArrayIndex});
+  V cout << KRED << "(cadUndoPushState) Pushed Current state!" << KNORMAL << endl;
+}
 void cadUndo()
 {
   if (cadUndoArray.size() > 1)
@@ -41,44 +49,25 @@ void cadAppend(cadEntity e, bool undo)
   cadEntityArray[cadEntityArrayIndex] = e;
   if (undo == true)
   {
-    if (cadUndoArray.size() > 9) //Only keep ten elements
-    {
-      cadUndoArray.erase(cadUndoArray.begin());
-    }
-    cadUndoArray.push_back(cadUndoStructure{cadEntityArray, cadEntityArrayIndex});
+    cadUndoPushState();
   }
   cadEntityArrayIndex++;
   glutPostRedisplay();
 }
 void cadEdit(int i, cadEntity e)
 {
-  /*
-  int SelectionIndex;
-  */
-  bool OpEdit = true;
+  cout << "(cadEdit) Undo true" << endl;
+  cadEdit(i, e, true);
+}
+void cadEdit(int i, cadEntity e, bool undo)
+{
   if (cadEntityArrayIndex > i)
   {
-    if (e.Removed != cadEntityArray[i].Removed ||
-        e.Color != cadEntityArray[i].Color ||
-        e.Line.start != cadEntityArray[i].Line.start ||
-        e.Line.end != cadEntityArray[i].Line.end ||
-        e.Arc.start != cadEntityArray[i].Arc.start ||
-        e.Arc.end != cadEntityArray[i].Arc.end ||
-        e.Arc.radius != cadEntityArray[i].Arc.radius ||
-        e.Arc.direction != cadEntityArray[i].Arc.direction)
-    {
-      OpEdit = false;
-    }
     cadEntityArray[i] = e;
   }
-  if (OpEdit == false)//Dont waste undo buffer!
+  if (undo == true)//Dont waste undo buffer!
   {
-    //V cout << KRED << "(cadEdit)Actual Edit!" << KNORMAL << endl;
-    if (cadUndoArray.size() > 9) //Only keep ten elements
-    {
-      cadUndoArray.erase(cadUndoArray.begin());
-    }
-    cadUndoArray.push_back(cadUndoStructure{cadEntityArray, cadEntityArrayIndex});
+    cadUndoPushState();
   }
 
   glutPostRedisplay();
@@ -121,6 +110,7 @@ int cadGetEntityArrayIndex()
 }
 void cadRemoveSelected()
 {
+  cadUndoPushState();
   cadEntity e;
   for (int i = 0; i < cadEntityArrayIndex; i++)
   {
@@ -128,7 +118,7 @@ void cadRemoveSelected()
       {
         //cadEntityArray[i].Removed = true;
         e.Removed = true;
-        cadEdit(i, e);
+        cadEdit(i, e, false);
       }
   }
 }
@@ -219,30 +209,6 @@ void cadHideSelectionBox()
 void cadSelectedToContour()
 {
   CurrentContour = geoGetContour(cadGetSelected());
-  //debugDumpContourStructure(CurrentContour);
-
-  /*vector<cadEntity> l;
-  cadEntity e;
-  for (int x = 0; x < CurrentContour.Entitys.size(); x++)
-  {
-    if (CurrentContour.Entitys[x].Type == CAD_LINE)
-    {
-      e.Type = CAD_LINE;
-      //e.Line = geoExtendLineStartpoint(geoRotateLine(CurrentContour.Entitys[x].Line, geoGetLineMidpoint(CurrentContour.Entitys[x].Line), 135), 0.050);
-      e.Line = geoExtendLineAngle(geoGetLineMidpoint(CurrentContour.Entitys[x].Line), geoGetLineAngle(CurrentContour.Entitys[x].Line) + geoDegreesToRadians(45), 0.1);
-      l.push_back(e);
-      e.Line = geoExtendLineAngle(geoGetLineMidpoint(CurrentContour.Entitys[x].Line), geoGetLineAngle(CurrentContour.Entitys[x].Line) + geoDegreesToRadians(-45), 0.1);
-      l.push_back(e);
-    }
-    if (CurrentContour.Entitys[x].Type == CAD_ARC)
-    {
-      cout << "Found Arc!" << endl;
-      e = CurrentContour.Entitys[x];
-      e.Arc = geoGetCircle(e.Arc.center, 0.1);
-      l.push_back(e);
-    }
-
-  }*/
   mouseLiveShow("CurrentContour");
 }
 void cadShowLiveEntity(vector<cadEntity> e)

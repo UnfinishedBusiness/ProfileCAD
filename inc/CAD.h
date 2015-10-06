@@ -17,9 +17,11 @@ struct cadUndoStructure{
 
 void cadInit();
 void cadUndo();
+void cadUndoPushState();
 void cadAppend(cadEntity);
 void cadAppend(cadEntity, bool);
 void cadEdit(int, cadEntity);
+void cadEdit(int, cadEntity, bool);
 void cadRemoveSelected();
 std::vector<cadEntity> cadGetSelected();
 std::vector<cadEntity>  cadGetMouseOver();

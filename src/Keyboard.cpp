@@ -31,6 +31,18 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
                  {
                    sceneIncZoom(-(0.05 * sceneGetScale()));
                  }
+                 if (key == 40) // Left parenthisee
+                 {
+                   cliPush("(");
+                 }
+                 if (key == 41) // Right parenthisee
+                 {
+                   cliPush(")");
+                 }
+                 if (key == 43) // Right parenthisee
+                 {
+                   cliPush("=");
+                 }
                  break;
                case 2 :
                   //printf("CTRL  key %d\n",mod);
@@ -140,6 +152,8 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
         case 45 : cliPush("-"); break;
         case 42 : cliPush("*"); break;
         case 47 : cliPush("/"); break;
+        case 61 : cliPush("+"); break;
+        case 43 : cliPush("+"); break;
 
         case 8 : cliBackup(); break; //Normal backspace
 

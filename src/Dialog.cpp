@@ -327,7 +327,25 @@ void dialogKeyboard(unsigned char key, int x, int y)
     }
     if (mod == 1)
     {
-      key += 32;
+      if (key == 40)
+      {
+        dialogKeyPush("(");
+        return;
+      }
+      else if (key == 41)
+      {
+        dialogKeyPush(")");
+        return;
+      }
+      else if (key == 43)
+      {
+        dialogKeyPush("=");
+        return;
+      }
+      else
+      {
+          key += 32; //Shift keys
+      }
     }
     switch(key)
     {
@@ -372,7 +390,8 @@ void dialogKeyboard(unsigned char key, int x, int y)
         case 45 : dialogKeyPush("-"); break;
         case 42 : dialogKeyPush("*"); break;
         case 47 : dialogKeyPush("/"); break;
-
+        case 61 : dialogKeyPush("+"); break;
+        case 43 : dialogKeyPush("+"); break;
         case 8 : dialogKeyBackspace(); break; //Normal backspace
 
         #ifdef __APPLE__

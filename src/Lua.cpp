@@ -65,8 +65,12 @@ string luaEval(string c)
   luaL_dostring(L, expresion.c_str());
   luaL_dostring(L, "out = e();");
   lua_getglobal(L, "out");
+  if (!lua_isstring(L, -1))
+  {
+    lua_close(L);
+    return "";
+  }
   r = lua_tostring(L, -1);
-
   lua_close(L);
   return r;
 }

@@ -299,7 +299,7 @@ void *cliScreenSelectAll()
     e = cadGetEntityArray(a);
     e.Selected = true;
     e.SelectionIndex = a;
-    cadEdit(a, e);
+    cadEdit(a, e, false);
   }
 }
 void *cliScreenUnSelectAll()
@@ -310,7 +310,7 @@ void *cliScreenUnSelectAll()
   {
     e = cadGetEntityArray(a);
     e.Selected = false;
-    cadEdit(a, e);
+    cadEdit(a, e, false);
   }
 }
 void *cliScreenDeleteSelected()
@@ -392,6 +392,7 @@ void *cliFilePutCurrent()
 }
 void *cliScreenColorRed()
 {
+  cadUndoPushState();
   CurrentColor = RED;
   cadEntity e;
   for (int x=0; x < cadGetEntityArrayIndex(); x++)
@@ -400,7 +401,7 @@ void *cliScreenColorRed()
     if (e.Selected && !e.Removed)
     {
       e.Color = CurrentColor;
-      cadEdit(x, e);
+      cadEdit(x, e, false);
     }
   }
   cliScreenUnSelectAll();
@@ -408,6 +409,7 @@ void *cliScreenColorRed()
 }
 void *cliScreenColorBlue()
 {
+  cadUndoPushState();
   CurrentColor = BLUE;
   cadEntity e;
   for (int x=0; x < cadGetEntityArrayIndex(); x++)
@@ -416,7 +418,7 @@ void *cliScreenColorBlue()
     if (e.Selected && !e.Removed)
     {
       e.Color = CurrentColor;
-      cadEdit(x, e);
+      cadEdit(x, e, false);
     }
   }
   cliScreenUnSelectAll();
@@ -424,6 +426,7 @@ void *cliScreenColorBlue()
 }
 void *cliScreenColorGreen()
 {
+  cadUndoPushState();
   CurrentColor = GREEN;
   cadEntity e;
   for (int x=0; x < cadGetEntityArrayIndex(); x++)
@@ -432,7 +435,7 @@ void *cliScreenColorGreen()
     if (e.Selected && !e.Removed)
     {
       e.Color = CurrentColor;
-      cadEdit(x, e);
+      cadEdit(x, e, false);
     }
   }
   cliScreenUnSelectAll();
@@ -440,6 +443,7 @@ void *cliScreenColorGreen()
 }
 void *cliScreenColorWhite()
 {
+  cadUndoPushState();
   CurrentColor = WHITE;
   cadEntity e;
   for (int x=0; x < cadGetEntityArrayIndex(); x++)
@@ -448,7 +452,7 @@ void *cliScreenColorWhite()
     if (e.Selected && !e.Removed)
     {
       e.Color = CurrentColor;
-      cadEdit(x, e);
+      cadEdit(x, e, false);
     }
   }
   cliScreenUnSelectAll();
@@ -456,6 +460,7 @@ void *cliScreenColorWhite()
 }
 void *cliScreenColorBlack()
 {
+  cadUndoPushState();
   CurrentColor = BLACK;
   cadEntity e;
   for (int x=0; x < cadGetEntityArrayIndex(); x++)
@@ -464,7 +469,7 @@ void *cliScreenColorBlack()
     if (e.Selected && !e.Removed)
     {
       e.Color = CurrentColor;
-      cadEdit(x, e);
+      cadEdit(x, e, false);
     }
   }
   cliScreenUnSelectAll();
@@ -472,6 +477,7 @@ void *cliScreenColorBlack()
 }
 void *cliScreenColorYellow()
 {
+  cadUndoPushState();
   CurrentColor = YELLOW;
   cadEntity e;
   for (int x=0; x < cadGetEntityArrayIndex(); x++)
@@ -480,7 +486,7 @@ void *cliScreenColorYellow()
     if (e.Selected && !e.Removed)
     {
       e.Color = CurrentColor;
-      cadEdit(x, e);
+      cadEdit(x, e, false);
     }
   }
   cliScreenUnSelectAll();
@@ -488,6 +494,7 @@ void *cliScreenColorYellow()
 }
 void *cliScreenColorCyan()
 {
+  cadUndoPushState();
   CurrentColor = CYAN;
   cadEntity e;
   for (int x=0; x < cadGetEntityArrayIndex(); x++)
@@ -496,7 +503,7 @@ void *cliScreenColorCyan()
     if (e.Selected && !e.Removed)
     {
       e.Color = CurrentColor;
-      cadEdit(x, e);
+      cadEdit(x, e, false);
     }
   }
   cliScreenUnSelectAll();
@@ -504,6 +511,7 @@ void *cliScreenColorCyan()
 }
 void *cliScreenColorMagenta()
 {
+  cadUndoPushState();
   CurrentColor = MAGENTA;
   cadEntity e;
   for (int x=0; x < cadGetEntityArrayIndex(); x++)
@@ -512,7 +520,7 @@ void *cliScreenColorMagenta()
     if (e.Selected && !e.Removed)
     {
       e.Color = CurrentColor;
-      cadEdit(x, e);
+      cadEdit(x, e, false);
     }
   }
   cliScreenUnSelectAll();
@@ -520,6 +528,7 @@ void *cliScreenColorMagenta()
 }
 void *cliScreenColorGrey()
 {
+  cadUndoPushState();
   CurrentColor = DARKGREY;
   cadEntity e;
   for (int x=0; x < cadGetEntityArrayIndex(); x++)
@@ -528,7 +537,7 @@ void *cliScreenColorGrey()
     if (e.Selected && !e.Removed)
     {
       e.Color = CurrentColor;
-      cadEdit(x, e);
+      cadEdit(x, e, false);
     }
   }
   cliScreenUnSelectAll();
@@ -773,7 +782,7 @@ void *cliXformFilletRadius()
        e[1].Line = geoReplaceClosestEndpoint(e[1].Line, fillet.end);
 
 
-       cadEdit(e[0].Index, e[0]); //Edit line 0
+       cadEdit(e[0].Index, e[0], false); //Edit line 0
        cadEdit(e[1].Index, e[1]); //Edit line 1
        cadDrawArc(fillet); //Draw arc
        cliScreenUnSelectAll();
@@ -879,7 +888,7 @@ void *cliXformFilletDiameter()
        e[1].Line = geoReplaceClosestEndpoint(e[1].Line, fillet.end);
 
 
-       cadEdit(e[0].Index, e[0]); //Edit line 0
+       cadEdit(e[0].Index, e[0], false); //Edit line 0
        cadEdit(e[1].Index, e[1]); //Edit line 1
        cadDrawArc(fillet); //Draw arc
        cliScreenUnSelectAll();
@@ -945,7 +954,7 @@ void cliXformRotate_Callback()
   V cout << KRED << "Operator" << KCYAN << " => " << KGREEN << dialogTextboxGetString("Operator") << KNORMAL << endl;
   V cout << KRED << "Origin" << KCYAN << " => ";
   V debugDumpPointStructure(Origin);
-
+  cadUndoPushState();
   cadEntity e;
   int start = 0;
   if (!Operator) start = 1;
@@ -965,7 +974,7 @@ void cliXformRotate_Callback()
             if (Operator) //Default is move
             {
               e.Color = PURPLE;
-              cadEdit(x, e);
+              cadEdit(x, e, false);
             }
             else
             {
@@ -984,7 +993,7 @@ void cliXformRotate_Callback()
             if (Operator) //Default is move
             {
               e.Color = PURPLE;
-              cadEdit(x, e);
+              cadEdit(x, e, false);
             }
             else
             {
@@ -1070,6 +1079,7 @@ void cliXformTranslate_Callback()
   V debugDumpPointStructure(To);
   point_t TranslationVector = geoTranslateCalculateVector(From, To);
   V debugDumpPointStructure(TranslationVector);
+  cadUndoPushState();
   cadEntity e;
   int start = 0;
   if (!Operator) start = 1;
@@ -1092,7 +1102,7 @@ void cliXformTranslate_Callback()
             if (Operator) //Default is move
             {
               e.Color = PURPLE;
-              cadEdit(x, e);
+              cadEdit(x, e, false);
             }
             else
             {
@@ -1115,7 +1125,7 @@ void cliXformTranslate_Callback()
             if (Operator) //Default is move
             {
               e.Color = PURPLE;
-              cadEdit(x, e);
+              cadEdit(x, e, false);
             }
             else
             {
@@ -1169,20 +1179,24 @@ void *cliXformTranslateSelected()
 }
 void cliXformScale_Callback()
 {
+  cadUndoPushState();
   cadEntity e;
   float Scale = fabs(atof(luaEval(dialogTextboxGetString("Scale")).c_str()));
   //cout << "luaEval returned => " << luaEval(dialogTextboxGetString("Scale")) << endl;
-  for (int x = 0; x < cadGetEntityArrayIndex(); x++)
+  if (Scale != 0)
   {
-      e = cadGetEntityArray(x);
-      if (e.Selected && !e.Removed) //Make sure were selected and not removed
-      {
-        e = geoScaleEntity(e, Scale);
-        cadEdit(x, e);
-      }
+    for (int x = 0; x < cadGetEntityArrayIndex(); x++)
+    {
+        e = cadGetEntityArray(x);
+        if (e.Selected && !e.Removed) //Make sure were selected and not removed
+        {
+          e = geoScaleEntity(e, Scale);
+          cadEdit(x, e, false);
+        }
+    }
+    cliScreenUnSelectAll();
+    dialogClose();
   }
-  cliScreenUnSelectAll();
-  dialogClose();
 }
 void *cliXformScaleAll()
 {
@@ -1240,6 +1254,7 @@ void cliXformOffsetContour_Callback()
   }
   float Offset = fabs(atof(dialogTextboxGetString("Offset").c_str()));
   vector<cadEntity> o = geoOffsetContour(cadGetCurrentContour(), Side, Offset);
+  cadUndoPushState();
   for (int x = 0; x < o.size(); x++)
   {
     //o[x].Color = cadGetCurrentColor();
