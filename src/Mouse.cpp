@@ -221,10 +221,6 @@ void mouseCallback(int btn, int state, int x, int y)
 
     }
     //V printf("Scroll %s At %d %d\n", (btn == 3) ? "Up" : "Down", x, y);
-    if(btn==GLUT_LEFT_BUTTON && state==GLUT_DOWN && mod == GLUT_ACTIVE_CTRL)
-    {
-        //V printf("Left + Ctrl button at X: %d, Y: %d\n", x, y);
-    }
     if(btn==GLUT_LEFT_BUTTON && state==GLUT_DOWN)
     {
       mouseLastClick = pos;
@@ -291,6 +287,11 @@ void mouseCallback(int btn, int state, int x, int y)
     if(btn==GLUT_RIGHT_BUTTON && state==GLUT_DOWN)
     {
         //V printf("Right button at X: %d, Y: %d\n", x, y);
+    }
+    if(btn==GLUT_LEFT_BUTTON && state==GLUT_DOWN && mod == GLUT_ACTIVE_CTRL)
+    {
+        //V printf("Left + Ctrl button at X: %d, Y: %d\n", x, y);
+        cadSelectChain();
     }
 }
 void mouseMotionCallback(int x, int y)

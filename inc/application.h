@@ -65,6 +65,7 @@ extern "C" {
 
 #define V if(mainVerbose())
 
+#define CAD_REAL_WORLD_CLOSE 0.00005 //Half a tenth
 #define CAD_ARC 0x00
 #define CAD_LINE 0x01
 #define CAD_NOTE 0x02
@@ -89,7 +90,29 @@ struct point_t{
   float x,y,z;
   bool operator==(const point_t& rhs)
   {
-    return x == rhs.x && y == rhs.y && z == rhs.z;
+    //return x == rhs.x && y == rhs.y && z == rhs.z;
+    auto t = [](float a, float b)
+    {
+      float diff;
+      if (a > b)
+      {
+        diff = a - b;
+      }
+      else
+      {
+        diff = b - a;
+      }
+      //printf("(geoInTolerance) Difference: %.6f, Plus: %.6f, Minus: %.6f\n", diff, fabs(t), -fabs(t));
+      if (diff <= fabs(CAD_REAL_WORLD_CLOSE) && diff >= -fabs(CAD_REAL_WORLD_CLOSE))
+      {
+        return true;
+      }
+      else
+      {
+        return false;
+      }
+    };
+    return t(x, rhs.x) && t(y, rhs.y) && t(z, rhs.z);
   }
   bool operator!=(const point_t& rhs)
   {
@@ -185,6 +208,9 @@ struct contour_t{
 #define MAGENTA color_t{1, 0, 1, 1}
 #define LIGHTGREY color_t{0.3, 0.3, 0.3, 1}
 #define DARKGREY color_t{0.8, 0.8, 0.8, 1}
+
+#define SELECTED_COLOR CYAN
+#define MOUSEOVER_COLOR WHITE
 
 #define KNORMAL  "\x1B[0m"
 #define KRED  "\x1B[31m"

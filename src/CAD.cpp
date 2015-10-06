@@ -261,9 +261,13 @@ void cadRender()
   {
       if (cadEntityArray[i].Type == CAD_DIMENSION && !cadEntityArray[i].Removed) //Where a line and its not been removed
       {
-        if (cadEntityArray[i].Selected || cadEntityArray[i].MouseOver)
+        if (cadEntityArray[i].Selected)
         {
-          sceneColor(WHITE);
+          sceneColor(SELECTED_COLOR);
+        }
+        else if (cadEntityArray[i].MouseOver)
+        {
+          sceneColor(MOUSEOVER_COLOR);
         }
         else
         {
@@ -275,9 +279,13 @@ void cadRender()
       }
       if (cadEntityArray[i].Type == CAD_NOTE && !cadEntityArray[i].Removed) //Where a line and its not been removed
       {
-        if (cadEntityArray[i].Selected || cadEntityArray[i].MouseOver)
+        if (cadEntityArray[i].Selected)
         {
-          sceneColor(WHITE);
+          sceneColor(SELECTED_COLOR);
+        }
+        else if (cadEntityArray[i].MouseOver)
+        {
+          sceneColor(MOUSEOVER_COLOR);
         }
         else
         {
@@ -288,9 +296,13 @@ void cadRender()
       }
       if (cadEntityArray[i].Type == CAD_LINE && !cadEntityArray[i].Removed) //Where a line and its not been removed
       {
-        if (cadEntityArray[i].Selected || cadEntityArray[i].MouseOver)
+        if (cadEntityArray[i].Selected)
         {
-          sceneColor(WHITE);
+          sceneColor(SELECTED_COLOR);
+        }
+        else if (cadEntityArray[i].MouseOver)
+        {
+          sceneColor(MOUSEOVER_COLOR);
         }
         else
         {
@@ -302,9 +314,13 @@ void cadRender()
       if (cadEntityArray[i].Type == CAD_ARC && !cadEntityArray[i].Removed && cadEntityArray[i].Arc.radius > 0)
       {
         //V printf("(cadRender) Found arc!\n");
-        if (cadEntityArray[i].Selected || cadEntityArray[i].MouseOver)
+        if (cadEntityArray[i].Selected)
         {
-          sceneColor(WHITE);
+          sceneColor(SELECTED_COLOR);
+        }
+        else if (cadEntityArray[i].MouseOver)
+        {
+          sceneColor(MOUSEOVER_COLOR);
         }
         else
         {
@@ -486,4 +502,109 @@ contour_t cadGetCurrentContour()
 color_t cadGetCurrentColor()
 {
   return cadColorAttribute;
+}
+void cadSelectChain()
+{
+  if (cadCountSelection() > 0)
+  {
+    //cout << "Select chain!" << endl;
+    /*
+    Loop through ENTITIES to generate a chain
+    If this entity is connected to the last entity in the chain, push it
+    to the chain stack and search entitys again
+    */
+    vector<int> used;
+    vector<cadEntity> chain;
+    chain.push_back(cadGetSelected()[0]);
+    bool Done = false;
+    bool Found = false;
+    while(!Done)
+    {
+      for (int i = 0; i < cadEntityArrayIndex; i++)
+      {
+        if (cadEntityArray[i].Type == CAD_LINE)
+        {
+          if (chain.back().Type == CAD_LINE)
+          {
+            if ((chain.back().Line.end == cadEntityArray[i].Line.end ||
+                chain.back().Line.end == cadEntityArray[i].Line.start ||
+                chain.back().Line.start == cadEntityArray[i].Line.end ||
+                chain.back().Line.start == cadEntityArray[i].Line.start) &&
+                std::find(used.begin(), used.end(), i) == used.end())
+            {
+              Found = true;
+              cadEntityArray[i].Selected = true;
+              cadEdit(i, cadEntityArray[i], false);
+              chain.push_back(cadEntityArray[i]);
+              used.push_back(i);
+              //cout << "Found!" << endl;
+              break;
+            }
+          }
+          else if (chain.back().Type == CAD_ARC)
+          {
+            if ((chain.back().Arc.end == cadEntityArray[i].Line.end ||
+                chain.back().Arc.end == cadEntityArray[i].Line.start ||
+                chain.back().Arc.start == cadEntityArray[i].Line.end ||
+                chain.back().Arc.start == cadEntityArray[i].Line.start) &&
+                std::find(used.begin(), used.end(), i) == used.end())
+            {
+              Found = true;
+              cadEntityArray[i].Selected = true;
+              cadEdit(i, cadEntityArray[i], false);
+              chain.push_back(cadEntityArray[i]);
+              used.push_back(i);
+              //cout << "Found!" << endl;
+              break;
+            }
+          }
+        }
+        else if (cadEntityArray[i].Type == CAD_ARC)
+        {
+          if (chain.back().Type == CAD_LINE)
+          {
+            if ((chain.back().Line.end == cadEntityArray[i].Arc.end ||
+                chain.back().Line.end == cadEntityArray[i].Arc.start ||
+                chain.back().Line.start == cadEntityArray[i].Arc.end ||
+                chain.back().Line.start == cadEntityArray[i].Arc.start) &&
+                std::find(used.begin(), used.end(), i) == used.end())
+            {
+              Found = true;
+              cadEntityArray[i].Selected = true;
+              cadEdit(i, cadEntityArray[i], false);
+              chain.push_back(cadEntityArray[i]);
+              used.push_back(i);
+              //cout << "Found!" << endl;
+              break;
+            }
+          }
+          else if (chain.back().Type == CAD_ARC)
+          {
+            if ((chain.back().Arc.end == cadEntityArray[i].Arc.end ||
+                chain.back().Arc.end == cadEntityArray[i].Arc.start ||
+                chain.back().Arc.start == cadEntityArray[i].Arc.end ||
+                chain.back().Arc.start == cadEntityArray[i].Arc.start) &&
+                std::find(used.begin(), used.end(), i) == used.end())
+            {
+              Found = true;
+              cadEntityArray[i].Selected = true;
+              cadEdit(i, cadEntityArray[i], false);
+              chain.push_back(cadEntityArray[i]);
+              used.push_back(i);
+              //cout << "Found!" << endl;
+              break;
+            }
+          }
+        }
+      }
+      if (Found)
+      {
+        Found = false;
+      }
+      else
+      {
+        Done = true;
+      }
+    }
+  }
 }

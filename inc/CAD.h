@@ -30,6 +30,7 @@ int cadCountEntitys();
 void cadSetColor(color_t);
 
 void cadSelectedToContour();
+void cadSelectChain();
 
 void cadRenderLine(line_t);
 void cadRenderLine(line_t, float);
