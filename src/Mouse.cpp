@@ -81,6 +81,7 @@ bool snapIntersection = true;
 
 int mod;
 int button;
+point_t mouseLastClick;
 point_t mouseCurrent;
 mouse_t mouseLast;
 point_t mouseLastSnapClick;
@@ -164,7 +165,8 @@ point_t mouseCadGetCurrentPos()
 }
 point_t mouseCadLastClickPos()
 {
-  return cadScreenCordToCadCord(mouseLast.x, mouseLast.y);
+  //return cadScreenCordToCadCord(mouseLast.x, mouseLast.y);
+  return mouseLastClick;
 }
 point_t mouseCadLastSnapClick()
 {
@@ -225,6 +227,7 @@ void mouseCallback(int btn, int state, int x, int y)
     }
     if(btn==GLUT_LEFT_BUTTON && state==GLUT_DOWN)
     {
+      mouseLastClick = pos;
       if (mouseLiveShowInstruction == "LineVerticalOrigin")
       {
         cliPush(to_string(mouseLive[0].Line.end.y));
@@ -243,6 +246,23 @@ void mouseCallback(int btn, int state, int x, int y)
         cliReturn();
         mouseLiveClear();
       }
+      if (mouseLiveShowInstruction == "LineParallel")
+      {
+        if (cadCountSelection() > 0 && cadGetSelected()[0].Type == CAD_LINE)
+        {
+          if (cadGetSelectionBox().visable == true)
+          {
+            cliPush(to_string(geoGetPerpendicularDistance(cadGetSelected()[0].Line, mouseLastMouseOverPoint)));
+          }
+          else
+          {
+            cliPush(to_string(geoGetPerpendicularDistance(cadGetSelected()[0].Line, pos)));
+          }
+          cliReturn();
+          mouseLiveClear();
+          cliScreenUnSelectAll();
+        }
+      }
       if (cadGetEntityArrayIndex() > 0)
       {
         if (cadGetEntityArray(mouseLastMouseOverEntity.Index).MouseOver == true)
@@ -255,14 +275,15 @@ void mouseCallback(int btn, int state, int x, int y)
           {
             mouseLastMouseOverEntity.Selected = true;
             mouseLastMouseOverEntity.SelectionIndex = cadCountSelection() + 1;
-            //debugDumpArcStructure(e.Arc);
+            mouseLastMouseOverEntity.SelectedAt = pos;
           }
           cadEdit(mouseLastMouseOverEntity.Index, mouseLastMouseOverEntity);
         }
-        if (cadGetSelectionBox().visable == true)
+        else if (cadGetSelectionBox().visable == true)
         {
           mouseLastSnapClick = cadGetSelectionBox().a.center;
           mouseLastMouseOverEntity.SelectedAt = mouseLastSnapClick;
+          mouseLastMouseOverEntity.SelectionIndex = cadCountSelection() + 1;
           cadEdit(mouseLastMouseOverEntity.Index, mouseLastMouseOverEntity);
         }
       }
@@ -366,6 +387,25 @@ void mousePassiveMotionCallback(int x, int y)
 
       }
 
+    }
+  }
+  if (mouseLiveShowInstruction == "LineParallel")
+  {
+    if (cadCountSelection() > 0 && cadGetSelected()[0].Type == CAD_LINE)
+    {
+      float distance;
+      if (cadGetSelectionBox().visable == true)
+      {
+        distance = geoGetPerpendicularDistance(cadGetSelected()[0].Line, mouseLastMouseOverPoint);
+      }
+      else
+      {
+        distance = geoGetPerpendicularDistance(cadGetSelected()[0].Line, mouseCurrent);
+      }
+
+      l.Type = CAD_LINE;
+      l.Line = geoGetParallelLine(cadGetSelected()[0].Line, mouseCurrent, distance);
+      mouseLive.push_back(l);
     }
   }
   if (mouseLiveShowInstruction == "LineVerticalOrigin")

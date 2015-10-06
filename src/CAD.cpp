@@ -174,7 +174,7 @@ int cadCountSelection()
 }
 int cadCountEntitys()
 {
-  int r = -1;
+  int r = 0;
   for (int i = 0; i < cadEntityArrayIndex; i++)
   {
       if (!cadEntityArray[i].Removed) //Make sure were selected and not removed

@@ -238,7 +238,7 @@ void *cliCreateLineParallel()
     if (e.size() == 1) //Make sure we have only one entity seleced
     {
       //V printf("(cliCreateLinePerpendicular) %d Entitys selected!\n", e.size());
-      line_t p = geoGetParallelLine(line_t{ e[0].Line.start,  e[0].Line.end}, mouseCadLastClickPos(), input);
+      line_t p = geoGetParallelLine(line_t{ e[0].Line.start,  e[0].Line.end}, mouseCadGetCurrentPos(), input);
       point_t Start = p.start;
       point_t End = p.end;
       cadSetColor(CurrentColor);
@@ -253,6 +253,7 @@ void *cliCreateLineParallel()
   cliPush("> ");
   uiEdit(0, uiEntity{UI_TEXT, RED, "Input distance!", UI_MENU_POSITION});
   uiEdit(3, uiEntity{UI_TEXT, RED, "Click to indecated offset direction!", UI_HINT_POSITION});
+  mouseLiveShow("LineParallel");
   return NULL;
 }
 void *cliCreateCircleCenterDiameter()
@@ -706,110 +707,214 @@ void *cliXformTrimCircle()
 void *cliXformFilletRadius()
 {
   if (TextReady == true)
-  {
-    TextReady = false;
-    arc_t fillet;
-    fillet.radius = cliGetInput();
-    std::vector<cadEntity> e = cadGetSelected();
-    if (e.empty())
-    {
-      return NULL;
-    }
-    if (e.size() == 2) //Make sure we have two selections
-    {
-      if (e[0].Type == CAD_LINE && e[1].Type == CAD_LINE) //Make sure both selections are lines
-      {
-        point_t relative_center = geoGetLineMidpoint(line_t{e[0].SelectedAt, e[1].SelectedAt});
-        V cout << KRED << "(cliXformFilletRadius) Relative Center = ";
-        V debugDumpPointStructure(relative_center);
-        line_t p_line_zero = geoGetParallelLine(e[0].Line, relative_center, fillet.radius);
-        //cadDrawLine(p_line_zero);
-        line_t p_line_one = geoGetParallelLine(e[1].Line, relative_center, fillet.radius);
-        //cadDrawLine(p_line_one);
-        //Get intersection point of both parallel lines to get fillet arc center point
-        fillet.center = geoGetLineIntersection(p_line_zero, p_line_one);
-        V cout << KRED << "(cliXformFilletRadius) Arc Center = ";
-        V debugDumpPointStructure(fillet.center);
+ {
+   TextReady = false;
+   arc_t fillet;
+   fillet.radius = cliGetInput();
+   std::vector<cadEntity> e = cadGetSelected();
+   if (e.empty())
+   {
+     return NULL;
+   }
+   if (e.size() == 2) //Make sure we have two selections
+   {
+     if (e[0].Type == CAD_LINE && e[1].Type == CAD_LINE) //Make sure both selections are lines
+     {
+       point_t relative_center = geoGetLineMidpoint(line_t{e[0].SelectedAt, e[1].SelectedAt});
+       V cout << KRED << "(cliXformFilletRadius) Relative Center = ";
+       V debugDumpPointStructure(relative_center);
+       line_t p_line_zero = geoGetParallelLine(e[0].Line, relative_center, fillet.radius);
+       //cadDrawLine(p_line_zero);
+       line_t p_line_one = geoGetParallelLine(e[1].Line, relative_center, fillet.radius);
+       //cadDrawLine(p_line_one);
+       //Get intersection point of both parallel lines to get fillet arc center point
+       fillet.center = geoGetLineIntersection(p_line_zero, p_line_one);
+       V cout << KRED << "(cliXformFilletRadius) Arc Center = ";
+       V debugDumpPointStructure(fillet.center);
 
-        //Get intersection of line_zero and p_line_one for fillet start point
-        fillet.start = geoGetLineIntersection(e[0].Line, p_line_one);
+       //Get intersection of line_zero and p_line_one for fillet start point
+       fillet.start = geoGetLineIntersection(e[0].Line, p_line_one);
 
-        //Get intersection of line_one and p_line_zero for fillet start point
-        fillet.end = geoGetLineIntersection(e[1].Line, p_line_zero);
+       //Get intersection of line_one and p_line_zero for fillet start point
+       fillet.end = geoGetLineIntersection(e[1].Line, p_line_zero);
 
-        V cout << KRED << "(cliXformFilletRadius) fillet.start = ";
-        V debugDumpPointStructure(fillet.start);
-        V cout << KRED << "(cliXformFilletRadius) fillet.end = ";
-        V debugDumpPointStructure(fillet.end);
+       V cout << KRED << "(cliXformFilletRadius) fillet.start = ";
+       V debugDumpPointStructure(fillet.start);
+       V cout << KRED << "(cliXformFilletRadius) fillet.end = ";
+       V debugDumpPointStructure(fillet.end);
 
-        //Determine direction of fillet by drawing a line from center to start and end point, if included angle is positive were CW
+       //Determine direction of fillet by drawing a line from center to start and end point, if included angle is positive were CW
 
-        float start_angle = geoGetLineAngle(line_t{fillet.center, fillet.start});
-        float end_angle = geoGetLineAngle(line_t{fillet.center, fillet.end});
-        float relative_center_angle = geoGetLineAngle(line_t{e[0].SelectedAt, e[1].SelectedAt});
-        V cout << KRED << "(cliXformFilletRadius) Arc Angle Difference = " << (start_angle - end_angle) << KNORMAL << endl;
-        V cout << KRED << "(cliXformFilletRadius) Arc Start Angle = " << start_angle << KNORMAL << endl;
-        V cout << KRED << "(cliXformFilletRadius) Arc End Angle = " << end_angle << KNORMAL << endl;
-        V cout << KRED << "(cliXformFilletRadius) Relative center Angle = " << relative_center_angle << KNORMAL << endl;
-        //if ((start_angle - end_angle) < start_angle)
-        //if X vector has positive direction and
-        //This approach is about 90% of the time
-        /*fillet.direction = ARC_CW;
-        vector<point_t> cw_ap = geoGetPointsOfArc(fillet);
-        float cw_endpoint_distance = geoGetLineLength(line_t{fillet.end, cw_ap.back()});
+       float start_angle = geoGetLineAngle(line_t{fillet.center, fillet.start});
+       float end_angle = geoGetLineAngle(line_t{fillet.center, fillet.end});
+       float relative_center_angle = geoGetLineAngle(line_t{e[0].SelectedAt, e[1].SelectedAt});
+       V cout << KRED << "(cliXformFilletRadius) Arc Angle Difference = " << (start_angle - end_angle) << KNORMAL << endl;
+       V cout << KRED << "(cliXformFilletRadius) Arc Start Angle = " << start_angle << KNORMAL << endl;
+       V cout << KRED << "(cliXformFilletRadius) Arc End Angle = " << end_angle << KNORMAL << endl;
+       V cout << KRED << "(cliXformFilletRadius) Relative center Angle = " << relative_center_angle << KNORMAL << endl;
+       //if ((start_angle - end_angle) < start_angle)
+       //if X vector has positive direction and
+       //This approach is about 90% of the time
+       /*fillet.direction = ARC_CW;
+       vector<point_t> cw_ap = geoGetPointsOfArc(fillet);
+       float cw_endpoint_distance = geoGetLineLength(line_t{fillet.end, cw_ap.back()});
+       fillet.direction = ARC_CCW;
+       vector<point_t> ccw_ap = geoGetPointsOfArc(fillet);
+       float ccw_endpoint_distance = geoGetLineLength(line_t{fillet.end, ccw_ap.back()});
+       if (cw_endpoint_distance < ccw_endpoint_distance )
+       {
+         fillet.direction = ARC_CW;
+       }
+       else
+       {
+         fillet.direction = ARC_CCW;
+       }*/
+       point_t original_corner = geoGetLineIntersection(e[0].Line, e[1].Line);
+       fillet.direction = ARC_CW;
+       vector<point_t> cw_ap = geoGetPointsOfArc(fillet);
+       float cw_distance_to_corner = geoGetLineLength(line_t{original_corner, cw_ap.at(cw_ap.size()/2)});
 
-        fillet.direction = ARC_CCW;
-        vector<point_t> ccw_ap = geoGetPointsOfArc(fillet);
-        float ccw_endpoint_distance = geoGetLineLength(line_t{fillet.end, ccw_ap.back()});
+       fillet.direction = ARC_CCW;
+       vector<point_t> ccw_ap = geoGetPointsOfArc(fillet);
+       float ccw_distance_to_corner = geoGetLineLength(line_t{original_corner, ccw_ap.at(ccw_ap.size()/2)});
+       if (cw_ap.size() > 180 || cw_ap.size() > 180)
+       {
+         V cout << KRED << "(cliXformFilletRadius) Fillet 180 error!" << KNORMAL << endl;
+         return NULL;
+       }
+       if (cw_distance_to_corner < ccw_distance_to_corner)
+       {
+         fillet.direction = ARC_CW;
+       }
+       else
+       {
+         fillet.direction = ARC_CCW;
+       }
 
-        if (cw_endpoint_distance < ccw_endpoint_distance )
-        {
-          fillet.direction = ARC_CW;
-        }
-        else
-        {
-          fillet.direction = ARC_CCW;
-        }*/
-        point_t original_corner = geoGetLineIntersection(e[0].Line, e[1].Line);
-        fillet.direction = ARC_CW;
-        vector<point_t> cw_ap = geoGetPointsOfArc(fillet);
-        float cw_distance_to_corner = geoGetLineLength(line_t{original_corner, cw_ap.at(cw_ap.size()/2)});
-
-        fillet.direction = ARC_CCW;
-        vector<point_t> ccw_ap = geoGetPointsOfArc(fillet);
-        float ccw_distance_to_corner = geoGetLineLength(line_t{original_corner, ccw_ap.at(ccw_ap.size()/2)});
-        if (cw_ap.size() > 180 || cw_ap.size() > 180)
-        {
-          V cout << KRED << "(cliXformFilletRadius) Fillet 180 error!" << KNORMAL << endl;
-          return NULL;
-        }
-        if (cw_distance_to_corner < ccw_distance_to_corner)
-        {
-          fillet.direction = ARC_CW;
-        }
-        else
-        {
-          fillet.direction = ARC_CCW;
-        }
-
-        V debugDumpArcStructure(fillet);
-        e[0].Line = geoReplaceClosestEndpoint(e[0].Line, fillet.start);
-        e[1].Line = geoReplaceClosestEndpoint(e[1].Line, fillet.end);
+       V debugDumpArcStructure(fillet);
+       e[0].Line = geoReplaceClosestEndpoint(e[0].Line, fillet.start);
+       e[1].Line = geoReplaceClosestEndpoint(e[1].Line, fillet.end);
 
 
-        cadEdit(e[0].Index, e[0]); //Edit line 0
-        cadEdit(e[1].Index, e[1]); //Edit line 1
-        cadDrawArc(fillet); //Draw arc
-        cliScreenUnSelectAll();
-      }
-    }
-    return NULL;
-  }
-  textCallback = &cliXformFilletRadius;
-  TextInput = true;
-  cliPush("> ");
-  uiEdit(0, uiEntity{UI_TEXT, RED, "Radius?", UI_MENU_POSITION});
-  return NULL;
+       cadEdit(e[0].Index, e[0]); //Edit line 0
+       cadEdit(e[1].Index, e[1]); //Edit line 1
+       cadDrawArc(fillet); //Draw arc
+       cliScreenUnSelectAll();
+     }
+   }
+   return NULL;
+ }
+ textCallback = &cliXformFilletRadius;
+ TextInput = true;
+ cliPush("> ");
+ uiEdit(0, uiEntity{UI_TEXT, RED, "Radius?", UI_MENU_POSITION});
+ return NULL;
+}
+void *cliXformFilletDiameter()
+{
+  if (TextReady == true)
+ {
+   TextReady = false;
+   arc_t fillet;
+   fillet.radius = cliGetInput() / 2;
+   std::vector<cadEntity> e = cadGetSelected();
+   if (e.empty())
+   {
+     return NULL;
+   }
+   if (e.size() == 2) //Make sure we have two selections
+   {
+     if (e[0].Type == CAD_LINE && e[1].Type == CAD_LINE) //Make sure both selections are lines
+     {
+       point_t relative_center = geoGetLineMidpoint(line_t{e[0].SelectedAt, e[1].SelectedAt});
+       V cout << KRED << "(cliXformFilletRadius) Relative Center = ";
+       V debugDumpPointStructure(relative_center);
+       line_t p_line_zero = geoGetParallelLine(e[0].Line, relative_center, fillet.radius);
+       //cadDrawLine(p_line_zero);
+       line_t p_line_one = geoGetParallelLine(e[1].Line, relative_center, fillet.radius);
+       //cadDrawLine(p_line_one);
+       //Get intersection point of both parallel lines to get fillet arc center point
+       fillet.center = geoGetLineIntersection(p_line_zero, p_line_one);
+       V cout << KRED << "(cliXformFilletRadius) Arc Center = ";
+       V debugDumpPointStructure(fillet.center);
+
+       //Get intersection of line_zero and p_line_one for fillet start point
+       fillet.start = geoGetLineIntersection(e[0].Line, p_line_one);
+
+       //Get intersection of line_one and p_line_zero for fillet start point
+       fillet.end = geoGetLineIntersection(e[1].Line, p_line_zero);
+
+       V cout << KRED << "(cliXformFilletRadius) fillet.start = ";
+       V debugDumpPointStructure(fillet.start);
+       V cout << KRED << "(cliXformFilletRadius) fillet.end = ";
+       V debugDumpPointStructure(fillet.end);
+
+       //Determine direction of fillet by drawing a line from center to start and end point, if included angle is positive were CW
+
+       float start_angle = geoGetLineAngle(line_t{fillet.center, fillet.start});
+       float end_angle = geoGetLineAngle(line_t{fillet.center, fillet.end});
+       float relative_center_angle = geoGetLineAngle(line_t{e[0].SelectedAt, e[1].SelectedAt});
+       V cout << KRED << "(cliXformFilletRadius) Arc Angle Difference = " << (start_angle - end_angle) << KNORMAL << endl;
+       V cout << KRED << "(cliXformFilletRadius) Arc Start Angle = " << start_angle << KNORMAL << endl;
+       V cout << KRED << "(cliXformFilletRadius) Arc End Angle = " << end_angle << KNORMAL << endl;
+       V cout << KRED << "(cliXformFilletRadius) Relative center Angle = " << relative_center_angle << KNORMAL << endl;
+       //if ((start_angle - end_angle) < start_angle)
+       //if X vector has positive direction and
+       //This approach is about 90% of the time
+       /*fillet.direction = ARC_CW;
+       vector<point_t> cw_ap = geoGetPointsOfArc(fillet);
+       float cw_endpoint_distance = geoGetLineLength(line_t{fillet.end, cw_ap.back()});
+       fillet.direction = ARC_CCW;
+       vector<point_t> ccw_ap = geoGetPointsOfArc(fillet);
+       float ccw_endpoint_distance = geoGetLineLength(line_t{fillet.end, ccw_ap.back()});
+       if (cw_endpoint_distance < ccw_endpoint_distance )
+       {
+         fillet.direction = ARC_CW;
+       }
+       else
+       {
+         fillet.direction = ARC_CCW;
+       }*/
+       point_t original_corner = geoGetLineIntersection(e[0].Line, e[1].Line);
+       fillet.direction = ARC_CW;
+       vector<point_t> cw_ap = geoGetPointsOfArc(fillet);
+       float cw_distance_to_corner = geoGetLineLength(line_t{original_corner, cw_ap.at(cw_ap.size()/2)});
+
+       fillet.direction = ARC_CCW;
+       vector<point_t> ccw_ap = geoGetPointsOfArc(fillet);
+       float ccw_distance_to_corner = geoGetLineLength(line_t{original_corner, ccw_ap.at(ccw_ap.size()/2)});
+       if (cw_ap.size() > 180 || cw_ap.size() > 180)
+       {
+         V cout << KRED << "(cliXformFilletRadius) Fillet 180 error!" << KNORMAL << endl;
+         return NULL;
+       }
+       if (cw_distance_to_corner < ccw_distance_to_corner)
+       {
+         fillet.direction = ARC_CW;
+       }
+       else
+       {
+         fillet.direction = ARC_CCW;
+       }
+
+       V debugDumpArcStructure(fillet);
+       e[0].Line = geoReplaceClosestEndpoint(e[0].Line, fillet.start);
+       e[1].Line = geoReplaceClosestEndpoint(e[1].Line, fillet.end);
+
+
+       cadEdit(e[0].Index, e[0]); //Edit line 0
+       cadEdit(e[1].Index, e[1]); //Edit line 1
+       cadDrawArc(fillet); //Draw arc
+       cliScreenUnSelectAll();
+     }
+   }
+   return NULL;
+ }
+ textCallback = &cliXformFilletDiameter;
+ TextInput = true;
+ cliPush("> ");
+ uiEdit(0, uiEntity{UI_TEXT, RED, "Diameter?", UI_MENU_POSITION});
+ return NULL;
 }
 void cliXform_CopyClicked(bool c)
 {
@@ -1218,7 +1323,7 @@ menu_item_t menu[CLI_MENU_ITEMS] = {
       },
       sub_menu_item_t{ "f", "fillet",
           sub_sub_menu_item_t{ "r", "radius" , &cliXformFilletRadius },
-          sub_sub_menu_item_t{ "d", "diameter" },
+          sub_sub_menu_item_t{ "d", "diameter", &cliXformFilletDiameter },
       },
       sub_menu_item_t{ "c", "chamfer",
           sub_sub_menu_item_t{ "d", "distances" },
