@@ -712,7 +712,7 @@ std::vector<cadEntity> geoOffsetContour(contour_t c, bool s, float d)
         v.push_back(e);
       }
       if (x > 0 && v.size() > x)
-      {
+      { 
         //Trim last line to this line via intersection
         point_t intersection = geoGetIntersection(v[x-1].Line, v[x].Line);
         v[x-1].Line.end = intersection;
@@ -723,7 +723,7 @@ std::vector<cadEntity> geoOffsetContour(contour_t c, bool s, float d)
     {
       if (s == CONTOUR_RIGHT)
       {
-        
+
       }
       if (s == CONTOUR_LEFT)
       {

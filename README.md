@@ -9,7 +9,7 @@ Mouse scroll zoom<br>
 
 Fileformats
 -----------
-1. pfcad < todo (native profileCAD format that saves toolpaths and dimensions)
+1. pfcad < done (native profileCAD format that saves toolpaths and dimensions)
 1. dxf < done
 3. stl < todo
 4. iges < todo
