@@ -395,12 +395,12 @@ void mousePassiveMotionCallback(int x, int y)
         mouseLive.push_back(l);
 
       }
-      l.Type = CAD_NOTE;
+      /*l.Type = CAD_NOTE;
       l.Color = PURPLE;
       l.Note.size = 12;
       sprintf(l.Note.text, "Number: %d, ID: %d", x, CurrentContour.Entitys[x].Index);
       l.Note.pos = note_pos;
-      mouseLive.push_back(l);
+      mouseLive.push_back(l);*/
     }
   }
   if (mouseLiveShowInstruction == "LineParallel")

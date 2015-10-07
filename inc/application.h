@@ -186,11 +186,27 @@ struct cadEntity{
   int SelectionIndex;
 };
 struct contour_t{
-  point_t start_reference;
   std::vector<cadEntity> Entitys;
-  std::vector<point_t> Points;
   bool isClosed;
 };
+#define CAD_CYCLE_CONTOUR 0
+
+struct cad_cycle_countour_t{
+  float feed;
+  float plunge_feed;
+  float retract_feed;
+};
+struct cadToolpath{
+  int Cycle;
+  float ToolNumber;
+  float ToolDiameter;
+  float SpindleSpeed;
+  bool Coolant;
+  contour_t Path;
+  bool Side;
+  cad_cycle_countour_t ContourCycle;
+};
+
 #ifdef __APPLE__
   #define BACKGROUND color_t{0, 0, 0.10, 1}
 #else
@@ -211,7 +227,7 @@ struct contour_t{
 
 #define SELECTED_COLOR CYAN
 #define MOUSEOVER_COLOR WHITE
-
+#define TOOLPATH_COLOR MAGENTA
 #define KNORMAL  "\x1B[0m"
 #define KRED  "\x1B[31m"
 #define KGREEN  "\x1B[32m"

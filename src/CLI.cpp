@@ -1252,7 +1252,7 @@ void cliXformOffsetContour_Callback()
   {
     Side = CONTOUR_LEFT;
   }
-  float Offset = fabs(atof(dialogTextboxGetString("Offset").c_str()));
+  float Offset = fabs(atof(luaEval(dialogTextboxGetString("Offset")).c_str()));
   vector<cadEntity> o = geoOffsetContour(cadGetCurrentContour(), Side, Offset);
   cadUndoPushState();
   for (int x = 0; x < o.size(); x++)
@@ -1280,7 +1280,189 @@ void *cliXformOffsetContour()
   dialogAddButton(point_t{200, -350}, 200, 100, "OK", cliXformOffsetContour_Callback);
   dialogOpen("Xform Offset Contour");
 }
-#define CLI_MENU_ITEMS 7
+void *cliToolpathsViewShow()
+{
+  cadShowToolpaths();
+}
+void *cliToolpathsViewHide()
+{
+  cadHideToolpaths();
+}
+void cliToolpathsCreateContour_Callback()
+{
+  cadToolpath t;
+  t.Cycle = CAD_CYCLE_CONTOUR;
+  if (dialogCheckboxGet("Right?"))
+  {
+    t.Side = CONTOUR_RIGHT;
+  }
+  if (dialogCheckboxGet("Left?"))
+  {
+    t.Side = CONTOUR_LEFT;
+  }
+  t.ToolNumber = fabs(atof(dialogTextboxGetString("ToolNumber").c_str()));
+  t.ToolDiameter = fabs(atof(luaEval(dialogTextboxGetString("ToolDiameter")).c_str()));
+  t.SpindleSpeed = fabs(atof(dialogTextboxGetString("SpindleSpeed").c_str()));
+  t.Coolant = dialogCheckboxGet("Coolant?");
+  t.ContourCycle.feed = fabs(atof(luaEval(dialogTextboxGetString("CrossFeed")).c_str()));
+  t.ContourCycle.plunge_feed = fabs(atof(luaEval(dialogTextboxGetString("PlungeFeed")).c_str()));
+  t.ContourCycle.retract_feed = fabs(atof(luaEval(dialogTextboxGetString("RetractFeed")).c_str()));
+  float LeaveStock = fabs(atof(luaEval(dialogTextboxGetString("LeaveStock")).c_str()));
+
+  cout << "Offset => " << (t.ToolDiameter/2) + LeaveStock << endl;
+  t.Path.Entitys = geoOffsetContour(cadGetCurrentContour(), t.Side, (t.ToolDiameter/2) + LeaveStock);
+  cadAppendToolpath(t);
+  cadShowToolpaths();
+  dialogClose();
+}
+void *cliToolpathsCreateContour()
+{
+  if (cadGetCurrentContour().Entitys.size() > 0) //Make sure we have a chain selected
+  {
+    point_t pos = point_t{-500, 1200};
+    dialogAddLabel(pos, "Tool Number?");
+    pos.y -= 120;
+    dialogAddTextBox(pos, 500, 100, "ToolNumber", "1");
+    pos.y -= 120;
+
+    dialogAddLabel(pos, "Tool Diameter?");
+    pos.y -= 120;
+    dialogAddTextBox(pos, 500, 100, "ToolDiameter", "1/2");
+    pos.y -= 120;
+
+    dialogAddLabel(pos, "Leave Stock?");
+    pos.y -= 120;
+    dialogAddTextBox(pos, 500, 100, "LeaveStock", "0.005");
+    pos.y -= 120;
+
+    dialogAddLabel(pos, "Plunge Feed?");
+    pos.y -= 120;
+    dialogAddTextBox(pos, 500, 100, "PlungeFeed", "1");
+    pos.y -= 120;
+
+    dialogAddLabel(pos, "Cross Feed?");
+    pos.y -= 120;
+    dialogAddTextBox(pos, 500, 100, "CrossFeed", "5");
+    pos.y -= 120;
+
+    dialogAddLabel(pos, "Retract Feed?");
+    pos.y -= 120;
+    dialogAddTextBox(pos, 500, 100, "RetractFeed", "7");
+    pos.y -= 120;
+
+    dialogAddLabel(pos, "Spindle Speed?");
+    pos.y -= 120;
+    dialogAddTextBox(pos, 500, 100, "SpindleSpeed", "3000");
+    pos.y -= 120;
+
+    dialogAddCheckbox(pos, "Coolant?", false, NULL);
+    pos.y -= 120;
+
+    dialogAddLabel(pos, "Contour Side?");
+    pos.y -= 70;
+    dialogAddCheckbox(pos, "Left?", false, cliXform_LeftClicked);
+    pos.y -= 60;
+
+    dialogAddCheckbox(pos, "Right?", true, cliXform_RightClicked);
+    pos.y -= 150;
+
+
+    dialogAddButton(point_t{400, -1300}, 200, 100, "OK", cliToolpathsCreateContour_Callback);
+    dialogSetPosition(300, 100);
+    dialogOpen("Toolpath Contour");
+    dialogSetSize(400, 700);
+  }
+}
+
+int backplotCycle = 0;
+int backplotPosition = -1;
+point_t backplotLastPos;
+void cliToolpathsBackplotClose_Callback()
+{
+  backplotCycle = 0;
+  backplotPosition = -1;
+  cadHideLiveEntity();
+  dialogClose();
+}
+void cliToolpathsBackplot_Callback()
+{
+  cadEntity e;
+  std::vector<cadEntity> l;
+  e.Type = CAD_ARC;
+  e.Color = RED;
+  if (backplotPosition < 0)
+  {
+    backplotPosition = 0;
+    return;
+  }
+  if (backplotPosition > cadGetToolpaths()[backplotCycle].Path.Entitys.size() -1)
+  {
+    //backplotPosition = cadGetToolpaths()[backplotCycle].Path.Entitys.size() -1;
+    //return;
+    backplotPosition = 0;
+  }
+  cout << "Position: " << backplotPosition << endl;
+  if (cadGetToolpaths()[backplotCycle].Path.Entitys[backplotPosition].Type == CAD_LINE)
+  {
+    point_t start = cadGetToolpaths()[backplotCycle].Path.Entitys[backplotPosition].Line.start;
+    point_t end = cadGetToolpaths()[backplotCycle].Path.Entitys[backplotPosition].Line.end;
+    if (geoInTolerance(backplotLastPos, start, 0.0005))
+    {
+      e.Arc = geoGetCircle(end, cadGetToolpaths()[backplotCycle].ToolDiameter / 2);
+      backplotLastPos = end;
+    }
+    else
+    {
+      e.Arc = geoGetCircle(start, cadGetToolpaths()[backplotCycle].ToolDiameter / 2);
+      backplotLastPos = start;
+    }
+    l.push_back(e);
+  }
+  else if (cadGetToolpaths()[backplotCycle].Path.Entitys[backplotPosition].Type == CAD_ARC)
+  {
+    point_t start = cadGetToolpaths()[backplotCycle].Path.Entitys[backplotPosition].Arc.start;
+    point_t end = cadGetToolpaths()[backplotCycle].Path.Entitys[backplotPosition].Arc.end;
+    if (geoInTolerance(backplotLastPos, start, 0.0005))
+    {
+      e.Arc = geoGetCircle(end, cadGetToolpaths()[backplotCycle].ToolDiameter / 2);
+      backplotLastPos = end;
+    }
+    else
+    {
+      e.Arc = geoGetCircle(start, cadGetToolpaths()[backplotCycle].ToolDiameter / 2);
+      backplotLastPos = start;
+    }
+    l.push_back(e);
+  }
+  cadShowLiveEntity(l);
+
+}
+void cliToolpathsBackplotNext_Callback()
+{
+  backplotPosition++;
+  cliToolpathsBackplot_Callback();
+}
+void cliToolpathsBackplotPrevius_Callback()
+{
+  backplotPosition--;
+  cliToolpathsBackplot_Callback();
+}
+void *cliToolpathsBackplot()
+{
+  if (cadGetToolpaths().size() > 0) //Make sure we have some toolpaths
+  {
+    point_t pos = point_t{-300, 50};
+    dialogAddButton(pos, 200, 100, "Previus", cliToolpathsBackplotPrevius_Callback);
+    pos.x += 400;
+    dialogAddButton(pos, 200, 100, "Next", cliToolpathsBackplotNext_Callback);
+    pos.y -= 200;
+    dialogAddButton(pos, 200, 100, "Close", cliToolpathsBackplotClose_Callback);
+    dialogSetPosition(800, 800);
+    dialogOpen("Toolpath Backplot");
+    dialogSetSize(300, 100);
+  }
+}
+#define CLI_MENU_ITEMS 8
 menu_item_t menu[CLI_MENU_ITEMS] = {
   { "f", "file",
     sub_menu_item_t{ "e", "exit",
@@ -1391,6 +1573,16 @@ menu_item_t menu[CLI_MENU_ITEMS] = {
   { "d", "drafting",
       sub_menu_item_t{ "d", "dimension",
         sub_sub_menu_item_t{ "p", "point", &cliDraftingDimensionPoint },
+      },
+  },
+  { "t", "toolpaths",
+      sub_menu_item_t{ "v", "view",
+        sub_sub_menu_item_t{ "s", "show", &cliToolpathsViewShow },
+        sub_sub_menu_item_t{ "h", "hide", &cliToolpathsViewHide },
+        sub_sub_menu_item_t{ "b", "backplot", &cliToolpathsBackplot },
+      },
+      sub_menu_item_t{ "c", "create",
+        sub_sub_menu_item_t{ "c", "contour", &cliToolpathsCreateContour },
       },
   },
 };

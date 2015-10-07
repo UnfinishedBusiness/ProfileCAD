@@ -4,10 +4,11 @@ using namespace std;
 
 cadSelectionBox_t cadSelectionBox;
 vector<cadEntity> cadLiveEntity;
-
+vector<cadToolpath> cadToolpathsArray;
 vector<cadUndoStructure> cadUndoArray;
 
 vector<cadEntity> cadEntityArray;
+bool renderToolpaths = false;
 int cadEntityArrayIndex;
 color_t cadColorAttribute = GREEN;
 contour_t CurrentContour;
@@ -219,9 +220,43 @@ void cadHideLiveEntity()
 {
   cadLiveEntity.clear();
 }
-
+void cadShowToolpaths()
+{
+  renderToolpaths = true;
+}
+void cadHideToolpaths()
+{
+  renderToolpaths = false;
+}
+void cadAppendToolpath(cadToolpath t)
+{
+  cadToolpathsArray.push_back(t);
+}
+std::vector<cadToolpath> cadGetToolpaths()
+{
+  return cadToolpathsArray;
+}
 void cadRender()
 {
+  if (renderToolpaths)
+  {
+    //cout << "Rendering toolpaths!" << endl;
+    sceneColor(TOOLPATH_COLOR);
+    for (int x = 0; x < cadToolpathsArray.size(); x++)
+    {
+      for (int i = 0; i < cadToolpathsArray[x].Path.Entitys.size(); i++)
+      {
+        if (cadToolpathsArray[x].Path.Entitys[i].Type == CAD_LINE)
+        {
+          cadRenderLine(cadToolpathsArray[x].Path.Entitys[i].Line, 2);
+        }
+        if (cadToolpathsArray[x].Path.Entitys[i].Type == CAD_ARC)
+        {
+          cadRenderArc(cadToolpathsArray[x].Path.Entitys[i].Arc, 2);
+        }
+      }
+    }
+  }
   if (cadSelectionBox.visable == true)
   {
     //printf("Rendering selection box!\n");

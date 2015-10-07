@@ -32,6 +32,11 @@ void cadSetColor(color_t);
 void cadSelectedToContour();
 void cadSelectChain();
 
+void cadShowToolpaths();
+void cadHideToolpaths();
+void cadAppendToolpath(cadToolpath);
+std::vector<cadToolpath> cadGetToolpaths();
+
 void cadRenderLine(line_t);
 void cadRenderLine(line_t, float);
 void cadRenderArc(arc_t);

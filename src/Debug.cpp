@@ -75,8 +75,6 @@ void debugDumpContourStructure(contour_t c)
   cout << KMAGENTA;
   cout << "contour_t{\n";
   cout << KGREEN;
-  cout << "\tstart_reference=";
-  debugDumpPointStructure(c.start_reference);
   for (int x=0; x < c.Entitys.size(); x++)
   {
       cout << KMAGENTA;

@@ -276,7 +276,7 @@ void dialogMouse(int btn, int state, int x, int y)
         float TextOffset = Dialog[x].Checkbox.Label.length() * TextOffsetFactor;
         if ((pos.x > Dialog[x].Checkbox.Position.x + TextOffset && pos.y > Dialog[x].Checkbox.Position.y ) && (pos.x < (Dialog[x].Checkbox.Position.x + Dialog[x].Checkbox.Width + TextOffset) && pos.y < (Dialog[x].Checkbox.Position.y + Dialog[x].Checkbox.Height) ))
         {
-          cout << "Clicked Checkbox " << x << endl;
+          //cout << "Clicked Checkbox " << x << endl;
           Dialog[x].Checkbox.Checked = !Dialog[x].Checkbox.Checked;
           if (Dialog[x].Checkbox.ClickCallback != NULL)
           {
@@ -520,6 +520,10 @@ void dialogOpen(string t)
 {
   dialogSetTitle(t);
   dialogOpen();
+}
+void dialogSetSize(int w, int h)
+{
+  glutReshapeWindow(w, h);
 }
 void dialogOpen()
 {

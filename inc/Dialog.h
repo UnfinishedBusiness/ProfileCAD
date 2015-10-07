@@ -14,6 +14,7 @@ bool dialogCheckboxGet(std::string);
 
 void dialogSetTitle(std::string);
 void dialogSetPosition(int, int);
+void dialogSetSize(int, int);
 
 void dialogResize(int, int);
 void dialogRender();
