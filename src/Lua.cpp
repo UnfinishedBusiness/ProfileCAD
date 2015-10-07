@@ -74,3 +74,67 @@ string luaEval(string c)
   lua_close(L);
   return r;
 }
+
+lua_State *Lua;
+void luaInit(std::string f)
+{
+  Lua = luaL_newstate();
+  luaopen_io(Lua); // provides io.*
+  luaopen_base(Lua);
+  luaopen_table(Lua);
+  luaopen_string(Lua);
+  luaopen_math(Lua);
+  luaL_openlibs(Lua);
+
+  //Register Functions
+  //lua_register(L, "Draw", luaDraw);
+
+  luaL_dofile(Lua, f.c_str());
+}
+std::string luaCallFunction(std::string function)
+{
+  vector<string> args = split(function, ' ');
+  //cout << "Lua Calling => " << args[0] << endl;
+  lua_getglobal(Lua, args[0].c_str());
+  for (int x = 1; x < args.size(); x++)
+  {
+    //cout << "Pushing argument " << x << endl;
+    lua_pushstring(Lua, args[x].c_str());
+  }
+  //lua_pcall(Lua, 0, LUA_MULTRET, 0);
+  lua_call(Lua, args.size()-1, 1);
+  string r = lua_tostring(Lua, -1);
+	lua_pop(Lua, 1);
+  return r;
+}
+std::string luaCallCycle(std::string cycle, cadToolpath t)
+{
+  lua_getglobal(Lua, cycle.c_str());
+  if (t.Cycle == CAD_CYCLE_CONTOUR)
+  {
+    lua_pushinteger(Lua, t.ContourCycle.plunge_feed);
+    lua_pushinteger(Lua, t.ContourCycle.feed);
+    lua_pushinteger(Lua, t.ContourCycle.retract_feed);
+  }
+  lua_newtable(Lua);
+  string s;
+  for (int x = 0; x < t.Path.Entitys.size(); x++)
+  {
+    s = "X" + to_string(t.Path.Entitys[x].Line.start.x) + "Y" + to_string(t.Path.Entitys[x].Line.start.y) + "Z" + to_string(t.Path.Entitys[x].Line.start.z);
+    lua_pushstring(Lua, s.c_str());
+    lua_rawseti(Lua,-2, x+1);
+  }
+  //lua_pcall(Lua, 0, LUA_MULTRET, 0);
+  lua_call(Lua, 4, 1);
+  if (!lua_isstring(Lua, -1))
+  {
+    return "";
+  }
+  string r = lua_tostring(Lua, -1);
+	lua_pop(Lua, 1);
+  return r;
+}
+void luaClose()
+{
+  lua_close(Lua);
+}

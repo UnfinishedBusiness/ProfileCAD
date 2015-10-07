@@ -80,6 +80,7 @@ void *cliToolpathsViewShow();
 void *cliToolpathsViewHide();
 void *cliToolpathsCreateContour();
 void cliToolpathsCreateContour_Callback();
-void *cliToolpathsBackplot();
+void *cliToolpathsViewBackplot();
+void *cliToolpathsNCPost();
 
 #endif

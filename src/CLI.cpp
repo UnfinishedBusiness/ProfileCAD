@@ -1447,7 +1447,7 @@ void cliToolpathsBackplotPrevius_Callback()
   backplotPosition--;
   cliToolpathsBackplot_Callback();
 }
-void *cliToolpathsBackplot()
+void *cliToolpathsViewBackplot()
 {
   if (cadGetToolpaths().size() > 0) //Make sure we have some toolpaths
   {
@@ -1461,6 +1461,16 @@ void *cliToolpathsBackplot()
     dialogOpen("Toolpath Backplot");
     dialogSetSize(300, 100);
   }
+}
+void *cliToolpathsNCPost()
+{
+  string PostFile = "post.lua";
+  luaInit(PostFile);
+  if (cadGetToolpaths().size() > 0) //Make sure we have some toolpaths
+  {
+    cout << luaCallCycle("Contour", cadGetToolpaths()[0]) << endl;
+  }
+  luaClose();
 }
 #define CLI_MENU_ITEMS 8
 menu_item_t menu[CLI_MENU_ITEMS] = {
@@ -1579,10 +1589,13 @@ menu_item_t menu[CLI_MENU_ITEMS] = {
       sub_menu_item_t{ "v", "view",
         sub_sub_menu_item_t{ "s", "show", &cliToolpathsViewShow },
         sub_sub_menu_item_t{ "h", "hide", &cliToolpathsViewHide },
-        sub_sub_menu_item_t{ "b", "backplot", &cliToolpathsBackplot },
+        sub_sub_menu_item_t{ "b", "backplot", &cliToolpathsViewBackplot },
       },
       sub_menu_item_t{ "c", "create",
         sub_sub_menu_item_t{ "c", "contour", &cliToolpathsCreateContour },
+      },
+      sub_menu_item_t{ "n", "nc",
+        sub_sub_menu_item_t{ "p", "post", &cliToolpathsNCPost },
       },
   },
 };
@@ -1737,6 +1750,14 @@ void cliInit()
   if (args.args.find("-fullscreen") != std::string::npos)
   {
     glutFullScreen();
+  }
+  if (args.args.find("-lua") != std::string::npos)
+  {
+    string PostFile = "post.lua";
+    luaInit(PostFile);
+    cout << luaCallFunction("Toolchange 1") << endl;
+    luaClose();
+    exit(0);
   }
   if (args.args.find("-pod") != std::string::npos)
   {
