@@ -93,7 +93,7 @@ void keyboardCallbackNormal(unsigned char key, int x, int y)
                   }
                   if (key == 3) //CTRL+c
                   {
-                    cadSelectedToContour();
+                    //cadSelectedToContour();
                   }
                   if (key == 18) //CTRL+r
                   {

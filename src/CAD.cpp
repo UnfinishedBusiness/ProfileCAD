@@ -206,11 +206,6 @@ void cadHideSelectionBox()
 {
   cadSelectionBox.visable = false;
 }
-void cadSelectedToContour()
-{
-  CurrentContour = geoGetContour(cadGetSelected());
-  mouseLiveShow("CurrentContour");
-}
 void cadShowLiveEntity(vector<cadEntity> e)
 {
   cadLiveEntity.clear();
@@ -606,5 +601,7 @@ void cadSelectChain()
         Done = true;
       }
     }
+    CurrentContour.Entitys = chain;
+    mouseLiveShow("CurrentContour");
   }
 }
