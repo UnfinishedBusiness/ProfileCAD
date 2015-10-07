@@ -334,6 +334,7 @@ void mousePassiveMotionCallback(int x, int y)
   point_t pos = cadScreenCordToCadCord(x, y);
   mouseCurrent = pos;
 
+  point_t note_pos;
   cadEntity l;
   l.LineWidth = 1;
   l.Color = DARKGREY;
@@ -355,7 +356,9 @@ void mousePassiveMotionCallback(int x, int y)
         mouseLive.push_back(l);
         l.Line = geoExtendLineAngle(geoGetLineMidpoint(CurrentContour.Entitys[x].Line), geoGetLineAngle(CurrentContour.Entitys[x].Line) + geoDegreesToRadians(-45), 0.1);
         mouseLive.push_back(l);
-
+        note_pos = l.Line.start;
+        note_pos.x += 0.2;
+        note_pos.y += 0.2;
       }
       if (CurrentContour.Entitys[x].Type == CAD_ARC)
       {
@@ -378,6 +381,9 @@ void mousePassiveMotionCallback(int x, int y)
         mouseLive.push_back(l);
         l.Line = geoExtendLineAngle(midpoint, geoGetLineAngle(arrow_body) + geoDegreesToRadians(-45), 0.1);
         mouseLive.push_back(l);
+        note_pos = l.Arc.start;
+        note_pos.x += 0.2;
+        note_pos.y += 0.2;
 
         /*line_t line = line_t{CurrentContour.Entitys[x].Arc.start, CurrentContour.Entitys[x].Arc.end};
         l.Type = CAD_LINE;
@@ -387,7 +393,12 @@ void mousePassiveMotionCallback(int x, int y)
         mouseLive.push_back(l);*/
 
       }
-
+      l.Type = CAD_NOTE;
+      l.Color = PURPLE;
+      l.Note.size = 12;
+      sprintf(l.Note.text, "Number: %d, ID: %d", x, CurrentContour.Entitys[x].Index);
+      l.Note.pos = note_pos;
+      mouseLive.push_back(l);
     }
   }
   if (mouseLiveShowInstruction == "LineParallel")

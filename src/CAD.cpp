@@ -511,6 +511,7 @@ void cadSelectChain()
     vector<int> used;
     vector<cadEntity> chain;
     chain.push_back(cadGetSelected()[0]);
+    used.push_back(cadGetSelected()[0].Index);
     bool Done = false;
     bool Found = false;
     while(!Done)
@@ -525,13 +526,13 @@ void cadSelectChain()
                 chain.back().Line.end == cadEntityArray[i].Line.start ||
                 chain.back().Line.start == cadEntityArray[i].Line.end ||
                 chain.back().Line.start == cadEntityArray[i].Line.start) &&
-                std::find(used.begin(), used.end(), i) == used.end())
+                std::find(used.begin(), used.end(), cadEntityArray[i].Index) == used.end())
             {
               Found = true;
               cadEntityArray[i].Selected = true;
               cadEdit(i, cadEntityArray[i], false);
               chain.push_back(cadEntityArray[i]);
-              used.push_back(i);
+              used.push_back(cadEntityArray[i].Index);
               //cout << "Found!" << endl;
               break;
             }
@@ -542,13 +543,13 @@ void cadSelectChain()
                 chain.back().Arc.end == cadEntityArray[i].Line.start ||
                 chain.back().Arc.start == cadEntityArray[i].Line.end ||
                 chain.back().Arc.start == cadEntityArray[i].Line.start) &&
-                std::find(used.begin(), used.end(), i) == used.end())
+                std::find(used.begin(), used.end(), cadEntityArray[i].Index) == used.end())
             {
               Found = true;
               cadEntityArray[i].Selected = true;
               cadEdit(i, cadEntityArray[i], false);
               chain.push_back(cadEntityArray[i]);
-              used.push_back(i);
+              used.push_back(cadEntityArray[i].Index);
               //cout << "Found!" << endl;
               break;
             }
@@ -562,13 +563,13 @@ void cadSelectChain()
                 chain.back().Line.end == cadEntityArray[i].Arc.start ||
                 chain.back().Line.start == cadEntityArray[i].Arc.end ||
                 chain.back().Line.start == cadEntityArray[i].Arc.start) &&
-                std::find(used.begin(), used.end(), i) == used.end())
+                std::find(used.begin(), used.end(), cadEntityArray[i].Index) == used.end())
             {
               Found = true;
               cadEntityArray[i].Selected = true;
               cadEdit(i, cadEntityArray[i], false);
               chain.push_back(cadEntityArray[i]);
-              used.push_back(i);
+              used.push_back(cadEntityArray[i].Index);
               //cout << "Found!" << endl;
               break;
             }
@@ -579,13 +580,13 @@ void cadSelectChain()
                 chain.back().Arc.end == cadEntityArray[i].Arc.start ||
                 chain.back().Arc.start == cadEntityArray[i].Arc.end ||
                 chain.back().Arc.start == cadEntityArray[i].Arc.start) &&
-                std::find(used.begin(), used.end(), i) == used.end())
+                std::find(used.begin(), used.end(), cadEntityArray[i].Index) == used.end())
             {
               Found = true;
               cadEntityArray[i].Selected = true;
               cadEdit(i, cadEntityArray[i], false);
               chain.push_back(cadEntityArray[i]);
-              used.push_back(i);
+              used.push_back(cadEntityArray[i].Index);
               //cout << "Found!" << endl;
               break;
             }
@@ -601,6 +602,74 @@ void cadSelectChain()
         Done = true;
       }
     }
+    for (int x = 0; x < chain.size() - 1; x++)
+    {
+      if (chain[x].Type == CAD_LINE && chain[x + 1].Type == CAD_LINE)
+      {
+        if (chain[x].Line.start == chain[x + 1].Line.end) //Flip both
+        {
+          chain[x].Line = geoFlipLine(chain[x].Line);
+          chain[x+1].Line = geoFlipLine(chain[x+1].Line);
+        }
+        else if (chain[x].Line.start == chain[x + 1].Line.start) //Flip this
+        {
+          chain[x].Line = geoFlipLine(chain[x].Line);
+        }
+        else if (chain[x].Line.end == chain[x + 1].Line.end) //Flip next
+        {
+          chain[x + 1].Line = geoFlipLine(chain[x + 1].Line);
+        }
+      }
+      else if (chain[x].Type == CAD_LINE && chain[x + 1].Type == CAD_ARC)
+      {
+        if (chain[x].Line.start == chain[x + 1].Arc.end) //Flip both
+        {
+          chain[x].Line = geoFlipLine(chain[x].Line);
+          chain[x+1].Arc = geoFlipArc(chain[x+1].Arc);
+        }
+        else if (chain[x].Line.start == chain[x + 1].Arc.start) //Flip this
+        {
+          chain[x].Line = geoFlipLine(chain[x].Line);
+        }
+        else if (chain[x].Line.end == chain[x + 1].Arc.end) //Flip next
+        {
+          chain[x + 1].Arc = geoFlipArc(chain[x + 1].Arc);
+        }
+      }
+      else if (chain[x].Type == CAD_ARC && chain[x + 1].Type == CAD_ARC)
+      {
+        if (chain[x].Arc.start == chain[x + 1].Arc.end) //Flip both
+        {
+          chain[x].Arc = geoFlipArc(chain[x].Arc);
+          chain[x+1].Arc = geoFlipArc(chain[x+1].Arc);
+        }
+        else if (chain[x].Arc.start == chain[x + 1].Arc.start) //Flip this
+        {
+          chain[x].Arc = geoFlipArc(chain[x].Arc);
+        }
+        else if (chain[x].Arc.end == chain[x + 1].Arc.end) //Flip next
+        {
+          chain[x + 1].Arc = geoFlipArc(chain[x + 1].Arc);
+        }
+      }
+      else if (chain[x].Type == CAD_ARC && chain[x + 1].Type == CAD_LINE)
+      {
+        if (chain[x].Arc.start == chain[x + 1].Line.end) //Flip both
+        {
+          chain[x].Arc = geoFlipArc(chain[x].Arc);
+          chain[x+1].Line = geoFlipLine(chain[x+1].Line);
+        }
+        else if (chain[x].Arc.start == chain[x + 1].Line.start) //Flip this
+        {
+          chain[x].Arc = geoFlipArc(chain[x].Arc);
+        }
+        else if (chain[x].Arc.end == chain[x + 1].Line.end) //Flip next
+        {
+          chain[x + 1].Line = geoFlipLine(chain[x + 1].Line);
+        }
+      }
+    }
+    CurrentContour.Entitys.clear();
     CurrentContour.Entitys = chain;
     mouseLiveShow("CurrentContour");
   }
