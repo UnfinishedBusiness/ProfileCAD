@@ -224,6 +224,8 @@ void mouseCallback(int btn, int state, int x, int y)
     if(btn==GLUT_LEFT_BUTTON && state==GLUT_DOWN)
     {
       mouseLastClick = pos;
+      mouseLastSnapClick = mouseLastMouseOverPoint;
+      //V debugDumpPointStructure(mouseLastMouseOverPoint);
       if (mouseLiveShowInstruction == "LineVerticalOrigin")
       {
         cliPush(to_string(mouseLive[0].Line.end.y));
@@ -271,7 +273,7 @@ void mouseCallback(int btn, int state, int x, int y)
           {
             mouseLastMouseOverEntity.Selected = true;
             mouseLastMouseOverEntity.SelectionIndex = cadCountSelection() + 1;
-            mouseLastMouseOverEntity.SelectedAt = pos;
+            mouseLastMouseOverEntity.SelectedAt = mouseLastSnapClick;
           }
           cadEdit(mouseLastMouseOverEntity.Index, mouseLastMouseOverEntity, false);
         }
@@ -362,7 +364,7 @@ void mousePassiveMotionCallback(int x, int y)
       }
       if (CurrentContour.Entitys[x].Type == CAD_ARC)
       {
-        l = CurrentContour.Entitys[x];
+        /*l = CurrentContour.Entitys[x];
         point_t midpoint = geoGetArcMidpoint(l.Arc);
         point_t center = l.Arc.center;
         l.Type = CAD_LINE;
@@ -383,14 +385,14 @@ void mousePassiveMotionCallback(int x, int y)
         mouseLive.push_back(l);
         note_pos = l.Arc.start;
         note_pos.x += 0.2;
-        note_pos.y += 0.2;
+        note_pos.y += 0.2;*/
 
-        /*line_t line = line_t{CurrentContour.Entitys[x].Arc.start, CurrentContour.Entitys[x].Arc.end};
+        line_t line = line_t{CurrentContour.Entitys[x].Arc.start, CurrentContour.Entitys[x].Arc.end};
         l.Type = CAD_LINE;
         l.Line = geoExtendLineAngle(geoGetLineMidpoint(line), geoGetLineAngle(line) + geoDegreesToRadians(45), 0.1);
         mouseLive.push_back(l);
         l.Line = geoExtendLineAngle(geoGetLineMidpoint(line), geoGetLineAngle(line) + geoDegreesToRadians(-45), 0.1);
-        mouseLive.push_back(l);*/
+        mouseLive.push_back(l);
 
       }
       l.Type = CAD_NOTE;

@@ -548,27 +548,92 @@ std::vector<cadEntity> geoOffsetContour(contour_t c, bool s, float d)
         e.Line = p;
         v.push_back(e);
       }
-      if (x > 0 && v.size() > x)
-      {
-        //Trim last line to this line via intersection
-        point_t intersection = geoGetIntersection(v[x-1].Line, v[x].Line);
-        v[x-1].Line.end = intersection;
-        v[x].Line.start = intersection;
-      }
     }
     if ( c.Entitys[x].Type == CAD_ARC)
     {
-      if (s == CONTOUR_RIGHT)
+      if (s == CONTOUR_RIGHT && c.Entitys[x].Arc.direction == ARC_CW)
       {
-
+        //Radius is -
+        cout << "RIGHT Arc CW" << endl;
+        e = c.Entitys[x];
+        e.Arc.radius -= d;
+        if (e.Arc.radius < 0)
+        {
+          V cout << "Arc not posible, making square corner!" << endl;
+        }
+        else
+        {
+          line_t start_line = line_t{e.Arc.center, e.Arc.start};
+          e.Arc.start = geoExtendLineAngle(e.Arc.center, geoGetLineAngle(start_line) + geoDegreesToRadians(180) , e.Arc.radius).end;
+          line_t end_line = line_t{e.Arc.center, e.Arc.end};
+          e.Arc.end = geoExtendLineAngle(e.Arc.center, geoGetLineAngle(end_line) - geoDegreesToRadians(180) , e.Arc.radius).end;
+          e.Type = CAD_ARC;
+          v.push_back(e);
+        }
       }
-      if (s == CONTOUR_LEFT)
+      else if (s == CONTOUR_RIGHT && c.Entitys[x].Arc.direction == ARC_CCW)
       {
+        cout << "RIGHT Arc CCW" << endl;
+        //Radius is +
+        e = c.Entitys[x];
+        e.Arc.radius += d;
+        e.Arc.direction = !e.Arc.direction;
+        line_t start_line = line_t{e.Arc.center, e.Arc.start};
+        e.Arc.start = geoExtendLineAngle(e.Arc.center, geoGetLineAngle(start_line) - geoDegreesToRadians(90), e.Arc.radius).end;
+        line_t end_line = line_t{e.Arc.center, e.Arc.end};
+        e.Arc.end = geoExtendLineAngle(e.Arc.center, geoGetLineAngle(end_line) + geoDegreesToRadians(90), e.Arc.radius).end;
+        e.Type = CAD_ARC;
+        v.push_back(e);
+      }
+      else if (s == CONTOUR_LEFT && c.Entitys[x].Arc.direction == ARC_CW)
+      {
+        cout << "LEFT Arc CW" << endl;
+        //Radius is +
+        e = c.Entitys[x];
+        e.Arc.radius += d;
+        //e.Arc.direction = !e.Arc.direction;
+        line_t start_line = line_t{e.Arc.center, e.Arc.start};
+        e.Arc.start = geoExtendLineAngle(e.Arc.center, geoGetLineAngle(start_line) - geoDegreesToRadians(180), e.Arc.radius).end;
+        line_t end_line = line_t{e.Arc.center, e.Arc.end};
+        e.Arc.end = geoExtendLineAngle(e.Arc.center, geoGetLineAngle(end_line) + geoDegreesToRadians(180), e.Arc.radius).end;
+        e.Type = CAD_ARC;
+        v.push_back(e);
+      }
+      else if (s == CONTOUR_LEFT && c.Entitys[x].Arc.direction == ARC_CCW)
+      {
+        cout << "LEFT Arc CCW" << endl;
+        //Radius is -
+        e = c.Entitys[x];
+        e.Arc.radius -= d;
+        if (e.Arc.radius < 0)
+        {
+          V cout << "Arc not posible, making square corner!" << endl;
 
+        }
+        else
+        {
+          line_t start_line = line_t{e.Arc.center, e.Arc.start};
+          e.Arc.start = geoExtendLineAngle(e.Arc.center, geoGetLineAngle(start_line) + geoDegreesToRadians(180) , e.Arc.radius).end;
+          line_t end_line = line_t{e.Arc.center, e.Arc.end};
+          e.Arc.end = geoExtendLineAngle(e.Arc.center, geoGetLineAngle(end_line) - geoDegreesToRadians(180) , e.Arc.radius).end;
+          e.Type = CAD_ARC;
+          v.push_back(e);
+        }
       }
     }
   }
-  if (c.isClosed) //Were a closed contour
+  for (int x = 0; x < v.size()-1; x++)
+  {
+    if (v[x].Type == CAD_LINE && v[x+1].Type == CAD_LINE)
+    {
+      //Trim last line to this line via intersection
+      point_t intersection = geoGetIntersection(v[x].Line, v[x+1].Line);
+      v[x].Line.end = intersection;
+      v[x+1].Line.start = intersection;
+
+    }
+  }
+  if (c.isClosed && v.back().Type == CAD_LINE && v.front().Type == CAD_LINE) //Were a closed contour
   {
     V cout << KRED << "(geoOffsetContour)" << KGREEN << "Trimming endpoints!" << KNORMAL << endl;
     point_t intersection = geoGetIntersection(v.back().Line, v.front().Line);

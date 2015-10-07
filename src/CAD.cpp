@@ -671,6 +671,39 @@ void cadSelectChain()
     }
     CurrentContour.Entitys.clear();
     CurrentContour.Entitys = chain;
+    CurrentContour.isClosed = false;
+    if (CurrentContour.Entitys.front().Type == CAD_LINE && CurrentContour.Entitys.back().Type == CAD_LINE)
+    {
+      if (CurrentContour.Entitys.front().Line.start == CurrentContour.Entitys.back().Line.end)
+      {
+        //cout << "Chain line=>line closed" << endl;
+        CurrentContour.isClosed = true;
+      }
+    }
+    else if (CurrentContour.Entitys.front().Type == CAD_LINE && CurrentContour.Entitys.back().Type == CAD_ARC)
+    {
+      if (CurrentContour.Entitys.front().Line.start == CurrentContour.Entitys.back().Arc.end)
+      {
+        //cout << "Chain line=>arc closed" << endl;
+        CurrentContour.isClosed = true;
+      }
+    }
+    else if (CurrentContour.Entitys.front().Type == CAD_ARC && CurrentContour.Entitys.back().Type == CAD_ARC)
+    {
+      if (CurrentContour.Entitys.front().Arc.start == CurrentContour.Entitys.back().Arc.end)
+      {
+        //cout << "Chain arc=>arc closed" << endl;
+        CurrentContour.isClosed = true;
+      }
+    }
+    else if (CurrentContour.Entitys.front().Type == CAD_ARC && CurrentContour.Entitys.back().Type == CAD_LINE)
+    {
+      if (CurrentContour.Entitys.front().Arc.start == CurrentContour.Entitys.back().Line.end)
+      {
+        //cout << "Chain arc=>line closed" << endl;
+        CurrentContour.isClosed = true;
+      }
+    }
     mouseLiveShow("CurrentContour");
   }
 }
