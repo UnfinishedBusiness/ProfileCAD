@@ -1307,6 +1307,7 @@ void cliToolpathsCreateContour_Callback()
   t.ContourCycle.feed = fabs(atof(luaEval(dialogTextboxGetString("CrossFeed")).c_str()));
   t.ContourCycle.plunge_feed = fabs(atof(luaEval(dialogTextboxGetString("PlungeFeed")).c_str()));
   t.ContourCycle.retract_feed = fabs(atof(luaEval(dialogTextboxGetString("RetractFeed")).c_str()));
+  t.ContourCycle.start_z = fabs(atof(luaEval(dialogTextboxGetString("StartZ")).c_str()));
   float LeaveStock = fabs(atof(luaEval(dialogTextboxGetString("LeaveStock")).c_str()));
 
   cout << "Offset => " << (t.ToolDiameter/2) + LeaveStock << endl;
@@ -1333,6 +1334,11 @@ void *cliToolpathsCreateContour()
     dialogAddLabel(pos, "Leave Stock?");
     pos.y -= 120;
     dialogAddTextBox(pos, 500, 100, "LeaveStock", "0.005");
+    pos.y -= 120;
+
+    dialogAddLabel(pos, "Start Z?");
+    pos.y -= 120;
+    dialogAddTextBox(pos, 500, 100, "StartZ", "0.1");
     pos.y -= 120;
 
     dialogAddLabel(pos, "Plunge Feed?");
@@ -1465,21 +1471,25 @@ void *cliToolpathsViewBackplot()
 void *cliToolpathsNCPost()
 {
   string PostFile = "post.lua";
+  string NCFile = "out.nc";
+  ofstream ofs;
+  ofs.open(NCFile, std::ofstream::out );
+
   luaInit(PostFile);
-  cout << luaCallFunction("Header");
+  ofs << luaCallFunction("Header");
   if (cadGetToolpaths().size() > 0) //Make sure we have some toolpaths
   {
     for (int x = 0; x < cadGetToolpaths().size(); x++)
     {
       if (cadGetToolpaths()[x].Cycle == CAD_CYCLE_CONTOUR)
       {
-          cout << luaCallFunction("Toolchange " + geoSupressZeros(cadGetToolpaths()[x].ToolNumber));
-          cout << luaCallCycle("Contour", cadGetToolpaths()[x]);
+          ofs << luaCallFunction("Toolchange " + geoSupressZeros(cadGetToolpaths()[x].ToolNumber));
+          ofs << luaCallCycle("Contour", cadGetToolpaths()[x]);
       }
     }
 
   }
-  cout << luaCallFunction("Footer") << endl;
+  ofs << luaCallFunction("Footer") << endl;
   luaClose();
 }
 #define CLI_MENU_ITEMS 8

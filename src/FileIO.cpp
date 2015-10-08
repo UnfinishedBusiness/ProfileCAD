@@ -94,6 +94,7 @@ void fileWritePFCAD()
     pod.ContourCycle.feed = t[x].ContourCycle.feed;
     pod.ContourCycle.plunge_feed = t[x].ContourCycle.plunge_feed;
     pod.ContourCycle.retract_feed = t[x].ContourCycle.retract_feed;
+    pod.ContourCycle.start_z = t[x].ContourCycle.start_z;
     pod.PathIsClosed = t[x].Path.isClosed;
     pod.NumberOfPathEntitys = t[x].Path.Entitys.size();
     gzwrite(gz, (char *) &pod, sizeof(struct cadToolpath_pod_t));
@@ -135,6 +136,7 @@ void fileReadPFCAD()
     t.ContourCycle.feed = pod.ContourCycle.feed;
     t.ContourCycle.plunge_feed = pod.ContourCycle.plunge_feed;
     t.ContourCycle.retract_feed = pod.ContourCycle.retract_feed;
+    t.ContourCycle.start_z = pod.ContourCycle.start_z;
     t.Path.isClosed = pod.PathIsClosed;
     for (int i = 0; i < pod.NumberOfPathEntitys; i++)
     {

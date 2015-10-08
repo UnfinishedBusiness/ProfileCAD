@@ -45,28 +45,52 @@ function string:split(delimiter)
   return result
 end
 
-function Contour(coolant, spindle_speed, plunge_feed, cross_feed, retract_feed, path)
+function tprint (tbl, indent)
+  if not indent then indent = 0 end
+  for k, v in pairs(tbl) do
+    formatting = string.rep("  ", indent) .. k .. ": "
+    if type(v) == "table" then
+      print(formatting)
+      tprint(v, indent+1)
+    elseif type(v) == 'boolean' then
+      print(formatting .. tostring(v))
+    else
+      print(formatting .. v)
+    end
+  end
+end
+
+function Contour(coolant, spindle_speed, start_z, plunge_feed, cross_feed, retract_feed, path)
   CYCLE_COUNT = CYCLE_COUNT + 1
   GCODE = N() .. " (Begin Cycle " .. CYCLE_COUNT .. ")" .. N() .. "M3S" .. spindle_speed;
-  for key,value in pairs(path)
+  POINT_COUNT = 0
+  end_table = {};
+  --print("\n");
+  --tprint(path)
+  for key, value in pairs(path)
   do
-     -- print(key,value)
-     if string.match(value, "[LINE]")
-     then
-        Table = string.split(value, "]");
-        GCODE = GCODE .. N() .. "G1" .. Table[2] .. "F" .. cross_feed
-     end
-     if string.match(value, "[ARC CW]")
-     then
-        Table = string.split(value, "]");
-        GCODE = GCODE .. N() .. "G2" .. Table[2] .. "F" .. cross_feed
-     end
-     if string.match(value, "[ARC CCW]")
-     then
-        Table = string.split(value, "]");
-        GCODE = GCODE .. N() .. "G3" .. Table[2] .. "F" .. cross_feed
-     end
-
+    if POINT_COUNT == 0
+    then
+        GCODE = GCODE .. N() .. "G0X" .. value.X .. "Y" .. value.Y .. "Z" .. (value.Z + start_z);
+        GCODE = GCODE .. N() .. "G1X" .. value.X .. "Y" .. value.Y .. "Z" .. value.Z .. "F" .. plunge_feed;
+    else
+        if value.Type == "Line"
+        then
+          GCODE = GCODE .. N() .. "G1X" .. value.X .. "Y" .. value.Y .. "Z" .. value.Z .. "F" .. cross_feed;
+        end
+        if value.Type == "Arc"
+        then
+            if value.Direction == "CW"
+            then
+                GCODE = GCODE .. N() .. "G2X" .. value.X .. "Y" .. value.Y .. "Z" .. value.Z .. "R" .. value.R .. "F" .. cross_feed;
+            else
+                GCODE = GCODE .. N() .. "G3X" .. value.X .. "Y" .. value.Y .. "Z" .. value.Z .. "R" .. value.R .. "F" .. cross_feed;
+            end
+        end
+    end
+    end_table = value;
+    POINT_COUNT = POINT_COUNT + 1;
   end
+  GCODE = GCODE .. N() .. "G1X" .. end_table.X .. "Y" .. end_table.Y .. "Z" .. (end_table.Z + start_z) .. "F" .. retract_feed;
   return GCODE
 end

@@ -195,6 +195,7 @@ struct cad_cycle_countour_t{
   float feed;
   float plunge_feed;
   float retract_feed;
+  float start_z;
 };
 struct cadToolpath{
   int Cycle;

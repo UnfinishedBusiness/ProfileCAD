@@ -107,6 +107,136 @@ std::string luaCallFunction(std::string function)
 	lua_pop(Lua, 1);
   return r;
 }
+int Index = 1;
+point_t lastpoint;
+vector<point_t> UsedPoints;
+void luaPushEntity(cadEntity e)
+{
+  if (e.Type == CAD_LINE)
+  {
+    if (!geoInTolerance(e.Line.start, lastpoint, 0.001))
+    {
+      if (std::find(UsedPoints.begin(), UsedPoints.end(), e.Line.start) == UsedPoints.end())
+      {
+        lua_newtable(Lua); /* upper table */
+
+        lua_pushstring(Lua, "Line");
+        lua_setfield(Lua, -2, "Type"); /* T[four] = 4 */
+
+        lua_pushstring(Lua, geoSupressZeros(e.Line.start.x).c_str());
+        lua_setfield(Lua, -2, "X");
+        lua_pushstring(Lua, geoSupressZeros(e.Line.start.y).c_str());
+        lua_setfield(Lua, -2, "Y");
+        lua_pushstring(Lua, geoSupressZeros(e.Line.start.z).c_str());
+        lua_setfield(Lua, -2, "Z");
+        UsedPoints.push_back(e.Line.start);
+        lastpoint = e.Line.start;
+
+        lua_rawseti(Lua,-2, Index++);
+        return;
+      }
+    }
+    else
+    {
+      if (std::find(UsedPoints.begin(), UsedPoints.end(), e.Line.end) == UsedPoints.end())
+      {
+        lua_newtable(Lua); /* upper table */
+
+        lua_pushstring(Lua, "Line");
+        lua_setfield(Lua, -2, "Type"); /* T[four] = 4 */
+
+        lua_pushstring(Lua, geoSupressZeros(e.Line.end.x).c_str());
+        lua_setfield(Lua, -2, "X");
+        lua_pushstring(Lua, geoSupressZeros(e.Line.end.y).c_str());
+        lua_setfield(Lua, -2, "Y");
+        lua_pushstring(Lua, geoSupressZeros(e.Line.end.z).c_str());
+        lua_setfield(Lua, -2, "Z");
+        UsedPoints.push_back(e.Line.end);
+        lastpoint = e.Line.end;
+
+        lua_rawseti(Lua,-2, Index++);
+        return;
+      }
+    }
+  }
+  if (e.Type == CAD_ARC)
+  {
+    if (!geoInTolerance(e.Arc.start, lastpoint, 0.001))
+    {
+        if (std::find(UsedPoints.begin(), UsedPoints.end(), e.Arc.start) == UsedPoints.end())
+        {
+          lua_newtable(Lua); /* upper table */
+
+          lua_pushstring(Lua, "Arc");
+          lua_setfield(Lua, -2, "Type"); /* T[four] = 4 */
+
+          lua_pushstring(Lua, geoSupressZeros(e.Arc.start.x).c_str());
+          lua_setfield(Lua, -2, "X");
+          lua_pushstring(Lua, geoSupressZeros(e.Arc.start.y).c_str());
+          lua_setfield(Lua, -2, "Y");
+          lua_pushstring(Lua, geoSupressZeros(e.Arc.start.z).c_str());
+          lua_setfield(Lua, -2, "Z");
+          lua_pushstring(Lua, geoSupressZeros(e.Arc.radius).c_str());
+          lua_setfield(Lua, -2, "R");
+
+          if (e.Arc.direction == ARC_CW)
+          {
+            lua_pushstring(Lua, "CW");
+            lua_setfield(Lua, -2, "Direction");
+          }
+          else
+          {
+            lua_pushstring(Lua, "CCW");
+            lua_setfield(Lua, -2, "Direction");
+          }
+
+          UsedPoints.push_back(e.Arc.start);
+          lastpoint = e.Arc.start;
+
+          lua_rawseti(Lua,-2, Index++);
+          return;
+        }
+    }
+    else
+    {
+      if (std::find(UsedPoints.begin(), UsedPoints.end(), e.Arc.end) == UsedPoints.end())
+      {
+        lua_newtable(Lua); /* upper table */
+
+        lua_pushstring(Lua, "Arc");
+        lua_setfield(Lua, -2, "Type"); /* T[four] = 4 */
+
+        lua_pushstring(Lua, geoSupressZeros(e.Arc.end.x).c_str());
+        lua_setfield(Lua, -2, "X");
+        lua_pushstring(Lua, geoSupressZeros(e.Arc.end.y).c_str());
+        lua_setfield(Lua, -2, "Y");
+        lua_pushstring(Lua, geoSupressZeros(e.Arc.end.z).c_str());
+        lua_setfield(Lua, -2, "Z");
+        lua_pushstring(Lua, geoSupressZeros(e.Arc.radius).c_str());
+        lua_setfield(Lua, -2, "R");
+
+        if (e.Arc.direction == ARC_CW)
+        {
+          lua_pushstring(Lua, "CW");
+          lua_setfield(Lua, -2, "Direction");
+        }
+        else
+        {
+          lua_pushstring(Lua, "CCW");
+          lua_setfield(Lua, -2, "Direction");
+        }
+
+        UsedPoints.push_back(e.Arc.end);
+        lastpoint = e.Arc.end;
+
+        lua_rawseti(Lua,-2, Index++);
+        return;
+      }
+    }
+  }
+
+  //lua_setfield(Lua, -2, to_string(x+1).c_str());  /* name upper table field T of bottom table */
+}
 std::string luaCallCycle(std::string cycle, cadToolpath t)
 {
   lua_getglobal(Lua, cycle.c_str());
@@ -115,64 +245,32 @@ std::string luaCallCycle(std::string cycle, cadToolpath t)
   lua_pushstring(Lua, geoSupressZeros(t.SpindleSpeed).c_str());
   if (t.Cycle == CAD_CYCLE_CONTOUR)
   {
-    lua_pushinteger(Lua, t.ContourCycle.plunge_feed);
-    lua_pushinteger(Lua, t.ContourCycle.feed);
-    lua_pushinteger(Lua, t.ContourCycle.retract_feed);
+    lua_pushstring(Lua, geoSupressZeros(t.ContourCycle.start_z).c_str());
+    lua_pushstring(Lua, geoSupressZeros(t.ContourCycle.plunge_feed).c_str());
+    lua_pushstring(Lua, geoSupressZeros(t.ContourCycle.feed).c_str());
+    lua_pushstring(Lua, geoSupressZeros(t.ContourCycle.retract_feed).c_str());
   }
-  lua_newtable(Lua);
+  lua_newtable(Lua); //First table
+
+
+  //luaPushEntity(cadEntity{});
+
   string s;
-  point_t lastpoint;
+
   for (int x = 0; x < t.Path.Entitys.size(); x++)
   {
-    if (t.Path.Entitys[x].Type == CAD_LINE)
-    {
-      s = "[LINE]";
-      if (!geoInTolerance(t.Path.Entitys[x].Line.start, lastpoint, 0.001))
-      {
-        s = s + "X" + geoSupressZeros(t.Path.Entitys[x].Line.start.x)
-          + "Y" + geoSupressZeros(t.Path.Entitys[x].Line.start.y)
-          + "Z" + geoSupressZeros(t.Path.Entitys[x].Line.start.z);
-        lastpoint = t.Path.Entitys[x].Line.start;
-      }
-      else
-      {
-        s = s + "X" + geoSupressZeros(t.Path.Entitys[x].Line.end.x)
-          + "Y" + geoSupressZeros(t.Path.Entitys[x].Line.end.y)
-          + "Z" + geoSupressZeros(t.Path.Entitys[x].Line.end.z);
-        lastpoint = t.Path.Entitys[x].Line.end;
-      }
-    }
-    if (t.Path.Entitys[x].Type == CAD_ARC)
-    {
-      if (t.Path.Entitys[x].Arc.direction == ARC_CW)
-      {
-        s = "[ARC CW]";
-      }
-      else
-      {
-        s = "[ARC CCW]";
-      }
-      if (!geoInTolerance(t.Path.Entitys[x].Arc.start, lastpoint, 0.001))
-      {
-        s = s + "X" + geoSupressZeros(t.Path.Entitys[x].Arc.start.x)
-          + "Y" + geoSupressZeros(t.Path.Entitys[x].Arc.start.y)
-          + "Z" + geoSupressZeros(t.Path.Entitys[x].Arc.start.z);
-        lastpoint = t.Path.Entitys[x].Arc.start;
-      }
-      else
-      {
-        s = s + "X" + geoSupressZeros(t.Path.Entitys[x].Arc.end.x)
-          + "Y" + geoSupressZeros(t.Path.Entitys[x].Arc.end.y)
-          + "Z" + geoSupressZeros(t.Path.Entitys[x].Arc.end.z);
-        lastpoint = t.Path.Entitys[x].Arc.end;
-      }
-      s = s + "R" + geoSupressZeros(t.Path.Entitys[x].Arc.radius);
-    }
-    lua_pushstring(Lua, s.c_str());
-    lua_rawseti(Lua,-2, x+1);
+    luaPushEntity(t.Path.Entitys[x]); //Push twice to post start and endpoints
+    luaPushEntity(t.Path.Entitys[x]);
   }
+  if (t.Path.isClosed)
+  {
+    UsedPoints.clear(); //Release used points and push first start point again
+    luaPushEntity(t.Path.Entitys[0]);
+  }
+  UsedPoints.clear();
+  Index = 1;
   //lua_pcall(Lua, 0, LUA_MULTRET, 0);
-  lua_pcall(Lua, 6, LUA_MULTRET, 1);
+  lua_pcall(Lua, 7, LUA_MULTRET, 1);
   if (!lua_isstring(Lua, -1))
   {
     return "";
