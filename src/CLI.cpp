@@ -1491,6 +1491,11 @@ void *cliToolpathsNCPost()
   }
   ofs << luaCallFunction("Footer") << endl;
   luaClose();
+  ofs.close();
+}
+void *cliToolpathsMachineUI()
+{
+  machineUI();
 }
 #define CLI_MENU_ITEMS 8
 menu_item_t menu[CLI_MENU_ITEMS] = {
@@ -1610,6 +1615,7 @@ menu_item_t menu[CLI_MENU_ITEMS] = {
         sub_sub_menu_item_t{ "s", "show", &cliToolpathsViewShow },
         sub_sub_menu_item_t{ "h", "hide", &cliToolpathsViewHide },
         sub_sub_menu_item_t{ "b", "backplot", &cliToolpathsViewBackplot },
+        sub_sub_menu_item_t{ "m", "machine ui", &cliToolpathsMachineUI },
       },
       sub_menu_item_t{ "c", "create",
         sub_sub_menu_item_t{ "c", "contour", &cliToolpathsCreateContour },

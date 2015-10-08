@@ -82,6 +82,21 @@ void dialogCheckboxSet(string l, bool c)
     }
   }
 }
+void dialogEditLabel(point_t p, string text)
+{
+  for (int x = 0; x < Dialog.size(); x++)
+  {
+    if (Dialog[x].Type == LABEL)
+    {
+      if (Dialog[x].Label.Position.x == (p.x * dialogScale) && Dialog[x].Label.Position.y == (p.y * dialogScale))
+      {
+        //cout << "Edited label" << endl;
+        Dialog[x].Label.Text = text;
+        glutPostRedisplay();
+      }
+    }
+  }
+}
 bool dialogCheckboxGet(string l)
 {
   for (int x = 0; x < Dialog.size(); x++)

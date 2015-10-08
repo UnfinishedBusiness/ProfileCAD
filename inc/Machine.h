@@ -8,6 +8,8 @@ void machineDisconnect();
 void machineWrite(std::string);
 std::string machineRead();
 
+void machineUI();
+
 void machineTinyGCommand(std::string c);
 
 #endif

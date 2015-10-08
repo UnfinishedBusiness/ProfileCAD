@@ -23,6 +23,98 @@ void machineInit()
     }
   }
 }
+void machineUI_Run_Callback()
+{
+  string line;
+  ifstream ifs;
+  ifs.open(dialogTextboxGetString("NCFile"));
+  if (ifs.is_open())
+  {
+    while (getline(ifs, line))
+    {
+      machineWrite(line);
+    }
+  }
+}
+void machineUI_Home_Callback()
+{
+  luaInit(dialogTextboxGetString("ControlFile"));
+  machineWrite(luaCallFunction("Home"));
+  luaClose();
+}
+void machineUI_Loading_Callback()
+{
+  luaInit(dialogTextboxGetString("ControlFile"));
+  machineWrite(luaCallFunction("Loading"));
+  luaClose();
+}
+void machineUI_XPlus_Callback()
+{
+  luaInit(dialogTextboxGetString("ControlFile"));
+  machineWrite(luaCallFunction("Xinc " + geoSupressZeros(0.1)));
+  luaClose();
+}
+void machineUI_XMinus_Callback()
+{
+  luaInit(dialogTextboxGetString("ControlFile"));
+  machineWrite(luaCallFunction("Xinc " + geoSupressZeros(-0.1)));
+  luaClose();
+}
+void machineUI_YPlus_Callback()
+{
+  luaInit(dialogTextboxGetString("ControlFile"));
+  machineWrite(luaCallFunction("Yinc " + geoSupressZeros(0.1)));
+  luaClose();
+}
+void machineUI_YMinus_Callback()
+{
+  luaInit(dialogTextboxGetString("ControlFile"));
+  machineWrite(luaCallFunction("Yinc " + geoSupressZeros(-0.1)));
+  luaClose();
+}
+void machineUI_SetXYZ_Callback()
+{
+  luaInit(dialogTextboxGetString("ControlFile"));
+  machineWrite(luaCallFunction("SetXYZ"));
+  luaClose();
+}
+void machineUI_Pause_Callback()
+{
+  luaInit(dialogTextboxGetString("ControlFile"));
+  machineWrite(luaCallFunction("Pause"));
+  luaClose();
+}
+void machineUI()
+{
+  point_t pos = point_t{-500, 1200};
+  dialogAddLabel(pos, "NC File?");
+  pos.y -= 120;
+  dialogAddTextBox(pos, 500, 100, "NCFile", "out.nc");
+  pos.y -= 150;
+  dialogAddLabel(pos, "Control File?");
+  pos.y -= 120;
+  dialogAddTextBox(pos, 500, 100, "ControlFile", "control.lua");
+
+
+  dialogAddLabel(point_t{500, 500}, "X: 0");
+  dialogAddLabel(point_t{500, 600}, "Y: 0");
+  dialogAddLabel(point_t{500, 700}, "Z: 0");
+
+  dialogAddButton(point_t{-600, 0}, 200, 100, "HOME", machineUI_Home_Callback);
+  dialogAddButton(point_t{-400, 0}, 200, 100, "SETXYZ", machineUI_SetXYZ_Callback);
+  dialogAddButton(point_t{0, 0}, 200, 100, "RUN", machineUI_Run_Callback);
+  dialogAddButton(point_t{400, 0}, 200, 100, "LOADING", machineUI_Loading_Callback);
+  dialogAddButton(point_t{400, -200}, 200, 100, "PAUSE", machineUI_Pause_Callback);
+
+  dialogAddButton(point_t{-400, 300}, 200, 100, "X+", machineUI_XPlus_Callback);
+  dialogAddButton(point_t{0, 300}, 200, 100, "X-", machineUI_XMinus_Callback);
+  dialogAddButton(point_t{0, -400}, 200, 100, "Y+", machineUI_YPlus_Callback);
+  dialogAddButton(point_t{0, 400}, 200, 100, "Y-", machineUI_YMinus_Callback);
+
+  dialogSetPosition(300, 100);
+  dialogOpen("Machine Interface");
+  dialogSetSize(600, 700);
+}
 void machineConnect()
 {
   /*mifs.open(machineCOM);
@@ -62,35 +154,92 @@ void machineWrite(string w)
     V cout << KRED << "Machine Controller" << KGREEN << " Sent -> " << w << KNORMAL << endl;
     write (mfd, w.c_str(), w.length());
     write (mfd, "\n", 1);
+    machineRead();
     return;
   }
 }
+string X;
+string Y;
+string Z;
 string machineRead()
 {
-  /*string line;
-  if (mifs.is_open())
+  string buffer;
+  char c;
+  while (true)
   {
-      getline (mifs, line);
-      line.erase(std::remove(line.begin(), line.end(), ' '), line.end()); //Remove all whitespaces
-      line.erase(std::remove(line.begin(), line.end(), '\n'), line.end()); //Remove all newline characters
-      line.erase(std::remove(line.begin(), line.end(), '\r'), line.end()); //Remove all carage return characters
-      V cout << KRED << "Machine Controller" << KGREEN << " Read -> " << line << KNORMAL << endl;
-      return line;
+      read(mfd, &c, sizeof(char));
+      if (c == '\n' || c == '\r')
+      {
+        //cout << "Little Fucker!" << endl;
+      }
+      else
+      {
+        buffer.push_back(c);
+        printf("%c", c);
+      }
+      if (c == '>')
+      {
+        break;
+      }
+
+  }
+  //buffer.erase(std::remove(buffer.begin(), buffer.end(), ' '), buffer.end()); //Remove all whitespaces
+  //vector<string> pre = split(buffer, '>');
+
+  //vector<string> pairs = split(pre[2], ',');
+  /*if (pairs.size() < 1)
+  {
+    pairs = split(buffer, '\n');
+    if (pairs.size() < 1)
+    {
+      cout << "No Feedback information!" << endl;
+    }
   }*/
+  /*cout << endl;
+  vector<string> data;
+  for (int x = 0; x < pairs.size(); x++)
+  {
+    data = split(pairs[x], ':');
+    cout << "Pair[" << x << "] Data[0] = " << data[0] << " Data[1] = " << data[1] << endl;
+    if (data[0] == "mpox")
+    {
+      X = data[1];
+    }
+    if (data[0] == "mpoy")
+    {
+      Y = data[1];
+    }
+    if (data[0] == "mpoz")
+    {
+      Z = data[1];
+    }
+    dialogEditLabel(point_t{500, 500}, "X: " + X);
+    dialogEditLabel(point_t{500, 600}, "Y: " + Y);
+    dialogEditLabel(point_t{500, 700}, "Z: " + Z);
+  }*/
+  return buffer;
 }
 void machineTinyGCommand(string c)
 {
   if (c.find("home") != std::string::npos)
   {
-    machineConnect();
     machineWrite("G28.2 X0Y0");
-    machineDisconnect();
   }
   if (c.find("loading") != std::string::npos)
   {
-    machineConnect();
     machineWrite("G0 X2.5Y5");
-    machineDisconnect();
+  }
+  if (c.find("setxyz") != std::string::npos)
+  {
+    machineWrite("G10 L2 P1 X0 Y0 Z0");
+  }
+  if (c.find("z+") != std::string::npos)
+  {
+    machineWrite("G91G0Z0.1G90");
+  }
+  if (c.find("z-") != std::string::npos)
+  {
+    machineWrite("G91G0Z0.1G90");
   }
   return;
 }

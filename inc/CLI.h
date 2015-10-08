@@ -82,5 +82,6 @@ void *cliToolpathsCreateContour();
 void cliToolpathsCreateContour_Callback();
 void *cliToolpathsViewBackplot();
 void *cliToolpathsNCPost();
+void *cliToolpathsMachineUI();
 
 #endif
