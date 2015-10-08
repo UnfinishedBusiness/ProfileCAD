@@ -224,7 +224,6 @@ void mouseCallback(int btn, int state, int x, int y)
     if(btn==GLUT_LEFT_BUTTON && state==GLUT_DOWN)
     {
       mouseLastClick = pos;
-      mouseLastSnapClick = mouseLastMouseOverPoint;
       //V debugDumpPointStructure(mouseLastMouseOverPoint);
       if (mouseLiveShowInstruction == "LineVerticalOrigin")
       {
@@ -263,7 +262,22 @@ void mouseCallback(int btn, int state, int x, int y)
       }
       if (cadGetEntityArrayIndex() > 0)
       {
-        if (cadGetEntityArray(mouseLastMouseOverEntity.Index).MouseOver == true)
+        if (cadGetSelectionBox().visable == true)
+        {
+          if (mouseLastMouseOverEntity.Selected == true)
+          {
+            mouseLastMouseOverEntity.Selected = false;
+          }
+          else
+          {
+            mouseLastSnapClick = cadGetSelectionBox().a.center;
+            mouseLastMouseOverEntity.Selected = true;
+            mouseLastMouseOverEntity.SelectedAt = mouseLastSnapClick;
+            mouseLastMouseOverEntity.SelectionIndex = cadCountSelection() + 1;
+          }
+          cadEdit(mouseLastMouseOverEntity.Index, mouseLastMouseOverEntity, false);
+        }
+        else if (cadGetEntityArray(mouseLastMouseOverEntity.Index).MouseOver == true)
         {
           if (mouseLastMouseOverEntity.Selected == true)
           {
@@ -275,13 +289,6 @@ void mouseCallback(int btn, int state, int x, int y)
             mouseLastMouseOverEntity.SelectionIndex = cadCountSelection() + 1;
             mouseLastMouseOverEntity.SelectedAt = mouseLastSnapClick;
           }
-          cadEdit(mouseLastMouseOverEntity.Index, mouseLastMouseOverEntity, false);
-        }
-        else if (cadGetSelectionBox().visable == true)
-        {
-          mouseLastSnapClick = cadGetSelectionBox().a.center;
-          mouseLastMouseOverEntity.SelectedAt = mouseLastSnapClick;
-          mouseLastMouseOverEntity.SelectionIndex = cadCountSelection() + 1;
           cadEdit(mouseLastMouseOverEntity.Index, mouseLastMouseOverEntity, false);
         }
       }

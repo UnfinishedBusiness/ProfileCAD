@@ -6,7 +6,8 @@
 
 bool geoInTolerance(point_t, point_t, float);
 bool geoInTolerance(float, float, float);
-
+std::string geoSupressZeros(float);
+std::string geoBoolToString(bool);
 
 point_t geoGetIntersection(line_t, line_t);
 point_t geoGetIntersection(arc_t, line_t);

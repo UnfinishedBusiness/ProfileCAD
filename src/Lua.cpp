@@ -101,8 +101,8 @@ std::string luaCallFunction(std::string function)
     //cout << "Pushing argument " << x << endl;
     lua_pushstring(Lua, args[x].c_str());
   }
-  //lua_pcall(Lua, 0, LUA_MULTRET, 0);
-  lua_call(Lua, args.size()-1, 1);
+  lua_pcall(Lua, args.size()-1, LUA_MULTRET, 1);
+  //lua_call(Lua, args.size()-1, 1);
   string r = lua_tostring(Lua, -1);
 	lua_pop(Lua, 1);
   return r;
@@ -110,6 +110,9 @@ std::string luaCallFunction(std::string function)
 std::string luaCallCycle(std::string cycle, cadToolpath t)
 {
   lua_getglobal(Lua, cycle.c_str());
+
+  lua_pushstring(Lua, geoBoolToString(t.Coolant).c_str());
+  lua_pushstring(Lua, geoSupressZeros(t.SpindleSpeed).c_str());
   if (t.Cycle == CAD_CYCLE_CONTOUR)
   {
     lua_pushinteger(Lua, t.ContourCycle.plunge_feed);
@@ -118,14 +121,58 @@ std::string luaCallCycle(std::string cycle, cadToolpath t)
   }
   lua_newtable(Lua);
   string s;
+  point_t lastpoint;
   for (int x = 0; x < t.Path.Entitys.size(); x++)
   {
-    s = "X" + to_string(t.Path.Entitys[x].Line.start.x) + "Y" + to_string(t.Path.Entitys[x].Line.start.y) + "Z" + to_string(t.Path.Entitys[x].Line.start.z);
+    if (t.Path.Entitys[x].Type == CAD_LINE)
+    {
+      s = "[LINE]";
+      if (!geoInTolerance(t.Path.Entitys[x].Line.start, lastpoint, 0.001))
+      {
+        s = s + "X" + geoSupressZeros(t.Path.Entitys[x].Line.start.x)
+          + "Y" + geoSupressZeros(t.Path.Entitys[x].Line.start.y)
+          + "Z" + geoSupressZeros(t.Path.Entitys[x].Line.start.z);
+        lastpoint = t.Path.Entitys[x].Line.start;
+      }
+      else
+      {
+        s = s + "X" + geoSupressZeros(t.Path.Entitys[x].Line.end.x)
+          + "Y" + geoSupressZeros(t.Path.Entitys[x].Line.end.y)
+          + "Z" + geoSupressZeros(t.Path.Entitys[x].Line.end.z);
+        lastpoint = t.Path.Entitys[x].Line.end;
+      }
+    }
+    if (t.Path.Entitys[x].Type == CAD_ARC)
+    {
+      if (t.Path.Entitys[x].Arc.direction == ARC_CW)
+      {
+        s = "[ARC CW]";
+      }
+      else
+      {
+        s = "[ARC CCW]";
+      }
+      if (!geoInTolerance(t.Path.Entitys[x].Arc.start, lastpoint, 0.001))
+      {
+        s = s + "X" + geoSupressZeros(t.Path.Entitys[x].Arc.start.x)
+          + "Y" + geoSupressZeros(t.Path.Entitys[x].Arc.start.y)
+          + "Z" + geoSupressZeros(t.Path.Entitys[x].Arc.start.z);
+        lastpoint = t.Path.Entitys[x].Arc.start;
+      }
+      else
+      {
+        s = s + "X" + geoSupressZeros(t.Path.Entitys[x].Arc.end.x)
+          + "Y" + geoSupressZeros(t.Path.Entitys[x].Arc.end.y)
+          + "Z" + geoSupressZeros(t.Path.Entitys[x].Arc.end.z);
+        lastpoint = t.Path.Entitys[x].Arc.end;
+      }
+      s = s + "R" + geoSupressZeros(t.Path.Entitys[x].Arc.radius);
+    }
     lua_pushstring(Lua, s.c_str());
     lua_rawseti(Lua,-2, x+1);
   }
   //lua_pcall(Lua, 0, LUA_MULTRET, 0);
-  lua_pcall(Lua, 4, LUA_MULTRET, 1);
+  lua_pcall(Lua, 6, LUA_MULTRET, 1);
   if (!lua_isstring(Lua, -1))
   {
     return "";

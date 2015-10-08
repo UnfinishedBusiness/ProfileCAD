@@ -27,6 +27,18 @@ bool geoInTolerance(float a, float b, float t)
     return false;
   }
 }
+string geoSupressZeros(float i)
+{
+  stringstream r;
+  r << i;
+  return r.str();
+}
+string geoBoolToString(bool i)
+{
+  stringstream r;
+  r << i;
+  return r.str();
+}
 line_t geoReplaceClosestEndpoint(line_t l, point_t p)
 {
   line_t r = l;

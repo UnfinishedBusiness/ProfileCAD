@@ -1466,10 +1466,20 @@ void *cliToolpathsNCPost()
 {
   string PostFile = "post.lua";
   luaInit(PostFile);
+  cout << luaCallFunction("Header");
   if (cadGetToolpaths().size() > 0) //Make sure we have some toolpaths
   {
-    cout << luaCallCycle("Contour", cadGetToolpaths()[0]) << endl;
+    for (int x = 0; x < cadGetToolpaths().size(); x++)
+    {
+      if (cadGetToolpaths()[x].Cycle == CAD_CYCLE_CONTOUR)
+      {
+          cout << luaCallFunction("Toolchange " + geoSupressZeros(cadGetToolpaths()[x].ToolNumber));
+          cout << luaCallCycle("Contour", cadGetToolpaths()[x]);
+      }
+    }
+
   }
+  cout << luaCallFunction("Footer") << endl;
   luaClose();
 }
 #define CLI_MENU_ITEMS 8
