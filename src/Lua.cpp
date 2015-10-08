@@ -125,7 +125,7 @@ std::string luaCallCycle(std::string cycle, cadToolpath t)
     lua_rawseti(Lua,-2, x+1);
   }
   //lua_pcall(Lua, 0, LUA_MULTRET, 0);
-  lua_call(Lua, 4, 1);
+  lua_pcall(Lua, 4, LUA_MULTRET, 1);
   if (!lua_isstring(Lua, -1))
   {
     return "";

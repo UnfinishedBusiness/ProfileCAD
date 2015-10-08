@@ -24,6 +24,7 @@ function Toolchange(toolnum)
     return Home() .. N() .. "M6T" .. toolnum .. Stop();
 end
 function Contour(plunge_feed, cross_feed, retract_feed, path)
+  GCODE = "";
   for key,value in pairs(path)
   do
      -- print(key,value)

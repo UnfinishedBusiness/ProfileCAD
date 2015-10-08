@@ -66,16 +66,44 @@ void fileWritePFCAD()
     cout << "Cannot write file!\n";
     return;
   }
+  Header_t Header;
+  Header.NumberOfEntitys = cadGetEntityArrayIndex();
+  Header.NumberOfToolpaths = cadGetToolpaths().size();
+  gzwrite(gz, (char *) &Header, sizeof(struct Header_t));
+
   cadEntity e;
-  for (int x = 0; x < cadGetEntityArrayIndex(); x++)
+  for (int x = 0; x < Header.NumberOfEntitys; x++)
   {
     e = cadGetEntityArray(x);
     if (!e.Removed)
     {
-      //ofs.write((char *) &e, sizeof(struct cadEntity));
       gzwrite(gz, (char *) &e, sizeof(struct cadEntity));
     }
   }
+  cadToolpath_pod_t pod;
+  vector<cadToolpath> t = cadGetToolpaths();
+  for (int x = 0; x < Header.NumberOfToolpaths; x++)
+  {
+    V cout << "Writing toolpath " << x << endl;
+    pod.Cycle = t[x].Cycle;
+    pod.ToolNumber = t[x].ToolNumber;
+    pod.ToolDiameter = t[x].ToolDiameter;
+    pod.SpindleSpeed = t[x].SpindleSpeed;
+    pod.Coolant = t[x].Coolant;
+    pod.Side = t[x].Side;
+    pod.ContourCycle.feed = t[x].ContourCycle.feed;
+    pod.ContourCycle.plunge_feed = t[x].ContourCycle.plunge_feed;
+    pod.ContourCycle.retract_feed = t[x].ContourCycle.retract_feed;
+    pod.PathIsClosed = t[x].Path.isClosed;
+    pod.NumberOfPathEntitys = t[x].Path.Entitys.size();
+    gzwrite(gz, (char *) &pod, sizeof(struct cadToolpath_pod_t));
+    for (int i = 0; i < pod.NumberOfPathEntitys; i++)
+    {
+      e = t[x].Path.Entitys[i];
+      gzwrite(gz, (char *) &e, sizeof(struct cadEntity));
+    }
+  }
+
 }
 void fileReadPFCAD()
 {
@@ -84,14 +112,42 @@ void fileReadPFCAD()
     return;
   }
   cadEntity e;
-  /*while(ifs.read((char *) &e, sizeof(struct cadEntity)))
+
+  Header_t Header;
+  gzread(gz, (char *) &Header, sizeof(struct Header_t));
+  //cout << "Header.NumberOfEntitys => " << Header.NumberOfEntitys << endl;
+  for (int x = 0; x < Header.NumberOfEntitys; x++)
   {
-      cadAppend(e, false);
-  }*/
-  while (gzread(gz, (char *) &e, sizeof(struct cadEntity)))
+    gzread(gz, (char *) &e, sizeof(struct cadEntity));
+    cadAppend(e, false);
+  }
+  cadToolpath_pod_t pod;
+  cadToolpath t;
+  for (int x = 0; x < Header.NumberOfToolpaths; x++)
+  {
+    gzread(gz, (char *) &pod, sizeof(struct cadToolpath_pod_t));
+    t.Cycle = pod.Cycle;
+    t.ToolNumber = pod.ToolNumber;
+    t.ToolDiameter = pod.ToolDiameter;
+    t.SpindleSpeed = pod.SpindleSpeed;
+    t.Coolant = pod.Coolant;
+    t.Side = pod.Side;
+    t.ContourCycle.feed = pod.ContourCycle.feed;
+    t.ContourCycle.plunge_feed = pod.ContourCycle.plunge_feed;
+    t.ContourCycle.retract_feed = pod.ContourCycle.retract_feed;
+    t.Path.isClosed = pod.PathIsClosed;
+    for (int i = 0; i < pod.NumberOfPathEntitys; i++)
+    {
+      gzread(gz, (char *) &e, sizeof(struct cadEntity));
+      t.Path.Entitys.push_back(e);
+    }
+    cadAppendToolpath(t);
+  }
+  /*while (gzread(gz, (char *) &e, sizeof(struct cadEntity)))
   {
        cadAppend(e, false);
-  }
+  }*/
+
 }
 void fileWriteDXF()
 {

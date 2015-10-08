@@ -2,6 +2,24 @@
 #define FILEIO_
 #include <application.h>
 
+struct Header_t{
+  int NumberOfEntitys;
+  int NumberOfToolpaths;
+};
+struct cadToolpath_pod_t{
+  int Cycle;
+  float ToolNumber;
+  float ToolDiameter;
+  float SpindleSpeed;
+  bool Coolant;
+  //contour_t Path;
+  bool Side;
+  cad_cycle_countour_t ContourCycle;
+
+  bool PathIsClosed;
+  int NumberOfPathEntitys;
+};
+
 #define FILE_OK 0
 #define FILE_WRITE_ERROR -1
 #define FILE_READ_ERROR -2
