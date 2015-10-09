@@ -23,8 +23,12 @@ void machineInit()
     }
   }
 }
+int runLine = 0;
+bool runningFile = false;
 void machineUI_Run_Callback()
 {
+  runningFile = true;
+  int x = 0;
   string line;
   ifstream ifs;
   ifs.open(dialogTextboxGetString("NCFile"));
@@ -32,9 +36,18 @@ void machineUI_Run_Callback()
   {
     while (getline(ifs, line))
     {
-      machineWrite(line);
+      if (runLine == x)
+      {
+          machineWrite(line);
+          ifs.close();
+          return;
+      }
+      x++;
     }
   }
+  runLine = 0;
+  runningFile = false;
+  ifs.close();
 }
 void machineUI_Home_Callback()
 {
@@ -84,6 +97,12 @@ void machineUI_Pause_Callback()
   machineWrite(luaCallFunction("Pause"));
   luaClose();
 }
+void machineUI_Clear_Callback()
+{
+  luaInit(dialogTextboxGetString("ControlFile"));
+  machineWrite(luaCallFunction("Clear"));
+  luaClose();
+}
 void machineUI()
 {
   point_t pos = point_t{-500, 1200};
@@ -95,16 +114,17 @@ void machineUI()
   pos.y -= 120;
   dialogAddTextBox(pos, 500, 100, "ControlFile", "control.lua");
 
-
   dialogAddLabel(point_t{500, 500}, "X: 0");
   dialogAddLabel(point_t{500, 600}, "Y: 0");
   dialogAddLabel(point_t{500, 700}, "Z: 0");
+  dialogAddLabel(point_t{100, 800}, "");
 
   dialogAddButton(point_t{-600, 0}, 200, 100, "HOME", machineUI_Home_Callback);
   dialogAddButton(point_t{-400, 0}, 200, 100, "SETXYZ", machineUI_SetXYZ_Callback);
   dialogAddButton(point_t{0, 0}, 200, 100, "RUN", machineUI_Run_Callback);
   dialogAddButton(point_t{400, 0}, 200, 100, "LOADING", machineUI_Loading_Callback);
   dialogAddButton(point_t{400, -200}, 200, 100, "PAUSE", machineUI_Pause_Callback);
+  dialogAddButton(point_t{400, -600}, 200, 100, "CLEAR", machineUI_Clear_Callback);
 
   dialogAddButton(point_t{-400, 300}, 200, 100, "X+", machineUI_XPlus_Callback);
   dialogAddButton(point_t{0, 300}, 200, 100, "X-", machineUI_XMinus_Callback);
@@ -141,6 +161,7 @@ void machineConnect()
 }
 void machineDisconnect()
 {
+  machineStopParse();
   close(mfd);
 }
 void machineWrite(string w)
@@ -152,72 +173,177 @@ void machineWrite(string w)
   else
   {
     V cout << KRED << "Machine Controller" << KGREEN << " Sent -> " << w << KNORMAL << endl;
+    //machineRead();
+    dialogEditLabel(point_t{100, 800}, w);
     write (mfd, w.c_str(), w.length());
     write (mfd, "\n", 1);
-    machineRead();
+    machineParse();
     return;
   }
 }
-string X;
-string Y;
-string Z;
-string machineRead()
+std::string machineRead()
+{
+  char c;
+  while (read(mfd, &c, sizeof(char)) > 0)
+  {
+    printf("%c", c);
+    fflush(stdout);
+  }
+  return "";
+}
+std::string machineReadLine()
 {
   string buffer;
   char c;
-  while (true)
+  int x = 0;
+  while (read(mfd, &c, sizeof(char)) > 0)
   {
-      read(mfd, &c, sizeof(char));
-      if (c == '\n' || c == '\r')
-      {
-        //cout << "Little Fucker!" << endl;
-      }
-      else
-      {
-        buffer.push_back(c);
-        printf("%c", c);
-      }
-      if (c == '>')
-      {
-        break;
-      }
-
-  }
-  //buffer.erase(std::remove(buffer.begin(), buffer.end(), ' '), buffer.end()); //Remove all whitespaces
-  //vector<string> pre = split(buffer, '>');
-
-  //vector<string> pairs = split(pre[2], ',');
-  /*if (pairs.size() < 1)
-  {
-    pairs = split(buffer, '\n');
-    if (pairs.size() < 1)
+    buffer.push_back(c);
+    //printf("%c", c);
+    //fflush(stdout);
+    if (c == '\n')
     {
-      cout << "No Feedback information!" << endl;
+      //cout << "Found newline!" << endl;
+      return buffer;
     }
-  }*/
-  /*cout << endl;
-  vector<string> data;
-  for (int x = 0; x < pairs.size(); x++)
+    x++;
+  }
+  if (x == 0)
   {
-    data = split(pairs[x], ':');
-    cout << "Pair[" << x << "] Data[0] = " << data[0] << " Data[1] = " << data[1] << endl;
+    //cout << "Zero bytes!" << endl;
+    return "NULL";
+  }
+  return "";
+}
+void machineIdleParse()
+{
+  auto Parse = [](string buffer)
+  {
+    vector<string> data = split(buffer, ':');
+    //cout << "Data[0] = " << data[0] << " Data[1] = " << data[1] << endl;
     if (data[0] == "mpox")
     {
-      X = data[1];
+      //X = data[1];
+      dialogEditLabel(point_t{500, 500}, "X: " + geoSupressZeros(atof(data[1].c_str()) / 25.4));
     }
     if (data[0] == "mpoy")
     {
-      Y = data[1];
+      dialogEditLabel(point_t{500, 600}, "Y: " + geoSupressZeros(atof(data[1].c_str()) / 25.4));
     }
     if (data[0] == "mpoz")
     {
-      Z = data[1];
+      dialogEditLabel(point_t{500, 700}, "Z: " + geoSupressZeros(atof(data[1].c_str()) / 25.4));
     }
-    dialogEditLabel(point_t{500, 500}, "X: " + X);
-    dialogEditLabel(point_t{500, 600}, "Y: " + Y);
-    dialogEditLabel(point_t{500, 700}, "Z: " + Z);
-  }*/
-  return buffer;
+    if (data[0] == "cycs" && data[1] == "0")
+    {
+      //cout << "End of cycle!" << endl;
+      if (runningFile)
+      {
+        runLine++;
+        machineUI_Run_Callback();
+      }
+      else
+      {
+          machineStopParse();
+      }
+      return true;
+    }
+    return false;
+  };
+  string buffer;
+
+  buffer = machineReadLine();
+  buffer.erase(std::remove(buffer.begin(), buffer.end(), ' '), buffer.end()); //Remove all whitespaces
+  buffer.erase(std::remove(buffer.begin(), buffer.end(), '\n'), buffer.end()); //Remove all new lines
+  buffer.erase(std::remove(buffer.begin(), buffer.end(), '\r'), buffer.end()); //Remove all carrage returns
+  if (buffer == "NULL")
+  {
+    //cout << "Nothing to parse!" << endl;
+    if (runningFile)
+    {
+      runLine++;
+      machineUI_Run_Callback();
+    }
+    else
+    {
+        machineStopParse();
+    }
+    return;
+  }
+  if (buffer.find(",") != std::string::npos && buffer.find(":") != std::string::npos)
+  {
+    vector<string> pairs = split(buffer, ',');
+    for (int x = 0; x < pairs.size(); x++)
+    {
+      if (Parse(pairs[x])) return;
+    }
+  }
+  if (buffer.find(":") != std::string::npos)
+  {
+    if (Parse(buffer)) return;
+  }
+  return;
+}
+void machineParse()
+{
+  glutIdleFunc(machineIdleParse);
+}
+void machineStopParse()
+{
+  glutIdleFunc(NULL);
+}
+void machineParseBlocking()
+{
+  auto Parse = [](string buffer)
+  {
+    vector<string> data = split(buffer, ':');
+    cout << "Data[0] = " << data[0] << " Data[1] = " << data[1] << endl;
+    if (data[0] == "mpox")
+    {
+      //X = data[1];
+      dialogEditLabel(point_t{500, 500}, "X: " + geoSupressZeros(atof(data[1].c_str()) / 25.4));
+    }
+    if (data[0] == "mpoy")
+    {
+      dialogEditLabel(point_t{500, 600}, "Y: " + geoSupressZeros(atof(data[1].c_str()) / 25.4));
+    }
+    if (data[0] == "mpoz")
+    {
+      dialogEditLabel(point_t{500, 700}, "Z: " + geoSupressZeros(atof(data[1].c_str()) / 25.4));
+    }
+    if (data[0] == "cycs" && data[1] == "0")
+    {
+      cout << "End of cycle!" << endl;
+      return true;
+    }
+    return false;
+  };
+  string buffer;
+  while(true)
+  {
+    buffer = machineReadLine();
+    buffer.erase(std::remove(buffer.begin(), buffer.end(), ' '), buffer.end()); //Remove all whitespaces
+    buffer.erase(std::remove(buffer.begin(), buffer.end(), '\n'), buffer.end()); //Remove all new lines
+    buffer.erase(std::remove(buffer.begin(), buffer.end(), '\r'), buffer.end()); //Remove all carrage returns
+    if (buffer == "NULL")
+    {
+      cout << "Nothing to parse!" << endl;
+      return;
+    }
+    if (buffer.find(",") != std::string::npos && buffer.find(":") != std::string::npos)
+    {
+      vector<string> pairs = split(buffer, ',');
+      for (int x = 0; x < pairs.size(); x++)
+      {
+        if (Parse(pairs[x])) return;
+      }
+    }
+    if (buffer.find(":") != std::string::npos)
+    {
+      if (Parse(buffer)) return;
+    }
+  }
+  return;
 }
 void machineTinyGCommand(string c)
 {

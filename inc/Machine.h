@@ -7,7 +7,8 @@ void machineConnect();
 void machineDisconnect();
 void machineWrite(std::string);
 std::string machineRead();
-
+void machineParse();
+void machineStopParse();
 void machineUI();
 
 void machineTinyGCommand(std::string c);
