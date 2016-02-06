@@ -1,22 +1,3 @@
-///////////////////////////////////////////////////////////////////////////////
-// Name:        cube.cpp
-// Purpose:     wxGLCanvas demo program
-// Author:      Julian Smart
-// Modified by: Vadim Zeitlin to use new wxGLCanvas API (2007-04-09)
-// Created:     04/01/98
-// Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
-///////////////////////////////////////////////////////////////////////////////
-
-// ============================================================================
-// declarations
-// ============================================================================
-
-// ----------------------------------------------------------------------------
-// headers
-// ----------------------------------------------------------------------------
-
-// For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
@@ -32,6 +13,7 @@
 #endif
 
 #include "main.h"
+#include "application.h"
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../res/icon.xpm"
@@ -41,11 +23,6 @@
 // constants
 // ----------------------------------------------------------------------------
 
-// control ids
-enum
-{
-    SpinTimer = wxID_HIGHEST + 1
-};
 
 // ----------------------------------------------------------------------------
 // helper functions
@@ -303,16 +280,16 @@ TestGLContext& MyApp::GetContext(wxGLCanvas *canvas, bool useStereo)
 }
 
 // ----------------------------------------------------------------------------
-// TestGLCanvas
+// GLCanvas
 // ----------------------------------------------------------------------------
 
-wxBEGIN_EVENT_TABLE(TestGLCanvas, wxGLCanvas)
-    EVT_PAINT(TestGLCanvas::OnPaint)
-    EVT_KEY_DOWN(TestGLCanvas::OnKeyDown)
-    EVT_TIMER(SpinTimer, TestGLCanvas::OnSpinTimer)
+wxBEGIN_EVENT_TABLE(GLCanvas, wxGLCanvas)
+    EVT_PAINT(GLCanvas::OnPaint)
+    EVT_KEY_DOWN(GLCanvas::OnKeyDown)
+    EVT_IDLE(GLCanvas::OnIdle)
 wxEND_EVENT_TABLE()
 
-TestGLCanvas::TestGLCanvas(wxWindow *parent, int *attribList)
+GLCanvas::GLCanvas(wxWindow *parent, int *attribList)
     // With perspective OpenGL graphics, the wxFULL_REPAINT_ON_RESIZE style
     // flag should always be set, because even making the canvas smaller should
     // be followed by a paint event that updates the entire canvas with new
@@ -322,7 +299,6 @@ TestGLCanvas::TestGLCanvas(wxWindow *parent, int *attribList)
                  wxFULL_REPAINT_ON_RESIZE),
       m_xangle(30.0),
       m_yangle(30.0),
-      m_spinTimer(this,SpinTimer),
       m_useStereo(false),
       m_stereoWarningAlreadyDisplayed(false)
 {
@@ -338,7 +314,7 @@ TestGLCanvas::TestGLCanvas(wxWindow *parent, int *attribList)
     }
 }
 
-void TestGLCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
+void GLCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     // This is required even though dc is not used otherwise.
     wxPaintDC dc(this);
@@ -384,15 +360,20 @@ void TestGLCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
     SwapBuffers();
 }
 
-void TestGLCanvas::Spin(float xSpin, float ySpin)
+void GLCanvas::Spin(float xSpin, float ySpin)
 {
     m_xangle += xSpin;
     m_yangle += ySpin;
 
-    Refresh(false);
+    //Refresh(false);
+    PostRedisplay();
 }
-
-void TestGLCanvas::OnKeyDown(wxKeyEvent& event)
+void PostRedisplay()
+{
+  PostRedisplay_Register = true;
+  //V printf("Redrawing!\n");
+}
+void GLCanvas::OnKeyDown(wxKeyEvent& event)
 {
     float angle = 5.0;
 
@@ -427,9 +408,19 @@ void TestGLCanvas::OnKeyDown(wxKeyEvent& event)
     }
 }
 
-void TestGLCanvas::OnSpinTimer(wxTimerEvent& WXUNUSED(event))
+void GLCanvas::OnSpinTimer(wxTimerEvent& WXUNUSED(event))
 {
     Spin(0.0, 4.0);
+}
+void GLCanvas::OnIdle(wxIdleEvent &event)
+{
+  if (PostRedisplay_Register == true)
+  {
+    Refresh(false);
+    PostRedisplay_Register = false;
+  }
+	/* Force the redraw immediately, gets the gfx card to its max */
+	event.RequestMore();
 }
 
 wxString glGetwxString(GLenum name)
@@ -459,11 +450,11 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame( bool stereoWindow )
-       : wxFrame(NULL, wxID_ANY, wxT("ProfileCAD"))
+       : wxFrame(NULL, wxID_ANY, wxT(WINDOW_TITLE))
 {
     int stereoAttribList[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_STEREO, 0 };
 
-    new TestGLCanvas(this, stereoWindow ? stereoAttribList : NULL);
+    new GLCanvas(this, stereoWindow ? stereoAttribList : NULL);
 
     SetIcon(wxICON(icon));
 
@@ -471,15 +462,24 @@ MyFrame::MyFrame( bool stereoWindow )
 
     /*Begin File Menu*/
     wxMenu *file_menu = new wxMenu;
-    //file_menu->Append(wxID_NEW);
     file_menu->Append(FILE_OPEN, "Open");
     file_menu->Append(FILE_SAVE, "Save");
     file_menu->AppendSeparator();
     file_menu->Append(wxID_CLOSE);
-    /* End File Menu */
+    /* End Menu */
+
+    /*Begin Create Menu*/
+    wxMenu *create_menu = new wxMenu;
+    create_menu->Append(CREATE_LINE_VERTICAL, "Vertical Line");
+    create_menu->Append(CREATE_LINE_HORIZONTAL, "Horizontal Line");
+    create_menu->Append(CREATE_LINE_ENDPOINTS, "Line Endpoints");
+    create_menu->Append(CREATE_LINE_POLAR, "Line Polar");
+    /* End Menu */
 
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append(file_menu, wxT("&File"));
+    menuBar->Append(create_menu, wxT("Create"));
+
 
     SetMenuBar(menuBar);
 
@@ -493,14 +493,14 @@ MyFrame::MyFrame( bool stereoWindow )
     wxLogStatus("Double-buffered display %s supported",
                 wxGLCanvas::IsDisplaySupported(attribs) ? "is" : "not");*/
 
-    if ( stereoWindow )
+    /*if ( stereoWindow )
     {
         const wxString vendor = glGetwxString(GL_VENDOR).Lower();
         const wxString renderer = glGetwxString(GL_RENDERER).Lower();
         if ( vendor.find("nvidia") != wxString::npos &&
                 renderer.find("quadro") == wxString::npos )
             ShowFullScreen(true);
-    }
+    }*/
 }
 
 void MyFrame::OnClose(wxCommandEvent& WXUNUSED(event))
@@ -510,9 +510,35 @@ void MyFrame::OnClose(wxCommandEvent& WXUNUSED(event))
 }
 void MyFrame::OnOpen (wxCommandEvent& WXUNUSED(event) )
 {
-  
+  wxFileDialog* OpenDialog = new wxFileDialog( this, _("Choose a file to open"), wxEmptyString, wxEmptyString, _("Profile CAD (*.fpcad)|*.fpcad;*.FPCAD|Autocad (*.dxf)|*.dxf;*.DXF"),wxFD_OPEN, wxDefaultPosition);
+
+	// Creates a "open file" dialog with 4 file types
+	if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
+	{
+		wxString CurrentDocPath = OpenDialog->GetPath();
+		// Sets our current document to the file the user selected
+		//MainEditBox->LoadFile(CurrentDocPath); //Opens that file
+		SetTitle(wxString("Edit - ") <<
+			OpenDialog->GetFilename()); // Set the Title to reflect the file open
+	}
+
+	// Clean up after ourselves
+	OpenDialog->Destroy();
 }
 void MyFrame::OnSave (wxCommandEvent& WXUNUSED(event) )
 {
+  wxFileDialog* SaveDialog = new wxFileDialog( this, _("Choose save location"), wxEmptyString, wxEmptyString, _("Profile CAD (*.fpcad)|*.fpcad;*.FPCAD|Autocad (*.dxf)|*.dxf;*.DXF"),wxFD_SAVE, wxDefaultPosition);
 
+	// Creates a "open file" dialog with 4 file types
+	if (SaveDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
+	{
+		wxString CurrentDocPath = SaveDialog->GetPath();
+		// Sets our current document to the file the user selected
+		//MainEditBox->LoadFile(CurrentDocPath); //Opens that file
+		SetTitle(wxString("Save - ") <<
+			SaveDialog->GetFilename()); // Set the Title to reflect the file open
+	}
+
+	// Clean up after ourselves
+	SaveDialog->Destroy();
 }

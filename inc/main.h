@@ -1,18 +1,9 @@
-/////////////////////////////////////////////////////////////////////////////
-// Name:        cube.h
-// Purpose:     wxGLCanvas demo program
-// Author:      Julian Smart
-// Modified by:
-// Created:     04/01/98
-// Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
-/////////////////////////////////////////////////////////////////////////////
-
 #ifndef _WX_CUBE_H_
 #define _WX_CUBE_H_
 
 #include "wx/glcanvas.h"
 
+bool PostRedisplay_Register = false;
 // the rendering context used by all GL canvases
 class TestGLContext : public wxGLContext
 {
@@ -61,17 +52,16 @@ private:
     wxDECLARE_EVENT_TABLE();
 };
 
-class TestGLCanvas : public wxGLCanvas
+class GLCanvas : public wxGLCanvas
 {
 public:
-    TestGLCanvas(wxWindow *parent, int *attribList = NULL);
-
+    GLCanvas(wxWindow *parent, int *attribList = NULL);
 private:
     void OnPaint(wxPaintEvent& event);
     void Spin(float xSpin, float ySpin);
     void OnKeyDown(wxKeyEvent& event);
     void OnSpinTimer(wxTimerEvent& WXUNUSED(event));
-
+    void OnIdle(wxIdleEvent &event);
     // angles of rotation around x- and y- axis
     float m_xangle,
           m_yangle;
@@ -82,10 +72,13 @@ private:
 
     wxDECLARE_EVENT_TABLE();
 };
-
-enum { NEW_STEREO_WINDOW = wxID_HIGHEST + 1 };
 enum { FILE_SAVE = wxID_HIGHEST + 1 };
-enum { FILE_OPEN = wxID_HIGHEST + 1 };
+enum { FILE_OPEN = wxID_HIGHEST + 2 };
+
+enum { CREATE_LINE_VERTICAL = wxID_HIGHEST + 3 };
+enum { CREATE_LINE_HORIZONTAL = wxID_HIGHEST + 4 };
+enum { CREATE_LINE_ENDPOINTS = wxID_HIGHEST + 5 };
+enum { CREATE_LINE_POLAR = wxID_HIGHEST + 6 };
 
 
 #endif // _WX_CUBE_H_
