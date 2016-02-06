@@ -41,8 +41,6 @@ extern "C" {
 #define  APPLICATION_
 
 
-/* End Global Variables */
-
 void PostRedisplay();
 
 #define VERBOSE true
@@ -232,4 +230,5 @@ struct cadToolpath{
 /* Global Operation variables */
 extern point_t MousePosition;
 extern bool PostRedisplay_Register;
+/* End Global Variables */
 #endif

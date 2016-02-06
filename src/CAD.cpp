@@ -23,7 +23,7 @@ void cadUndoPushState()
     cadUndoArray.erase(cadUndoArray.begin());
   }
   cadUndoArray.push_back(cadUndoStructure{cadEntityArray, cadEntityArrayIndex});
-  V cout << KRED << "(cadUndoPushState) Pushed Current state!" << KNORMAL << endl;
+  //V cout << KRED << "(cadUndoPushState) Pushed Current state!" << KNORMAL << endl;
 }
 void cadUndo()
 {
@@ -489,10 +489,11 @@ point_t cadScreenCordToCadCord(int x, int y)
   //get the world coordinates from the screen coordinates
   gluUnProject( winX, winY, winZ, modelview, projection, viewport, &worldX, &worldY, &worldZ);
   //printf("tx: %.6f, ty: %.6f\n", sceneGetPanOffset().x, sceneGetPanOffset().y);
-  worldX = (worldX/sceneGetScale());
-  worldY = (worldY/sceneGetScale());
-  point_t panOffset = sceneGetPanOffset();
-  return point_t{(float)worldX - (panOffset.x), (float)worldY - (panOffset.y), 0};
+  return point_t{ (float)worldX, (float)worldY };
+  //worldX = (worldX);
+  //worldY = (worldY);
+  //point_t panOffset = sceneGetPanOffset();
+  //return point_t{(float)worldX - (panOffset.x), (float)worldY - (panOffset.y), 0};
 }
 point_t cadCadCordToScreenCord(point_t s)
 {

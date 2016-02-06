@@ -340,11 +340,12 @@ void GLCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
     glLoadIdentity();//these two lines are unchanged
 
     glOrtho( -ClientSize.x/2, ClientSize.x/2, -ClientSize.y/2, ClientSize.y/2, -1,1 );
-    //glScalef(1, WINDOW_WIDTH/WINDOW_HEIGHT + WINDOW_WIDTH/WINDOW_HEIGHT + 0.5, 1); //Not sure wtf, but it works!
+    //glScalef(1, ClientSize.x/ClientSize.y + ClientSize.x/ClientSize.y + 0.5, 1); //Not sure wtf, but it works!
     //gluPerspective(0, 16.0/9.0*float(width)/float(height), -1, 1);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glViewport(0,0,ClientSize.x,ClientSize.y);
+
 
 
     canvas.DrawScene();
@@ -364,6 +365,7 @@ void PostRedisplay()
   PostRedisplay_Register = true;
   //V printf("Redrawing!\n");
 }
+point_t LastMouseScrollPosition;
 void GLCanvas::OnMouse(wxMouseEvent& event)
 {
   int ScrollWheel = event.GetWheelRotation();
@@ -375,17 +377,22 @@ void GLCanvas::OnMouse(wxMouseEvent& event)
   //MousePosition.z = m.z;
   if (ScrollWheel == 120)
   {
-    //printf("Zoom = %d!\n", event.GetWheelRotation());
-    //PostRedisplay();
-    //V printf("Zooming in!\n");
-    sceneIncZoom(+0.01);
+    sceneIncZoom(0.1 * sceneGetScale());
+    wxSize size = GetSize();
+    WarpPointer(size.x/2, size.y/2);
+    sceneIncPan(LastMouseScrollPosition.x - MousePosition.x, LastMouseScrollPosition.y - MousePosition.y, 0);
+    LastMouseScrollPosition = MousePosition;
   }
   else if (ScrollWheel == -120)
   {
-    //V printf("Zooming out!\n");
-    sceneIncZoom(-0.01);
+    sceneIncZoom(-0.1 * sceneGetScale());
+    wxSize size = GetSize();
+    WarpPointer(size.x/2, size.y/2);
+    sceneIncPan(LastMouseScrollPosition.x - MousePosition.x, LastMouseScrollPosition.y - MousePosition.y, 0);
+    LastMouseScrollPosition = MousePosition;
   }
   //printf("Event: %d\n", e);
+
 }
 void GLCanvas::OnKeyDown(wxKeyEvent& event)
 {
@@ -395,22 +402,23 @@ void GLCanvas::OnKeyDown(wxKeyEvent& event)
     {
         case WXK_RIGHT:
             //Spin( 0.0, -angle );
-            sceneIncPan(+0.10, 0, 0);
+            sceneIncPan(+5, 0, 0);
             break;
 
         case WXK_LEFT:
-            sceneIncPan(-0.10, 0, 0);
+            sceneIncPan(-5, 0, 0);
             break;
 
         case WXK_DOWN:
-            sceneIncPan(0, +0.10, 0);
+            sceneIncPan(0, -5, 0);
             break;
 
         case WXK_UP:
-            sceneIncPan(0, -0.10, 0);
+            sceneIncPan(0, +5, 0);
             break;
 
         case WXK_SPACE:
+            fileOpen("test/dxf/box.dxf");
             break;
 
         default:
@@ -521,7 +529,7 @@ void MyFrame::OnClose(wxCommandEvent& WXUNUSED(event))
 }
 void MyFrame::OnOpen (wxCommandEvent& WXUNUSED(event) )
 {
-  wxFileDialog* OpenDialog = new wxFileDialog( this, _("Choose a file to open"), wxEmptyString, wxEmptyString, _("Profile CAD (*.fpcad)|*.fpcad;*.FPCAD|Autocad (*.dxf)|*.dxf;*.DXF"),wxFD_OPEN, wxDefaultPosition);
+  wxFileDialog* OpenDialog = new wxFileDialog( this, _("Choose a file to open"), wxEmptyString, wxEmptyString, _("Profile CAD (*.pfcad)|*.pfcad;*.PFCAD|Autocad (*.dxf)|*.dxf;*.DXF"),wxFD_OPEN, wxDefaultPosition);
 
 	// Creates a "open file" dialog with 4 file types
 	if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
@@ -530,7 +538,7 @@ void MyFrame::OnOpen (wxCommandEvent& WXUNUSED(event) )
     fileOpen(string(CurrentDocPath.mb_str()));
 		// Sets our current document to the file the user selected
 		//MainEditBox->LoadFile(CurrentDocPath); //Opens that file
-		SetTitle(wxString("Edit - ") <<
+		SetTitle(wxString("ProfileCAD - ") <<
 			OpenDialog->GetFilename()); // Set the Title to reflect the file open
 	}
 
@@ -539,7 +547,7 @@ void MyFrame::OnOpen (wxCommandEvent& WXUNUSED(event) )
 }
 void MyFrame::OnSave (wxCommandEvent& WXUNUSED(event) )
 {
-  wxFileDialog* SaveDialog = new wxFileDialog( this, _("Choose save location"), wxEmptyString, wxEmptyString, _("Profile CAD (*.fpcad)|*.fpcad;*.FPCAD|Autocad (*.dxf)|*.dxf;*.DXF"),wxFD_SAVE, wxDefaultPosition);
+  wxFileDialog* SaveDialog = new wxFileDialog( this, _("Choose save location"), wxEmptyString, wxEmptyString, _("Profile CAD (*.pfcad)|*.PFcad;*.PFCAD|Autocad (*.dxf)|*.dxf;*.DXF"),wxFD_SAVE, wxDefaultPosition);
 
 	// Creates a "open file" dialog with 4 file types
 	if (SaveDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
@@ -547,7 +555,7 @@ void MyFrame::OnSave (wxCommandEvent& WXUNUSED(event) )
 		wxString CurrentDocPath = SaveDialog->GetPath();
 		// Sets our current document to the file the user selected
 		//MainEditBox->LoadFile(CurrentDocPath); //Opens that file
-		SetTitle(wxString("Save - ") <<
+		SetTitle(wxString("ProfileCAD - ") <<
 			SaveDialog->GetFilename()); // Set the Title to reflect the file open
 	}
 
