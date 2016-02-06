@@ -1,104 +1,84 @@
-#include <application.h>
+#include <iostream>
+#include <string>
+#include <cassert>
+#include <cmath>
 
-using namespace std;
+#include <wx/wx.h>
+#include <wx/glcanvas.h>
+#include <wx/notebook.h>
 
-bool isVerbose = false;
-bool mainVerbose()
+class GL_Window : public wxGLCanvas
 {
-  return isVerbose;
-}
-args_t args;
-args_t mainGetArgs()
+public:
+
+	GL_Window(float c, wxWindow * parent, wxWindowID id,
+	          const wxPoint & pos, const wxSize& size, long style=0,
+	          const wxString & name = _("GLCanvas"), int * attribList = 0,
+	          const wxPalette & palette = wxNullPalette)
+	: wxGLCanvas(parent, id, pos, size, style, name, attribList, palette),
+	  c_(c), rotate_(c) { }
+
+	virtual ~GL_Window() { }
+
+	void draw() {
+		rotate_ += 0.01;
+
+		SetCurrent();
+		glClearColor(0.0, 0.0, 0.0, 0.0);
+		glClear(GL_COLOR_BUFFER_BIT);
+		glViewport(0, 0, (GLint)200, (GLint)200);
+		glColor3f(1.0, c_, c_);
+
+		glBegin(GL_POLYGON);
+		glVertex3f(-0.5, -0.5, 5 * cos(rotate_));
+		glVertex3f(-0.5, 0.5, 5 * cos(rotate_));
+		glVertex3f(0.5, 0.5, -5 * cos(rotate_));
+		glVertex3f(0.5, -0.5, -5 * cos(rotate_));
+		glEnd();
+
+		SwapBuffers();
+	}
+
+	void OnIdle(wxIdleEvent & event)	{
+		draw();
+		event.RequestMore();
+	}
+
+private:
+
+	float c_;
+	float rotate_;
+
+	DECLARE_EVENT_TABLE();
+};
+
+class MyApp: public wxApp
 {
-  return args;
-}
-int set_interface_attribs (int fd, int speed, int parity)
+	virtual bool OnInit();
+};
+
+IMPLEMENT_APP(MyApp)
+
+bool MyApp::OnInit()
 {
-        struct termios tty;
-        memset (&tty, 0, sizeof tty);
-        if (tcgetattr (fd, &tty) != 0)
-        {
-                printf ("error %d from tcgetattr", errno);
-                return -1;
-        }
+	wxFrame* frame = new wxFrame((wxFrame *) NULL, -1,
+		_("Hello GL World"), wxPoint(50, 50), wxSize(450, 340) );
 
-        cfsetospeed (&tty, speed);
-        cfsetispeed (&tty, speed);
+	wxNotebook* book = new wxNotebook(frame, -1,
+		wxPoint(-1, -1), wxSize(200, 200));
 
-        tty.c_cflag = (tty.c_cflag & ~CSIZE) | CS8;     // 8-bit chars
-        // disable IGNBRK for mismatched speed tests; otherwise receive break
-        // as \000 chars
-        tty.c_iflag &= ~IGNBRK;         // disable break processing
-        tty.c_lflag = 0;                // no signaling chars, no echo,
-                                        // no canonical processing
-        tty.c_oflag = 0;                // no remapping, no delays
-        tty.c_cc[VMIN]  = 0;            // read doesn't block
-        tty.c_cc[VTIME] = 5;            // 0.5 seconds read timeout
+	GL_Window* MyGLCanvas = new GL_Window(1, book, -1, wxPoint(-1, -1),
+		wxSize(200, 200), wxSUNKEN_BORDER, _("some text"));
+	book->AddPage(MyGLCanvas, _("One"));
 
-        tty.c_iflag &= ~(IXON | IXOFF | IXANY); // shut off xon/xoff ctrl
+	MyGLCanvas = new GL_Window(0, book, -1, wxPoint(-1,-1),
+		wxSize(200,200), wxSUNKEN_BORDER, _("some text"));
+	book->AddPage(MyGLCanvas, _("Two"));
 
-        tty.c_cflag |= (CLOCAL | CREAD);// ignore modem controls,
-                                        // enable reading
-        tty.c_cflag &= ~(PARENB | PARODD);      // shut off parity
-        tty.c_cflag |= parity;
-        tty.c_cflag &= ~CSTOPB;
-        tty.c_cflag &= ~CRTSCTS;
-
-        if (tcsetattr (fd, TCSANOW, &tty) != 0)
-        {
-                printf ("error %d from tcsetattr", errno);
-                return -1;
-        }
-        return 0;
+	frame->Show(true);
+	return true;
 }
-void set_blocking (int fd, int should_block)
-{
-        struct termios tty;
-        memset (&tty, 0, sizeof tty);
-        if (tcgetattr (fd, &tty) != 0)
-        {
-                printf ("error %d from tggetattr", errno);
-                return;
-        }
 
-        tty.c_cc[VMIN]  = should_block ? 1 : 0;
-        tty.c_cc[VTIME] = 5;            // 0.5 seconds read timeout
-
-        if (tcsetattr (fd, TCSANOW, &tty) != 0)
-                printf ("error %d setting term attributes", errno);
-}
-void windowTest()
-{
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-}
-int main(int argc, char **argv)
-{
-  string a = "";
-  for (int x = 1; x < argc; x++)
-  {
-    a.append(string(argv[x]));
-    a.append(" ");
-  }
-  args.argc = argc;
-  args.args = a;
-  if (args.args.find("-verbose") != std::string::npos)
-  {
-    isVerbose = true;
-  }
-  glutInit(&argc, argv);
-  machineInit();
-  windowInit();
-  sceneInit();
-  menuInit();
-  keyboardInit();
-  mouseInit();
-  uiInit();
-  cadInit();
-  cliInit();
-  luaInit();
-  sceneSetViewAngle(0, 0, 0); //Set plane to XY
-  dialogInit();
-  glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_CONTINUE_EXECUTION);
-  glutMainLoop();
-  return 0;             /* ANSI C requires main to return int. */
-}
+BEGIN_EVENT_TABLE(GL_Window, wxGLCanvas)
+    EVT_IDLE(GL_Window::OnIdle)
+END_EVENT_TABLE()
