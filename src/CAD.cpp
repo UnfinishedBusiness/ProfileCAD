@@ -471,7 +471,7 @@ void cadRenderArc(arc_t a, float w)
 }
 void cadRedraw()
 {
-  //glutPostRedisplay();
+  PostRedisplay();
 }
 point_t cadScreenCordToCadCord(int x, int y)
 {

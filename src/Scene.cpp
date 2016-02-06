@@ -77,43 +77,34 @@ point_t sceneGetPanOffset()
 }
 void sceneDraw(void)
 {
-  //V printf("(sceneDraw) %d\r", s++);
-  //D fflush(stdout);
-
   glClearColor(BackgroundColor.r, BackgroundColor.g, BackgroundColor.b, BackgroundColor.a);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  //glEnable(GL_LIGHTING);
-  //glDisable(GL_BLEND);
-  //glColorMaterial ( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
-  //glEnable ( GL_COLOR_MATERIAL );
-  //Render 3D
-  glPushMatrix();
-  glRotatef(ax, 1.0, 0.0, 0.0);
-  glRotatef(-ay, 0.0, 1.0, 0.0);
 
-  //V printf("\nscale = %f\n", scale);
+  //glMatrixMode(GL_MODELVIEW);
 
-  glScalef(scale, scale, scale);
   glTranslatef(tx, ty, tz);
 
-  //gluLookAt( 10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 10.0, 10.0, 10.0 );
-  cadRender();
-  glPopMatrix();
+  glRotatef(ax, 1.0f, 0.0f, 0.0f);
+  glRotatef(-ay, 0.0f, 1.0f, 0.0f);
+  glScalef(scale, scale, scale);
+  //glTranslatef(tx, ty, tz);
 
-  //Render 2D overlay for Indicators
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-  glMatrixMode(GL_PROJECTION);
-  glPushMatrix();
-  glLoadIdentity();
-  gluOrtho2D(0, 1, 0, 1);
-  //uiRender();
-  glPopMatrix();
-  glPopMatrix();
-  glMatrixMode(GL_MODELVIEW);
+  //cadRender();
 
 
-  //glDisable(GL_STENCIL_TEST);
-  //glutSwapBuffers();
+
+  glLineWidth(10);
+  glColor3f(1.0, 1.0, 0.0);
+  glBegin(GL_LINES);
+  glVertex3f(0.0, 0.0, 0.0);
+  glVertex3f(500, 0, 0);
+  glEnd();
+
+  glBegin(GL_LINES);
+  glVertex3f(0.0, 0.0, 0.0);
+  glVertex3f(500, 500, 0);
+  glEnd();
+  //glPopMatrix();
+
 
 }

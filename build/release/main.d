@@ -125,7 +125,7 @@ build/release/main.o: src//main.cpp /usr/include/wx-3.0/wx/wxprec.h \
  /usr/include/wx-3.0/wx/mdi.h /usr/include/wx-3.0/wx/gtk/mdi.h inc/main.h \
  /usr/include/wx-3.0/wx/glcanvas.h /usr/include/wx-3.0/wx/gtk/glcanvas.h \
  /usr/include/wx-3.0/wx/unix/glx11.h inc/application.h inc/CAD.h \
- inc/Scene.h inc/application.h inc/Debug.h inc/Geometry.h \
+ inc/Scene.h inc/application.h inc/Debug.h inc/FileIO.h inc/Geometry.h \
  src//../res/icon.xpm
 
 /usr/include/wx-3.0/wx/wxprec.h:
@@ -595,6 +595,8 @@ inc/Scene.h:
 inc/application.h:
 
 inc/Debug.h:
+
+inc/FileIO.h:
 
 inc/Geometry.h:
 

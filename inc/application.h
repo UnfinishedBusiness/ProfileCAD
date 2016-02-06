@@ -26,7 +26,7 @@
 #include <CAD.h>
 #include <Scene.h>
 #include <Debug.h>
-//#include <FileIO.h>
+#include <FileIO.h>
 #include <Geometry.h>
 
 #include "zlib.h"
@@ -40,7 +40,9 @@ extern "C" {
 #ifndef APPLICATION_
 #define  APPLICATION_
 
-extern bool PostRedisplay_Register;
+
+/* End Global Variables */
+
 void PostRedisplay();
 
 #define VERBOSE true
@@ -190,11 +192,7 @@ struct cadToolpath{
   cad_cycle_countour_t ContourCycle;
 };
 
-#ifdef __APPLE__
-  #define BACKGROUND color_t{0, 0, 0.10, 1}
-#else
-  #define BACKGROUND color_t{0, 0, 0.05, 1}
-#endif
+#define BACKGROUND color_t{0, 0, 0.05, 1}
 
 #define WHITE color_t{1, 1, 1, 1}
 #define BLACK color_t{0, 0, 0, 1}
@@ -230,4 +228,8 @@ struct cadToolpath{
 #define isSimilar(A, B) ( ((A-B) < SMALL) && ((A-B) > -SMALL) )
 #define isBetween(A, B, C) ( ((A-B) > -ZERO) && ((A-C) < ZERO) )
 #define POSITIVE(n) ((n) < 0 ? 0 - (n) : (n))
+
+/* Global Operation variables */
+extern point_t MousePosition;
+extern bool PostRedisplay_Register;
 #endif

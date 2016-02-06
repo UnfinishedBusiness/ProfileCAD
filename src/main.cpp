@@ -1,5 +1,7 @@
 #include "wx/wxprec.h"
 
+using namespace std;
+
 #ifdef __BORLANDC__
 #pragma hdrstop
 #endif
@@ -18,6 +20,11 @@
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../res/icon.xpm"
 #endif
+
+/****************** Globals ***********************/
+bool PostRedisplay_Register = false;
+point_t MousePosition;
+
 
 // ----------------------------------------------------------------------------
 // constants
@@ -154,7 +161,10 @@ TestGLContext::TestGLContext(wxGLCanvas *canvas)
 
     CheckGLError();
 }
-
+void TestGLContext::DrawScene()
+{
+  sceneDraw();
+}
 void TestGLContext::DrawRotatedCube(float xangle, float yangle)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -286,6 +296,7 @@ TestGLContext& MyApp::GetContext(wxGLCanvas *canvas, bool useStereo)
 wxBEGIN_EVENT_TABLE(GLCanvas, wxGLCanvas)
     EVT_PAINT(GLCanvas::OnPaint)
     EVT_KEY_DOWN(GLCanvas::OnKeyDown)
+    EVT_MOUSE_EVENTS(GLCanvas::OnMouse)
     EVT_IDLE(GLCanvas::OnIdle)
 wxEND_EVENT_TABLE()
 
@@ -318,45 +329,25 @@ void GLCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     // This is required even though dc is not used otherwise.
     wxPaintDC dc(this);
-
-    // Set the OpenGL viewport according to the client size of this canvas.
-    // This is done here rather than in a wxSizeEvent handler because our
-    // OpenGL rendering context (and thus viewport setting) is used with
-    // multiple canvases: If we updated the viewport in the wxSizeEvent
-    // handler, changing the size of one canvas causes a viewport setting that
-    // is wrong when next another canvas is repainted.
     const wxSize ClientSize = GetClientSize();
 
     TestGLContext& canvas = wxGetApp().GetContext(this, m_useStereo);
-    glViewport(0, 0, ClientSize.x, ClientSize.y);
 
-    // Render the graphics and swap the buffers.
-    GLboolean quadStereoSupported;
-    glGetBooleanv( GL_STEREO, &quadStereoSupported);
-    if ( quadStereoSupported )
-    {
-        glDrawBuffer( GL_BACK_LEFT );
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glFrustum(-0.47f, 0.53f, -0.5f, 0.5f, 1.0f, 3.0f);
-        canvas.DrawRotatedCube(m_xangle, m_yangle);
-        CheckGLError();
-        glDrawBuffer( GL_BACK_RIGHT );
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glFrustum(-0.53f, 0.47f, -0.5f, 0.5f, 1.0f, 3.0f);
-        canvas.DrawRotatedCube(m_xangle, m_yangle);
-        CheckGLError();
-    }
-    else
-    {
-        canvas.DrawRotatedCube(m_xangle, m_yangle);
-        if ( m_useStereo && !m_stereoWarningAlreadyDisplayed )
-        {
-            m_stereoWarningAlreadyDisplayed = true;
-            wxLogError("Stereo not supported by the graphics card.");
-        }
-    }
+    //glViewport(0, 0, ClientSize.x, ClientSize.y);
+
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();//these two lines are unchanged
+
+    glOrtho( -ClientSize.x/2, ClientSize.x/2, -ClientSize.y/2, ClientSize.y/2, -1,1 );
+    //glScalef(1, WINDOW_WIDTH/WINDOW_HEIGHT + WINDOW_WIDTH/WINDOW_HEIGHT + 0.5, 1); //Not sure wtf, but it works!
+    //gluPerspective(0, 16.0/9.0*float(width)/float(height), -1, 1);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glViewport(0,0,ClientSize.x,ClientSize.y);
+
+
+    canvas.DrawScene();
     SwapBuffers();
 }
 
@@ -373,6 +364,29 @@ void PostRedisplay()
   PostRedisplay_Register = true;
   //V printf("Redrawing!\n");
 }
+void GLCanvas::OnMouse(wxMouseEvent& event)
+{
+  int ScrollWheel = event.GetWheelRotation();
+
+  wxPoint m = event.GetPosition();
+  MousePosition = cadScreenCordToCadCord(m.x, m.y);
+
+  wxLogStatus("X: %.6f Y: %.6f Zoom: %.6f", MousePosition.x, MousePosition.y, sceneGetScale());
+  //MousePosition.z = m.z;
+  if (ScrollWheel == 120)
+  {
+    //printf("Zoom = %d!\n", event.GetWheelRotation());
+    //PostRedisplay();
+    //V printf("Zooming in!\n");
+    sceneIncZoom(+0.01);
+  }
+  else if (ScrollWheel == -120)
+  {
+    //V printf("Zooming out!\n");
+    sceneIncZoom(-0.01);
+  }
+  //printf("Event: %d\n", e);
+}
 void GLCanvas::OnKeyDown(wxKeyEvent& event)
 {
     float angle = 5.0;
@@ -380,26 +394,23 @@ void GLCanvas::OnKeyDown(wxKeyEvent& event)
     switch ( event.GetKeyCode() )
     {
         case WXK_RIGHT:
-            Spin( 0.0, -angle );
+            //Spin( 0.0, -angle );
+            sceneIncPan(+0.10, 0, 0);
             break;
 
         case WXK_LEFT:
-            Spin( 0.0, angle );
+            sceneIncPan(-0.10, 0, 0);
             break;
 
         case WXK_DOWN:
-            Spin( -angle, 0.0 );
+            sceneIncPan(0, +0.10, 0);
             break;
 
         case WXK_UP:
-            Spin( angle, 0.0 );
+            sceneIncPan(0, -0.10, 0);
             break;
 
         case WXK_SPACE:
-            if ( m_spinTimer.IsRunning() )
-                m_spinTimer.Stop();
-            else
-                m_spinTimer.Start( 25 );
             break;
 
         default:
@@ -516,6 +527,7 @@ void MyFrame::OnOpen (wxCommandEvent& WXUNUSED(event) )
 	if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
 	{
 		wxString CurrentDocPath = OpenDialog->GetPath();
+    fileOpen(string(CurrentDocPath.mb_str()));
 		// Sets our current document to the file the user selected
 		//MainEditBox->LoadFile(CurrentDocPath); //Opens that file
 		SetTitle(wxString("Edit - ") <<
