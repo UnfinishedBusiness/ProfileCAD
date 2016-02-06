@@ -195,7 +195,7 @@ void cadShowSelectionBox(point_t p)
 {
   //line_t geoGetPerpendicularLine(line_t, point_t, float);
   //line_t geoGetParallelLine(line_t, point_t, float);
-  cadSelectionBox.a.radius = 0.005 / sceneGetScale();
+  cadSelectionBox.a.radius = 0.008 / sceneGetScale();
   cadSelectionBox.a.center = p;
   cadSelectionBox.a.start = p;
   cadSelectionBox.a.start.x += cadSelectionBox.a.radius;

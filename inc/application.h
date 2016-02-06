@@ -24,6 +24,7 @@
 #include <locale>
 
 #include <CAD.h>
+#include <Mouse.h>
 #include <Scene.h>
 #include <Debug.h>
 #include <FileIO.h>
@@ -226,6 +227,11 @@ struct cadToolpath{
 #define isSimilar(A, B) ( ((A-B) < SMALL) && ((A-B) > -SMALL) )
 #define isBetween(A, B, C) ( ((A-B) > -ZERO) && ((A-C) < ZERO) )
 #define POSITIVE(n) ((n) < 0 ? 0 - (n) : (n))
+
+#define MOUSE_LEFT_BUTTON 0
+#define MOUSE_DOWN 1
+#define MOUSE_RIGHT_BUTTON 2
+#define MOUSE_ACTIVE_CTRL 3
 
 /* Global Operation variables */
 extern point_t MousePosition;

@@ -296,6 +296,7 @@ TestGLContext& MyApp::GetContext(wxGLCanvas *canvas, bool useStereo)
 wxBEGIN_EVENT_TABLE(GLCanvas, wxGLCanvas)
     EVT_PAINT(GLCanvas::OnPaint)
     EVT_KEY_DOWN(GLCanvas::OnKeyDown)
+    EVT_LEFT_DOWN(GLCanvas::OnMouseLeftDown)
     EVT_MOUSE_EVENTS(GLCanvas::OnMouse)
     EVT_IDLE(GLCanvas::OnIdle)
 wxEND_EVENT_TABLE()
@@ -335,7 +336,6 @@ void GLCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     //glViewport(0, 0, ClientSize.x, ClientSize.y);
 
-
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();//these two lines are unchanged
 
@@ -366,6 +366,12 @@ void PostRedisplay()
   //V printf("Redrawing!\n");
 }
 point_t LastMouseScrollPosition;
+void GLCanvas::OnMouseLeftDown(wxMouseEvent& event)
+{
+  wxPoint m = event.GetPosition();
+  MousePosition = cadScreenCordToCadCord(m.x, m.y);
+  mouseClick(MOUSE_LEFT_BUTTON, MOUSE_DOWN, MousePosition.x, MousePosition.y);
+}
 void GLCanvas::OnMouse(wxMouseEvent& event)
 {
   int ScrollWheel = event.GetWheelRotation();
@@ -391,7 +397,8 @@ void GLCanvas::OnMouse(wxMouseEvent& event)
     sceneIncPan(LastMouseScrollPosition.x - MousePosition.x, LastMouseScrollPosition.y - MousePosition.y, 0);
     LastMouseScrollPosition = MousePosition;
   }
-  //printf("Event: %d\n", e);
+  //printf("Event: %d\n", event);
+  mousePassiveMotionCallback(MousePosition.x, MousePosition.y);
 
 }
 void GLCanvas::OnKeyDown(wxKeyEvent& event)
