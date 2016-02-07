@@ -18,7 +18,7 @@ DCOMPILE_FLAGS = -D DEBUG
 # Add additional include paths
 INCLUDES = -I $(SRC_PATH)/ -I./inc
 # General linker settings
-LINK_FLAGS = `wx-config --libs --gl-libs` -lGL -lGLU -lz
+LINK_FLAGS = `wx-config --libs --gl-libs` -lGL -lGLU -lz -lm -lpthread
 # Additional release-specific linker settings
 RLINK_FLAGS =
 # Additional debug-specific linker settings

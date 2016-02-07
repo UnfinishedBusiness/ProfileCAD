@@ -285,7 +285,6 @@ TestGLContext& MyApp::GetContext(wxGLCanvas *canvas, bool useStereo)
     }
 
     glContext->SetCurrent(*canvas);
-
     return *glContext;
 }
 
@@ -296,6 +295,7 @@ TestGLContext& MyApp::GetContext(wxGLCanvas *canvas, bool useStereo)
 wxBEGIN_EVENT_TABLE(GLCanvas, wxGLCanvas)
     EVT_PAINT(GLCanvas::OnPaint)
     EVT_KEY_DOWN(GLCanvas::OnKeyDown)
+    EVT_KEY_UP(GLCanvas::OnKeyUp)
     EVT_LEFT_DOWN(GLCanvas::OnMouseLeftDown)
     EVT_MOUSE_EVENTS(GLCanvas::OnMouse)
     EVT_IDLE(GLCanvas::OnIdle)
@@ -365,6 +365,9 @@ void PostRedisplay()
   PostRedisplay_Register = true;
   //V printf("Redrawing!\n");
 }
+
+/* See http://docs.wxwidgets.org/trunk/classwx_mouse_event.html for mouse events */
+
 point_t LastMouseScrollPosition;
 void GLCanvas::OnMouseLeftDown(wxMouseEvent& event)
 {
@@ -401,10 +404,26 @@ void GLCanvas::OnMouse(wxMouseEvent& event)
   mousePassiveMotionCallback(MousePosition.x, MousePosition.y);
 
 }
+KbMods_t KbMods;
+void GLCanvas::OnKeyUp(wxKeyEvent& event)
+{
+  switch ( event.GetKeyCode() )
+  {
+      case WXK_CONTROL:
+        KbMods.Ctrl = false;
+        break;
+      case WXK_SHIFT:
+        KbMods.Shift = false;
+        break;
+      case WXK_ALT:
+        KbMods.Alt = false;
+        break;
+  }
+}
+//See http://docs.wxwidgets.org/2.6.3/wx_keycodes.html for keycodes
 void GLCanvas::OnKeyDown(wxKeyEvent& event)
 {
-    float angle = 5.0;
-
+    //printf("Keycode is %d\n", event.GetKeyCode());
     switch ( event.GetKeyCode() )
     {
         case WXK_RIGHT:
@@ -428,6 +447,48 @@ void GLCanvas::OnKeyDown(wxKeyEvent& event)
             fileOpen("test/dxf/box.dxf");
             break;
 
+        case WXK_CONTROL:
+            KbMods.Ctrl = true;
+          break;
+        case WXK_SHIFT:
+          KbMods.Shift = true;
+          break;
+        case WXK_ALT:
+          KbMods.Alt = true;
+          break;
+
+        case 65: //a
+          if (KbMods.Ctrl)
+          {
+            //cliScreenSelectAll();
+          }
+          break;
+        case 83: //s
+          if (KbMods.Ctrl)
+          {
+            //Save current file
+          }
+          break;
+        case 90: //z
+          if (KbMods.Ctrl)
+          {
+            cadUndo();
+          }
+          break;
+
+        case 27: //esc
+          if (KbMods.Ctrl)
+          {
+            CleanupAndExit();
+          }
+          break;
+
+        case 82: //r
+          if (KbMods.Ctrl)
+          {
+            cliRunScript("scripts/main.js");
+          }
+          break;
         default:
             event.Skip();
             return;
@@ -446,6 +507,7 @@ void GLCanvas::OnIdle(wxIdleEvent &event)
     PostRedisplay_Register = false;
   }
 	/* Force the redraw immediately, gets the gfx card to its max */
+
 	event.RequestMore();
 }
 
@@ -485,6 +547,9 @@ MyFrame::MyFrame( bool stereoWindow )
     SetIcon(wxICON(icon));
 
     Maximize();
+
+    cliRegisterFunctions();
+
 
     /*Begin File Menu*/
     wxMenu *file_menu = new wxMenu;
@@ -533,6 +598,7 @@ void MyFrame::OnClose(wxCommandEvent& WXUNUSED(event))
 {
     // true is to force the frame to close
     Close(true);
+    CleanupAndExit();
 }
 void MyFrame::OnOpen (wxCommandEvent& WXUNUSED(event) )
 {
@@ -568,4 +634,9 @@ void MyFrame::OnSave (wxCommandEvent& WXUNUSED(event) )
 
 	// Clean up after ourselves
 	SaveDialog->Destroy();
+}
+void CleanupAndExit()
+{
+  duk_destroy_heap(ctx);
+  kill(0, SIGKILL);
 }

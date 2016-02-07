@@ -29,6 +29,8 @@
 #include <Debug.h>
 #include <FileIO.h>
 #include <Geometry.h>
+#include <CLI.h>
+#include <duktape.h>
 
 #include "zlib.h"
 
@@ -233,8 +235,19 @@ struct cadToolpath{
 #define MOUSE_RIGHT_BUTTON 2
 #define MOUSE_ACTIVE_CTRL 3
 
+/* Keyboard Modifier structure */
+struct KbMods_t{
+  bool Ctrl = false;
+  bool Alt = false;
+  bool Shift = false;
+};
+extern KbMods_t KbMods;
 /* Global Operation variables */
 extern point_t MousePosition;
 extern bool PostRedisplay_Register;
+extern duk_context *ctx;
 /* End Global Variables */
+
+void CleanupAndExit();
+
 #endif

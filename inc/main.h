@@ -61,6 +61,7 @@ private:
     void OnPaint(wxPaintEvent& event);
     void Spin(float xSpin, float ySpin);
     void OnKeyDown(wxKeyEvent& event);
+    void OnKeyUp(wxKeyEvent& event);
     void OnMouse(wxMouseEvent& event);
     void OnMouseLeftDown(wxMouseEvent& event);
     void OnMouseLeftUp(wxMouseEvent& event);

@@ -207,7 +207,6 @@ void mouseClick(int btn, int state, float x, float y)
     point_t pos = point_t{x, y};
     mouseCurrent = pos;
     button = btn;
-    //mod = glutGetModifiers();
 
     //V printf("Scroll %s At %d %d\n", (btn == 3) ? "Up" : "Down", x, y);
     if(btn==MOUSE_LEFT_BUTTON && state==MOUSE_DOWN)
@@ -286,11 +285,11 @@ void mouseClick(int btn, int state, float x, float y)
     {
         //V printf("Right button at X: %d, Y: %d\n", x, y);
     }
-    /*if(btn==MOUSE_LEFT_BUTTON && state==MOUSE_DOWN && mod == MOUSE_ACTIVE_CTRL)
+    if(btn==MOUSE_LEFT_BUTTON && state==MOUSE_DOWN && KbMods.Ctrl)
     {
         //V printf("Left + Ctrl button at X: %d, Y: %d\n", x, y);
         cadSelectChain();
-    }*/
+    }
 }
 void mouseMotionCallback(int x, int y)
 {

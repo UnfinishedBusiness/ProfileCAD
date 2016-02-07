@@ -11,7 +11,7 @@ bool isNumeric(const std::string& input) {
 }
 int fileOpen(string f)
 {
-  V printf("[fileOpen] Opening %s\n", f.c_str());
+  //V printf("[fileOpen] Opening %s\n", f.c_str());
   if (f.find(".dxf") != std::string::npos)
   {
     ifs.open(f);
