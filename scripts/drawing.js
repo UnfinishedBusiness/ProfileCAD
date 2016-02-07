@@ -40,3 +40,45 @@ function DrawLineHorizontalFromOrigin()
     HideLiveEntity();
   });
 }
+function DrawLineEndpoints()
+{
+  cliPrompt("Click first endpoint");
+  MouseClickCallback = function()
+  {
+    var p = MouseGetSnap();
+    if (p == "None")
+    {
+      cliPrompt("Must be a snap point!");
+    }
+    else
+    {
+      cliPrompt("Click second endpoint");
+      ClearMouseCallback();
+      MouseCallback = function()
+      {
+        Live.type = "line";
+        Live.start = { x: p.x, y: p.y };
+        Live.end = { x: Mouse.x, y: Mouse.y };
+        ShowLiveEntity(Live);
+      }
+      MouseClickCallback = function()
+      {
+        var p = MouseGetSnap();
+        if (p == "None")
+        {
+          cliPrompt("Must be a snap point!");
+        }
+        else
+        {
+          DrawLine(Live.start, { x: p.x, y: p.y });
+          cliPrompt("");
+          HideLiveEntity();
+          ClearMouseCallback();
+          UnSelectAllEntities();
+          DrawLineEndpoints();
+        }
+
+      }
+    }
+  }
+}

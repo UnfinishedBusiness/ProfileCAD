@@ -47,3 +47,15 @@ function ShowLiveEntity(obj)
 {
   NativeShowLiveEntity(JSON.stringify(obj));
 }
+function MouseGetSnap()
+{
+  var snap = NativeMouseGetSnap();
+  if (snap != "None")
+  {
+    return JSON.parse(NativeMouseGetSnap());
+  }
+  else
+  {
+    return "None";
+  }
+}

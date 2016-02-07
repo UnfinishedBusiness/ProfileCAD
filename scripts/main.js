@@ -3,6 +3,7 @@ Mouse = {};
 MouseCallback = "";
 MouseClickCallback = "";
 Live = {};
+CancelAction = false;
 
 function main()
 {
@@ -31,7 +32,19 @@ function OnMouseMotion(x, y)
   Mouse.y = y;
   if (MouseCallback != "")
   {
-    MouseCallback();
+    if (CancelAction == true)
+    {
+      CancelAction = false;
+      ClearMouseCallback();
+      cliReturn();
+      HideLiveEntity();
+      SetStatusText("");
+    }
+    else
+    {
+      MouseCallback();
+    }
+
   }
 }
 function OnKeyDown(mod, keycode)
@@ -44,14 +57,26 @@ function OnKeyDown(mod, keycode)
   {
     RemoveSelectedEntities();
   }
+  else if (mod == "None" && keycode == 27) //esc
+  {
+    ClearMouseCallback();
+    cliReturn();
+    HideLiveEntity();
+    SetStatusText("");
+    CancelAction = true;
+  }
   else if (mod == "None" && keycode == 32) //Space
   {
-    var live = {};
-    live.type = "line";
-    live.start = { x: 0, y: 0 };
-    live.end = { x: 0, y: Mouse.y };
-
-    ShowLiveEntity(live);
+    /*var p = MouseGetSnap();
+    if (p == "None")
+    {
+      print("No snap points");
+    }
+    else
+    {
+      print("Last snap X: " + p.x + " Y: " + p.y);
+    }*/
+    DrawLineEndpoints();
   }
   else if (mod == "Ctrl" && keycode == 65) //Ctrl-a
   {

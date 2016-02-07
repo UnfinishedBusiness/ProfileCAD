@@ -251,6 +251,23 @@ int HideLiveEntity(duk_context *ctx)
 	duk_push_number(ctx, 0);
 	return 1;  /* one return value */
 }
+int MouseGetSnap(duk_context *ctx)
+{
+	duk_get_top(ctx);  /* #args */
+	point_t p = mouseCadLastSnapClick();
+	string json;
+	if (geoInTolerance(MousePosition, p, 0.050))
+	{
+		json = "{\"x\":\"" + to_string(p.x) + "\",\"y\":\"" + to_string(p.y) + "\"}";
+	}
+	else
+	{
+		json = "None";
+	}
+
+	duk_push_string(ctx, json.c_str());
+	return 1;  /* one return value */
+}
 int Source(duk_context *ctx)
 {
 	duk_get_top(ctx);  /* #args */
@@ -331,6 +348,11 @@ void scriptRegisterFunctions()
 	duk_push_global_object(ctx);
 	duk_push_c_function(ctx, CountEntities, DUK_VARARGS);
 	duk_put_prop_string(ctx, -2, "CountEntities");
+	duk_pop(ctx);
+
+	duk_push_global_object(ctx);
+	duk_push_c_function(ctx, MouseGetSnap, DUK_VARARGS);
+	duk_put_prop_string(ctx, -2, "NativeMouseGetSnap");
 	duk_pop(ctx);
 
 	duk_push_global_object(ctx);
