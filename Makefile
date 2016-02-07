@@ -10,7 +10,7 @@ SRC_PATH = ./src/
 # Space-separated pkg-config libraries used by this project
 LIBS =
 # General compiler flags
-COMPILE_FLAGS = -std=c++11 -g -fpermissive `wx-config --cxxflags`
+COMPILE_FLAGS = -std=c++14 -g -fpermissive `wx-config --cxxflags`
 # Additional release-specific flags
 RCOMPILE_FLAGS = -D NDEBUG
 # Additional debug-specific flags
@@ -18,7 +18,7 @@ DCOMPILE_FLAGS = -D DEBUG
 # Add additional include paths
 INCLUDES = -I $(SRC_PATH)/ -I./inc
 # General linker settings
-LINK_FLAGS = `wx-config --libs --gl-libs` -lGL -lGLU -lz -lm -lpthread
+LINK_FLAGS = `wx-config --libs --gl-libs` -lGL -lGLU -lz -lm 
 # Additional release-specific linker settings
 RLINK_FLAGS =
 # Additional debug-specific linker settings

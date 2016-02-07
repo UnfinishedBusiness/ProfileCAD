@@ -557,8 +557,8 @@ MyFrame::MyFrame( bool stereoWindow )
 
     Maximize();
 
-    scriptRegisterFunctions();
 
+    scriptRegisterFunctions();
 
     /*Begin File Menu*/
     wxMenu *file_menu = new wxMenu;

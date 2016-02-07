@@ -14,6 +14,8 @@ void *scriptScreenDeleteSelected();
 void scriptRegisterFunctions();
 void scriptRun(std::string);
 void scriptSource(std::string);
-void scriptEval(std::string);
+std::string scriptEval(std::string);
+
+std::string scriptParseJSON(std::string, std::string);
 
 #endif

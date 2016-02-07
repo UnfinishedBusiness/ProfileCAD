@@ -34,6 +34,10 @@
 #include <Script.h>
 #include <duktape.h>
 
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/foreach.hpp>
+
 #include "zlib.h"
 
 #ifndef APPLICATION_
