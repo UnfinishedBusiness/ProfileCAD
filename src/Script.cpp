@@ -205,7 +205,49 @@ int EditEntity(duk_context *ctx)
 		//debugDumpEntityStructure(e);
 		cadEdit(i, e, false);
 	}
+	if (scriptParseJSON("type", json) == "arc")
+	{
+		cadEntity e = cadGetEntityArray(i);
+		e.Arc.start.x = atof(scriptParseJSON("start.x", json).c_str());
+		e.Arc.start.y = atof(scriptParseJSON("start.y", json).c_str());
+		e.Arc.end.x = atof(scriptParseJSON("end.x", json).c_str());
+		e.Arc.end.y = atof(scriptParseJSON("end.y", json).c_str());
+		e.Arc.radius = atof(scriptParseJSON("radius", json).c_str());
+		if (scriptParseJSON("direction", json) == "cw") e.Arc.direction = ARC_CW;
+		if (scriptParseJSON("direction", json) == "ccw") e.Arc.direction = ARC_CCW;
+		//debugDumpEntityStructure(e);
+		cadEdit(i, e, false);
+	}
 	PostRedisplay();
+	duk_push_number(ctx, 0);
+	return 1;  /* one return value */
+}
+int ShowLiveEntity(duk_context *ctx)
+{
+	duk_get_top(ctx);  /* #args */
+  string json = duk_to_string(ctx, 0);
+	//printf("Json = %sn", json.c_str());
+	if (scriptParseJSON("type", json) == "line")
+	{
+		vector<cadEntity> v;
+		cadEntity e;
+		e.Type = CAD_LINE;
+		e.Line.start.x = atof(scriptParseJSON("start.x", json).c_str());
+		e.Line.start.y = atof(scriptParseJSON("start.y", json).c_str());
+		e.Line.end.x = atof(scriptParseJSON("end.x", json).c_str());
+		e.Line.end.y = atof(scriptParseJSON("end.y", json).c_str());
+		//debugDumpEntityStructure(e);
+		v.push_back(e);
+		cadShowLiveEntity(v);
+	}
+	PostRedisplay();
+	duk_push_number(ctx, 0);
+	return 1;  /* one return value */
+}
+int HideLiveEntity(duk_context *ctx)
+{
+	duk_get_top(ctx);  /* #args */
+	cadHideLiveEntity();
 	duk_push_number(ctx, 0);
 	return 1;  /* one return value */
 }
@@ -302,6 +344,16 @@ void scriptRegisterFunctions()
 	duk_pop(ctx);
 
 	duk_push_global_object(ctx);
+	duk_push_c_function(ctx, ShowLiveEntity, DUK_VARARGS);
+	duk_put_prop_string(ctx, -2, "NativeShowLiveEntity");
+	duk_pop(ctx);
+
+	duk_push_global_object(ctx);
+	duk_push_c_function(ctx, HideLiveEntity, DUK_VARARGS);
+	duk_put_prop_string(ctx, -2, "HideLiveEntity");
+	duk_pop(ctx);
+
+	duk_push_global_object(ctx);
 	duk_push_c_function(ctx, Source, DUK_VARARGS);
 	duk_put_prop_string(ctx, -2, "Source");
 	duk_pop(ctx);
@@ -344,7 +396,7 @@ void scriptSource(string file)
 {
   if (duk_peval_file(ctx, file.c_str()) != 0)
   {
-        printf("Error: %s\n", duk_safe_to_string(ctx, -1));
+        printf("Error (%s): %s\n",file.c_str(), duk_safe_to_string(ctx, -1));
   }
   duk_pop(ctx);  /* ignore result */
 }
@@ -353,7 +405,7 @@ string scriptEval(string s)
 {
 	duk_push_string(ctx, s.c_str());
   if (duk_peval(ctx) != 0) {
-    printf("[scriptEval] eval failed: %s\n", duk_safe_to_string(ctx, -1));
+    printf("[scriptEval] (%s) eval failed: %s\n",s.c_str(), duk_safe_to_string(ctx, -1));
   } else {
     if (!strcmp(duk_safe_to_string(ctx, -1), "undefined") == 0)
     {

@@ -268,7 +268,8 @@ void cadRender()
     if (cadLiveEntity[x].Removed == false)
     {
       //printf("Rendering live entity!\n");
-      sceneColor(cadLiveEntity[x].Color);
+      //sceneColor(cadLiveEntity[x].Color);
+      sceneColor(YELLOW);
       if (cadLiveEntity[x].Type == CAD_LINE)
       {
         cadRenderLine(cadLiveEntity[x].Line, cadLiveEntity[x].LineWidth);

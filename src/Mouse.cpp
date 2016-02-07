@@ -456,11 +456,11 @@ void mousePassiveMotionCallback(float x, float y)
   }
   if (mouseLive.size() > 0)
   {
-    cadShowLiveEntity(mouseLive);
+    //cadShowLiveEntity(mouseLive);
   }
   else
   {
-    cadHideLiveEntity();
+    //cadHideLiveEntity();
   }
   mouseLive.clear();
   if (passivePrime)

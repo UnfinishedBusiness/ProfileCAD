@@ -27,11 +27,15 @@ function cliPush(mod, c)
     SetStatusText("");
     cliReturn(e);
   }
-  if (isLetter(letter) || isNumber(letter) || c == 40 || c == 41 || c == 59 || c == 39 || c == 91 || c == 93)
+  if (isLetter(letter) || isNumber(letter) || c == 61 || c == 45 || c == 47 || c == 40 || c == 41 || c == 59 || c == 39 || c == 91 || c == 93)
   {
     if (mod == "None")
     {
       Input += letter.toLowerCase();
+    }
+    else if (mod == "Shift" || c == 61) // + keyPressed
+    {
+      Input += '+';
     }
     else if (mod == "Shift")
     {

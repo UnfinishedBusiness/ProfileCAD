@@ -1,5 +1,9 @@
 VerboseKeycode = false;
 Mouse = {};
+MouseCallback = "";
+MouseClickCallback = "";
+Live = {};
+
 function main()
 {
   Source("scripts/helpers.js");
@@ -9,10 +13,26 @@ function main()
   //Entry point for scriptRun()!
   //DrawLine({x: 0, y: 0}, {x: -4, y: 0});
 }
+function ClearMouseCallback()
+{
+  MouseCallback = "";
+  MouseClickCallback = "";
+}
+function OnMouseClick()
+{
+  if (MouseClickCallback != "")
+  {
+    MouseClickCallback();
+  }
+}
 function OnMouseMotion(x, y)
 {
   Mouse.x = x;
   Mouse.y = y;
+  if (MouseCallback != "")
+  {
+    MouseCallback();
+  }
 }
 function OnKeyDown(mod, keycode)
 {
@@ -26,8 +46,12 @@ function OnKeyDown(mod, keycode)
   }
   else if (mod == "None" && keycode == 32) //Space
   {
-    //SetStatusText('Test!');
-    DrawLineVerticalFromOrigin();
+    var live = {};
+    live.type = "line";
+    live.start = { x: 0, y: 0 };
+    live.end = { x: 0, y: Mouse.y };
+
+    ShowLiveEntity(live);
   }
   else if (mod == "Ctrl" && keycode == 65) //Ctrl-a
   {

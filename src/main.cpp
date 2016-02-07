@@ -372,6 +372,7 @@ void GLCanvas::OnMouseLeftDown(wxMouseEvent& event)
 {
   wxPoint m = event.GetPosition();
   MousePosition = cadScreenCordToCadCord(m.x, m.y);
+  scriptEval("OnMouseClick();");
   mouseClick(MOUSE_LEFT_BUTTON, MOUSE_DOWN, MousePosition.x, MousePosition.y);
 }
 void GLCanvas::OnMouse(wxMouseEvent& event)

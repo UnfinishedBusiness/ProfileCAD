@@ -43,3 +43,7 @@ function DrawArc(start, end, radius, direction)
 {
   return NativeDrawArc2D(start.x,start.y,end.x,end.y,radius, direction);
 }
+function ShowLiveEntity(obj)
+{
+  NativeShowLiveEntity(JSON.stringify(obj));
+}
