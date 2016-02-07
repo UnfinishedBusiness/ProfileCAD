@@ -1,14 +1,5 @@
 VerboseKeycode = false;
 
-function GetEntity(i)
-{
-  return JSON.parse(NativeGetEntity(i));
-}
-function DrawLine(start, end)
-{
-  NativeDrawLine2D(start.x,start.y,end.x,end.y);
-}
-
 function main()
 {
   Source("scripts/helpers.js");
@@ -30,12 +21,11 @@ function OnKeyDown(mod, keycode)
   }
   if (mod == "None" && keycode == 32) //Space
   {
-    //DrawLine({x: 0, y: 0}, {x: -1.5086, y: 0});
-    var obj = {};
-    obj.test = "It Works!";
-    obj.start = {};
-    obj.start.x = 5;
-    NativeEditEntity(1, JSON.stringify(obj));
+    var id = DrawLine({x: 0, y: 0}, {x: -1.5086, y: 0});
+    var e = GetEntity(id);
+    e.end.x = 0;
+    e.end.y = 5;
+    EditEntity(0, e);
   }
   if (mod == "Ctrl" && keycode == 65) //Ctrl-a
   {

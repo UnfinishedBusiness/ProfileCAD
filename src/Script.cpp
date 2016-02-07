@@ -54,7 +54,6 @@ int DrawLine2D(duk_context *ctx)
   line_t line;
 	int i;
 	int n = duk_get_top(ctx);  /* #args */
-	double res = 0.0;
   line.start.x = duk_to_number(ctx, 0);
   line.start.y = duk_to_number(ctx, 1);
   line.end.x = duk_to_number(ctx, 2);
@@ -70,9 +69,10 @@ int DrawLine2D(duk_context *ctx)
   if (color == "darkgrey") cadSetColor(DARKGREY);
   if (color == "lightgrey") cadSetColor(LIGHTGREY);
   cadDrawLine(line);
+	int res = cadCountEntitys() -1;
   PostRedisplay();
 
-	duk_push_number(ctx, res);
+	duk_push_int(ctx, res);
 	return 1;  /* one return value */
 }
 int RemoveSelectedEntities(duk_context *ctx)
@@ -158,12 +158,18 @@ int EditEntity(duk_context *ctx)
 	duk_get_top(ctx);  /* #args */
 	int i = duk_to_int(ctx, 0);
   string json = duk_to_string(ctx, 1);
-	printf("Json = %s, start = %s\n", json.c_str(),scriptParseJSON("start.x", json).c_str());
-	/*if (scriptParseJSON("type", json) == "line")
+	//printf("Json = %s, start = %s\n", json.c_str(),scriptParseJSON("start.x", json).c_str());
+	if (scriptParseJSON("type", json) == "line")
 	{
 		cadEntity e = cadGetEntityArray(i);
-	}*/
-
+		e.Line.start.x = atof(scriptParseJSON("start.x", json).c_str());
+		e.Line.start.y = atof(scriptParseJSON("start.y", json).c_str());
+		e.Line.end.x = atof(scriptParseJSON("end.x", json).c_str());
+		e.Line.end.y = atof(scriptParseJSON("end.y", json).c_str());
+		//debugDumpEntityStructure(e);
+		cadEdit(i, e, false);
+	}
+	PostRedisplay();
 	duk_push_number(ctx, 0);
 	return 1;  /* one return value */
 }

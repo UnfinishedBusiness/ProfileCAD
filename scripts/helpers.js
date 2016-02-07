@@ -20,3 +20,15 @@ function DumpEntity(i)
     print("Direction: " + e.direction);
   }
 }
+function EditEntity(i, e) //Should always GetEntity before we edit it to avoid losing properties!
+{
+  NativeEditEntity(i, JSON.stringify(e));
+}
+function GetEntity(i)
+{
+  return JSON.parse(NativeGetEntity(i));
+}
+function DrawLine(start, end)
+{
+  return NativeDrawLine2D(start.x,start.y,end.x,end.y);
+}
