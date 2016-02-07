@@ -22,6 +22,13 @@ function DumpEntity(i)
 }
 function EditEntity(i, e) //Should always GetEntity before we edit it to avoid losing properties!
 {
+  //Use like follows!
+  /*var id = DrawLine({x: 0, y: 0}, {x: -1.5086, y: 0});
+  var e = GetEntity(id);
+  e.end.x = 0;
+  e.end.y = 5;
+  EditEntity(0, e);
+  */
   NativeEditEntity(i, JSON.stringify(e));
 }
 function GetEntity(i)
@@ -31,4 +38,8 @@ function GetEntity(i)
 function DrawLine(start, end)
 {
   return NativeDrawLine2D(start.x,start.y,end.x,end.y);
+}
+function DrawArc(start, end, radius, direction)
+{
+  return NativeDrawArc2D(start.x,start.y,end.x,end.y,radius, direction);
 }

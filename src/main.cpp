@@ -24,8 +24,8 @@ using namespace std;
 /****************** Globals ***********************/
 bool PostRedisplay_Register = false;
 point_t MousePosition;
-
-
+string StatusText;
+string LastStatusText;
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -34,7 +34,6 @@ point_t MousePosition;
 // ----------------------------------------------------------------------------
 // helper functions
 // ----------------------------------------------------------------------------
-
 static void CheckGLError()
 {
     GLenum errLast = GL_NO_ERROR;
@@ -381,8 +380,9 @@ void GLCanvas::OnMouse(wxMouseEvent& event)
 
   wxPoint m = event.GetPosition();
   MousePosition = cadScreenCordToCadCord(m.x, m.y);
+  scriptEval("OnMouseMotion(" + to_string(MousePosition.x) + ", " + to_string(MousePosition.y) + ")");
 
-  wxLogStatus("X: %.6f Y: %.6f Zoom: %.6f", MousePosition.x, MousePosition.y, sceneGetScale());
+  //wxLogStatus("X: %.6f Y: %.6f Zoom: %.6f", MousePosition.x, MousePosition.y, sceneGetScale());
   //MousePosition.z = m.z;
   if (ScrollWheel == 120)
   {
@@ -510,6 +510,11 @@ void GLCanvas::OnSpinTimer(wxTimerEvent& WXUNUSED(event))
 }
 void GLCanvas::OnIdle(wxIdleEvent &event)
 {
+  if (LastStatusText != StatusText)
+  {
+    wxLogStatus(StatusText.c_str());
+  }
+  LastStatusText = StatusText;
   if (PostRedisplay_Register == true)
   {
     Refresh(false);

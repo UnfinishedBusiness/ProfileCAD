@@ -75,6 +75,42 @@ int DrawLine2D(duk_context *ctx)
 	duk_push_int(ctx, res);
 	return 1;  /* one return value */
 }
+int DrawArc2D(duk_context *ctx)
+{
+  arc_t arc;
+	int i;
+	int n = duk_get_top(ctx);  /* #args */
+  arc.start.x = duk_to_number(ctx, 0);
+  arc.start.y = duk_to_number(ctx, 1);
+  arc.end.x = duk_to_number(ctx, 2);
+  arc.end.y = duk_to_number(ctx, 3);
+	arc.radius = duk_to_number(ctx, 4);
+	string direction = duk_to_string(ctx, 5);
+	if (direction == "ccw")
+	{
+		arc.direction = ARC_CCW;
+	}
+	else
+	{
+		arc.direction = ARC_CW;
+	}
+
+	if (color == "black") cadSetColor(BLACK);
+  if (color == "red") cadSetColor(RED);
+  if (color == "yellow") cadSetColor(YELLOW);
+  if (color == "green") cadSetColor(GREEN);
+  if (color == "cyan") cadSetColor(CYAN);
+  if (color == "blue") cadSetColor(BLUE);
+  if (color == "magenta") cadSetColor(MAGENTA);
+  if (color == "darkgrey") cadSetColor(DARKGREY);
+  if (color == "lightgrey") cadSetColor(LIGHTGREY);
+  cadDrawArc(arc);
+	int res = cadCountEntitys() -1;
+  PostRedisplay();
+
+	duk_push_int(ctx, res);
+	return 1;  /* one return value */
+}
 int RemoveSelectedEntities(duk_context *ctx)
 {
 	cadRemoveSelected();
@@ -181,6 +217,13 @@ int Source(duk_context *ctx)
 	duk_push_number(ctx, 0);
 	return 1;  /* one return value */
 }
+int SetStatusText(duk_context *ctx)
+{
+	duk_get_top(ctx);  /* #args */
+  StatusText = duk_to_string(ctx, 0);
+	duk_push_number(ctx, 0);
+	return 1;  /* one return value */
+}
 int DumptEntityStack(duk_context *ctx)
 {
   int m = cadGetEntityArrayIndex();
@@ -224,6 +267,11 @@ void scriptRegisterFunctions()
 	duk_pop(ctx);
 
 	duk_push_global_object(ctx);
+	duk_push_c_function(ctx, DrawArc2D, DUK_VARARGS);
+	duk_put_prop_string(ctx, -2, "NativeDrawArc2D");
+	duk_pop(ctx);
+
+	duk_push_global_object(ctx);
 	duk_push_c_function(ctx, RemoveSelectedEntities, DUK_VARARGS);
 	duk_put_prop_string(ctx, -2, "RemoveSelectedEntities");
 	duk_pop(ctx);
@@ -256,6 +304,11 @@ void scriptRegisterFunctions()
 	duk_push_global_object(ctx);
 	duk_push_c_function(ctx, Source, DUK_VARARGS);
 	duk_put_prop_string(ctx, -2, "Source");
+	duk_pop(ctx);
+
+	duk_push_global_object(ctx);
+	duk_push_c_function(ctx, SetStatusText, DUK_VARARGS);
+	duk_put_prop_string(ctx, -2, "SetStatusText");
 	duk_pop(ctx);
 
 	duk_push_global_object(ctx);
