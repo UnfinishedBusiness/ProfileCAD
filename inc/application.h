@@ -8,9 +8,11 @@
 #include <errno.h>
 #include <termios.h>
 #include <fcntl.h>
-#include <png.h>
-#include <GL/freeglut.h>
-#include <GL/freeglut_ext.h>
+//#include <png.h>
+//#include <GL/freeglut.h>
+//#include <GL/freeglut_ext.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
 #include <iostream>
 #include <vector>
 #include <cmath>
@@ -29,16 +31,10 @@
 #include <Debug.h>
 #include <FileIO.h>
 #include <Geometry.h>
-#include <CLI.h>
+#include <Script.h>
 #include <duktape.h>
 
 #include "zlib.h"
-
-extern "C" {
-#include "lua.h"
-#include "lualib.h"
-#include "lauxlib.h"
-}
 
 #ifndef APPLICATION_
 #define  APPLICATION_

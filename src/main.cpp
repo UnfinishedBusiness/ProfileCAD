@@ -424,7 +424,15 @@ void GLCanvas::OnKeyUp(wxKeyEvent& event)
 void GLCanvas::OnKeyDown(wxKeyEvent& event)
 {
     //printf("Keycode is %d\n", event.GetKeyCode());
-    switch ( event.GetKeyCode() )
+    int keycode = event.GetKeyCode();
+    char eval[1024];
+    string mod = "None";
+    if (KbMods.Shift == true) mod = "Shift";
+    if (KbMods.Ctrl== true) mod = "Ctrl";
+    if (KbMods.Alt == true) mod = "Alt";
+    sprintf(eval, "OnKeyDown(\"%s\",%d);",mod.c_str(),keycode);
+    scriptEval(string(eval));
+    switch ( keycode )
     {
         case WXK_RIGHT:
             //Spin( 0.0, -angle );
@@ -444,7 +452,7 @@ void GLCanvas::OnKeyDown(wxKeyEvent& event)
             break;
 
         case WXK_SPACE:
-            fileOpen("test/dxf/box.dxf");
+            //fileOpen("test/dxf/box.dxf");
             break;
 
         case WXK_CONTROL:
@@ -486,7 +494,8 @@ void GLCanvas::OnKeyDown(wxKeyEvent& event)
         case 82: //r
           if (KbMods.Ctrl)
           {
-            cliRunScript("scripts/main.js");
+            scriptSource("scripts/main.js");
+            scriptEval("main();");
           }
           break;
         default:
@@ -548,7 +557,7 @@ MyFrame::MyFrame( bool stereoWindow )
 
     Maximize();
 
-    cliRegisterFunctions();
+    scriptRegisterFunctions();
 
 
     /*Begin File Menu*/

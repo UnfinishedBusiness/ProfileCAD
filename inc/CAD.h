@@ -23,6 +23,7 @@ void cadAppend(cadEntity, bool);
 void cadEdit(int, cadEntity);
 void cadEdit(int, cadEntity, bool);
 void cadRemoveSelected();
+void cadSelectAllEntities();
 std::vector<cadEntity> cadGetSelected();
 std::vector<cadEntity>  cadGetMouseOver();
 int cadCountSelection();

@@ -6,6 +6,7 @@
 void debugDumpArcStructure(arc_t);
 void debugDumpPointStructure(point_t);
 void debugDumpLineStructure(line_t);
+void debugDumpColorStructure(color_t);
 void debugDumpContourStructure(contour_t);
 void debugDumpEntityStructure(cadEntity);
 #endif

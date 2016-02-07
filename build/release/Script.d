@@ -1,8 +1,8 @@
-build/release/FileIO.o: src//FileIO.cpp inc/FileIO.h inc/application.h \
+build/release/Script.o: src//Script.cpp inc/Script.h inc/application.h \
  inc/CAD.h inc/Mouse.h inc/Scene.h inc/application.h inc/Debug.h \
- inc/Geometry.h inc/Script.h inc/duktape.h inc/duk_config.h
+ inc/FileIO.h inc/Geometry.h inc/duktape.h inc/duk_config.h
 
-inc/FileIO.h:
+inc/Script.h:
 
 inc/application.h:
 
@@ -16,9 +16,9 @@ inc/application.h:
 
 inc/Debug.h:
 
-inc/Geometry.h:
+inc/FileIO.h:
 
-inc/Script.h:
+inc/Geometry.h:
 
 inc/duktape.h:
 
