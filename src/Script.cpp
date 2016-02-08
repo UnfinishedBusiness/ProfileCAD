@@ -251,6 +251,13 @@ int HideLiveEntity(duk_context *ctx)
 	duk_push_number(ctx, 0);
 	return 1;  /* one return value */
 }
+int Repaint(duk_context *ctx)
+{
+	duk_get_top(ctx);  /* #args */
+	PostRedisplay();
+	duk_push_number(ctx, 0);
+	return 1;  /* one return value */
+}
 int MouseGetSnap(duk_context *ctx)
 {
 	duk_get_top(ctx);  /* #args */
@@ -273,6 +280,30 @@ int Source(duk_context *ctx)
 	duk_get_top(ctx);  /* #args */
   string file = duk_to_string(ctx, 0);
 	scriptSource(file);
+	duk_push_number(ctx, 0);
+	return 1;  /* one return value */
+}
+int AppendPopupMenu(duk_context *ctx)
+{
+	duk_get_top(ctx);  /* #args */
+	PopupMenu_t p;
+	p.label = duk_to_string(ctx, 0);
+	p.callback = duk_to_string(ctx, 1);
+	PopupMenuStack.push_back(p);
+	duk_push_number(ctx, 0);
+	return 1;  /* one return value */
+}
+int ShowPopupMenu(duk_context *ctx)
+{
+	duk_get_top(ctx);  /* #args */
+	ShowPopupMenu();
+	duk_push_number(ctx, 0);
+	return 1;  /* one return value */
+}
+int ClearPopupMenu(duk_context *ctx)
+{
+	duk_get_top(ctx);  /* #args */
+	PopupMenuStack.clear();
 	duk_push_number(ctx, 0);
 	return 1;  /* one return value */
 }
@@ -376,8 +407,28 @@ void scriptRegisterFunctions()
 	duk_pop(ctx);
 
 	duk_push_global_object(ctx);
+	duk_push_c_function(ctx, Repaint, DUK_VARARGS);
+	duk_put_prop_string(ctx, -2, "Repaint");
+	duk_pop(ctx);
+
+	duk_push_global_object(ctx);
 	duk_push_c_function(ctx, Source, DUK_VARARGS);
 	duk_put_prop_string(ctx, -2, "Source");
+	duk_pop(ctx);
+
+	duk_push_global_object(ctx);
+	duk_push_c_function(ctx, AppendPopupMenu, DUK_VARARGS);
+	duk_put_prop_string(ctx, -2, "AppendPopupMenu");
+	duk_pop(ctx);
+
+	duk_push_global_object(ctx);
+	duk_push_c_function(ctx, ClearPopupMenu, DUK_VARARGS);
+	duk_put_prop_string(ctx, -2, "ClearPopupMenu");
+	duk_pop(ctx);
+
+	duk_push_global_object(ctx);
+	duk_push_c_function(ctx, ShowPopupMenu, DUK_VARARGS);
+	duk_put_prop_string(ctx, -2, "ShowPopupMenu");
 	duk_pop(ctx);
 
 	duk_push_global_object(ctx);

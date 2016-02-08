@@ -3,7 +3,6 @@
 
 #include "wx/glcanvas.h"
 
-
 // the rendering context used by all GL canvases
 class TestGLContext : public wxGLContext
 {
@@ -11,7 +10,6 @@ public:
     TestGLContext(wxGLCanvas *canvas);
 
     // render the cube showing it at given angles
-    void DrawRotatedCube(float xangle, float yangle);
     void DrawScene();
 
 private:
@@ -64,6 +62,7 @@ private:
     void OnKeyUp(wxKeyEvent& event);
     void OnMouse(wxMouseEvent& event);
     void OnMouseLeftDown(wxMouseEvent& event);
+    void OnMouseRightDown(wxMouseEvent& event);
     void OnMouseLeftUp(wxMouseEvent& event);
     void OnSpinTimer(wxTimerEvent& WXUNUSED(event));
     void OnIdle(wxIdleEvent &event);

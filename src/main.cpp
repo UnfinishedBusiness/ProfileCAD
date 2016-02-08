@@ -8,6 +8,8 @@ using namespace std;
 
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
+#include "wx/menu.h"
+#include "wx/menuitem.h"
 #endif
 
 #if !wxUSE_GLCANVAS
@@ -22,10 +24,13 @@ using namespace std;
 #endif
 
 /****************** Globals ***********************/
+std::vector<PopupMenu_t> PopupMenuStack;
 bool PostRedisplay_Register = false;
 point_t MousePosition;
+wxPoint MouseSreenPosition;
 string StatusText;
 string LastStatusText;
+bool ShowPopupMenu_Register = false;
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -164,76 +169,6 @@ void TestGLContext::DrawScene()
 {
   sceneDraw();
 }
-void TestGLContext::DrawRotatedCube(float xangle, float yangle)
-{
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glTranslatef(0.0f, 0.0f, -2.0f);
-    glRotatef(xangle, 1.0f, 0.0f, 0.0f);
-    glRotatef(yangle, 0.0f, 1.0f, 0.0f);
-
-    // draw six faces of a cube of size 1 centered at (0, 0, 0)
-    glBindTexture(GL_TEXTURE_2D, m_textures[0]);
-    glBegin(GL_QUADS);
-        glNormal3f( 0.0f, 0.0f, 1.0f);
-        glTexCoord2f(0, 0); glVertex3f( 0.5f, 0.5f, 0.5f);
-        glTexCoord2f(1, 0); glVertex3f(-0.5f, 0.5f, 0.5f);
-        glTexCoord2f(1, 1); glVertex3f(-0.5f,-0.5f, 0.5f);
-        glTexCoord2f(0, 1); glVertex3f( 0.5f,-0.5f, 0.5f);
-    glEnd();
-
-    glBindTexture(GL_TEXTURE_2D, m_textures[1]);
-    glBegin(GL_QUADS);
-        glNormal3f( 0.0f, 0.0f,-1.0f);
-        glTexCoord2f(0, 0); glVertex3f(-0.5f,-0.5f,-0.5f);
-        glTexCoord2f(1, 0); glVertex3f(-0.5f, 0.5f,-0.5f);
-        glTexCoord2f(1, 1); glVertex3f( 0.5f, 0.5f,-0.5f);
-        glTexCoord2f(0, 1); glVertex3f( 0.5f,-0.5f,-0.5f);
-    glEnd();
-
-    glBindTexture(GL_TEXTURE_2D, m_textures[2]);
-    glBegin(GL_QUADS);
-        glNormal3f( 0.0f, 1.0f, 0.0f);
-        glTexCoord2f(0, 0); glVertex3f( 0.5f, 0.5f, 0.5f);
-        glTexCoord2f(1, 0); glVertex3f( 0.5f, 0.5f,-0.5f);
-        glTexCoord2f(1, 1); glVertex3f(-0.5f, 0.5f,-0.5f);
-        glTexCoord2f(0, 1); glVertex3f(-0.5f, 0.5f, 0.5f);
-    glEnd();
-
-    glBindTexture(GL_TEXTURE_2D, m_textures[3]);
-    glBegin(GL_QUADS);
-        glNormal3f( 0.0f,-1.0f, 0.0f);
-        glTexCoord2f(0, 0); glVertex3f(-0.5f,-0.5f,-0.5f);
-        glTexCoord2f(1, 0); glVertex3f( 0.5f,-0.5f,-0.5f);
-        glTexCoord2f(1, 1); glVertex3f( 0.5f,-0.5f, 0.5f);
-        glTexCoord2f(0, 1); glVertex3f(-0.5f,-0.5f, 0.5f);
-    glEnd();
-
-    glBindTexture(GL_TEXTURE_2D, m_textures[4]);
-    glBegin(GL_QUADS);
-        glNormal3f( 1.0f, 0.0f, 0.0f);
-        glTexCoord2f(0, 0); glVertex3f( 0.5f, 0.5f, 0.5f);
-        glTexCoord2f(1, 0); glVertex3f( 0.5f,-0.5f, 0.5f);
-        glTexCoord2f(1, 1); glVertex3f( 0.5f,-0.5f,-0.5f);
-        glTexCoord2f(0, 1); glVertex3f( 0.5f, 0.5f,-0.5f);
-    glEnd();
-
-    glBindTexture(GL_TEXTURE_2D, m_textures[5]);
-    glBegin(GL_QUADS);
-        glNormal3f(-1.0f, 0.0f, 0.0f);
-        glTexCoord2f(0, 0); glVertex3f(-0.5f,-0.5f,-0.5f);
-        glTexCoord2f(1, 0); glVertex3f(-0.5f,-0.5f, 0.5f);
-        glTexCoord2f(1, 1); glVertex3f(-0.5f, 0.5f, 0.5f);
-        glTexCoord2f(0, 1); glVertex3f(-0.5f, 0.5f,-0.5f);
-    glEnd();
-
-    glFlush();
-
-    CheckGLError();
-}
-
 
 // ----------------------------------------------------------------------------
 // MyApp: the application object
@@ -296,6 +231,7 @@ wxBEGIN_EVENT_TABLE(GLCanvas, wxGLCanvas)
     EVT_KEY_DOWN(GLCanvas::OnKeyDown)
     EVT_KEY_UP(GLCanvas::OnKeyUp)
     EVT_LEFT_DOWN(GLCanvas::OnMouseLeftDown)
+    EVT_RIGHT_DOWN(GLCanvas::OnMouseRightDown)
     EVT_MOUSE_EVENTS(GLCanvas::OnMouse)
     EVT_IDLE(GLCanvas::OnIdle)
 wxEND_EVENT_TABLE()
@@ -373,13 +309,39 @@ void GLCanvas::OnMouseLeftDown(wxMouseEvent& event)
   wxPoint m = event.GetPosition();
   MousePosition = cadScreenCordToCadCord(m.x, m.y);
   mouseClick(MOUSE_LEFT_BUTTON, MOUSE_DOWN, MousePosition.x, MousePosition.y);
+  usleep(1000); //Double buffer issue
   scriptEval("OnMouseClick();");
+}
+void PopupMenuHandle(wxCommandEvent &event)
+{
+  for (int i = 0; i < PopupMenuStack.size(); i++)
+  {
+    if (i == event.GetId())
+    {
+      scriptEval(PopupMenuStack[i].callback);
+    }
+  }
+}
+void ShowPopupMenu()
+{
+  ShowPopupMenu_Register = true;
+}
+void GLCanvas::OnMouseRightDown(wxMouseEvent& event)
+{
+  wxMenu *right_menu = new wxMenu;
+  for (int i = 0; i < PopupMenuStack.size(); i++)
+  {
+    right_menu->Append(i, PopupMenuStack[i].label.c_str());
+    Bind( wxEVT_COMMAND_MENU_SELECTED, &PopupMenuHandle, i );
+  }
+  PopupMenu(right_menu, MouseSreenPosition);
 }
 void GLCanvas::OnMouse(wxMouseEvent& event)
 {
   int ScrollWheel = event.GetWheelRotation();
 
   wxPoint m = event.GetPosition();
+  MouseSreenPosition = m;
   MousePosition = cadScreenCordToCadCord(m.x, m.y);
   scriptEval("OnMouseMotion(" + to_string(MousePosition.x) + ", " + to_string(MousePosition.y) + ")");
 
@@ -454,6 +416,7 @@ void GLCanvas::OnKeyDown(wxKeyEvent& event)
 
         case WXK_SPACE:
             //fileOpen("test/dxf/box.dxf");
+            //ShowPopupMenu();
             break;
 
         case WXK_CONTROL:
@@ -511,6 +474,12 @@ void GLCanvas::OnSpinTimer(wxTimerEvent& WXUNUSED(event))
 }
 void GLCanvas::OnIdle(wxIdleEvent &event)
 {
+  if (ShowPopupMenu_Register == true)
+  {
+    ShowPopupMenu_Register = false;
+    wxCommandEvent evt = wxCommandEvent(wxEVT_RIGHT_DOWN, wxID_OK );
+    ProcessEvent(evt);
+  }
   if (LastStatusText != StatusText)
   {
     wxLogStatus(StatusText.c_str());
@@ -608,7 +577,6 @@ MyFrame::MyFrame( bool stereoWindow )
             ShowFullScreen(true);
     }*/
 }
-
 void MyFrame::OnClose(wxCommandEvent& WXUNUSED(event))
 {
     // true is to force the frame to close

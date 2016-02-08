@@ -192,7 +192,10 @@ struct cadToolpath{
   bool Side;
   cad_cycle_countour_t ContourCycle;
 };
-
+struct PopupMenu_t{
+  std::string label;
+  std::string callback;
+};
 #define BACKGROUND color_t{0, 0, 0.05, 1}
 
 #define WHITE color_t{1, 1, 1, 1}
@@ -243,6 +246,7 @@ struct KbMods_t{
 };
 extern KbMods_t KbMods;
 /* Global Operation variables */
+extern std::vector<PopupMenu_t> PopupMenuStack;
 extern point_t MousePosition;
 extern bool PostRedisplay_Register;
 extern duk_context *ctx;
@@ -250,5 +254,6 @@ extern std::string StatusText;
 /* End Global Variables */
 
 void CleanupAndExit();
+void ShowPopupMenu();
 
 #endif

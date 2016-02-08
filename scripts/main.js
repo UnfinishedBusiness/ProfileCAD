@@ -10,7 +10,11 @@ function main()
   Source("scripts/helpers.js");
   Source("scripts/cli.js");
   Source("scripts/drawing.js");
+  Source("scripts/popup_menu.js");
+  Popup_MainMenu();
   SetDrawColor("green");
+
+
   //Entry point for scriptRun()!
   //DrawLine({x: 0, y: 0}, {x: -4, y: 0});
 }
