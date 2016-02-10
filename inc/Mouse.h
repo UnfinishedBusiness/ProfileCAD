@@ -6,6 +6,8 @@ struct mouse_t{
   int x,y;
 };
 
+extern cadEntity mouseLastMouseOverEntity;
+
 void mouseToggleLineEndpointSnap();
 void mouseToggleArcEndpointSnap();
 void mouseToggleCenterSnap();

@@ -111,7 +111,7 @@ function DrawLinePerpendicular()
           HideLiveEntity();
           ClearMouseCallback();
           UnSelectAllEntities();
-          DrawLineEndpoints();
+          DrawLinePerpendicular();
         });
         MouseClickCallback = function()
         {
@@ -122,15 +122,18 @@ function DrawLinePerpendicular()
           }
           else
           {
-            var intersection = geoGetLineIntersection(base_line, Live);
-            if (intersection == "None")
+            var hover = MouseGetHoverOver();
+            var intersection = geoGetLineIntersection(GetEntity(hover), Live);
+            //print("Intersection: " + VarDump(intersection));
+            if (intersection == "None" || geoGetLineLength({start: Live.start, end: intersection}) > 1000)
             {
-              print("Lines never cross!");
+              SetStatusText("Lines never cross!");
             }
             else
             {
-              print("Intersection point: " + VarDump(intersection));
-              DrawLine(Live.end, intersection);
+              //print("Intersection point: " + VarDump(intersection));
+              //print("Line - " + VarDump(Live));
+              DrawLine(Live.start, intersection);
             }
           }
           cliPrompt("");
@@ -189,7 +192,7 @@ function DrawLineParallel()
           HideLiveEntity();
           ClearMouseCallback();
           UnSelectAllEntities();
-          DrawLineEndpoints();
+          DrawLineParallel();
         });
         MouseClickCallback = function()
         {
@@ -198,7 +201,7 @@ function DrawLineParallel()
           HideLiveEntity();
           ClearMouseCallback();
           UnSelectAllEntities();
-          DrawLineEndpoints();
+          DrawLineParallel();
         }
         //geoGetParallelLine(base_line, 0.5, Mouse);
       }

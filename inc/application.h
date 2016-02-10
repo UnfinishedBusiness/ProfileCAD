@@ -255,5 +255,6 @@ extern std::string StatusText;
 
 void CleanupAndExit();
 void ShowPopupMenu();
+#define POPUP_MENU_ID_OFFSET 1000
 
 #endif

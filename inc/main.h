@@ -62,8 +62,8 @@ private:
     void OnKeyUp(wxKeyEvent& event);
     void OnMouse(wxMouseEvent& event);
     void OnMouseLeftDown(wxMouseEvent& event);
-    void OnMouseRightDown(wxMouseEvent& event);
     void OnMouseLeftUp(wxMouseEvent& event);
+    void OnMouseRightDown(wxMouseEvent& event);
     void OnSpinTimer(wxTimerEvent& WXUNUSED(event));
     void OnIdle(wxIdleEvent &event);
     // angles of rotation around x- and y- axis

@@ -231,6 +231,7 @@ wxBEGIN_EVENT_TABLE(GLCanvas, wxGLCanvas)
     EVT_KEY_DOWN(GLCanvas::OnKeyDown)
     EVT_KEY_UP(GLCanvas::OnKeyUp)
     EVT_LEFT_DOWN(GLCanvas::OnMouseLeftDown)
+    EVT_LEFT_UP(GLCanvas::OnMouseLeftUp)
     EVT_RIGHT_DOWN(GLCanvas::OnMouseRightDown)
     EVT_MOUSE_EVENTS(GLCanvas::OnMouse)
     EVT_IDLE(GLCanvas::OnIdle)
@@ -309,14 +310,17 @@ void GLCanvas::OnMouseLeftDown(wxMouseEvent& event)
   wxPoint m = event.GetPosition();
   MousePosition = cadScreenCordToCadCord(m.x, m.y);
   mouseClick(MOUSE_LEFT_BUTTON, MOUSE_DOWN, MousePosition.x, MousePosition.y);
-  usleep(1000); //Double buffer issue
+}
+void GLCanvas::OnMouseLeftUp(wxMouseEvent& event)
+{
   scriptEval("OnMouseClick();");
 }
 void PopupMenuHandle(wxCommandEvent &event)
 {
   for (int i = 0; i < PopupMenuStack.size(); i++)
   {
-    if (i == event.GetId())
+    //5000 is id offset
+    if (i + POPUP_MENU_ID_OFFSET == event.GetId())
     {
       scriptEval(PopupMenuStack[i].callback);
     }
@@ -331,8 +335,8 @@ void GLCanvas::OnMouseRightDown(wxMouseEvent& event)
   wxMenu *right_menu = new wxMenu;
   for (int i = 0; i < PopupMenuStack.size(); i++)
   {
-    right_menu->Append(i, PopupMenuStack[i].label.c_str());
-    Bind( wxEVT_COMMAND_MENU_SELECTED, &PopupMenuHandle, i );
+    right_menu->Append(i + POPUP_MENU_ID_OFFSET, PopupMenuStack[i].label.c_str());
+    Bind( wxEVT_COMMAND_MENU_SELECTED, &PopupMenuHandle, i + POPUP_MENU_ID_OFFSET );
   }
   PopupMenu(right_menu, MouseSreenPosition);
 }

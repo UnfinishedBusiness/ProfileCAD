@@ -300,6 +300,13 @@ int MouseGetSnap(duk_context *ctx)
 	duk_push_string(ctx, json.c_str());
 	return 1;  /* one return value */
 }
+int MouseGetHoverOver(duk_context *ctx)
+{
+	duk_get_top(ctx);  /* #args */
+	int id = mouseLastMouseOverEntity.Index;
+	duk_push_number(ctx, id);
+	return 1;  /* one return value */
+}
 int Source(duk_context *ctx)
 {
 	duk_get_top(ctx);  /* #args */
@@ -434,6 +441,11 @@ void scriptRegisterFunctions()
 	duk_push_global_object(ctx);
 	duk_push_c_function(ctx, HideLiveEntity, DUK_VARARGS);
 	duk_put_prop_string(ctx, -2, "HideLiveEntity");
+	duk_pop(ctx);
+
+	duk_push_global_object(ctx);
+	duk_push_c_function(ctx, MouseGetHoverOver, DUK_VARARGS);
+	duk_put_prop_string(ctx, -2, "MouseGetHoverOver");
 	duk_pop(ctx);
 
 	duk_push_global_object(ctx);

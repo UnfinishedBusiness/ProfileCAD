@@ -120,6 +120,6 @@ function geoGetParallelLine(base_line, distance, relative_to_point)
   var half_line = geoExtendLineAngle(perpendicular_line.end, perpendicular_line_angle + 90, base_line_length / 2);
   var parallel_line  = geoExtendLineAngle(half_line.end, geoGetLineAngle(half_line), base_line_length);
 
-  print("Line = " + VarDump(parallel_line));
+  //print("Line = " + VarDump(parallel_line));
   return parallel_line;
 }

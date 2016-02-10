@@ -70,6 +70,10 @@ function OnKeyDown(mod, keycode)
     SetStatusText("");
     CancelAction = true;
   }
+  else if(mod == "None" && keycode == 308) //Left Ctrl
+  {
+    print("Mouse Position - " + VarDump(Mouse));
+  }
   else if (mod == "None" && keycode == 32) //Space
   {
     /*var p = MouseGetSnap();
@@ -81,7 +85,9 @@ function OnKeyDown(mod, keycode)
     {
       print("Last snap X: " + p.x + " Y: " + p.y);
     }*/
-    print(GetSelectedEntities());
+    //print(GetSelectedEntities());
+    var hover = MouseGetHoverOver();
+    print("Hover Over: " + VarDump(GetEntity(hover)));
   }
   else if (mod == "Ctrl" && keycode == 65) //Ctrl-a
   {
