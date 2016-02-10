@@ -35,6 +35,18 @@ function GetEntity(i)
 {
   return JSON.parse(NativeGetEntity(i));
 }
+function GetSelectedEntities(i)
+{
+  var e = NativeGetSelectedEntities();
+  if (e == "None")
+  {
+    return undefined;
+  }
+  else
+  {
+      return JSON.parse(e);
+  }
+}
 function DrawLine(start, end)
 {
   return NativeDrawLine2D(start.x,start.y,end.x,end.y);
@@ -58,4 +70,14 @@ function MouseGetSnap()
   {
     return "None";
   }
+}
+function VarDump(o)
+{
+  return JSON.stringify(o);
+}
+function toDegrees (angle) {
+  return angle * (180 / Math.PI);
+}
+function toRadians (angle) {
+  return angle * (Math.PI / 180);
 }

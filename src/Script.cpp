@@ -154,6 +154,31 @@ int CountEntities(duk_context *ctx)
 	duk_push_number(ctx, m);
 	return 1;  /* one return value */
 }
+int GetSelectedEntities(duk_context *ctx)
+{
+	vector<cadEntity> selected = cadGetSelected();
+	string return_json;
+	if (selected.size() == 0)
+	{
+		return_json = "None";
+	}
+	else
+	{
+		return_json = "[";
+		for (int i = 0; i < selected.size(); i++)
+		{
+			return_json.append(to_string(selected[i].Index));
+			if ((i + 1) != selected.size())
+			{
+				return_json.append(",");
+			}
+		}
+		return_json.append("]");
+	}
+
+	duk_push_string(ctx, return_json.c_str());
+	return 1;  /* one return value */
+}
 int GetEntity(duk_context *ctx)
 {
 	duk_get_top(ctx);  /* #args */
@@ -389,6 +414,11 @@ void scriptRegisterFunctions()
 	duk_push_global_object(ctx);
 	duk_push_c_function(ctx, GetEntity, DUK_VARARGS);
 	duk_put_prop_string(ctx, -2, "NativeGetEntity");
+	duk_pop(ctx);
+
+	duk_push_global_object(ctx);
+	duk_push_c_function(ctx, GetSelectedEntities, DUK_VARARGS);
+	duk_put_prop_string(ctx, -2, "NativeGetSelectedEntities");
 	duk_pop(ctx);
 
 	duk_push_global_object(ctx);

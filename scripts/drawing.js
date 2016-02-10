@@ -1,6 +1,6 @@
 function DrawLineVerticalFromOrigin()
 {
-  MouseCallback = function()
+  MouseMotionCallback = function()
   {
     Live.type = "line";
     Live.start = { x: 0, y: 0 };
@@ -21,7 +21,7 @@ function DrawLineVerticalFromOrigin()
 }
 function DrawLineHorizontalFromOrigin()
 {
-  MouseCallback = function()
+  MouseMotionCallback = function()
   {
     Live.type = "line";
     Live.start = { x: 0, y: 0 };
@@ -54,7 +54,7 @@ function DrawLineEndpoints()
     {
       cliPrompt("Click second endpoint");
       ClearMouseCallback();
-      MouseCallback = function()
+      MouseMotionCallback = function()
       {
         Live.type = "line";
         Live.start = { x: p.x, y: p.y };
@@ -80,5 +80,144 @@ function DrawLineEndpoints()
 
       }
     }
+  }
+}
+function DrawLinePerpendicular()
+{
+  MouseClickCallback = function()
+  {
+    if (GetSelectedEntities() != undefined)
+    {
+      var selected = GetSelectedEntities();
+      if (selected.length == 1)
+      {
+        var base_line = GetEntity(selected[0]);
+        MouseMotionCallback = function()
+        {
+          var distance = geoGetPerpendicularDistance(base_line, Mouse);
+          var line = geoGetPerpendicularLine(base_line, distance, Mouse);
+          //print("Distance: " + distance);
+          Live.type = "line";
+          Live.start = { x: line.start.x, y: line.start.y };
+          Live.end = { x: line.end.x, y: line.end.y };
+          //print("Live - " + VarDump(Live));
+          ShowLiveEntity(Live);
+        }
+        cliPrompt("Distance?", function(str){
+          var distance = geoGetPerpendicularDistance(base_line, Mouse);
+          var line = geoGetPerpendicularLine(base_line, Number(str), Mouse);
+          DrawLine(line.start, line.end);
+          cliPrompt("");
+          HideLiveEntity();
+          ClearMouseCallback();
+          UnSelectAllEntities();
+          DrawLineEndpoints();
+        });
+        MouseClickCallback = function()
+        {
+          var p = MouseGetSnap();
+          if (p == "None")
+          {
+            DrawLine(Live.start, Live.end);
+          }
+          else
+          {
+            var intersection = geoGetLineIntersection(base_line, Live);
+            if (intersection == "None")
+            {
+              print("Lines never cross!");
+            }
+            else
+            {
+              print("Intersection point: " + VarDump(intersection));
+              DrawLine(Live.end, intersection);
+            }
+          }
+          cliPrompt("");
+          HideLiveEntity();
+          ClearMouseCallback();
+          UnSelectAllEntities();
+          DrawLinePerpendicular();
+        }
+        //geoGetParallelLine(base_line, 0.5, Mouse);
+      }
+      else
+      {
+          SetStatusText("Only select on base line!");
+      }
+    }
+    else
+    {
+      SetStatusText("Select Base Line!");
+    }
+  }
+  if (GetSelectedEntities() != undefined) //We already have our line selected!
+  {
+    MouseClickCallback();
+  }
+  else
+  {
+    SetStatusText("Select Base Line");
+  }
+}
+function DrawLineParallel()
+{
+  MouseClickCallback = function()
+  {
+    if (GetSelectedEntities() != undefined)
+    {
+      var selected = GetSelectedEntities();
+      if (selected.length == 1)
+      {
+        var base_line = GetEntity(selected[0]);
+        MouseMotionCallback = function()
+        {
+          var distance = geoGetPerpendicularDistance(base_line, Mouse);
+          var line = geoGetParallelLine(base_line, distance, Mouse);
+          //print("Distance: " + distance);
+          Live.type = "line";
+          Live.start = { x: line.start.x, y: line.start.y };
+          Live.end = { x: line.end.x, y: line.end.y };
+          //print("Live - " + VarDump(Live));
+          ShowLiveEntity(Live);
+        }
+        cliPrompt("Distance?", function(str){
+          var distance = geoGetPerpendicularDistance(base_line, Mouse);
+          var line = geoGetParallelLine(base_line, Number(str), Mouse);
+          DrawLine(line.start, line.end);
+          cliPrompt("");
+          HideLiveEntity();
+          ClearMouseCallback();
+          UnSelectAllEntities();
+          DrawLineEndpoints();
+        });
+        MouseClickCallback = function()
+        {
+          DrawLine(Live.start, Live.end);
+          cliPrompt("");
+          HideLiveEntity();
+          ClearMouseCallback();
+          UnSelectAllEntities();
+          DrawLineEndpoints();
+        }
+        //geoGetParallelLine(base_line, 0.5, Mouse);
+      }
+      else
+      {
+          SetStatusText("Only select on base line!");
+      }
+    }
+    else
+    {
+      SetStatusText("Select Base Line!");
+    }
+  }
+  if (GetSelectedEntities() != undefined) //We already have our line selected!
+  {
+    MouseClickCallback();
+  }
+  else
+  {
+    SetStatusText("Select Base Line");
   }
 }

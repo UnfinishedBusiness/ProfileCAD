@@ -1,6 +1,6 @@
 VerboseKeycode = false;
 Mouse = {};
-MouseCallback = "";
+MouseMotionCallback = "";
 MouseClickCallback = "";
 Live = {};
 CancelAction = false;
@@ -11,6 +11,7 @@ function main()
   Source("scripts/cli.js");
   Source("scripts/drawing.js");
   Source("scripts/popup_menu.js");
+  Source("scripts/geometry.js");
   Popup_MainMenu();
   SetDrawColor("green");
 
@@ -20,7 +21,7 @@ function main()
 }
 function ClearMouseCallback()
 {
-  MouseCallback = "";
+  MouseMotionCallback = "";
   MouseClickCallback = "";
 }
 function OnMouseClick()
@@ -34,7 +35,7 @@ function OnMouseMotion(x, y)
 {
   Mouse.x = x;
   Mouse.y = y;
-  if (MouseCallback != "")
+  if (MouseMotionCallback != "")
   {
     if (CancelAction == true)
     {
@@ -46,7 +47,7 @@ function OnMouseMotion(x, y)
     }
     else
     {
-      MouseCallback();
+      MouseMotionCallback();
     }
 
   }
@@ -80,7 +81,7 @@ function OnKeyDown(mod, keycode)
     {
       print("Last snap X: " + p.x + " Y: " + p.y);
     }*/
-    DrawLineEndpoints();
+    print(GetSelectedEntities());
   }
   else if (mod == "Ctrl" && keycode == 65) //Ctrl-a
   {

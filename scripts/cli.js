@@ -56,7 +56,7 @@ function cliPrompt(p, c)
   {
     Callback = c;
   }
-  SetStatusText(Prompt + Input);
+  SetStatusText(Prompt + " " + Input);
 }
 function cliReturn(str)
 {

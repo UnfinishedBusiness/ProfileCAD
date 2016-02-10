@@ -4,6 +4,8 @@ function Popup_LineMenu()
   AppendPopupMenu("Vertical Origin", "DrawLineVerticalFromOrigin();");
   AppendPopupMenu("Horizontal Origin", "DrawLineHorizontalFromOrigin();");
   AppendPopupMenu("Endpoints", "DrawLineEndpoints();");
+  AppendPopupMenu("Perpendicular", "DrawLinePerpendicular();");
+  AppendPopupMenu("Parallel", "DrawLineParallel();");
   AppendPopupMenu("Back", "Popup_MainMenu();");
   ShowPopupMenu();
 }
