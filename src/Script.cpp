@@ -362,6 +362,16 @@ int DumptEntityStack(duk_context *ctx)
 	duk_push_number(ctx, 0);
 	return 1;  /* one return value */
 }
+
+int DialogShow(duk_context *ctx)
+{
+	duk_get_top(ctx);  /* #args */
+  string title = duk_to_string(ctx, 0);
+	Dialog *custom = new Dialog(title.c_str());
+  custom->Show(true);
+	duk_push_number(ctx, 0);
+	return 1;  /* one return value */
+}
 /***** End Javascript functions **************/
 
 void scriptRegisterFunctions()
@@ -481,6 +491,11 @@ void scriptRegisterFunctions()
 	duk_push_global_object(ctx);
 	duk_push_c_function(ctx, DumptEntityStack, DUK_VARARGS);
 	duk_put_prop_string(ctx, -2, "DumptEntityStack");
+	duk_pop(ctx);
+
+	duk_push_global_object(ctx);
+	duk_push_c_function(ctx, DialogShow, DUK_VARARGS);
+	duk_put_prop_string(ctx, -2, "DialogShow");
 	duk_pop(ctx);
 
 	scriptRun("scripts/main.js");

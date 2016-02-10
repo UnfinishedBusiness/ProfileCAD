@@ -32,6 +32,7 @@
 #include <FileIO.h>
 #include <Geometry.h>
 #include <Script.h>
+#include <Dialog.h>
 #include <duktape.h>
 
 #include <boost/property_tree/ptree.hpp>

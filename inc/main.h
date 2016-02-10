@@ -79,10 +79,5 @@ private:
 enum { FILE_SAVE = wxID_HIGHEST + 1 };
 enum { FILE_OPEN = wxID_HIGHEST + 2 };
 
-enum { CREATE_LINE_VERTICAL = wxID_HIGHEST + 3 };
-enum { CREATE_LINE_HORIZONTAL = wxID_HIGHEST + 4 };
-enum { CREATE_LINE_ENDPOINTS = wxID_HIGHEST + 5 };
-enum { CREATE_LINE_POLAR = wxID_HIGHEST + 6 };
-
 
 #endif // _WX_CUBE_H_

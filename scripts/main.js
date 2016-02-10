@@ -24,6 +24,17 @@ function ClearMouseCallback()
   MouseMotionCallback = "";
   MouseClickCallback = "";
 }
+function OnIdle()
+{
+  if (CancelAction == true)
+  {
+    CancelAction = false;
+    ClearMouseCallback();
+    cliReturn();
+    HideLiveEntity();
+    SetStatusText("");
+  }
+}
 function OnMouseClick()
 {
   if (MouseClickCallback != "")
@@ -37,19 +48,7 @@ function OnMouseMotion(x, y)
   Mouse.y = y;
   if (MouseMotionCallback != "")
   {
-    if (CancelAction == true)
-    {
-      CancelAction = false;
-      ClearMouseCallback();
-      cliReturn();
-      HideLiveEntity();
-      SetStatusText("");
-    }
-    else
-    {
       MouseMotionCallback();
-    }
-
   }
 }
 function OnKeyDown(mod, keycode)
@@ -86,12 +85,14 @@ function OnKeyDown(mod, keycode)
       print("Last snap X: " + p.x + " Y: " + p.y);
     }*/
     //print(GetSelectedEntities());
-    var hover = MouseGetHoverOver();
-    print("Hover Over: " + VarDump(GetEntity(hover)));
+    //var hover = MouseGetHoverOver();
+    //print("Hover Over: " + VarDump(GetEntity(hover)));
+
+    DialogShow("Test");
   }
   else if (mod == "Ctrl" && keycode == 65) //Ctrl-a
   {
-    SelectAllEntities();
+    //SelectAllEntities();
   }
   else if (mod == "Ctrl" && keycode == 79) //Ctrl-o
   {

@@ -495,7 +495,7 @@ void GLCanvas::OnIdle(wxIdleEvent &event)
     PostRedisplay_Register = false;
   }
 	/* Force the redraw immediately, gets the gfx card to its max */
-
+  scriptEval("OnIdle();");
 	event.RequestMore();
 }
 
@@ -547,17 +547,8 @@ MyFrame::MyFrame( bool stereoWindow )
     file_menu->Append(wxID_CLOSE);
     /* End Menu */
 
-    /*Begin Create Menu*/
-    wxMenu *create_menu = new wxMenu;
-    create_menu->Append(CREATE_LINE_VERTICAL, "Vertical Line");
-    create_menu->Append(CREATE_LINE_HORIZONTAL, "Horizontal Line");
-    create_menu->Append(CREATE_LINE_ENDPOINTS, "Line Endpoints");
-    create_menu->Append(CREATE_LINE_POLAR, "Line Polar");
-    /* End Menu */
-
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append(file_menu, wxT("&File"));
-    menuBar->Append(create_menu, wxT("Create"));
 
 
     SetMenuBar(menuBar);
@@ -566,20 +557,6 @@ MyFrame::MyFrame( bool stereoWindow )
 
     SetClientSize(400, 400);
     Show();
-
-    // test IsDisplaySupported() function:
-    /*static const int attribs[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, 0 };
-    wxLogStatus("Double-buffered display %s supported",
-                wxGLCanvas::IsDisplaySupported(attribs) ? "is" : "not");*/
-
-    /*if ( stereoWindow )
-    {
-        const wxString vendor = glGetwxString(GL_VENDOR).Lower();
-        const wxString renderer = glGetwxString(GL_RENDERER).Lower();
-        if ( vendor.find("nvidia") != wxString::npos &&
-                renderer.find("quadro") == wxString::npos )
-            ShowFullScreen(true);
-    }*/
 }
 void MyFrame::OnClose(wxCommandEvent& WXUNUSED(event))
 {
