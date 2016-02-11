@@ -11,8 +11,8 @@
 //#include <png.h>
 //#include <GL/freeglut.h>
 //#include <GL/freeglut_ext.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
 #include <iostream>
 #include <vector>
 #include <cmath>
@@ -34,10 +34,6 @@
 #include <Script.h>
 #include <Dialog.h>
 #include <duktape.h>
-
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/json_parser.hpp>
-#include <boost/foreach.hpp>
 
 #include "zlib.h"
 

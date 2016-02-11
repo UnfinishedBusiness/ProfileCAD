@@ -2,7 +2,7 @@
 # The name of the executable to be created
 BIN_NAME := ProfileCAD
 # Compiler used
-CXX ?= g++
+CXX ?= `wx-config --cxx`
 # Extension of source files used in the project
 SRC_EXT = cpp
 # Path to the source directory, relative to the makefile
@@ -18,7 +18,7 @@ DCOMPILE_FLAGS = -D DEBUG
 # Add additional include paths
 INCLUDES = -I $(SRC_PATH)/ -I./inc
 # General linker settings
-LINK_FLAGS = `wx-config --libs --gl-libs` -lGL -lGLU -lz -lm 
+LINK_FLAGS = `wx-config --libs core,base,gl` -lz -lm
 # Additional release-specific linker settings
 RLINK_FLAGS =
 # Additional debug-specific linker settings
