@@ -1,3 +1,5 @@
+ButtonCallbackStack = [];
+
 function ParseHelper(key, json)
 {
   //print("Looking for " + key + " in " + json);
@@ -69,6 +71,59 @@ function MouseGetSnap()
   else
   {
     return "None";
+  }
+}
+function ExecuteButtonCallback(id)
+{
+  //print("Button Callback ID: " + id);
+  for(var i = 0; i < ButtonCallbackStack.length; i++)
+  {
+    if (ButtonCallbackStack[i].id == id)
+    {
+      ButtonCallbackStack[i].callback();
+    }
+  }
+}
+function DialogAddButton(obj)
+{
+  var n = {};
+  n.id = NativeDialogAddButton(JSON.stringify(obj));
+  n.callback = obj.callback;
+  ButtonCallbackStack.push(n);
+}
+function DialogAddStaticBox(obj)
+{
+  NativeDialogAddStaticBox(JSON.stringify(obj));
+}
+function DialogAddTextBox(obj)
+{
+  if (obj != undefined)
+  {
+    if (!obj.hasOwnProperty('default_text'))
+    {
+      obj.default_text = "";
+    }
+    NativeDialogAddTextBox(JSON.stringify(obj));
+  }
+}
+function DialogAddRadioButton(obj)
+{
+  NativeDialogAddRadioButton(JSON.stringify(obj));
+}
+function DialogShow(obj)
+{
+  if (obj != undefined)
+  {
+    if (!obj.hasOwnProperty('size'))
+    {
+      obj.size = { width: 200, height: 200};
+    }
+    if (!obj.hasOwnProperty('title'))
+    {
+      obj.title = "Untitled";
+    }
+    //print("OBJ = " + VarDump(obj));
+    NativeDialogShow(JSON.stringify(obj));
   }
 }
 function VarDump(o)

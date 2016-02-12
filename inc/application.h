@@ -11,8 +11,15 @@
 //#include <png.h>
 //#include <GL/freeglut.h>
 //#include <GL/freeglut_ext.h>
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
+
+#ifdef __APPLE__
+  #include <OpenGL/gl.h>
+  #include <OpenGL/glu.h>
+#else
+  #include <GL/gl.h>
+  #include <GL/glu.h>
+#endif
+
 #include <iostream>
 #include <vector>
 #include <cmath>

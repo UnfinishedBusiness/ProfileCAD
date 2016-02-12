@@ -1,6 +1,4 @@
-build/release/Script.o: src//Script.cpp inc/Script.h inc/application.h \
- inc/CAD.h inc/Mouse.h inc/Scene.h inc/application.h inc/Debug.h \
- inc/FileIO.h inc/Geometry.h inc/Dialog.h /usr/include/wx-3.0/wx/wx.h \
+build/debug/main.o: src//main.cpp /usr/include/wx-3.0/wx/wxprec.h \
  /usr/include/wx-3.0/wx/defs.h /usr/include/wx-3.0/wx/platform.h \
  /usr/include/wx-3.0/wx/compiler.h \
  /usr/lib/wx/include/gtk2-unicode-3.0/wx/setup.h \
@@ -9,25 +7,25 @@ build/release/Script.o: src//Script.cpp inc/Script.h inc/application.h \
  /usr/include/wx-3.0/wx/cpp.h /usr/include/wx-3.0/wx/dlimpexp.h \
  /usr/include/wx-3.0/wx/debug.h /usr/include/wx-3.0/wx/chartype.h \
  /usr/include/wx-3.0/wx/windowid.h /usr/include/wx-3.0/wx/features.h \
- /usr/include/wx-3.0/wx/object.h /usr/include/wx-3.0/wx/memory.h \
- /usr/include/wx-3.0/wx/string.h /usr/include/wx-3.0/wx/wxcrtbase.h \
- /usr/include/wx-3.0/wx/strvararg.h /usr/include/wx-3.0/wx/strconv.h \
- /usr/include/wx-3.0/wx/buffer.h /usr/include/wx-3.0/wx/fontenc.h \
- /usr/include/wx-3.0/wx/unichar.h /usr/include/wx-3.0/wx/stringimpl.h \
- /usr/include/wx-3.0/wx/beforestd.h /usr/include/wx-3.0/wx/afterstd.h \
- /usr/include/wx-3.0/wx/stringops.h /usr/include/wx-3.0/wx/iosfwrap.h \
- /usr/include/wx-3.0/wx/crt.h /usr/include/wx-3.0/wx/wxcrt.h \
- /usr/include/wx-3.0/wx/wxcrtvararg.h /usr/include/wx-3.0/wx/msgout.h \
- /usr/include/wx-3.0/wx/xti.h /usr/include/wx-3.0/wx/rtti.h \
- /usr/include/wx-3.0/wx/flags.h /usr/include/wx-3.0/wx/xti2.h \
- /usr/include/wx-3.0/wx/dynarray.h /usr/include/wx-3.0/wx/list.h \
- /usr/include/wx-3.0/wx/vector.h /usr/include/wx-3.0/wx/scopeguard.h \
- /usr/include/wx-3.0/wx/except.h /usr/include/wx-3.0/wx/meta/movable.h \
- /usr/include/wx-3.0/wx/meta/pod.h /usr/include/wx-3.0/wx/meta/if.h \
- /usr/include/wx-3.0/wx/hash.h /usr/include/wx-3.0/wx/hashmap.h \
- /usr/include/wx-3.0/wx/arrstr.h /usr/include/wx-3.0/wx/intl.h \
- /usr/include/wx-3.0/wx/translation.h /usr/include/wx-3.0/wx/language.h \
- /usr/include/wx-3.0/wx/scopedptr.h \
+ /usr/include/wx-3.0/wx/wx.h /usr/include/wx-3.0/wx/object.h \
+ /usr/include/wx-3.0/wx/memory.h /usr/include/wx-3.0/wx/string.h \
+ /usr/include/wx-3.0/wx/wxcrtbase.h /usr/include/wx-3.0/wx/strvararg.h \
+ /usr/include/wx-3.0/wx/strconv.h /usr/include/wx-3.0/wx/buffer.h \
+ /usr/include/wx-3.0/wx/fontenc.h /usr/include/wx-3.0/wx/unichar.h \
+ /usr/include/wx-3.0/wx/stringimpl.h /usr/include/wx-3.0/wx/beforestd.h \
+ /usr/include/wx-3.0/wx/afterstd.h /usr/include/wx-3.0/wx/stringops.h \
+ /usr/include/wx-3.0/wx/iosfwrap.h /usr/include/wx-3.0/wx/crt.h \
+ /usr/include/wx-3.0/wx/wxcrt.h /usr/include/wx-3.0/wx/wxcrtvararg.h \
+ /usr/include/wx-3.0/wx/msgout.h /usr/include/wx-3.0/wx/xti.h \
+ /usr/include/wx-3.0/wx/rtti.h /usr/include/wx-3.0/wx/flags.h \
+ /usr/include/wx-3.0/wx/xti2.h /usr/include/wx-3.0/wx/dynarray.h \
+ /usr/include/wx-3.0/wx/list.h /usr/include/wx-3.0/wx/vector.h \
+ /usr/include/wx-3.0/wx/scopeguard.h /usr/include/wx-3.0/wx/except.h \
+ /usr/include/wx-3.0/wx/meta/movable.h /usr/include/wx-3.0/wx/meta/pod.h \
+ /usr/include/wx-3.0/wx/meta/if.h /usr/include/wx-3.0/wx/hash.h \
+ /usr/include/wx-3.0/wx/hashmap.h /usr/include/wx-3.0/wx/arrstr.h \
+ /usr/include/wx-3.0/wx/intl.h /usr/include/wx-3.0/wx/translation.h \
+ /usr/include/wx-3.0/wx/language.h /usr/include/wx-3.0/wx/scopedptr.h \
  /usr/include/wx-3.0/wx/checkeddelete.h /usr/include/wx-3.0/wx/log.h \
  /usr/include/wx-3.0/wx/thread.h /usr/include/wx-3.0/wx/generic/logg.h \
  /usr/include/wx-3.0/wx/event.h /usr/include/wx-3.0/wx/clntdata.h \
@@ -124,30 +122,14 @@ build/release/Script.o: src//Script.cpp inc/Script.h inc/application.h \
  /usr/include/wx-3.0/wx/valtext.h /usr/include/wx-3.0/wx/filedlg.h \
  /usr/include/wx-3.0/wx/gtk/filedlg.h \
  /usr/include/wx-3.0/wx/gtk/filectrl.h /usr/include/wx-3.0/wx/filectrl.h \
- /usr/include/wx-3.0/wx/mdi.h /usr/include/wx-3.0/wx/gtk/mdi.h \
- inc/duktape.h inc/duk_config.h
+ /usr/include/wx-3.0/wx/mdi.h /usr/include/wx-3.0/wx/gtk/mdi.h inc/main.h \
+ /usr/include/wx-3.0/wx/glcanvas.h /usr/include/wx-3.0/wx/gtk/glcanvas.h \
+ /usr/include/wx-3.0/wx/unix/glx11.h inc/application.h inc/CAD.h \
+ inc/Mouse.h inc/Scene.h inc/application.h inc/Debug.h inc/FileIO.h \
+ inc/Geometry.h inc/Script.h inc/Dialog.h inc/duktape.h inc/duk_config.h \
+ src//../res/icon.xpm
 
-inc/Script.h:
-
-inc/application.h:
-
-inc/CAD.h:
-
-inc/Mouse.h:
-
-inc/Scene.h:
-
-inc/application.h:
-
-inc/Debug.h:
-
-inc/FileIO.h:
-
-inc/Geometry.h:
-
-inc/Dialog.h:
-
-/usr/include/wx-3.0/wx/wx.h:
+/usr/include/wx-3.0/wx/wxprec.h:
 
 /usr/include/wx-3.0/wx/defs.h:
 
@@ -176,6 +158,8 @@ inc/Dialog.h:
 /usr/include/wx-3.0/wx/windowid.h:
 
 /usr/include/wx-3.0/wx/features.h:
+
+/usr/include/wx-3.0/wx/wx.h:
 
 /usr/include/wx-3.0/wx/object.h:
 
@@ -595,6 +579,36 @@ inc/Dialog.h:
 
 /usr/include/wx-3.0/wx/gtk/mdi.h:
 
+inc/main.h:
+
+/usr/include/wx-3.0/wx/glcanvas.h:
+
+/usr/include/wx-3.0/wx/gtk/glcanvas.h:
+
+/usr/include/wx-3.0/wx/unix/glx11.h:
+
+inc/application.h:
+
+inc/CAD.h:
+
+inc/Mouse.h:
+
+inc/Scene.h:
+
+inc/application.h:
+
+inc/Debug.h:
+
+inc/FileIO.h:
+
+inc/Geometry.h:
+
+inc/Script.h:
+
+inc/Dialog.h:
+
 inc/duktape.h:
 
 inc/duk_config.h:
+
+src//../res/icon.xpm:

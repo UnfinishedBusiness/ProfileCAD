@@ -71,28 +71,30 @@ function OnKeyDown(mod, keycode)
   }
   else if(mod == "None" && keycode == 308) //Left Ctrl
   {
-    print("Mouse Position - " + VarDump(Mouse));
+    //print("Mouse Position - " + VarDump(Mouse));
   }
   else if (mod == "None" && keycode == 32) //Space
   {
-    /*var p = MouseGetSnap();
-    if (p == "None")
-    {
-      print("No snap points");
-    }
-    else
-    {
-      print("Last snap X: " + p.x + " Y: " + p.y);
-    }*/
-    //print(GetSelectedEntities());
-    //var hover = MouseGetHoverOver();
-    //print("Hover Over: " + VarDump(GetEntity(hover)));
 
-    DialogShow("Test");
+    DialogClear();
+
+    DialogAddStaticBox({ text: "Translate", position: { x: 50, y: 0 }, size: { x: 200, y: 100 }});
+    DialogAddTextBox({ default_text: "test", position: { x: 50, y: 125 } });
+    DialogAddRadioButton({ text: "Move", position: { x: 50, y: 100 } });
+
+    DialogAddButton({ text: "OK", position: { x: 100, y: 100 }, size: { x: 70, y: 30 }, callback: function(){
+      print("Ok Clicked!");
+    }});
+    DialogAddButton({ text: "Close", position: { x: 100, y: 200 }, size: { x: 70, y: 30 }, callback: function(){
+      print("Close Clicked!");
+      DialogClose();
+    }});
+
+    DialogShow({ title: "Test Dialog", size: { width: 300, height: 300 }});
   }
   else if (mod == "Ctrl" && keycode == 65) //Ctrl-a
   {
-    //SelectAllEntities();
+    SelectAllEntities();
   }
   else if (mod == "Ctrl" && keycode == 79) //Ctrl-o
   {

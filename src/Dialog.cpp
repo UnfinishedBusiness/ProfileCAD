@@ -1,35 +1,58 @@
 #include "Dialog.h"
 
-Dialog::Dialog(const wxString & title)
-       : wxDialog(NULL, -1, title, wxDefaultPosition, wxSize(250, 230))
+using namespace std;
+vector<dialog_t> DialogStack;
+
+void Dialog::CloseDialog()
+{
+  Close(true);
+}
+void Dialog::OnButtonClick(wxCommandEvent& event)
+{
+  for (int i = 0; i < DialogStack.size(); i++)
+  {
+    if (i + DIALOG_ID_OFFSET == GetId())
+    {
+      scriptEval("ExecuteButtonCallback(\"" + to_string(GetId() - DIALOG_ID_OFFSET) + "\");");
+    }
+  }
+}
+Dialog::Dialog(const wxString & title, wxSize size)
+       : wxDialog(NULL, -1, title, wxDefaultPosition, size)
 {
   wxPanel *panel = new wxPanel(this, -1);
 
   wxBoxSizer *vbox = new wxBoxSizer(wxVERTICAL);
   wxBoxSizer *hbox = new wxBoxSizer(wxHORIZONTAL);
 
-  wxStaticBox *st = new wxStaticBox(panel, -1, wxT("Colors"),
-      wxPoint(5, 5), wxSize(240, 150));
-  wxRadioButton *rb = new wxRadioButton(panel, -1,
-      wxT("256 Colors"), wxPoint(15, 30), wxDefaultSize, wxRB_GROUP);
+  for (int i = 0; i < DialogStack.size(); i++)
+  {
+    if (DialogStack[i].type == DIALOG_STATIC_BOX )
+    {
+      wxStaticBox *st = new wxStaticBox(panel, i + DIALOG_ID_OFFSET ,DialogStack[i].static_box.text.c_str(),
+                                                  DialogStack[i].static_box.position,
+                                                  DialogStack[i].static_box.size);
+    }
+    if (DialogStack[i].type == DIALOG_BUTTON )
+    {
+      wxButton *Button = new wxButton(this, i + DIALOG_ID_OFFSET, DialogStack[i].button.text.c_str(),
+                                                DialogStack[i].button.position,
+                                                DialogStack[i].button.size);
+      Button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(Dialog::OnButtonClick));
+      hbox->Add(Button, 1);
+    }
+    if (DialogStack[i].type == DIALOG_TEXT_BOX )
+    {
+      wxTextCtrl *tc = new wxTextCtrl(panel, i + DIALOG_ID_OFFSET, DialogStack[i].textbox.default_text.c_str(),
+                                                 DialogStack[i].textbox.position);
+    }
+    if (DialogStack[i].type == DIALOG_RADIO_BUTTON )
+    {
+      wxRadioButton *rb = new wxRadioButton(panel, i + DIALOG_ID_OFFSET, DialogStack[i].radio_button.text.c_str(),
+                                                       DialogStack[i].radio_button.position);
+    }
 
-  wxRadioButton *rb1 = new wxRadioButton(panel, -1,
-      wxT("16 Colors"), wxPoint(15, 55));
-  wxRadioButton *rb2 = new wxRadioButton(panel, -1,
-      wxT("2 Colors"), wxPoint(15, 80));
-  wxRadioButton *rb3 = new wxRadioButton(panel, -1,
-      wxT("Custom"), wxPoint(15, 105));
-  wxTextCtrl *tc = new wxTextCtrl(panel, -1, wxT(""),
-      wxPoint(95, 105));
-
-  wxButton *okButton = new wxButton(this, -1, wxT("Ok"),
-      wxDefaultPosition, wxSize(70, 30));
-  wxButton *closeButton = new wxButton(this, -1, wxT("Close"),
-      wxDefaultPosition, wxSize(70, 30));
-
-  hbox->Add(okButton, 1);
-  hbox->Add(closeButton, 1, wxLEFT, 5);
-
+  }
   vbox->Add(panel, 1);
   vbox->Add(hbox, 0, wxALIGN_CENTER | wxTOP | wxBOTTOM, 10);
 
@@ -38,5 +61,5 @@ Dialog::Dialog(const wxString & title)
   Centre();
   ShowModal();
 
-  Destroy();
+  //Destroy();
 }

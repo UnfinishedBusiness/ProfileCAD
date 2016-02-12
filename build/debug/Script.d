@@ -1,4 +1,4 @@
-build/release/Script.o: src//Script.cpp inc/Script.h inc/application.h \
+build/debug/Script.o: src//Script.cpp inc/Script.h inc/application.h \
  inc/CAD.h inc/Mouse.h inc/Scene.h inc/application.h inc/Debug.h \
  inc/FileIO.h inc/Geometry.h inc/Dialog.h /usr/include/wx-3.0/wx/wx.h \
  /usr/include/wx-3.0/wx/defs.h /usr/include/wx-3.0/wx/platform.h \

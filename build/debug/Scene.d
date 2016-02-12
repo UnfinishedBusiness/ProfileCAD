@@ -1,6 +1,6 @@
-build/release/Script.o: src//Script.cpp inc/Script.h inc/application.h \
- inc/CAD.h inc/Mouse.h inc/Scene.h inc/application.h inc/Debug.h \
- inc/FileIO.h inc/Geometry.h inc/Dialog.h /usr/include/wx-3.0/wx/wx.h \
+build/debug/Scene.o: src//Scene.cpp inc/Scene.h inc/application.h \
+ inc/CAD.h inc/application.h inc/Mouse.h inc/Debug.h inc/FileIO.h \
+ inc/Geometry.h inc/Script.h inc/Dialog.h /usr/include/wx-3.0/wx/wx.h \
  /usr/include/wx-3.0/wx/defs.h /usr/include/wx-3.0/wx/platform.h \
  /usr/include/wx-3.0/wx/compiler.h \
  /usr/lib/wx/include/gtk2-unicode-3.0/wx/setup.h \
@@ -127,23 +127,23 @@ build/release/Script.o: src//Script.cpp inc/Script.h inc/application.h \
  /usr/include/wx-3.0/wx/mdi.h /usr/include/wx-3.0/wx/gtk/mdi.h \
  inc/duktape.h inc/duk_config.h
 
-inc/Script.h:
+inc/Scene.h:
 
 inc/application.h:
 
 inc/CAD.h:
 
-inc/Mouse.h:
-
-inc/Scene.h:
-
 inc/application.h:
+
+inc/Mouse.h:
 
 inc/Debug.h:
 
 inc/FileIO.h:
 
 inc/Geometry.h:
+
+inc/Script.h:
 
 inc/Dialog.h:
 

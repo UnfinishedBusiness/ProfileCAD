@@ -2,6 +2,7 @@
 
 using namespace std;
 
+Dialog *script_dialog;
 duk_context *ctx;
 string color;
 
@@ -363,12 +364,99 @@ int DumptEntityStack(duk_context *ctx)
 	return 1;  /* one return value */
 }
 
+int DialogAddButton(duk_context *ctx)
+{
+	duk_get_top(ctx);  /* #args */
+  string json = duk_to_string(ctx, 0);
+
+	dialog_t d;
+	d.type = DIALOG_BUTTON;
+	d.button.text = scriptParseJSON("text", json);
+	d.button.position.x = atoi(scriptParseJSON("position.x", json).c_str());
+	d.button.position.y = atoi(scriptParseJSON("position.y", json).c_str());
+	d.button.size.x = atoi(scriptParseJSON("size.x", json).c_str());
+	d.button.size.y = atoi(scriptParseJSON("size.y", json).c_str());
+
+	DialogStack.push_back(d);
+
+	duk_push_number(ctx, DialogStack.size() - 1);
+	return 1;  /* one return value */
+}
+int DialogAddStaticBox(duk_context *ctx)
+{
+	duk_get_top(ctx);  /* #args */
+  string json = duk_to_string(ctx, 0);
+
+	dialog_t d;
+	d.type = DIALOG_STATIC_BOX;
+	d.static_box.text = scriptParseJSON("text", json);
+	d.static_box.position.x = atoi(scriptParseJSON("position.x", json).c_str());
+	d.static_box.position.y = atoi(scriptParseJSON("position.y", json).c_str());
+	d.static_box.size.x = atoi(scriptParseJSON("size.x", json).c_str());
+	d.static_box.size.y = atoi(scriptParseJSON("size.y", json).c_str());
+
+	DialogStack.push_back(d);
+
+	duk_push_number(ctx, 0);
+	return 1;  /* one return value */
+}
+int DialogAddTextBox(duk_context *ctx)
+{
+	duk_get_top(ctx);  /* #args */
+  string json = duk_to_string(ctx, 0);
+
+	dialog_t d;
+	d.type = DIALOG_TEXT_BOX;
+	d.textbox.default_text = scriptParseJSON("default_text", json);
+	d.textbox.position.x = atoi(scriptParseJSON("position.x", json).c_str());
+	d.textbox.position.y = atoi(scriptParseJSON("position.y", json).c_str());
+
+	DialogStack.push_back(d);
+
+	duk_push_number(ctx, 0);
+	return 1;  /* one return value */
+}
+int DialogAddRadioButton(duk_context *ctx)
+{
+	duk_get_top(ctx);  /* #args */
+  string json = duk_to_string(ctx, 0);
+
+	dialog_t d;
+	d.type = DIALOG_RADIO_BUTTON;
+	d.radio_button.text = scriptParseJSON("text", json);
+	d.radio_button.position.x = atoi(scriptParseJSON("position.x", json).c_str());
+	d.radio_button.position.y = atoi(scriptParseJSON("position.y", json).c_str());
+
+	DialogStack.push_back(d);
+
+	duk_push_number(ctx, 0);
+	return 1;  /* one return value */
+}
 int DialogShow(duk_context *ctx)
 {
 	duk_get_top(ctx);  /* #args */
-  string title = duk_to_string(ctx, 0);
-	Dialog *custom = new Dialog(title.c_str());
-  custom->Show(true);
+  string json = duk_to_string(ctx, 0);
+
+	string title = scriptParseJSON("title", json);
+	int width = atoi(scriptParseJSON("size.width", json).c_str());
+	int height = atoi(scriptParseJSON("size.height", json).c_str());
+
+	script_dialog = new Dialog(title.c_str(), wxSize(width, height));
+  script_dialog->Show();
+	duk_push_number(ctx, 0);
+	return 1;  /* one return value */
+}
+int DialogClear(duk_context *ctx)
+{
+	duk_get_top(ctx);  /* #args */
+  DialogStack.clear();
+	duk_push_number(ctx, 0);
+	return 1;  /* one return value */
+}
+int DialogClose(duk_context *ctx)
+{
+	duk_get_top(ctx);  /* #args */
+	script_dialog->CloseDialog();
 	duk_push_number(ctx, 0);
 	return 1;  /* one return value */
 }
@@ -494,8 +582,38 @@ void scriptRegisterFunctions()
 	duk_pop(ctx);
 
 	duk_push_global_object(ctx);
+	duk_push_c_function(ctx, DialogAddButton, DUK_VARARGS);
+	duk_put_prop_string(ctx, -2, "NativeDialogAddButton");
+	duk_pop(ctx);
+
+	duk_push_global_object(ctx);
+	duk_push_c_function(ctx, DialogAddStaticBox, DUK_VARARGS);
+	duk_put_prop_string(ctx, -2, "NativeDialogAddStaticBox");
+	duk_pop(ctx);
+
+	duk_push_global_object(ctx);
+	duk_push_c_function(ctx, DialogAddTextBox, DUK_VARARGS);
+	duk_put_prop_string(ctx, -2, "NativeDialogAddTextBox");
+	duk_pop(ctx);
+
+	duk_push_global_object(ctx);
+	duk_push_c_function(ctx, DialogAddRadioButton, DUK_VARARGS);
+	duk_put_prop_string(ctx, -2, "NativeDialogAddRadioButton");
+	duk_pop(ctx);
+
+	duk_push_global_object(ctx);
 	duk_push_c_function(ctx, DialogShow, DUK_VARARGS);
-	duk_put_prop_string(ctx, -2, "DialogShow");
+	duk_put_prop_string(ctx, -2, "NativeDialogShow");
+	duk_pop(ctx);
+
+	duk_push_global_object(ctx);
+	duk_push_c_function(ctx, DialogClear, DUK_VARARGS);
+	duk_put_prop_string(ctx, -2, "DialogClear");
+	duk_pop(ctx);
+
+	duk_push_global_object(ctx);
+	duk_push_c_function(ctx, DialogClose, DUK_VARARGS);
+	duk_put_prop_string(ctx, -2, "DialogClose");
 	duk_pop(ctx);
 
 	scriptRun("scripts/main.js");
