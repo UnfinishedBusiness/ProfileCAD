@@ -84,6 +84,11 @@ function ExecuteButtonCallback(id)
     }
   }
 }
+function DialogClear()
+{
+  ButtonCallbackStack = [];
+  NativeDialogClear();
+}
 function DialogAddButton(obj)
 {
   var n = {};
@@ -93,7 +98,11 @@ function DialogAddButton(obj)
 }
 function DialogAddStaticBox(obj)
 {
-  NativeDialogAddStaticBox(JSON.stringify(obj));
+  return NativeDialogAddStaticBox(JSON.stringify(obj));
+}
+function DialogAddStaticText(obj)
+{
+  return NativeDialogAddStaticText(JSON.stringify(obj));
 }
 function DialogAddTextBox(obj)
 {
@@ -103,7 +112,7 @@ function DialogAddTextBox(obj)
     {
       obj.default_text = "";
     }
-    NativeDialogAddTextBox(JSON.stringify(obj));
+    return NativeDialogAddTextBox(JSON.stringify(obj));
   }
 }
 function DialogAddRadioButton(obj)

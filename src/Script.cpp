@@ -400,6 +400,22 @@ int DialogAddStaticBox(duk_context *ctx)
 	duk_push_number(ctx, 0);
 	return 1;  /* one return value */
 }
+int DialogAddStaticText(duk_context *ctx)
+{
+	duk_get_top(ctx);  /* #args */
+  string json = duk_to_string(ctx, 0);
+
+	dialog_t d;
+	d.type = DIALOG_STATIC_TEXT;
+	d.static_text.text = scriptParseJSON("text", json);
+	d.static_text.position.x = atoi(scriptParseJSON("position.x", json).c_str());
+	d.static_text.position.y = atoi(scriptParseJSON("position.y", json).c_str());
+
+	DialogStack.push_back(d);
+
+	duk_push_number(ctx, 0);
+	return 1;  /* one return value */
+}
 int DialogAddTextBox(duk_context *ctx)
 {
 	duk_get_top(ctx);  /* #args */
@@ -413,7 +429,7 @@ int DialogAddTextBox(duk_context *ctx)
 
 	DialogStack.push_back(d);
 
-	duk_push_number(ctx, 0);
+	duk_push_number(ctx, DialogStack.size() - 1);
 	return 1;  /* one return value */
 }
 int DialogAddRadioButton(duk_context *ctx)
@@ -458,6 +474,14 @@ int DialogClose(duk_context *ctx)
 	duk_get_top(ctx);  /* #args */
 	script_dialog->CloseDialog();
 	duk_push_number(ctx, 0);
+	return 1;  /* one return value */
+}
+int DialogGetTextboxValue(duk_context *ctx)
+{
+	duk_get_top(ctx);  /* #args */
+  int id = duk_to_int(ctx, 0);
+	string value = script_dialog->GetTextBoxValue(id);
+	duk_push_string(ctx, value.c_str());
 	return 1;  /* one return value */
 }
 /***** End Javascript functions **************/
@@ -592,6 +616,11 @@ void scriptRegisterFunctions()
 	duk_pop(ctx);
 
 	duk_push_global_object(ctx);
+	duk_push_c_function(ctx, DialogAddStaticText, DUK_VARARGS);
+	duk_put_prop_string(ctx, -2, "NativeDialogAddStaticText");
+	duk_pop(ctx);
+
+	duk_push_global_object(ctx);
 	duk_push_c_function(ctx, DialogAddTextBox, DUK_VARARGS);
 	duk_put_prop_string(ctx, -2, "NativeDialogAddTextBox");
 	duk_pop(ctx);
@@ -608,12 +637,17 @@ void scriptRegisterFunctions()
 
 	duk_push_global_object(ctx);
 	duk_push_c_function(ctx, DialogClear, DUK_VARARGS);
-	duk_put_prop_string(ctx, -2, "DialogClear");
+	duk_put_prop_string(ctx, -2, "NativeDialogClear");
 	duk_pop(ctx);
 
 	duk_push_global_object(ctx);
 	duk_push_c_function(ctx, DialogClose, DUK_VARARGS);
 	duk_put_prop_string(ctx, -2, "DialogClose");
+	duk_pop(ctx);
+
+	duk_push_global_object(ctx);
+	duk_push_c_function(ctx, DialogGetTextboxValue, DUK_VARARGS);
+	duk_put_prop_string(ctx, -2, "DialogGetTextboxValue");
 	duk_pop(ctx);
 
 	scriptRun("scripts/main.js");

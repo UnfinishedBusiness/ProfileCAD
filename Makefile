@@ -1,5 +1,7 @@
 #### PROJECT SETTINGS ####
 # The name of the executable to be created
+OS := $(shell uname)
+
 BIN_NAME := ProfileCAD
 # Compiler used
 CXX ?= `wx-config --cxx`
@@ -18,7 +20,14 @@ DCOMPILE_FLAGS = -D DEBUG
 # Add additional include paths
 INCLUDES = -I $(SRC_PATH)/ -I./inc
 # General linker settings
-LINK_FLAGS = `wx-config --libs core,base,gl` -lz -lm -lGL -lGLU
+LINK_FLAGS = `wx-config --libs core,base,gl` -lz -lm
+
+ifeq ($(OS),Darwin)
+  # Run MacOS commands
+else
+  LINK_FLAGS += -lGL -lGLU
+endif
+
 # Additional release-specific linker settings
 RLINK_FLAGS =
 # Additional debug-specific linker settings

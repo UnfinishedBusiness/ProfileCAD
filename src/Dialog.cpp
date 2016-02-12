@@ -2,10 +2,23 @@
 
 using namespace std;
 vector<dialog_t> DialogStack;
+vector<wxTextCtrl*> TextBoxStack;
 
 void Dialog::CloseDialog()
 {
-  Close(true);
+  TextBoxStack.clear();
+  Close();
+  Destroy();
+}
+std::string Dialog::GetTextBoxValue(int id) //Id before offset
+{
+  for (int i = 0; i < TextBoxStack.size(); i++)
+  {
+    if (TextBoxStack[i]->GetId() == id + DIALOG_ID_OFFSET)
+    {
+      return string(TextBoxStack[i]->GetValue());
+    }
+  }
 }
 void Dialog::OnButtonClick(wxCommandEvent& event)
 {
@@ -45,11 +58,17 @@ Dialog::Dialog(const wxString & title, wxSize size)
     {
       wxTextCtrl *tc = new wxTextCtrl(panel, i + DIALOG_ID_OFFSET, DialogStack[i].textbox.default_text.c_str(),
                                                  DialogStack[i].textbox.position);
+      TextBoxStack.push_back(tc);
     }
     if (DialogStack[i].type == DIALOG_RADIO_BUTTON )
     {
       wxRadioButton *rb = new wxRadioButton(panel, i + DIALOG_ID_OFFSET, DialogStack[i].radio_button.text.c_str(),
                                                        DialogStack[i].radio_button.position);
+    }
+    if (DialogStack[i].type == DIALOG_STATIC_TEXT )
+    {
+      wxStaticText *st = new wxStaticText(panel, i + DIALOG_ID_OFFSET, DialogStack[i].static_text.text.c_str(),
+                                                       DialogStack[i].static_text.position);
     }
 
   }
@@ -59,7 +78,4 @@ Dialog::Dialog(const wxString & title, wxSize size)
   SetSizer(vbox);
 
   Centre();
-  ShowModal();
-
-  //Destroy();
 }

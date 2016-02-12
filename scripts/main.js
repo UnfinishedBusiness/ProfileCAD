@@ -77,13 +77,12 @@ function OnKeyDown(mod, keycode)
   {
 
     DialogClear();
-
     DialogAddStaticBox({ text: "Translate", position: { x: 50, y: 0 }, size: { x: 200, y: 100 }});
-    DialogAddTextBox({ default_text: "test", position: { x: 50, y: 125 } });
+    var textbox = DialogAddTextBox({ default_text: "test", position: { x: 50, y: 125 } });
     DialogAddRadioButton({ text: "Move", position: { x: 50, y: 100 } });
-
+    DialogAddStaticText({ text: "Static Text", position: { x: 50, y: 60 }});
     DialogAddButton({ text: "OK", position: { x: 100, y: 100 }, size: { x: 70, y: 30 }, callback: function(){
-      print("Ok Clicked!");
+      print("Text Box says: " + DialogGetTextboxValue(textbox));
     }});
     DialogAddButton({ text: "Close", position: { x: 100, y: 200 }, size: { x: 70, y: 30 }, callback: function(){
       print("Close Clicked!");

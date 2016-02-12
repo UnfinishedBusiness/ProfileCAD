@@ -8,11 +8,17 @@
 #define DIALOG_TEXT_BOX 1
 #define DIALOG_BUTTON 2
 #define DIALOG_RADIO_BUTTON 3
+#define DIALOG_STATIC_TEXT 4
 
 struct dialog_static_box_t{
   std::string text;
   wxPoint position;
   wxSize size;
+};
+
+struct dialog_static_text_t{
+  std::string text;
+  wxPoint position;
 };
 
 struct dialog_radio_button_t{
@@ -35,6 +41,7 @@ struct dialog_t{
   int type;
   dialog_button_t button;
   dialog_static_box_t static_box;
+  dialog_static_text_t static_text;
   dialog_text_box_t textbox;
   dialog_radio_button_t radio_button;
 };
@@ -49,5 +56,6 @@ public:
   Dialog(const wxString& title, wxSize size);
   void OnButtonClick(wxCommandEvent& event);
   void CloseDialog();
+  std::string GetTextBoxValue(int);
 };
 #endif
