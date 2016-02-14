@@ -10,8 +10,10 @@ function main()
   Source("scripts/helpers.js");
   Source("scripts/cli.js");
   Source("scripts/drawing.js");
+  Source("scripts/advanced_drawing.js");
   Source("scripts/popup_menu.js");
   Source("scripts/geometry.js");
+
   Popup_MainMenu();
   SetDrawColor("green");
 
@@ -75,21 +77,7 @@ function OnKeyDown(mod, keycode)
   }
   else if (mod == "None" && keycode == 32) //Space
   {
-
-    DialogClear();
-    DialogAddStaticBox({ text: "Translate", position: { x: 50, y: 0 }, size: { x: 200, y: 100 }});
-    var textbox = DialogAddTextBox({ default_text: "test", position: { x: 50, y: 125 } });
-    DialogAddRadioButton({ text: "Move", position: { x: 50, y: 100 } });
-    DialogAddStaticText({ text: "Static Text", position: { x: 50, y: 60 }});
-    DialogAddButton({ text: "OK", position: { x: 100, y: 100 }, size: { x: 70, y: 30 }, callback: function(){
-      print("Text Box says: " + DialogGetTextboxValue(textbox));
-    }});
-    DialogAddButton({ text: "Close", position: { x: 100, y: 200 }, size: { x: 70, y: 30 }, callback: function(){
-      print("Close Clicked!");
-      DialogClose();
-    }});
-
-    DialogShow({ title: "Test Dialog", size: { width: 300, height: 300 }});
+    AdvancedDrawingDrawGear();
   }
   else if (mod == "Ctrl" && keycode == 65) //Ctrl-a
   {
