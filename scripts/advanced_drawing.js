@@ -22,9 +22,8 @@ function AdvancedDrawingDrawGear()
     print("Text Box says: " + DialogGetTextboxValue(textbox));
   }});
   DialogAddButton({ text: "Close", position: { x: 100, y: 200 }, size: { x: 70, y: 30 }, callback: function(){
-    print("Close Clicked!");
     DialogClose();
   }});
 
-  DialogShow({ title: "Test Dialog", size: { width: 300, height: 300 }});
+  DialogShow({ title: "Create Gear", size: { width: 300, height: 300 }});
 }

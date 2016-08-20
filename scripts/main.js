@@ -10,9 +10,11 @@ function main()
   Source("scripts/helpers.js");
   Source("scripts/cli.js");
   Source("scripts/drawing.js");
+  Source("scripts/xform.js");
   Source("scripts/advanced_drawing.js");
   Source("scripts/popup_menu.js");
   Source("scripts/geometry.js");
+
   Popup_MainMenu();
   SetDrawColor("green");
 

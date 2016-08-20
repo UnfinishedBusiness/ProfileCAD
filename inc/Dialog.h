@@ -57,5 +57,6 @@ public:
   void OnButtonClick(wxCommandEvent& event);
   void CloseDialog();
   std::string GetTextBoxValue(int);
+  std::string GetRadioButtonValue(int);
 };
 #endif

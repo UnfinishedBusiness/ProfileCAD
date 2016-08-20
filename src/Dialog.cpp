@@ -3,6 +3,7 @@
 using namespace std;
 vector<dialog_t> DialogStack;
 vector<wxTextCtrl*> TextBoxStack;
+vector<wxRadioButton*> RadioButtonStack;
 
 void Dialog::CloseDialog()
 {
@@ -17,6 +18,23 @@ std::string Dialog::GetTextBoxValue(int id) //Id before offset
     if (TextBoxStack[i]->GetId() == id + DIALOG_ID_OFFSET)
     {
       return string(TextBoxStack[i]->GetValue());
+    }
+  }
+}
+std::string Dialog::GetRadioButtonValue(int id) //Id before offset
+{
+  for (int i = 0; i < RadioButtonStack.size(); i++)
+  {
+    if (RadioButtonStack[i]->GetId() == id + DIALOG_ID_OFFSET)
+    {
+      if (RadioButtonStack[i]->GetValue() == true)
+      {
+        return "true";
+      }
+      else
+      {
+        return "false";
+      }
     }
   }
 }
@@ -63,7 +81,8 @@ Dialog::Dialog(const wxString & title, wxSize size)
     if (DialogStack[i].type == DIALOG_RADIO_BUTTON )
     {
       wxRadioButton *rb = new wxRadioButton(panel, i + DIALOG_ID_OFFSET, DialogStack[i].radio_button.text.c_str(),
-                                                       DialogStack[i].radio_button.position);
+                                                  DialogStack[i].radio_button.position);
+      RadioButtonStack.push_back(rb);
     }
     if (DialogStack[i].type == DIALOG_STATIC_TEXT )
     {

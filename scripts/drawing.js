@@ -40,6 +40,72 @@ function DrawLineHorizontalFromOrigin()
     HideLiveEntity();
   });
 }
+function DrawLineVerticalFromEndPoint()
+{
+  cliPrompt("Click first endpoint");
+  MouseClickCallback = function()
+  {
+    var p = MouseGetSnap();
+    if (p == "None")
+    {
+      cliPrompt("Must be a snap point!");
+    }
+    else
+    {
+      cliPrompt("Click second endpoint");
+      ClearMouseCallback();
+      MouseMotionCallback = function()
+      {
+        Live.type = "line";
+        Live.start = { x: p.x, y: p.y };
+        Live.end = { x: p.x, y: Mouse.y };
+        ShowLiveEntity(Live);
+      }
+      MouseClickCallback = function()
+      {
+        DrawLine(Live.start, { x: Live.start.x, y: Mouse.y });
+        cliPrompt("");
+        HideLiveEntity();
+        ClearMouseCallback();
+        UnSelectAllEntities();
+        DrawLineEndpoints();
+      }
+    }
+  }
+}
+function DrawLineHorizontalFromEndPoint()
+{
+  cliPrompt("Click first endpoint");
+  MouseClickCallback = function()
+  {
+    var p = MouseGetSnap();
+    if (p == "None")
+    {
+      cliPrompt("Must be a snap point!");
+    }
+    else
+    {
+      cliPrompt("Click second endpoint");
+      ClearMouseCallback();
+      MouseMotionCallback = function()
+      {
+        Live.type = "line";
+        Live.start = { x: p.x, y: p.y };
+        Live.end = { x: Mouse.x, y: p.y };
+        ShowLiveEntity(Live);
+      }
+      MouseClickCallback = function()
+      {
+        DrawLine(Live.start, { x: Mouse.x, y: Live.start.y });
+        cliPrompt("");
+        HideLiveEntity();
+        ClearMouseCallback();
+        UnSelectAllEntities();
+        DrawLineEndpoints();
+      }
+    }
+  }
+}
 function DrawLineEndpoints()
 {
   cliPrompt("Click first endpoint");

@@ -117,7 +117,19 @@ function DialogAddTextBox(obj)
 }
 function DialogAddRadioButton(obj)
 {
-  NativeDialogAddRadioButton(JSON.stringify(obj));
+  return NativeDialogAddRadioButton(JSON.stringify(obj));
+}
+function DialogGetRadioButtonValue(id)
+{
+  var string = NativeDialogGetRadioButtonValue(id);
+  if (string == "true")
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
 }
 function DialogShow(obj)
 {
