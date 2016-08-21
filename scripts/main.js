@@ -31,11 +31,15 @@ function OnFileOpenDialog(file)
   print("Opening " + file);
   CurrentFile = file;
   var re = /(?:\.([^.]+))?$/;
-  var ext = re.exec(CurrentFile)[1];
+  var ext = re.exec(CurrentFile)[1].toLowerCase();
   //print(ext);
   if (ext == "pfcad")
   {
     Read_PFCAD();
+  }
+  if (ext == "dxf")
+  {
+    Read_DXF();
   }
 }
 function OnFileSaveDialog(file)
@@ -43,7 +47,7 @@ function OnFileSaveDialog(file)
   print("Saving " + file);
   CurrentFile = file;
   var re = /(?:\.([^.]+))?$/;
-  var ext = re.exec(CurrentFile)[1];
+  var ext = re.exec(CurrentFile)[1].toLowerCase();
   //print(ext);
   if (ext == "pfcad")
   {

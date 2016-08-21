@@ -89,6 +89,11 @@ function DialogClear()
   ButtonCallbackStack = [];
   NativeDialogClear();
 }
+function GetArcPointFromAngle(center_x, center_y, radius, direction, angle)
+{
+  end_point = NativeGetArcPointFromAngle(center_x, center_y, radius, direction, angle);
+  return JSON.parse(end_point);
+}
 function DialogAddButton(obj)
 {
   var n = {};

@@ -220,8 +220,34 @@ int DrawArc2D(duk_context *ctx)
 	duk_push_int(ctx, res);
 	return 1;  /* one return value */
 }
+int GetArcPointFromAngle(duk_context *ctx)
+{
+  duk_get_top(ctx);
+  arc_t a;
+  a.center.x = duk_to_number(ctx, 0);
+  a.center.y = duk_to_number(ctx, 1);
+  a.radius = duk_to_number(ctx, 2);
+  if (duk_to_string(ctx, 3) == "cw")
+  {
+    a.direction = ARC_CW;
+  }
+  else
+  {
+    a.direction = ARC_CCW;
+  }
+  float angle = duk_to_number(ctx, 4);
+  point_t end_point = geoGetArcPoint(a, angle);
+
+  string json = "{ \"x\":\"" + to_string(end_point.x) + "\", \"y\":\"" + to_string(end_point.y) + "\"  }";
+
+  PostRedisplay();
+	duk_push_string(ctx, json.c_str());
+	return 1;  /* one return value */
+}
+
 int RemoveSelectedEntities(duk_context *ctx)
 {
+  duk_get_top(ctx);
 	cadRemoveSelected();
   PostRedisplay();
 	duk_push_number(ctx, 0);
@@ -357,15 +383,7 @@ int EditEntity(duk_context *ctx)
 		//debugDumpEntityStructure(e);
 
     color = scriptParseJSON("color", json);
-    if (color == "black") e.Color = BLACK;
-    if (color == "red") e.Color = RED;
-    if (color == "yellow") e.Color = YELLOW;
-    if (color == "green") e.Color = GREEN;
-    if (color == "cyan") e.Color = CYAN;
-    if (color == "blue") e.Color = BLUE;
-    if (color == "magenta") e.Color = MAGENTA;
-    if (color == "darkgrey") e.Color = DARKGREY;
-    if (color == "lightgrey") e.Color = LIGHTGREY;
+    e.Color = GetColorStructure(color);
 
 		cadEdit(i, e, false);
 	}
@@ -683,6 +701,11 @@ void scriptRegisterFunctions()
 	duk_push_global_object(ctx);
 	duk_push_c_function(ctx, DrawArc2D, DUK_VARARGS);
 	duk_put_prop_string(ctx, -2, "NativeDrawArc2D");
+	duk_pop(ctx);
+
+  duk_push_global_object(ctx);
+	duk_push_c_function(ctx, GetArcPointFromAngle, DUK_VARARGS);
+	duk_put_prop_string(ctx, -2, "NativeGetArcPointFromAngle");
 	duk_pop(ctx);
 
 	duk_push_global_object(ctx);
