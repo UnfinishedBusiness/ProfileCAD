@@ -16,6 +16,7 @@ function Read_PFCAD()
         break;
       }
       var e = JSON.parse(line);
+      SetDrawColor(e.color);
       if (e.type == "line")
       {
         DrawLine(e.start, e.end);
@@ -25,6 +26,7 @@ function Read_PFCAD()
         DrawArc(e.start, e.end, e.radius, e.direction);
       }
     }
+    SetDrawColor("green");
   }
   else
   {

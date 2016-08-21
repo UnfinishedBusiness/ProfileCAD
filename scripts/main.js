@@ -16,6 +16,7 @@ function main()
   Source("scripts/popup_menu.js");
   Source("scripts/geometry.js");
   Source("scripts/file_converters.js");
+  Source("scripts/screen.js");
 
   Popup_MainMenu();
   SetDrawColor("green");

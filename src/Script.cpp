@@ -21,6 +21,35 @@ std::vector<std::string> split(const std::string &s, char delim) {
     return elems;
 }
 
+std::string GetColorString(color_t c)
+{
+  if (c == BLACK) return "black";
+  if (c == RED) return "red";
+  if (c == YELLOW) return "yellow";
+  if (c == GREEN) return "green";
+  if (c == CYAN) return "cyan";
+  if (c == BLUE) return "blue";
+  if (c == PURPLE) return "purple";
+  if (c == MAGENTA) return "magenta";
+  if (c == DARKGREY) return "darkgrey";
+  if (c == LIGHTGREY) return "lightgrey";
+  return "green"; //Defaylt Color
+}
+color_t GetColorStructure(string c)
+{
+  if (c == "black") return BLACK;
+  if (c == "red") return RED;
+  if (c == "yellow") return YELLOW;
+  if (c == "green") return GREEN;
+  if (c == "cyan") return CYAN;
+  if (c == "blue") return BLUE;
+  if (c == "purple") return PURPLE;
+  if (c == "magenta") return MAGENTA;
+  if (c == "darkgrey") return DARKGREY;
+  if (c == "lightgrey") return LIGHTGREY;
+  return GREEN; //Default Color
+}
+
 /***** Javascript functions **************/
 int OpenFile(duk_context *ctx)
 {
@@ -156,15 +185,7 @@ int DrawLine2D(duk_context *ctx)
   line.end.x = duk_to_number(ctx, 2);
   line.end.y = duk_to_number(ctx, 3);
 
-	if (color == "black") cadSetColor(BLACK);
-  if (color == "red") cadSetColor(RED);
-  if (color == "yellow") cadSetColor(YELLOW);
-  if (color == "green") cadSetColor(GREEN);
-  if (color == "cyan") cadSetColor(CYAN);
-  if (color == "blue") cadSetColor(BLUE);
-  if (color == "magenta") cadSetColor(MAGENTA);
-  if (color == "darkgrey") cadSetColor(DARKGREY);
-  if (color == "lightgrey") cadSetColor(LIGHTGREY);
+  cadSetColor(GetColorStructure(color));
   cadDrawLine(line);
 	int res = cadCountEntitys() -1;
   PostRedisplay();
@@ -191,16 +212,7 @@ int DrawArc2D(duk_context *ctx)
 	{
 		arc.direction = ARC_CW;
 	}
-
-	if (color == "black") cadSetColor(BLACK);
-  if (color == "red") cadSetColor(RED);
-  if (color == "yellow") cadSetColor(YELLOW);
-  if (color == "green") cadSetColor(GREEN);
-  if (color == "cyan") cadSetColor(CYAN);
-  if (color == "blue") cadSetColor(BLUE);
-  if (color == "magenta") cadSetColor(MAGENTA);
-  if (color == "darkgrey") cadSetColor(DARKGREY);
-  if (color == "lightgrey") cadSetColor(LIGHTGREY);
+	cadSetColor(GetColorStructure(color));
   cadDrawArc(arc);
 	int res = cadCountEntitys() -1;
   PostRedisplay();
@@ -291,7 +303,8 @@ int GetEntity(duk_context *ctx)
 		{
 			json.append("\"type\": \"line\",");
 			json.append("\"start\": {\"x\": \"" + to_string(e.Line.start.x) + "\", \"y\": \"" + to_string(e.Line.start.y) + "\" },");
-			json.append("\"end\": {\"x\": \"" + to_string(e.Line.end.x) + "\", \"y\": \"" + to_string(e.Line.end.y) + "\" }");
+			json.append("\"end\": {\"x\": \"" + to_string(e.Line.end.x) + "\", \"y\": \"" + to_string(e.Line.end.y) + "\" },");
+      json.append("\"color\": \"" + GetColorString(e.Color) + "\"");
 		}
 		if (e.Type == CAD_ARC)
 		{
@@ -300,7 +313,8 @@ int GetEntity(duk_context *ctx)
 			json.append("\"end\": {\"x\": \"" + to_string(e.Arc.end.x) + "\", \"y\": \"" + to_string(e.Arc.end.y) + "\" },");
 			json.append("\"radius\": \"" + to_string(e.Arc.radius) + "\",");
 			if (e.Arc.direction == ARC_CW) json.append("\"direction\": \"cw\"");
-			if (e.Arc.direction == ARC_CCW) json.append("\"direction\": \"ccw\"");
+			if (e.Arc.direction == ARC_CCW) json.append("\"direction\": \"ccw\",");
+      json.append("\"color\": \"" + GetColorString(e.Color) + "\"");
 		}
 		json.append("}");
 	}
@@ -324,6 +338,9 @@ int EditEntity(duk_context *ctx)
 		e.Line.start.y = atof(scriptParseJSON("start.y", json).c_str());
 		e.Line.end.x = atof(scriptParseJSON("end.x", json).c_str());
 		e.Line.end.y = atof(scriptParseJSON("end.y", json).c_str());
+
+    color = scriptParseJSON("color", json);
+    e.Color = GetColorStructure(color);
 		//debugDumpEntityStructure(e);
 		cadEdit(i, e, false);
 	}
@@ -338,6 +355,18 @@ int EditEntity(duk_context *ctx)
 		if (scriptParseJSON("direction", json) == "cw") e.Arc.direction = ARC_CW;
 		if (scriptParseJSON("direction", json) == "ccw") e.Arc.direction = ARC_CCW;
 		//debugDumpEntityStructure(e);
+
+    color = scriptParseJSON("color", json);
+    if (color == "black") e.Color = BLACK;
+    if (color == "red") e.Color = RED;
+    if (color == "yellow") e.Color = YELLOW;
+    if (color == "green") e.Color = GREEN;
+    if (color == "cyan") e.Color = CYAN;
+    if (color == "blue") e.Color = BLUE;
+    if (color == "magenta") e.Color = MAGENTA;
+    if (color == "darkgrey") e.Color = DARKGREY;
+    if (color == "lightgrey") e.Color = LIGHTGREY;
+
 		cadEdit(i, e, false);
 	}
 	PostRedisplay();
