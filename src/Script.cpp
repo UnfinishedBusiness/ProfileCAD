@@ -5,6 +5,7 @@ using namespace std;
 Dialog *script_dialog;
 duk_context *ctx;
 string color;
+FILE *FilePointer;
 
 std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems) {
     std::stringstream ss(s);
@@ -25,7 +26,68 @@ int OpenFile(duk_context *ctx)
 {
 	int n = duk_get_top(ctx);  /* #args */
   string file = duk_to_string(ctx, 0);
-  fileOpen(file);
+  string rw = duk_to_string(ctx, 1);
+  //fileOpen(file);
+  int ret = 1; //Return 0 on successful open, 1 on unsucessful
+  if (rw == "w")
+  {
+    FilePointer = fopen (file.c_str(), "w");
+  }
+  else
+  {
+    FilePointer = fopen (file.c_str(), "r");
+  }
+
+  if (FilePointer != NULL)
+  {
+    ret = 0;
+  }
+  PostRedisplay();
+	duk_push_number(ctx, ret);
+	return 1;  /* one return value */
+}
+int WriteFileLine(duk_context *ctx)
+{
+	int n = duk_get_top(ctx);  /* #args */
+  string line = duk_to_string(ctx, 0);
+  if (FilePointer != NULL)
+  {
+    fprintf(FilePointer, "%s\n", line.c_str());
+  }
+  PostRedisplay();
+	duk_push_number(ctx, 0);
+	return 1;  /* one return value */
+}
+int ReadFileLine(duk_context *ctx)
+{
+	int n = duk_get_top(ctx);  /* #args */
+  int ret = 1; //Return 1 if we have reached end of file
+  char line[2048];
+  string line_string;
+  if (FilePointer != NULL)
+  {
+    if (fgets(line, sizeof(line), FilePointer) == NULL)
+    {
+      ret = 0;
+    }
+  }
+  if (ret == 0)
+  {
+    line_string = "NULL";
+  }
+  else
+  {
+    line[strlen(line) - 1] = '\0';
+    line_string = string(line);
+  }
+  PostRedisplay();
+	duk_push_string(ctx, line_string.c_str());
+	return 1;  /* one return value */
+}
+int CloseFile(duk_context *ctx)
+{
+  int n = duk_get_top(ctx);  /* #args */
+  fclose(FilePointer);
   PostRedisplay();
 	duk_push_number(ctx, 0);
 	return 1;  /* one return value */
@@ -501,6 +563,21 @@ void scriptRegisterFunctions()
 	duk_push_global_object(ctx);
 	duk_push_c_function(ctx, OpenFile, DUK_VARARGS);
 	duk_put_prop_string(ctx, -2, "OpenFile");
+	duk_pop(ctx);
+
+  duk_push_global_object(ctx);
+	duk_push_c_function(ctx, ReadFileLine, DUK_VARARGS);
+	duk_put_prop_string(ctx, -2, "ReadFileLine");
+	duk_pop(ctx);
+
+  duk_push_global_object(ctx);
+	duk_push_c_function(ctx, WriteFileLine, DUK_VARARGS);
+	duk_put_prop_string(ctx, -2, "WriteFileLine");
+	duk_pop(ctx);
+
+  duk_push_global_object(ctx);
+	duk_push_c_function(ctx, CloseFile, DUK_VARARGS);
+	duk_put_prop_string(ctx, -2, "CloseFile");
 	duk_pop(ctx);
 
   duk_push_global_object(ctx);

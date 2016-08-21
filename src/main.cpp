@@ -572,7 +572,8 @@ void MyFrame::OnOpen (wxCommandEvent& WXUNUSED(event) )
 	if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
 	{
 		wxString CurrentDocPath = OpenDialog->GetPath();
-    fileOpen(string(CurrentDocPath.mb_str()));
+    //fileOpen(string(CurrentDocPath.mb_str()));
+    scriptEval(string("OnFileOpenDialog(\"" + CurrentDocPath + "\")"));
 		// Sets our current document to the file the user selected
 		//MainEditBox->LoadFile(CurrentDocPath); //Opens that file
 		SetTitle(wxString("ProfileCAD - ") <<
@@ -584,14 +585,13 @@ void MyFrame::OnOpen (wxCommandEvent& WXUNUSED(event) )
 }
 void MyFrame::OnSave (wxCommandEvent& WXUNUSED(event) )
 {
-  wxFileDialog* SaveDialog = new wxFileDialog( this, _("Choose save location"), wxEmptyString, wxEmptyString, _("Profile CAD (*.pfcad)|*.PFcad;*.PFCAD|Autocad (*.dxf)|*.dxf;*.DXF"),wxFD_SAVE, wxDefaultPosition);
+  wxFileDialog* SaveDialog = new wxFileDialog( this, _("Choose save location"), wxEmptyString, wxEmptyString, _("Profile CAD (*.pfcad)|*.pfcad;*.PFCAD|Autocad (*.dxf)|*.dxf;*.DXF"),wxFD_SAVE, wxDefaultPosition);
 
 	// Creates a "open file" dialog with 4 file types
 	if (SaveDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
 	{
 		wxString CurrentDocPath = SaveDialog->GetPath();
-		// Sets our current document to the file the user selected
-		//MainEditBox->LoadFile(CurrentDocPath); //Opens that file
+		scriptEval(string("OnFileSaveDialog(\"" + CurrentDocPath + "\")"));
 		SetTitle(wxString("ProfileCAD - ") <<
 			SaveDialog->GetFilename()); // Set the Title to reflect the file open
 	}

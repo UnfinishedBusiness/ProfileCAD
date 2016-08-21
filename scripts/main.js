@@ -4,6 +4,7 @@ MouseMotionCallback = "";
 MouseClickCallback = "";
 Live = {};
 CancelAction = false;
+CurrentFile = "";
 
 function main()
 {
@@ -14,6 +15,7 @@ function main()
   Source("scripts/advanced_drawing.js");
   Source("scripts/popup_menu.js");
   Source("scripts/geometry.js");
+  Source("scripts/file_converters.js");
 
   Popup_MainMenu();
   SetDrawColor("green");
@@ -21,6 +23,30 @@ function main()
 
   //Entry point for scriptRun()!
   //DrawLine({x: 0, y: 0}, {x: -4, y: 0});
+}
+function OnFileOpenDialog(file)
+{
+  print("Opening " + file);
+  CurrentFile = file;
+  var re = /(?:\.([^.]+))?$/;
+  var ext = re.exec(CurrentFile)[1];
+  //print(ext);
+  if (ext == "pfcad")
+  {
+    Read_PFCAD();
+  }
+}
+function OnFileSaveDialog(file)
+{
+  print("Saving " + file);
+  CurrentFile = file;
+  var re = /(?:\.([^.]+))?$/;
+  var ext = re.exec(CurrentFile)[1];
+  //print(ext);
+  if (ext == "pfcad")
+  {
+    Write_PFCAD();
+  }
 }
 function ClearMouseCallback()
 {
@@ -78,7 +104,7 @@ function OnKeyDown(mod, keycode)
   }
   else if (mod == "None" && keycode == 32) //Space
   {
-    AdvancedDrawingDrawGear();
+    DumptEntityStack();
   }
   else if (mod == "Ctrl" && keycode == 65) //Ctrl-a
   {
@@ -86,7 +112,13 @@ function OnKeyDown(mod, keycode)
   }
   else if (mod == "Ctrl" && keycode == 79) //Ctrl-o
   {
-    OpenFile("test/dxf/boltpattern.dxf");
+    //Keep a variable with the current filename. if theres no current file name open, use the file open dialog!
+    //OpenFile("test/dxf/boltpattern.dxf");
+    OnFileOpenDialog(CurrentFile);
+  }
+  else if (mod == "Ctrl" && keycode == 83) //Ctrl-s
+  {
+    OnFileSaveDialog(CurrentFile);
   }
   else if (mod == "Ctrl" && keycode == 85) //Ctrl-u
   {

@@ -9,8 +9,8 @@ function DrawLineVerticalFromOrigin()
   }
   MouseClickCallback = function()
   {
-    DrawLine({x: 0, y: 0}, {x: 0, y: Mouse.y});
     ClearMouseCallback();
+    cliReturn(Mouse.y);
     cliReturn();
   }
   cliPrompt("Y? ", function(str){
@@ -30,8 +30,8 @@ function DrawLineHorizontalFromOrigin()
   }
   MouseClickCallback = function()
   {
-    DrawLine({x: 0, y: 0}, {x: Mouse.x, y: 0});
     ClearMouseCallback();
+    cliReturn(Mouse.x);
     cliReturn();
   }
   cliPrompt("X? ", function(str){
