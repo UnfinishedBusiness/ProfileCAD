@@ -26,6 +26,7 @@ function main()
 }
 function OnFileOpenDialog(file)
 {
+  ClearEntityStack();
   print("Opening " + file);
   CurrentFile = file;
   var re = /(?:\.([^.]+))?$/;
@@ -104,7 +105,8 @@ function OnKeyDown(mod, keycode)
   }
   else if (mod == "None" && keycode == 32) //Space
   {
-    DumptEntityStack();
+    print("Dumping enties!");
+    DumpEntityStack();
   }
   else if (mod == "Ctrl" && keycode == 65) //Ctrl-a
   {
@@ -114,10 +116,18 @@ function OnKeyDown(mod, keycode)
   {
     //Keep a variable with the current filename. if theres no current file name open, use the file open dialog!
     //OpenFile("test/dxf/boltpattern.dxf");
+    if (CurrentFile == "")
+    {
+      FileOpenDialog();
+    }
     OnFileOpenDialog(CurrentFile);
   }
   else if (mod == "Ctrl" && keycode == 83) //Ctrl-s
   {
+    if (CurrentFile == "")
+    {
+      FileSaveDialog();
+    }
     OnFileSaveDialog(CurrentFile);
   }
   else if (mod == "Ctrl" && keycode == 85) //Ctrl-u

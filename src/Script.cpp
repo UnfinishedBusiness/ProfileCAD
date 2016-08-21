@@ -92,6 +92,40 @@ int CloseFile(duk_context *ctx)
 	duk_push_number(ctx, 0);
 	return 1;  /* one return value */
 }
+int FileOpenDialog(duk_context *ctx)
+{
+  int n = duk_get_top(ctx);  /* #args */
+  wxFileDialog* OpenDialog = new wxFileDialog( MainWindow, _("Choose a file to open"), wxEmptyString, wxEmptyString, _("Profile CAD (*.pfcad)|*.pfcad;*.PFCAD|Autocad (*.dxf)|*.dxf;*.DXF"),wxFD_OPEN, wxDefaultPosition);
+
+	// Creates a "open file" dialog with 4 file types
+	if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
+	{
+		wxString CurrentDocPath = OpenDialog->GetPath();
+    scriptEval(string("OnFileOpenDialog(\"" + CurrentDocPath + "\")"));
+	}
+	// Clean up after ourselves
+	OpenDialog->Destroy();
+  PostRedisplay();
+	duk_push_number(ctx, 0);
+	return 1;  /* one return value */
+}
+int FileSaveDialog(duk_context *ctx)
+{
+  int n = duk_get_top(ctx);  /* #args */
+  wxFileDialog* SaveDialog = new wxFileDialog( MainWindow, _("Choose save location"), wxEmptyString, wxEmptyString, _("Profile CAD (*.pfcad)|*.pfcad;*.PFCAD|Autocad (*.dxf)|*.dxf;*.DXF"),wxFD_SAVE, wxDefaultPosition);
+
+	// Creates a "open file" dialog with 4 file types
+	if (SaveDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
+	{
+		wxString CurrentDocPath = SaveDialog->GetPath();
+		scriptEval(string("OnFileSaveDialog(\"" + CurrentDocPath + "\")"));
+	}
+	// Clean up after ourselves
+	SaveDialog->Destroy();
+  PostRedisplay();
+	duk_push_number(ctx, 0);
+	return 1;  /* one return value */
+}
 int adder(duk_context *ctx)
 {
 	int i;
@@ -409,8 +443,9 @@ int SetStatusText(duk_context *ctx)
 	duk_push_number(ctx, 0);
 	return 1;  /* one return value */
 }
-int DumptEntityStack(duk_context *ctx)
+int DumpEntityStack(duk_context *ctx)
 {
+  duk_get_top(ctx);  /* #args */
   int m = cadGetEntityArrayIndex();
   cadEntity e;
   for (int a = 0; a < m; a++)
@@ -425,7 +460,13 @@ int DumptEntityStack(duk_context *ctx)
 	duk_push_number(ctx, 0);
 	return 1;  /* one return value */
 }
-
+int ClearEntityStack(duk_context *ctx)
+{
+  duk_get_top(ctx);  /* #args */
+  cadClearEntityStack();
+	duk_push_number(ctx, 0);
+	return 1;  /* one return value */
+}
 int DialogAddButton(duk_context *ctx)
 {
 	duk_get_top(ctx);  /* #args */
@@ -560,6 +601,16 @@ void scriptRegisterFunctions()
 {
   ctx = duk_create_heap_default();
 
+  duk_push_global_object(ctx);
+	duk_push_c_function(ctx, FileOpenDialog, DUK_VARARGS);
+	duk_put_prop_string(ctx, -2, "FileOpenDialog");
+	duk_pop(ctx);
+
+  duk_push_global_object(ctx);
+	duk_push_c_function(ctx, FileSaveDialog, DUK_VARARGS);
+	duk_put_prop_string(ctx, -2, "FileSaveDialog");
+	duk_pop(ctx);
+
 	duk_push_global_object(ctx);
 	duk_push_c_function(ctx, OpenFile, DUK_VARARGS);
 	duk_put_prop_string(ctx, -2, "OpenFile");
@@ -583,6 +634,11 @@ void scriptRegisterFunctions()
   duk_push_global_object(ctx);
 	duk_push_c_function(ctx, adder, DUK_VARARGS);
 	duk_put_prop_string(ctx, -2, "adder");
+	duk_pop(ctx);
+
+  duk_push_global_object(ctx);
+	duk_push_c_function(ctx, ClearEntityStack, DUK_VARARGS);
+	duk_put_prop_string(ctx, -2, "ClearEntityStack");
 	duk_pop(ctx);
 
 	duk_push_global_object(ctx);
@@ -686,8 +742,8 @@ void scriptRegisterFunctions()
 	duk_pop(ctx);
 
 	duk_push_global_object(ctx);
-	duk_push_c_function(ctx, DumptEntityStack, DUK_VARARGS);
-	duk_put_prop_string(ctx, -2, "DumptEntityStack");
+	duk_push_c_function(ctx, DumpEntityStack, DUK_VARARGS);
+	duk_put_prop_string(ctx, -2, "DumpEntityStack");
 	duk_pop(ctx);
 
 	duk_push_global_object(ctx);

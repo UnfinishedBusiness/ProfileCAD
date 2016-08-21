@@ -255,6 +255,7 @@ extern point_t MousePosition;
 extern bool PostRedisplay_Register;
 extern duk_context *ctx;
 extern std::string StatusText;
+extern wxWindow *MainWindow;
 /* End Global Variables */
 
 void CleanupAndExit();

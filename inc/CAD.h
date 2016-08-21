@@ -29,6 +29,7 @@ std::vector<cadEntity>  cadGetMouseOver();
 int cadCountSelection();
 int cadCountEntitys();
 void cadSetColor(color_t);
+void cadClearEntityStack();
 
 void cadSelectedToContour();
 void cadSelectChain();

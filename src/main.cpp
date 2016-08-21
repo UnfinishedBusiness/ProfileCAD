@@ -31,6 +31,7 @@ wxPoint MouseSreenPosition;
 string StatusText;
 string LastStatusText;
 bool ShowPopupMenu_Register = false;
+wxWindow *MainWindow;
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -532,6 +533,7 @@ MyFrame::MyFrame( bool stereoWindow )
 
     new GLCanvas(this, stereoWindow ? stereoAttribList : NULL);
 
+    MainWindow = this;
     SetIcon(wxICON(icon));
 
     Maximize();
@@ -566,38 +568,11 @@ void MyFrame::OnClose(wxCommandEvent& WXUNUSED(event))
 }
 void MyFrame::OnOpen (wxCommandEvent& WXUNUSED(event) )
 {
-  wxFileDialog* OpenDialog = new wxFileDialog( this, _("Choose a file to open"), wxEmptyString, wxEmptyString, _("Profile CAD (*.pfcad)|*.pfcad;*.PFCAD|Autocad (*.dxf)|*.dxf;*.DXF"),wxFD_OPEN, wxDefaultPosition);
-
-	// Creates a "open file" dialog with 4 file types
-	if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
-	{
-		wxString CurrentDocPath = OpenDialog->GetPath();
-    //fileOpen(string(CurrentDocPath.mb_str()));
-    scriptEval(string("OnFileOpenDialog(\"" + CurrentDocPath + "\")"));
-		// Sets our current document to the file the user selected
-		//MainEditBox->LoadFile(CurrentDocPath); //Opens that file
-		SetTitle(wxString("ProfileCAD - ") <<
-			OpenDialog->GetFilename()); // Set the Title to reflect the file open
-	}
-
-	// Clean up after ourselves
-	OpenDialog->Destroy();
+  scriptEval(string("FileOpenDialog()"));
 }
 void MyFrame::OnSave (wxCommandEvent& WXUNUSED(event) )
 {
-  wxFileDialog* SaveDialog = new wxFileDialog( this, _("Choose save location"), wxEmptyString, wxEmptyString, _("Profile CAD (*.pfcad)|*.pfcad;*.PFCAD|Autocad (*.dxf)|*.dxf;*.DXF"),wxFD_SAVE, wxDefaultPosition);
-
-	// Creates a "open file" dialog with 4 file types
-	if (SaveDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
-	{
-		wxString CurrentDocPath = SaveDialog->GetPath();
-		scriptEval(string("OnFileSaveDialog(\"" + CurrentDocPath + "\")"));
-		SetTitle(wxString("ProfileCAD - ") <<
-			SaveDialog->GetFilename()); // Set the Title to reflect the file open
-	}
-
-	// Clean up after ourselves
-	SaveDialog->Destroy();
+  scriptEval(string("FileSaveDialog()"));
 }
 void CleanupAndExit()
 {

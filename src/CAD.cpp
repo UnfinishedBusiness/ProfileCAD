@@ -37,6 +37,11 @@ void cadUndo()
   }
   //cliScreenUnSelectAll();
 }
+void cadClearEntityStack()
+{
+  cadEntityArrayIndex = 0;
+  cadEntityArray.clear();
+}
 void cadAppend(cadEntity e)
 {
   cadAppend(e, true);

@@ -12,6 +12,7 @@ function Read_PFCAD()
       if (line == "NULL")
       {
         CloseFile();
+        print("Found end of file!");
         break;
       }
       var e = JSON.parse(line);
