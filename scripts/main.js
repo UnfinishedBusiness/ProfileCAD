@@ -49,7 +49,7 @@ function OnFileSaveDialog(file)
   var re = /(?:\.([^.]+))?$/;
   var ext = re.exec(CurrentFile)[1].toLowerCase();
   //print(ext);
-  if (ext == "pfcad")
+  if (ext == "pfcad" || ext == "")
   {
     Write_PFCAD();
   }

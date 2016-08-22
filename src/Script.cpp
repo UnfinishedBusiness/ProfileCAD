@@ -339,8 +339,9 @@ int GetEntity(duk_context *ctx)
 			json.append("\"type\": \"arc\",");
 			json.append("\"start\": {\"x\": \"" + to_string(e.Arc.start.x) + "\", \"y\": \"" + to_string(e.Arc.start.y) + "\" },");
 			json.append("\"end\": {\"x\": \"" + to_string(e.Arc.end.x) + "\", \"y\": \"" + to_string(e.Arc.end.y) + "\" },");
+      json.append("\"center\": {\"x\": \"" + to_string(e.Arc.center.x) + "\", \"y\": \"" + to_string(e.Arc.center.y) + "\" },");
 			json.append("\"radius\": \"" + to_string(e.Arc.radius) + "\",");
-			if (e.Arc.direction == ARC_CW) json.append("\"direction\": \"cw\"");
+			if (e.Arc.direction == ARC_CW) json.append("\"direction\": \"cw\",");
 			if (e.Arc.direction == ARC_CCW) json.append("\"direction\": \"ccw\",");
       json.append("\"color\": \"" + GetColorString(e.Color) + "\"");
 		}

@@ -19,7 +19,7 @@ function Read_PFCAD()
       }
       if (e.type == "arc")
       {
-        DrawArc(e.start, e.end, e.radius, e.direction);
+        DrawArc(e.start, e.end, e.center, e.radius, e.direction);
       }
     }
     SetDrawColor("green");
@@ -31,11 +31,14 @@ function Read_PFCAD()
 }
 function Write_PFCAD()
 {
+  print("Write_PFCAD()");
   if (OpenFile(CurrentFile, "w") == 0)
   {
+    print("File Open!");
     for (var i = 0; i < CountEntities(); i++)
     {
       var e = GetEntity(i);
+      print("Line(" + i + ")> " + JSON.stringify(e));
       WriteFileLine(JSON.stringify(e));
     }
     CloseFile();
