@@ -1,9 +1,5 @@
 function Read_PFCAD()
 {
-  if (CurrentFile == "")
-  {
-    //Open File Dialog
-  }
   if (OpenFile(CurrentFile, "r") == 0)
   {
     while(1)
@@ -35,10 +31,6 @@ function Read_PFCAD()
 }
 function Write_PFCAD()
 {
-  if (CurrentFile == "")
-  {
-    //Open File Dialog
-  }
   if (OpenFile(CurrentFile, "w") == 0)
   {
     for (var i = 0; i < CountEntities(); i++)
@@ -70,13 +62,9 @@ function DXF_Color_Map(color)
 }
 function Read_DXF()
 {
-  if (CurrentFile == "")
-  {
-    //Open File Dialog
-  }
   if (OpenFile(CurrentFile, "r") == 0)
   {
-    print("Opened file!");
+    //print("Opened file!");
     e = {};
     e.start = {};
     e.end = {};
@@ -85,11 +73,11 @@ function Read_DXF()
     while(1)
     {
       var line = ReadFileLine();
-      print("Line: " + line);
+      //print("Line: " + line);
       if (line == "NULL")
       {
         CloseFile();
-        print("Found end of file!");
+        //print("Found end of file!");
         break;
       }
       if (line.indexOf("LINE") >= 0)
@@ -97,26 +85,26 @@ function Read_DXF()
         while(1)
         {
           var line = ReadFileLine();
-          print("LINE->Line: " + line);
+          //print("LINE->Line: " + line);
           if (line == "NULL")
           {
             CloseFile();
-            print("Found end of file!");
+            //print("Found end of file!");
             break;
           }
-          print("\tGroup Number: " + line);
+          //print("\tGroup Number: " + line);
           var GroupNumber = parseInt(line);
           if (GroupNumber == 0) //End of Entity
           {
             SetDrawColor(e.color);
             DrawLine(e.start, e.end);
-            print("Drawing line: " + JSON.stringify(e));
+            //print("Drawing line: " + JSON.stringify(e));
             break;
           }
           if (GroupNumber == 62) //Color
           {
             var color = DXF_Color_Map(parseInt(ReadFileLine()));
-            print("\tColor = " + color + " = " + e.color);
+            //print("\tColor = " + color);
           }
           if (GroupNumber == 10) //Start X
           {
@@ -149,38 +137,38 @@ function Read_DXF()
         while(1)
         {
           var line = ReadFileLine();
-          print("ARC->Line: " + line);
+          //print("ARC->Line: " + line);
           if (line == "NULL")
           {
             CloseFile();
-            print("Found end of file!");
+            //print("Found end of file!");
             break;
           }
-          print("\tGroup Number: " + line);
+          //print("\tGroup Number: " + line);
           var GroupNumber = parseInt(line);
           if (GroupNumber == 0) //End of Entity
           {
             if (e.start_angle < e.end_angle)
             {
-              print("\tArc is Counter-Clock-wise!");
+              //print("\tArc is Counter-Clock-wise!");
               e.direction = "ccw";
             }
             else
             {
-              print("\tArc is Clock-Wise!");
+              //print("\tArc is Clock-Wise!");
               e.direction = "cw";
             }
             e.start = GetArcPointFromAngle(e.center.x, e.center.y, e.radius, e.direction, e.start_angle);
             e.end = GetArcPointFromAngle(e.center.x, e.center.y, e.radius, e.direction, e.end_angle);
             SetDrawColor(e.color);
-            DrawArc(e.start, e.end, e.radius, e.direction);
+            DrawArc(e.start, e.end, e.center, e.radius, e.direction);
             print("Drawing Arc: " + JSON.stringify(e));
             break;
           }
           if (GroupNumber == 62) //Color
           {
             var color = DXF_Color_Map(parseInt(ReadFileLine()));
-            print("\tColor = " + color + " = " + e.color);
+            //print("\tColor = " + color);
           }
           if (GroupNumber == 10) //Center X
           {
@@ -207,6 +195,57 @@ function Read_DXF()
             e.end_angle = parseFloat(ReadFileLine());
           }
 
+        }
+      }
+      if (line.indexOf("CIRCLE") >= 0)
+      {
+        while(1)
+        {
+          var line = ReadFileLine();
+          //print("CIRCLE->Line: " + line);
+          if (line == "NULL")
+          {
+            CloseFile();
+            print("Found end of file!");
+            break;
+          }
+          //print("\tGroup Number: " + line);
+          var GroupNumber = parseInt(line);
+          if (GroupNumber == 0) //End of Entity
+          {
+            e.direction = "cw";
+            e.start.x = e.center.x + e.radius;
+            e.start.y = e.center.y;
+
+            e.end.x = e.center.x + e.radius;
+            e.end.y = e.center.y;
+
+            SetDrawColor(e.color);
+            DrawArc(e.start, e.end, e.center, e.radius, e.direction);
+            print("Drawing Circle: " + JSON.stringify(e));
+            break;
+          }
+          if (GroupNumber == 62) //Color
+          {
+            var color = DXF_Color_Map(parseInt(ReadFileLine()));
+            //print("\tColor = " + color);
+          }
+          if (GroupNumber == 10) //Center X
+          {
+            e.center.x = parseFloat(ReadFileLine());
+          }
+          if (GroupNumber == 20) //Center Y
+          {
+            e.center.y = parseFloat(ReadFileLine());
+          }
+          if (GroupNumber == 30) //Center Z
+          {
+            e.center.z = parseFloat(ReadFileLine());
+          }
+          if (GroupNumber == 40) //Radius
+          {
+            e.radius = parseFloat(ReadFileLine());
+          }
         }
       }
 

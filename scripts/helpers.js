@@ -53,9 +53,9 @@ function DrawLine(start, end)
 {
   return NativeDrawLine2D(start.x,start.y,end.x,end.y);
 }
-function DrawArc(start, end, radius, direction)
+function DrawArc(start, end, center, radius, direction)
 {
-  return NativeDrawArc2D(start.x,start.y,end.x,end.y,radius, direction);
+  return NativeDrawArc2D(start.x,start.y,end.x,end.y, center.x, center.y, radius, direction);
 }
 function ShowLiveEntity(obj)
 {

@@ -202,8 +202,10 @@ int DrawArc2D(duk_context *ctx)
   arc.start.y = duk_to_number(ctx, 1);
   arc.end.x = duk_to_number(ctx, 2);
   arc.end.y = duk_to_number(ctx, 3);
-	arc.radius = duk_to_number(ctx, 4);
-	string direction = duk_to_string(ctx, 5);
+  arc.center.x = duk_to_number(ctx, 4);
+  arc.center.y = duk_to_number(ctx, 5);
+	arc.radius = duk_to_number(ctx, 6);
+	string direction = duk_to_string(ctx, 7);
 	if (direction == "ccw")
 	{
 		arc.direction = ARC_CCW;
