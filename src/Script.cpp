@@ -222,6 +222,38 @@ int DrawArc2D(duk_context *ctx)
 	duk_push_int(ctx, res);
 	return 1;  /* one return value */
 }
+int GetArcAnglesFromPoint(duk_context *ctx)
+{
+	duk_get_top(ctx);  /* #args */
+  string json = duk_to_string(ctx, 0);
+	//printf("Json = %sn", json.c_str());
+	arc_t a;
+	a.center.x = atof(scriptParseJSON("center.x", json).c_str());
+  a.center.y = atof(scriptParseJSON("center.y", json).c_str());
+  a.start.x = atof(scriptParseJSON("start.x", json).c_str());
+  a.start.y = atof(scriptParseJSON("start.y", json).c_str());
+  a.end.x = atof(scriptParseJSON("end.x", json).c_str());
+  a.end.y = atof(scriptParseJSON("end.y", json).c_str());
+  a.radius = atof(scriptParseJSON("radius", json).c_str());
+  if (scriptParseJSON("direction", json) == "cw")
+  {
+    a.direction = ARC_CW;
+  }
+  else
+  {
+    a.direction = ARC_CCW;
+  }
+
+  float start_angle = geoRadiansToDegrees(geoGetArcStartAngle(a));
+  float end_angle = geoRadiansToDegrees(geoGetArcEndAngle(a));
+
+  string ret_json = "{ \"start\":\"" + to_string(start_angle) + "\", \"end\":\"" + to_string(end_angle) + "\" }";
+
+
+	PostRedisplay();
+	duk_push_string(ctx, ret_json.c_str());
+	return 1;  /* one return value */
+}
 int GetArcPointFromAngle(duk_context *ctx)
 {
   duk_get_top(ctx);
@@ -704,6 +736,11 @@ void scriptRegisterFunctions()
 	duk_push_global_object(ctx);
 	duk_push_c_function(ctx, DrawArc2D, DUK_VARARGS);
 	duk_put_prop_string(ctx, -2, "NativeDrawArc2D");
+	duk_pop(ctx);
+
+  duk_push_global_object(ctx);
+	duk_push_c_function(ctx, GetArcAnglesFromPoint, DUK_VARARGS);
+	duk_put_prop_string(ctx, -2, "NativeGetArcAnglesFromPoint");
 	duk_pop(ctx);
 
   duk_push_global_object(ctx);

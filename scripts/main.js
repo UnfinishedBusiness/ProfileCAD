@@ -53,6 +53,10 @@ function OnFileSaveDialog(file)
   {
     Write_PFCAD();
   }
+  if (ext == "dxf")
+  {
+    Write_DXF();
+  }
 }
 function ClearMouseCallback()
 {

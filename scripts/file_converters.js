@@ -49,9 +49,10 @@ function Write_PFCAD()
   }
 }
 
-function DXF_Color_Map(color)
+function DXF_Color_Map(color) //Takes number and gets literal
 {
   var c = "green";
+  //print("Color code: " + color);
   if (color == 0) c = "black";
   if (color == 1) c = "red";
   if (color == 2) c = "yellow";
@@ -61,6 +62,21 @@ function DXF_Color_Map(color)
   if (color == 6) c = "magenta";
   if (color == 7) c = "darkgrey";
   if (color == 8) c = "lightgrey";
+  //print("Color chose: " + c);
+  return c;
+}
+function DXF_Reverse_Color_Map(color) //Takes literal and get number
+{
+  var c = 3;
+  if (color == "black") c = 0;
+  if (color == "red") c = 1;
+  if (color == "yellow") c = 2;
+  if (color == "green") c = 3;
+  if (color == "cyan") c = 4;
+  if (color == "blue") c = 5;
+  if (color == "magenta") c = 6;
+  if (color == "darkgrey") c = 7;
+  if (color == "lightgrey") c = 8;
   return c;
 }
 function Read_DXF()
@@ -106,7 +122,7 @@ function Read_DXF()
           }
           if (GroupNumber == 62) //Color
           {
-            var color = DXF_Color_Map(parseInt(ReadFileLine()));
+            e.color = DXF_Color_Map(parseInt(ReadFileLine()));
             //print("\tColor = " + color);
           }
           if (GroupNumber == 10) //Start X
@@ -161,16 +177,16 @@ function Read_DXF()
               //print("\tArc is Clock-Wise!");
               e.direction = "cw";
             }
-            e.start = GetArcPointFromAngle(e.center.x, e.center.y, e.radius, e.direction, e.start_angle);
-            e.end = GetArcPointFromAngle(e.center.x, e.center.y, e.radius, e.direction, e.end_angle);
+            e.start = GetArcPointFromAngle(e.center, e.radius, e.direction, e.start_angle);
+            e.end = GetArcPointFromAngle(e.center, e.radius, e.direction, e.end_angle);
             SetDrawColor(e.color);
             DrawArc(e.start, e.end, e.center, e.radius, e.direction);
-            print("Drawing Arc: " + JSON.stringify(e));
+            //print("Drawing Arc: " + JSON.stringify(e));
             break;
           }
           if (GroupNumber == 62) //Color
           {
-            var color = DXF_Color_Map(parseInt(ReadFileLine()));
+            e.color = DXF_Color_Map(parseInt(ReadFileLine()));
             //print("\tColor = " + color);
           }
           if (GroupNumber == 10) //Center X
@@ -225,12 +241,12 @@ function Read_DXF()
 
             SetDrawColor(e.color);
             DrawArc(e.start, e.end, e.center, e.radius, e.direction);
-            print("Drawing Circle: " + JSON.stringify(e));
+            //print("Drawing Circle: " + JSON.stringify(e));
             break;
           }
           if (GroupNumber == 62) //Color
           {
-            var color = DXF_Color_Map(parseInt(ReadFileLine()));
+            e.color = DXF_Color_Map(parseInt(ReadFileLine()));
             //print("\tColor = " + color);
           }
           if (GroupNumber == 10) //Center X
@@ -258,5 +274,95 @@ function Read_DXF()
   else
   {
     print("Cant open " + CurrentFile);
+  }
+}
+function Write_DXF()
+{
+  print("Write_DXF()");
+  if (OpenFile(CurrentFile, "w") == 0)
+  {
+    print("File Open!");
+    WriteFileLine("0");
+    WriteFileLine("SECTION");
+    WriteFileLine("2");
+    WriteFileLine("ENTITIES");
+    WriteFileLine("0");
+    for (var i = 0; i < CountEntities(); i++)
+    {
+      var e = GetEntity(i);
+      if (e.type == "line")
+      {
+        WriteFileLine("LINE");
+        WriteFileLine("8"); //Fixed to layer one for now
+        WriteFileLine("1");
+        WriteFileLine("62"); //Color
+        WriteFileLine(DXF_Reverse_Color_Map(e.color));
+        WriteFileLine("10"); //X Start
+        WriteFileLine(e.start.x);
+        WriteFileLine("20"); //Y Start
+        WriteFileLine(e.start.y);
+        WriteFileLine("30"); //Z Start
+        WriteFileLine("0.0");
+
+        WriteFileLine("11"); //X end
+        WriteFileLine(e.end.x);
+        WriteFileLine("21"); //Y end
+        WriteFileLine(e.end.y);
+        WriteFileLine("31"); //Z end
+        WriteFileLine("0.0");
+        WriteFileLine("0"); //End Entity
+      }
+      if (e.type == "arc")
+      {
+        if (JSON.stringify(e.start) == JSON.stringify(e.end)) //Were a CIRCLE
+        {
+          WriteFileLine("CIRCLE");
+          WriteFileLine("8"); //Fixed to layer one for now
+          WriteFileLine("1");
+          WriteFileLine("62"); //Color
+          WriteFileLine(DXF_Reverse_Color_Map(e.color));
+          WriteFileLine("10"); //X Center
+          WriteFileLine(e.center.x);
+          WriteFileLine("20"); //Y Center
+          WriteFileLine(e.center.y);
+          WriteFileLine("30"); //Z Center
+          WriteFileLine("0.0");
+          WriteFileLine("40"); //Radius
+          WriteFileLine(e.radius); //Y end
+          WriteFileLine("0"); //End Entity
+        }
+        else
+        {
+          WriteFileLine("ARC");
+          WriteFileLine("8"); //Fixed to layer one for now
+          WriteFileLine("1");
+          WriteFileLine("62"); //Color
+          WriteFileLine(DXF_Reverse_Color_Map(e.color));
+          WriteFileLine("10"); //X Center
+          WriteFileLine(e.center.x);
+          WriteFileLine("20"); //Y Center
+          WriteFileLine(e.center.y);
+          WriteFileLine("30"); //Z Center
+          WriteFileLine("0.0");
+          WriteFileLine("40"); //Radius
+          WriteFileLine(e.radius); //Y end
+          WriteFileLine("50"); //Start Angle
+          var angles = GetArcAnglesFromPoint(e);
+          WriteFileLine(angles.start);
+          WriteFileLine("51"); //End Angle
+          WriteFileLine(angles.end);
+          WriteFileLine("0"); //End Entity
+        }
+      }
+      //WriteFileLine(JSON.stringify(e));
+    }
+    WriteFileLine("ENDSEC");
+    WriteFileLine("0");
+    WriteFileLine("EOF");
+    CloseFile();
+  }
+  else
+  {
+      print("Cant open " + CurrentFile);
   }
 }
