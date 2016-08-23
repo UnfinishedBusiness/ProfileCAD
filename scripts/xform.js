@@ -18,42 +18,50 @@ function XformScale()
   //yplace += 30;
 
   DialogAddButton({ text: "OK", position: { x: 100, y: 100 }, size: { x: 70, y: 30 }, callback: function(){
-    print("Scale Factor = " + DialogGetTextboxValue(textbox) + " Copy = " + DialogGetRadioButtonValue(copy_option));
+    scale = parseFloat(DialogGetTextboxValue(textbox));
+    copy_op = DialogGetRadioButtonValue(copy_option);
+    print("Scale Factor = " + scale + " Copy = " + copy_op);
     DialogClose();
     if (GetSelectedEntities() != undefined)
     {
-      if (DialogGetRadioButtonValue(copy_option) == false)
+      if (copy_op == false)
       {
-        var scale = parseFloat(DialogGetTextboxValue(textbox));
-        var selected = GetSelectedEntities();
+
+        selected = GetSelectedEntities();
         print("Getting ready to scale " + selected.length + " selected entities!");
         for (var i = 0; i < selected.length; i++)
         {
           var e = GetEntity(selected[i]);
+          print("\tFrom - " + JSON.stringify(e));
           if (e.type == "line")
           {
-            print(" - Scaling Entity " + i + " which is a line");
+            print(" - Scaling Entity " + i + " which is a line by " + scale);
             e.start.x = e.start.x * scale;
-            e.end.x = e.end.x * scale;
-
             e.start.y = e.start.y * scale;
+
+            e.end.x = e.end.x * scale;
             e.end.y = e.end.y * scale;
           }
           if (e.type == "arc")
           {
-            print(" - Scaling Entity " + i + " which is a line");
+            print(" - Scaling Entity " + i + " which is a arc by " + scale);
             e.start.x = e.start.x * scale;
-            e.end.x = e.end.x * scale;
-
             e.start.y = e.start.y * scale;
+
+            e.end.x = e.end.x * scale;
             e.end.y = e.end.y * scale;
+
+            e.center.x = e.center.x * scale;
+            e.center.y = e.center.y * scale;
 
             e.radius = e.radius * scale;
           }
-          EditEntity(i, e);
+          print("\tTo - " + JSON.stringify(e));
+          EditEntity(selected[i], e);
         }
       }
       print('Done!');
+      UnSelectAllEntities();
     }
   }});
   DialogAddButton({ text: "Close", position: { x: 100, y: 200 }, size: { x: 70, y: 30 }, callback: function(){

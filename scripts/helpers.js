@@ -35,7 +35,25 @@ function EditEntity(i, e) //Should always GetEntity before we edit it to avoid l
 }
 function GetEntity(i)
 {
-  return JSON.parse(NativeGetEntity(i));
+  e = JSON.parse(NativeGetEntity(i));
+  if (e.type == "line")
+  {
+    e.start.x = parseFloat(e.start.x);
+    e.start.y = parseFloat(e.start.y);
+    e.end.x = parseFloat(e.end.x);
+    e.end.y = parseFloat(e.end.y);
+  }
+  if (e.type == "arc")
+  {
+    e.start.x = parseFloat(e.start.x);
+    e.start.y = parseFloat(e.start.y);
+    e.end.x = parseFloat(e.end.x);
+    e.end.y = parseFloat(e.end.y);
+    e.center.x = parseFloat(e.center.x);
+    e.center.y = parseFloat(e.center.y);
+    e.radius = parseFloat(e.radius);
+  }
+  return e;
 }
 function GetSelectedEntities(i)
 {
