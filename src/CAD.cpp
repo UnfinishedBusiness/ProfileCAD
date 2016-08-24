@@ -148,18 +148,22 @@ std::vector<cadEntity> cadGetSelected()
       if (e[x].SelectionIndex == next)
       {
         //cout << "Ordered = " << e[x].SelectionIndex << endl;
+        //printf("Found! SelectionIndex = %d\n not %d!\n", e[x].SelectionIndex, next);
         o.push_back(e[x]);
         next++;
       }
     }
   }
-
+  if (e.size() > o.size()) //We could order them properly, give an Unordered list!
+  {
+    return e;
+  }
   return o;
 }
 int cadCountSelection()
 {
   int r = 0;
-  for (int i = 0; i < cadEntityArrayIndex; i++)
+  for (int i = 0; i < cadEntityArray.size(); i++)
   {
       if (cadEntityArray[i].Selected && !cadEntityArray[i].Removed) //Make sure were selected and not removed
       {
@@ -572,7 +576,8 @@ void cadSelectChain()
             {
               Found = true;
               cadEntityArray[i].Selected = true;
-              cadEdit(i, cadEntityArray[i], false);
+              cadEntityArray[i].SelectionIndex = cadCountSelection() + 1;
+              //cadEdit(i, cadEntityArray[i], false);
               chain.push_back(cadEntityArray[i]);
               used.push_back(cadEntityArray[i].Index);
               //cout << "Found!" << endl;
@@ -589,7 +594,8 @@ void cadSelectChain()
             {
               Found = true;
               cadEntityArray[i].Selected = true;
-              cadEdit(i, cadEntityArray[i], false);
+              cadEntityArray[i].SelectionIndex = cadCountSelection() + 1;
+              //cadEdit(i, cadEntityArray[i], false);
               chain.push_back(cadEntityArray[i]);
               used.push_back(cadEntityArray[i].Index);
               //cout << "Found!" << endl;
@@ -609,7 +615,8 @@ void cadSelectChain()
             {
               Found = true;
               cadEntityArray[i].Selected = true;
-              cadEdit(i, cadEntityArray[i], false);
+              cadEntityArray[i].SelectionIndex = cadCountSelection() + 1;
+              //cadEdit(i, cadEntityArray[i], false);
               chain.push_back(cadEntityArray[i]);
               used.push_back(cadEntityArray[i].Index);
               //cout << "Found!" << endl;
@@ -626,7 +633,8 @@ void cadSelectChain()
             {
               Found = true;
               cadEntityArray[i].Selected = true;
-              cadEdit(i, cadEntityArray[i], false);
+              cadEntityArray[i].SelectionIndex = cadCountSelection() + 1;
+              //cadEdit(i, cadEntityArray[i], false);
               chain.push_back(cadEntityArray[i]);
               used.push_back(cadEntityArray[i].Index);
               //cout << "Found!" << endl;

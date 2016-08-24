@@ -114,8 +114,10 @@ function OnKeyDown(mod, keycode)
   }
   else if (mod == "None" && keycode == 32) //Space
   {
-    print("Dumping enties!");
-    DumpEntityStack();
+    //print("Dumping enties!");
+    //DumpEntityStack();
+    print("Number of Selected Entities - ");
+    print(JSON.stringify(GetSelectedEntities()));
   }
   else if (mod == "Ctrl" && keycode == 65) //Ctrl-a
   {
