@@ -83,7 +83,7 @@ int WriteFileLine(duk_context *ctx)
   {
     fprintf(FilePointer, "%s\n", line.c_str());
   }
-  PostRedisplay();
+  //PostRedisplay();
 	duk_push_number(ctx, 0);
 	return 1;  /* one return value */
 }
@@ -109,7 +109,7 @@ int ReadFileLine(duk_context *ctx)
     line[strlen(line) - 1] = '\0';
     line_string = string(line);
   }
-  PostRedisplay();
+  //PostRedisplay();
 	duk_push_string(ctx, line_string.c_str());
 	return 1;  /* one return value */
 }

@@ -39,7 +39,14 @@ function Write_PFCAD()
     {
       var e = GetEntity(i);
       print("Line(" + i + ")> " + JSON.stringify(e));
-      WriteFileLine(JSON.stringify(e));
+      if (e.start.x == 0 && e.start.y == 0 && e.end.x == 0 && e.end.y == 0) //Invalid
+      {
+        print("Skipping zero line!");
+      }
+      else
+      {
+        WriteFileLine(JSON.stringify(e));
+      }
     }
     CloseFile();
   }
