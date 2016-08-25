@@ -386,6 +386,17 @@ int GetEntity(duk_context *ctx)
 	duk_push_string(ctx, json.c_str());
 	return 1;  /* one return value */
 }
+int RemoveEntity(duk_context *ctx)
+{
+	duk_get_top(ctx);  /* #args */
+	int i = duk_to_int(ctx, 0);
+  cadEntity e = cadGetEntityArray(i);
+  e.Removed = true;
+  cadEdit(i, e, false);
+  PostRedisplay();
+	duk_push_number(ctx, 0);
+	return 1;  /* one return value */
+}
 int EditEntity(duk_context *ctx)
 {
 	duk_get_top(ctx);  /* #args */
@@ -778,6 +789,11 @@ void scriptRegisterFunctions()
 	duk_push_global_object(ctx);
 	duk_push_c_function(ctx, GetEntity, DUK_VARARGS);
 	duk_put_prop_string(ctx, -2, "NativeGetEntity");
+	duk_pop(ctx);
+
+  duk_push_global_object(ctx);
+	duk_push_c_function(ctx, RemoveEntity, DUK_VARARGS);
+	duk_put_prop_string(ctx, -2, "RemoveEntity");
 	duk_pop(ctx);
 
 	duk_push_global_object(ctx);

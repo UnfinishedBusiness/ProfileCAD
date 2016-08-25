@@ -2,6 +2,7 @@ function Popup_XformMenu()
 {
   ClearPopupMenu();
   AppendPopupMenu("Scale", "XformScale();");
+  AppendPopupMenu("Filter", "XformFilter();");
   AppendPopupMenu("Back", "Popup_MainMenu_Show();");
   ShowPopupMenu();
 }

@@ -70,3 +70,46 @@ function XformScale()
 
   DialogShow({ title: "Scale", size: { width: 300, height: 300 }});
 }
+function XformFilter()
+{
+  var yplace = 30;
+  DialogClear();
+  DialogAddStaticBox({ text: "Filter line length", position: { x: 10, y: 0 }, size: { x: 280, y: 200 }});
+  var textbox = DialogAddTextBox({ default_text: "0.020", position: { x: 90, y: (yplace - 2) } });
+  yplace += 55;
+
+  DialogAddButton({ text: "OK", position: { x: 100, y: 100 }, size: { x: 70, y: 30 }, callback: function(){
+    filter = parseFloat(DialogGetTextboxValue(textbox));
+    print("Filter length = " + filter);
+    DialogClose();
+    count = 0;
+    if (GetSelectedEntities() != undefined)
+    {
+      selected = GetSelectedEntities();
+      for (var i = 0; i < selected.length; i++)
+      {
+        var e = GetEntity(selected[i]);
+        if (e.type == "line" && i > 0) //We can't trim to the last entity if there wasn't one!
+        {
+          if (geoGetLineLength(e) < filter)
+          {
+            print("(" + count + ") Found line shorter than - " + filter + " [Entity: " + selected[i] + "]");
+            count++;
+            //Remove this entity and connect last entity's endpoint to this entities endpoint
+            last_entity = GetEntity(selected[i - 1]);
+            last_entity.end.x = e.end.x;
+            last_entity.end.y = e.end.y;
+            EditEntity(selected[i - 1], last_entity);
+            RemoveEntity(selected[i]); //This entity
+          }
+        }
+      }
+      UnSelectAllEntities();
+    }
+  }});
+  DialogAddButton({ text: "Close", position: { x: 100, y: 200 }, size: { x: 70, y: 30 }, callback: function(){
+    DialogClose();
+  }});
+
+  DialogShow({ title: "Scale", size: { width: 300, height: 300 }});
+}
