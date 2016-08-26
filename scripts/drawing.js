@@ -351,3 +351,64 @@ function DrawCircleRadius()
     }
   }
 }
+function DrawCircleDiameter()
+{
+  cliPrompt("Click Arc Center!");
+  MouseClickCallback = function()
+  {
+    var p = MouseGetSnap();
+    if (p == "None")
+    {
+      cliPrompt("Must be a snap point!");
+    }
+    else
+    {
+      cliPrompt("Diameter?", function(str){
+        Live.type = "arc";
+        Live.center = { x: p.x, y: p.y };
+        Live.start = { x: Number(str) / 2, y: p.y };
+        Live.end = { x: Number(str) / 2, y: p.y };
+        Live.radius = Number(str) / 2;
+        Live.direction = "cw";
+        DrawArc(Live.start, Live.end, Live.center, Live.radius, Live.direction);
+        cliPrompt("");
+        HideLiveEntity();
+        ClearMouseCallback();
+        UnSelectAllEntities();
+        DrawLineEndpoints();
+      });
+      ClearMouseCallback();
+      MouseMotionCallback = function()
+      {
+        Live.type = "arc";
+        Live.center = { x: p.x, y: p.y };
+        Live.start = { x: Mouse.x, y: Mouse.y };
+        Live.end = { x: Mouse.x, y: Mouse.y };
+        Live.radius = geoGetLineLength({ start: Live.center, end: Mouse });
+        Live.direction = "cw";
+        ShowLiveEntity(Live);
+      }
+      MouseClickCallback = function()
+      {
+        var p = MouseGetSnap();
+        if (p == "None")
+        {
+          DrawArc(Live.start, Live.end, Live.center, Live.radius, Live.direction);
+        }
+        else
+        {
+          Live.type = "arc";
+          Live.start = { x: p.x, y: p.y };
+          Live.end = { x: p.x, y: p.y };
+          Live.radius = geoGetLineLength({ start: Live.center, end: p });
+          DrawArc(Live.start, Live.end, Live.center, Live.radius, Live.direction);
+        }
+        cliPrompt("");
+        HideLiveEntity();
+        ClearMouseCallback();
+        UnSelectAllEntities();
+        DrawLineEndpoints();
+      }
+    }
+  }
+}

@@ -22,7 +22,6 @@ function cliPush(mod, c)
   {
     letter = KeypadLookupTable[c];
     IsKeypad = true;
-    print("Found keypad! " + letter);
   }
   else
   {
