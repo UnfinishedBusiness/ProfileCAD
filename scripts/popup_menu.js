@@ -27,6 +27,14 @@ function Popup_LineMenu()
   AppendPopupMenu("Back", "Popup_MainMenu_Show();");
   ShowPopupMenu();
 }
+function Popup_ArcMenu()
+{
+  ClearPopupMenu();
+  AppendPopupMenu("Circle Radius", "DrawCircleRadius();");
+  AppendPopupMenu("Circle Diameter", "DrawCircleDiameter();");
+  AppendPopupMenu("Back", "Popup_MainMenu_Show();");
+  ShowPopupMenu();
+}
 function Popup_ScreenMenu()
 {
   ClearPopupMenu();
@@ -38,7 +46,7 @@ function Popup_MainMenu()
 {
   ClearPopupMenu();
   AppendPopupMenu("Line", "Popup_LineMenu();");
-  //AppendPopupMenu("Arc", "Popup_ArcMenu();");
+  AppendPopupMenu("Arc", "Popup_ArcMenu();");
   AppendPopupMenu("Modify", "Popup_ModifyMenu();");
   AppendPopupMenu("Xform", "Popup_XformMenu();");
   //AppendPopupMenu("Dimension", "Popup_DimsensionMenu();");

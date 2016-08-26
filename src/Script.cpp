@@ -457,6 +457,24 @@ int ShowLiveEntity(duk_context *ctx)
 		v.push_back(e);
 		cadShowLiveEntity(v);
 	}
+  if (scriptParseJSON("type", json) == "arc")
+	{
+		vector<cadEntity> v;
+		cadEntity e;
+    e.Type = CAD_ARC;
+    e.Arc.start.x = atof(scriptParseJSON("start.x", json).c_str());
+		e.Arc.start.y = atof(scriptParseJSON("start.y", json).c_str());
+		e.Arc.end.x = atof(scriptParseJSON("end.x", json).c_str());
+		e.Arc.end.y = atof(scriptParseJSON("end.y", json).c_str());
+    e.Arc.center.x = atof(scriptParseJSON("center.x", json).c_str());
+		e.Arc.center.y = atof(scriptParseJSON("center.y", json).c_str());
+		e.Arc.radius = atof(scriptParseJSON("radius", json).c_str());
+		if (scriptParseJSON("direction", json) == "cw") e.Arc.direction = ARC_CW;
+		if (scriptParseJSON("direction", json) == "ccw") e.Arc.direction = ARC_CCW;
+		//debugDumpEntityStructure(e);
+		v.push_back(e);
+		cadShowLiveEntity(v);
+	}
 	PostRedisplay();
 	duk_push_number(ctx, 0);
 	return 1;  /* one return value */

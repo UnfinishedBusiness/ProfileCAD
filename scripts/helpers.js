@@ -8,6 +8,10 @@ function ParseHelper(key, json)
 }
 function DumpEntity(i)
 {
+  if (!isNumber(i))
+  {
+    return;
+  }
   var e = GetEntity(i);
   if (e.type == "line")
   {
