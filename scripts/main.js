@@ -17,6 +17,7 @@ function main()
   Source("scripts/geometry.js");
   Source("scripts/file_converters.js");
   Source("scripts/screen.js");
+  Source("scripts/modify.js");
 
   Popup_MainMenu();
   SetDrawColor("green");
@@ -111,6 +112,10 @@ function OnKeyDown(mod, keycode)
   else if(mod == "None" && keycode == 308) //Left Ctrl
   {
     //print("Mouse Position - " + VarDump(Mouse));
+  }
+  else if (mod == "None" && keycode == 84) //t for trim!
+  {
+    ModifyTrim1();
   }
   else if (mod == "None" && keycode == 32) //Space
   {

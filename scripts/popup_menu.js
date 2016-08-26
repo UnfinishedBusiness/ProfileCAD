@@ -6,6 +6,14 @@ function Popup_XformMenu()
   AppendPopupMenu("Back", "Popup_MainMenu_Show();");
   ShowPopupMenu();
 }
+function Popup_ModifyMenu()
+{
+  ClearPopupMenu();
+  AppendPopupMenu("Trim 1", "ModifyTrim1();");
+  AppendPopupMenu("Trim 2", "ModifyTrim2();");
+  AppendPopupMenu("Back", "Popup_MainMenu_Show();");
+  ShowPopupMenu();
+}
 function Popup_LineMenu()
 {
   ClearPopupMenu();
@@ -31,7 +39,7 @@ function Popup_MainMenu()
   ClearPopupMenu();
   AppendPopupMenu("Line", "Popup_LineMenu();");
   //AppendPopupMenu("Arc", "Popup_ArcMenu();");
-  //AppendPopupMenu("Modify", "Popup_ModifyMenu();");
+  AppendPopupMenu("Modify", "Popup_ModifyMenu();");
   AppendPopupMenu("Xform", "Popup_XformMenu();");
   //AppendPopupMenu("Dimension", "Popup_DimsensionMenu();");
   //AppendPopupMenu("Advanced", "Popup_AdvancedMenu();");
