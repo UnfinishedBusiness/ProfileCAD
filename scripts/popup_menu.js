@@ -11,6 +11,7 @@ function Popup_ModifyMenu()
   ClearPopupMenu();
   AppendPopupMenu("Trim 1", "ModifyTrim1();");
   AppendPopupMenu("Trim 2", "ModifyTrim2();");
+  AppendPopupMenu("Fillet", "ModifyFillet();");
   AppendPopupMenu("Back", "Popup_MainMenu_Show();");
   ShowPopupMenu();
 }

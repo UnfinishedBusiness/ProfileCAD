@@ -103,9 +103,9 @@ function OnKeyDown(mod, keycode)
   }
   else if (mod == "None" && keycode == 27) //esc
   {
+    HideLiveEntity();
     ClearMouseCallback();
     cliReturn();
-    HideLiveEntity();
     SetStatusText("");
     CancelAction = true;
   }
@@ -113,16 +113,36 @@ function OnKeyDown(mod, keycode)
   {
     //print("Mouse Position - " + VarDump(Mouse));
   }
-  else if (mod == "None" && keycode == 84) //t for trim!
+  else if (mod == "Ctrl" && keycode == 84) //t for trim!
   {
     ModifyTrim1();
+  }
+  else if (mod == "None" && keycode == 307) //Windows key
+  {
+    Live.type = "line";
+    Live.start = { x: 0, y: 0 };
+    Live.end = { x: 0, y: 5 };
+    DrawLine(Live.start, Live.end);
   }
   else if (mod == "None" && keycode == 32) //Space
   {
     //print("Dumping enties!");
     //DumpEntityStack();
-    print("Number of Selected Entities - ");
-    print(JSON.stringify(GetSelectedEntities()));
+    //print("Number of Selected Entities - ");
+    //print(JSON.stringify(GetSelectedEntities()));
+    //print(JSON.stringify(Live));
+    //Live = geoRotateLine(Live, Live.start, 1);
+    //print(JSON.stringify(Live));
+    //DrawLine(Live.start, Live.end);
+    //print(geoInTolerance({ x: 0, y: 0.0001}, { x: 0, y: 0.0003 } , 0.0002));
+    //geoPointMe({x: 3, y: 3});
+
+    selected = GetSelectedEntities();
+    var points = geoGetLineArcIntersection(GetEntity(selected[0]), GetEntity(selected[1]));
+    print(JSON.stringify(points));
+    geoPointMe(points[0]);
+    geoPointMe(points[1]);
+    print("Done!");
   }
   else if (mod == "Ctrl" && keycode == 65) //Ctrl-a
   {

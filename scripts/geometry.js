@@ -1,3 +1,30 @@
+function geoInToleranceSimple(a, b, t)
+{
+  var diff;
+  if (a > b)
+  {
+    diff = a - b;
+  }
+  else
+  {
+    diff = b - a;
+  }
+  //printf("(geoInTolerance) Difference: %.6f, Plus: %.6f, Minus: %.6f\n", diff, fabs(t), -fabs(t));
+  if (diff <= Math.abs(t) && diff >= -Math.abs(t))
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+function geoInTolerance(point1, point2, t)
+{
+  //print(JSON.stringify(point1));
+  //print(JSON.stringify(point2));
+  return (geoInToleranceSimple(point1.x, point2.x, t) && geoInToleranceSimple(point1.y, point2.y, t));
+}
 function geoGetLineLength(line)
 {
   var x,y;
@@ -15,6 +42,25 @@ function geoGetDistanceBetweenPoints(one, two)
 function geoGetLineAngle(line)
 {
   return toDegrees(Math.atan2(line.start.y - line.end.y, line.start.x - line.end.x));
+}
+function geoRotateLine(line, origin, angle)
+{
+  //print("Line: " + JSON.stringify(line));
+  //print("Origin: " + JSON.stringify(origin));
+  var new_line = {}
+  new_line.start = geoRotatePointAroundPoint(line.start, origin, angle);
+  new_line.end = geoRotatePointAroundPoint(line.end, origin, angle);
+  return new_line;
+}
+function geoRotatePointAroundPoint(p, o, angle) //angle is in degrees!
+{
+  var rad = angle * (3.14159265359 / 180.0);
+  //print("Point: " + JSON.stringify(p));
+  //print("Origin: " + JSON.stringify(o));
+  //print("Angle: " + angle);
+  var x = Math.cos(rad) * (p.x - o.x) - Math.sin(rad) * (p.y - o.y) + o.x;
+  var y = Math.sin(rad) * (p.x - o.x) + Math.cos(rad) * (p.y - o.y) + o.y;
+  return { x: parseFloat(x).toFixed(4), y: parseFloat(y).toFixed(4) };
 }
 function geoGetPerpendicularDistance(base_line, point)
 {
@@ -110,6 +156,83 @@ function geoGetLineIntersection(line_one, line_two)
   var  x_int = (b2 * c1 - b1 * c2) / det;
   var  y_int = (a1 * c2 - a2 * c1) / det;
   return {x: x_int, y: y_int,};
+}
+function geoGetLineArcIntersection(line, arc)
+{
+  //p1 is the first line point
+  //p2 is the second line point
+  //c is the circle's center
+  //r is the circle's radius
+
+  p1 = line.start;
+  p2 = line.end;
+
+  c = arc.center;
+  r = arc.radius;
+
+  var p3 = {x:p1.x - c.x, y:p1.y - c.y}; //shifted line points
+  var p4 = {x:p2.x - c.x, y:p2.y - c.y};
+
+  var m = (p4.y - p3.y) / (p4.x - p3.x); //slope of the line
+  if (m == Infinity)
+  {
+    
+  }
+  else
+  {
+    var b = p3.y - m * p3.x; //y-intercept of line
+
+    var underRadical = Math.pow(r,2)*Math.pow(m,2) + Math.pow(r,2) - Math.pow(b,2); //the value under the square root sign
+
+    print("p1: " + JSON.stringify(p1));
+    print("p2: " + JSON.stringify(p2));
+    print("p3: " + JSON.stringify(p3));
+    print("p4: " + JSON.stringify(p4));
+    print("m: " + m);
+    print("b: " + b);
+    print("underRadical: " + underRadical);
+
+    if (underRadical < 0)
+    {
+        //No Intersection
+        return "None";
+    }
+    else
+    {
+        var t1 = (-m*b + Math.sqrt(underRadical))/(Math.pow(m,2) + 1); //one of the intercept x's
+        var t2 = (-m*b - Math.sqrt(underRadical))/(Math.pow(m,2) + 1); //other intercept's x
+        var i1 = {x:t1+c.x, y:m*t1+b+c.y}; //intercept point 1
+        var i2 = {x:t2+c.x, y:m*t2+b+c.y}; //intercept point 2
+        return [i1, i2];
+    }
+  }
+
+
+}
+function geoPointMe(p)
+{
+  var length = 0.050;
+  var line = {};
+  line.type = "line";
+  line.start = { x: p.x, y: p.y };
+  line.end = { x: p.x + length, y: p.y };
+  DrawLine(line.start, line.end);
+
+  line.type = "line";
+  line.start = { x: p.x, y: p.y };
+  line.end = { x: p.x - length, y: p.y };
+  DrawLine(line.start, line.end);
+
+  line.type = "line";
+  line.start = { x: p.x, y: p.y };
+  line.end = { x: p.x, y: p.y + length};
+  DrawLine(line.start, line.end);
+
+  line.type = "line";
+  line.start = { x: p.x, y: p.y };
+  line.end = { x: p.x, y: p.y - length};
+  DrawLine(line.start, line.end);
+
 }
 function geoGetParallelLine(base_line, distance, relative_to_point)
 {

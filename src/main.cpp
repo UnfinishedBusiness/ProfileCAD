@@ -497,6 +497,7 @@ void GLCanvas::OnIdle(wxIdleEvent &event)
   }
 	/* Force the redraw immediately, gets the gfx card to its max */
   scriptEval("OnIdle();");
+  usleep(400);
 	event.RequestMore();
 }
 

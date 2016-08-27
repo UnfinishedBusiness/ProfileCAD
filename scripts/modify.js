@@ -75,3 +75,9 @@ function ModifyTrim2()
       cliPrompt("Select base line then line to trim too!");
   }
 }
+function ModifyFillet()
+{
+  cliPrompt("Radius?", function(str){
+    radius = Number(str);
+  });
+}

@@ -15,7 +15,7 @@ function cliPush(mod, c)
   {
     Prompt = "> ";
   }
-  var KeypadLookupTable = { 390: '-', 391: '.', 388: '+', 324: '0', 325: '1', 326: '2', 327: '3', 328: '4', 329: '5', 330: '6', 331: '7', 332: '8', 333: '9' };
+  var KeypadLookupTable = { 390: '-', 391: '.', 392: '/', 388: '+', 324: '0', 325: '1', 326: '2', 327: '3', 328: '4', 329: '5', 330: '6', 331: '7', 332: '8', 333: '9' };
   var IsKeypad = false;
   var letter;
   if (KeypadLookupTable[c] != undefined)
