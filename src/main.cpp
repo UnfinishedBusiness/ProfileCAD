@@ -262,11 +262,20 @@ GLCanvas::GLCanvas(wxWindow *parent, int *attribList)
         }
     }
 }
-
 void GLCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     // This is required even though dc is not used otherwise.
-    wxPaintDC dc(this);
+    //wxPaintDC dc(this);
+
+    #ifdef __APPLE__
+      wxClientDC dc(this);
+    #elif __CYGWIN__
+      wxBufferedPaintDC dc(this, wxBUFFER_VIRTUAL_AREA);
+    #else
+      wxBufferedPaintDC dc(this,wxBUFFER_VIRTUAL_AREA);
+    #endif
+
+
     const wxSize ClientSize = GetClientSize();
 
     TestGLContext& canvas = wxGetApp().GetContext(this, m_useStereo);
