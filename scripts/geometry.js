@@ -176,13 +176,13 @@ function geoGetLineArcIntersection(line, arc)
   var m = (p4.y - p3.y) / (p4.x - p3.x); //slope of the line
   if (m == Infinity)
   {
-    
+
   }
   else
   {
     var b = p3.y - m * p3.x; //y-intercept of line
 
-    var underRadical = Math.pow(r,2)*Math.pow(m,2) + Math.pow(r,2) - Math.pow(b,2); //the value under the square root sign
+    var underRadical = Math.pow(r,2) * Math.pow(m,2) + Math.pow(r,2) - Math.pow(b,2); //the value under the square root sign
 
     print("p1: " + JSON.stringify(p1));
     print("p2: " + JSON.stringify(p2));
@@ -203,6 +203,11 @@ function geoGetLineArcIntersection(line, arc)
         var t2 = (-m*b - Math.sqrt(underRadical))/(Math.pow(m,2) + 1); //other intercept's x
         var i1 = {x:t1+c.x, y:m*t1+b+c.y}; //intercept point 1
         var i2 = {x:t2+c.x, y:m*t2+b+c.y}; //intercept point 2
+
+        i1.x = i1.x.toFixed(4);
+        i1.y = i1.y.toFixed(4);
+        i2.x = i2.x.toFixed(4);
+        i2.y = i2.y.toFixed(4);
         return [i1, i2];
     }
   }
