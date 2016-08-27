@@ -19,7 +19,7 @@
   #include <GL/gl.h>
   #include <GL/glu.h>
 #endif
-
+#include <wx/dcbuffer.h>
 #include <iostream>
 #include <vector>
 #include <cmath>

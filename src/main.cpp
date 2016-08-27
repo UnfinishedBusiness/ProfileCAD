@@ -272,7 +272,7 @@ void GLCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
     #elif __CYGWIN__
       wxBufferedPaintDC dc(this, wxBUFFER_VIRTUAL_AREA);
     #else
-      wxBufferedPaintDC dc(this,wxBUFFER_VIRTUAL_AREA);
+      wxClientDC dc(this);
     #endif
 
 
