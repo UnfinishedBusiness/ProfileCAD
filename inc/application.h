@@ -1,8 +1,5 @@
-#ifdef __APPLE__
-    //We don't need anything here
-#elif _WIN32
-    //Windows is dumb
-    #define UNICODE 1
+#ifdef __CYGWIN__
+  #define UNICODE 1
 #endif
 
 #define _USE_MATH_DEFINES
