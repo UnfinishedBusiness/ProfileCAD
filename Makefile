@@ -22,11 +22,10 @@ INCLUDES = -I $(SRC_PATH)/ -I./inc
 # General linker settings
 LINK_FLAGS = `wx-config --libs core,base,gl` -lz -lm
 
-ifeq ($(OS),Darwin)
-  # Run MacOS commands
-else
+ifeq ($(OS),Linux)
   LINK_FLAGS += -lGL -lGLU
 endif
+
 
 # Additional release-specific linker settings
 RLINK_FLAGS =

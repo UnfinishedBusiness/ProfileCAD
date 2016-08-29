@@ -529,12 +529,12 @@ wxString glGetwxString(GLenum name)
 // ----------------------------------------------------------------------------
 // MyFrame: main application window
 // ----------------------------------------------------------------------------
-int FILE_OPEN = wxID_HIGHEST + 1;
-int FILE_SAVE = wxID_HIGHEST + 2;
+int _FILE_OPEN = wxID_HIGHEST + 1;
+int _FILE_SAVE = wxID_HIGHEST + 2;
 
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_MENU(FILE_OPEN, MyFrame::OnOpen)
-    EVT_MENU(FILE_SAVE, MyFrame::OnSave)
+    EVT_MENU(_FILE_OPEN, MyFrame::OnOpen)
+    EVT_MENU(_FILE_SAVE, MyFrame::OnSave)
     EVT_MENU(wxID_CLOSE, MyFrame::OnClose)
 wxEND_EVENT_TABLE()
 
@@ -555,8 +555,8 @@ MyFrame::MyFrame( bool stereoWindow )
 
     /*Begin File Menu*/
     wxMenu *file_menu = new wxMenu;
-    file_menu->Append(FILE_OPEN, "Open");
-    file_menu->Append(FILE_SAVE, "Save");
+    file_menu->Append(_FILE_OPEN, "Open");
+    file_menu->Append(_FILE_SAVE, "Save");
     file_menu->AppendSeparator();
     file_menu->Append(wxID_CLOSE);
     /* End Menu */
