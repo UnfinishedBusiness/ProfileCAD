@@ -12,7 +12,7 @@ SRC_PATH = ./src/
 # Space-separated pkg-config libraries used by this project
 LIBS =
 # General compiler flags
-COMPILE_FLAGS = -std=gnu++14 -g -fpermissive `wx-config --cxxflags`
+COMPILE_FLAGS = -static -std=gnu++14 -g -fpermissive `wx-config --cxxflags`
 # Additional release-specific flags
 RCOMPILE_FLAGS = -D NDEBUG
 # Additional debug-specific flags
