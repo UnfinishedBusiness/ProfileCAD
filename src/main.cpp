@@ -529,6 +529,8 @@ wxString glGetwxString(GLenum name)
 // ----------------------------------------------------------------------------
 // MyFrame: main application window
 // ----------------------------------------------------------------------------
+int FILE_OPEN = wxID_HIGHEST + 1;
+int FILE_SAVE = wxID_HIGHEST + 2;
 
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(FILE_OPEN, MyFrame::OnOpen)

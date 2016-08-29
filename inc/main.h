@@ -76,8 +76,5 @@ private:
 
     wxDECLARE_EVENT_TABLE();
 };
-enum { FILE_SAVE = wxID_HIGHEST + 1 };
-enum { FILE_OPEN = wxID_HIGHEST + 2 };
-
 
 #endif // _WX_CUBE_H_
