@@ -428,7 +428,7 @@ void cadRenderDimension(dimension_t d)
 void cadRenderLine(line_t l, float w)
 {
   glLineWidth(w);
-  glBegin(GL_LINE_LOOP);
+  glBegin(GL_LINE_STRIP);
   glVertex3f((GLfloat) l.start.x, l.start.y, l.start.z);
   glVertex3f((GLfloat) l.end.x, l.end.y, l.end.z);
   glEnd();

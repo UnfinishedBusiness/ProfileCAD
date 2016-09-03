@@ -86,6 +86,7 @@ function OnMouseMotion(x, y)
 {
   Mouse.x = x;
   Mouse.y = y;
+  //SetStatusText("X: " + Mouse.x + " Y: " + Mouse.y);
   if (MouseMotionCallback != "")
   {
       MouseMotionCallback();
