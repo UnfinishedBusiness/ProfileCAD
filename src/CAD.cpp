@@ -427,11 +427,69 @@ void cadRenderDimension(dimension_t d)
 }
 void cadRenderLine(line_t l, float w)
 {
+  //glLineWidth(w);
+  //glBegin(GL_LINE_STRIP);
+  //glVertex3f((GLfloat) l.start.x, l.start.y, l.start.z);
+  //glVertex3f((GLfloat) l.end.x, l.end.y, l.end.z);
+  //glEnd();
+
+  float x1, y1, x2, y2;
+
+
   glLineWidth(w);
   glBegin(GL_LINE_STRIP);
   glVertex3f((GLfloat) l.start.x, l.start.y, l.start.z);
-  glVertex3f((GLfloat) l.end.x, l.end.y, l.end.z);
+
+
+  x1 = l.start.x;
+  y1 = l.start.y;
+  x2 = l.end.x;
+  y2 = l.end.y;
+
+  bool steep = (fabs(y2 - y1) > fabs(x2 - x1));
+
+  if(steep)
+  {
+    std::swap(x1, y1);
+    std::swap(x2, y2);
+  }
+
+  if(x1 > x2)
+  {
+    std::swap(x1, x2);
+    std::swap(y1, y2);
+  }
+
+  float dx = x2 - x1;
+  float dy = fabs(y2 - y1);
+
+  float error = dx / 2.0f;
+  float ystep = (y1 < y2) ? 1 : -1;
+  float y = (float)y1;
+
+  float maxX = (float)x2;
+
+  for(float x=(float)x1; x<maxX; x += 0.0005)
+  {
+    if(steep)
+    {
+        glVertex3f((GLfloat) y, x, l.start.z);
+    }
+    else
+    {
+        glVertex3f((GLfloat) x, y, l.start.z);
+    }
+
+    error -= dy;
+    if(error < 0)
+    {
+        y += ystep;
+        error += dx;
+    }
+  }
+  glVertex3f((GLfloat) l.end.x, l.end.y, l.start.z);
   glEnd();
+
 }
 void cadRenderLine(line_t l)
 {
