@@ -427,13 +427,13 @@ void cadRenderDimension(dimension_t d)
 }
 void cadRenderLine(line_t l, float w)
 {
-  //glLineWidth(w);
-  //glBegin(GL_LINE_STRIP);
-  //glVertex3f((GLfloat) l.start.x, l.start.y, l.start.z);
-  //glVertex3f((GLfloat) l.end.x, l.end.y, l.end.z);
-  //glEnd();
-
-  float x1, y1, x2, y2;
+  glPushAttrib(GL_ENABLE_BIT);
+  glLineWidth(w);
+  glBegin(GL_LINE_STRIP);
+  glVertex3f((GLfloat) l.start.x, l.start.y, l.start.z);
+  glVertex3f((GLfloat) l.end.x, l.end.y, l.end.z);
+  glEnd();
+  /*float x1, y1, x2, y2;
 
 
   glLineWidth(w);
@@ -489,7 +489,7 @@ void cadRenderLine(line_t l, float w)
   }
   glVertex3f((GLfloat) l.end.x, l.end.y, l.start.z);
   glEnd();
-
+  */
 }
 void cadRenderLine(line_t l)
 {

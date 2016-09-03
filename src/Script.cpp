@@ -175,6 +175,33 @@ int SetDrawColor(duk_context *ctx)
 	duk_push_number(ctx, 0);
 	return 1;  /* one return value */
 }
+int DrawPointDimension(duk_context *ctx)
+{
+  dimension_t dimension;
+  dimension_point_t point;
+	int i;
+	int n = duk_get_top(ctx);  /* #args */
+
+  point.snap_pos.x = duk_to_number(ctx, 0);
+  point.snap_pos.y = duk_to_number(ctx, 1);
+  point.text_pos.x = duk_to_number(ctx, 2);
+  point.text_pos.y = duk_to_number(ctx, 3);
+  point.size = duk_to_number(ctx, 4);
+
+  sprintf(point.text, "X: %0.4f Y: %0.4f Z: %0.4f", point.snap_pos.x, point.snap_pos.y, point.snap_pos.z);
+
+  cadSetColor(GetColorStructure(color));
+
+  dimension.Type = DIMENSION_POINT;
+  dimension.Point = point;
+  cadDrawDimension(dimension);
+
+	int res = cadCountEntitys() -1;
+  PostRedisplay();
+
+	duk_push_int(ctx, res);
+	return 1;  /* one return value */
+}
 int DrawLine2D(duk_context *ctx)
 {
   line_t line;
@@ -757,6 +784,11 @@ void scriptRegisterFunctions()
 	duk_push_global_object(ctx);
 	duk_push_c_function(ctx, SetDrawColor, DUK_VARARGS);
 	duk_put_prop_string(ctx, -2, "SetDrawColor");
+	duk_pop(ctx);
+
+  duk_push_global_object(ctx);
+	duk_push_c_function(ctx, DrawPointDimension, DUK_VARARGS);
+	duk_put_prop_string(ctx, -2, "NativeDrawPointDimension");
 	duk_pop(ctx);
 
   duk_push_global_object(ctx);

@@ -43,6 +43,13 @@ function Popup_ScreenMenu()
   AppendPopupMenu("Back", "Popup_MainMenu_Show();");
   ShowPopupMenu();
 }
+function Popup_DimensionMenu()
+{
+  ClearPopupMenu();
+  AppendPopupMenu("Point", "DimensionPoint();");
+  AppendPopupMenu("Back", "Popup_MainMenu_Show();");
+  ShowPopupMenu();
+}
 function Popup_MainMenu()
 {
   ClearPopupMenu();
@@ -50,7 +57,7 @@ function Popup_MainMenu()
   AppendPopupMenu("Arc", "Popup_ArcMenu();");
   AppendPopupMenu("Modify", "Popup_ModifyMenu();");
   AppendPopupMenu("Xform", "Popup_XformMenu();");
-  //AppendPopupMenu("Dimension", "Popup_DimsensionMenu();");
+  AppendPopupMenu("Dimension", "Popup_DimensionMenu();");
   //AppendPopupMenu("Advanced", "Popup_AdvancedMenu();");
   AppendPopupMenu("Screen", "Popup_ScreenMenu();");
   AppendPopupMenu("Repaint", "Repaint();");

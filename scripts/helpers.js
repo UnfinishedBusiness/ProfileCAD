@@ -71,6 +71,10 @@ function GetSelectedEntities(i)
       return JSON.parse(e);
   }
 }
+function DrawPointDimension(snap_point, text_point, size)
+{
+  return NativeDrawPointDimension(snap_point.x, snap_point.y, text_point.x, text_point.y, size);
+}
 function DrawLine(start, end)
 {
   return NativeDrawLine2D(start.x,start.y,end.x,end.y);
