@@ -23,4 +23,5 @@ How to build
 ------------
 Clone this repository to a project folder.
 Run "npm install"
+Mac - "sudo npm install --unsafe-perm=true --allow-root"
 Then "npm start" to launch the Application via Electron (Formerly Atom-Shell)

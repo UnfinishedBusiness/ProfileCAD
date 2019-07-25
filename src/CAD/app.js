@@ -18,18 +18,18 @@ function ParseDXF(data, part_name)
       {
         if (dxf.entities[i].type == "CIRCLE")
         {
-          imported_stack.push({ type: "circle", origin: [dxf.entities[i].center.x, dxf.entities[i].center.y], radius: dxf.entities[i].radius, meta: render._defaultMeta });
+          imported_stack.push({ type: "circle", origin: [dxf.entities[i].center.x, dxf.entities[i].center.y], radius: dxf.entities[i].radius, meta: render.copy_obj(render._defaultMeta)});
         }
         else if (dxf.entities[i].type == "LINE")
         {
-          imported_stack.push({ type: "line", origin: [dxf.entities[i].vertices[0].x, dxf.entities[i].vertices[0].y], end: [dxf.entities[i].vertices[1].x, dxf.entities[i].vertices[1].y], meta: render._defaultMeta });
+          imported_stack.push({ type: "line", origin: [dxf.entities[i].vertices[0].x, dxf.entities[i].vertices[0].y], end: [dxf.entities[i].vertices[1].x, dxf.entities[i].vertices[1].y], meta: render.copy_obj(render._defaultMeta) });
         }
         else if (dxf.entities[i].type == "ARC")
         {
-          imported_stack.push({ type: "arc", origin: [dxf.entities[i].center.x, dxf.entities[i].center.y], startAngle: render.to_degrees(dxf.entities[i].startAngle), endAngle: render.to_degrees(dxf.entities[i].endAngle), radius: dxf.entities[i].radius, meta: render._defaultMeta});
+          imported_stack.push({ type: "arc", origin: [dxf.entities[i].center.x, dxf.entities[i].center.y], startAngle: render.to_degrees(dxf.entities[i].startAngle), endAngle: render.to_degrees(dxf.entities[i].endAngle), radius: dxf.entities[i].radius, meta: render.copy_obj(render._defaultMeta)});
         }
       }
-      var part = { part_name: part_name, offset: [0, 0, 0], entities: imported_stack, updateRender: true};
+      var part = { part_name: part_name, offset: [0, 0, 0], entities: imported_stack, updateRender: true, hidden: false};
       render.Stack.push(part);
   }catch(err) {
       return console.error(err.stack);
