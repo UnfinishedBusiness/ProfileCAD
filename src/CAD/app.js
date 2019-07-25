@@ -29,7 +29,8 @@ function ParseDXF(data, part_name)
           imported_stack.push({ type: "arc", origin: [dxf.entities[i].center.x, dxf.entities[i].center.y], startAngle: render.to_degrees(dxf.entities[i].startAngle), endAngle: render.to_degrees(dxf.entities[i].endAngle), radius: dxf.entities[i].radius, meta: render.copy_obj(render._defaultMeta)});
         }
       }
-      var part = { part_name: part_name, offset: [0, 0, 0], entities: imported_stack, updateRender: true, hidden: false};
+      var part = render.newPart(part_name);
+      part.entities = imported_stack;
       render.Stack.push(part);
   }catch(err) {
       return console.error(err.stack);
