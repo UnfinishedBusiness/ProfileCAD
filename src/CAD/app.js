@@ -124,6 +124,19 @@ function main()
 	render.init();
   Terminal_Init();
   animate();
+
+  //Autoload a file, just to make initial development cycle faster
+  var item = "test/dxf/test.dxf";
+  fs.readFile(item, 'utf-8', (err, data) => {
+    if(err){
+        alert("An error ocurred reading the file :" + err.message);
+        return;
+    }
+    var path = require("path");
+    var filepath = item;
+    var name = path.parse(filepath).name;
+    ParseDXF(data, name);
+  });
 }
 $( document ).ready(function() {
     main();
