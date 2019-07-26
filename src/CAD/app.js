@@ -122,6 +122,7 @@ function animate()
 function main()
 {
 	CreateMenu();
+  render._renderHeight = window.innerHeight - 125;
 	render.init();
   Terminal_Init();
   animate();

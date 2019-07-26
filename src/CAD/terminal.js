@@ -185,13 +185,14 @@ function Terminal_Init()
 	});
   Terminal.open(document.getElementById('terminal'));
 	//Terminal.toggleFullScreen(true);
-	$("#terminal").css({'opacity': 0.7}).css({'position': 'absolute'}).css({'width': "100%"}).css({'height': "100%"}).css({'z-index': 100});
+	$("#terminal").css({'opacity': 0.7}).css({'position': 'absolute'}).css({'width': "100%"}).css({'z-index': 100});
 	Terminal.fit();
+	Terminal.resize(80, 7);
   Terminal.write(PS1);
 	TerminalLineBuffer = "";
 	Terminal.on('key', (key, ev) => {
         //console.log("Keycode: " + key.charCodeAt(0) + " Key: " + key);
-				if (render.renderer.domElement.hidden == true)
+				if (Terminal.isFocused== true)
 				{
 					if (key.charCodeAt(0) == 13)
 					{
@@ -258,16 +259,19 @@ function Terminal_Init()
 				}
 	});
 	Terminal.focus();
-	$("#terminal").hide();
+	//$("#terminal").hide();
+	Terminal.isFocused = false;
 }
 function Terminal_Show()
 {
-	$("#terminal").show();
-	render.renderer.domElement.hidden = true;
+	//$("#terminal").show();
+	//render.renderer.domElement.hidden = true;
 	Terminal.focus();
+	Terminal.isFocused = true;
 }
 function Terminal_Hide()
 {
-	$("#terminal").hide();
-	render.renderer.domElement.hidden = false;
+	//$("#terminal").hide();
+	//render.renderer.domElement.hidden = false;
+	Terminal.isFocused = false;
 }
