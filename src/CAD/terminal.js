@@ -1,4 +1,8 @@
 var Terminal;
+var on_tab_key = null;
+var getline_active = false;
+var getline_callback = null;
+var getline_unfocus_on_finish = null;
 const red = "\u001b[31m";
 const green = "\u001b[32m"
 const blue = "\u001b[34m";
@@ -10,12 +14,13 @@ const right_code = "\u001b[{n}D";
 
 var terminal_commands = [
 	{ description: "Clear Terminal Screen", cmd: "clear", run: function(args){ Terminal.clear(); ret(); } },
-	{ description: "Close Terminal", cmd: "exit", run: function(args){ Terminal_Hide(); ret();} },
+	{ description: "Close Terminal", cmd: "exit", run: function(args){ Terminal_UnFocus(); ret();} },
 	{ description: "Evaluate math expression", cmd: "eval", run: function(args){ eval_command(args); } },
 	{ description: "List Parts in Model", cmd: "list_parts", run: function(args){ list_parts(args); } },
 	{ description: "Set View", cmd: "view", run: function(args){ view(args); } },
 	{ description: "Display this menu", cmd: "help", run: function(args){ help(); } },
 	{ description: "History", cmd: "history", run: function(args){ history(); } },
+	{ description: "Draw a line", hotkey: "l", cmd: "line", run: function(args){ DrawLine(); } },
 	{ special: true, cmd: "control-c", run: function(args){ printf("Terminating!\n"); } },
 	{ special: true, cmd: "tab-complete", run: function(args){ tab_complete(args); } },
 	{ special: true, cmd: "up-arrowkey", run: function(args){ UpArrow(); } },
@@ -109,9 +114,28 @@ function help()
 {
 	for (var x = 0; x < terminal_commands.length; x++)
 	{
+		if (terminal_commands[x].hotkey == undefined)
+		{
 			if (terminal_commands[x].description != undefined) printf(terminal_commands[x].cmd + " - " + terminal_commands[x].description + "\n\r");
+		}
+		else
+		{
+			if (terminal_commands[x].description != undefined) printf(terminal_commands[x].cmd + " (hotkey: " + terminal_commands[x].hotkey + ") - " + terminal_commands[x].description + "\n\r");
+		}
+
 	}
 	ret();
+}
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+function getline(callback)
+{
+	getline_unfocus_on_finish = false;
+	if (Terminal.isFocused == false) getline_unfocus_on_finish = true;
+	Terminal_Focus(); //Makse sure we have focus so that key input is directed to TerminalLineBuffer;
+	getline_active = true; //Make sure key input knows that enter is not to eval command, but to switch flag false
+	getline_callback = callback;
 }
 function tab_complete(args)
 {
@@ -147,6 +171,18 @@ function eval_command(args)
 	var eval_string = args.join(" ");
 	printf(eval(eval_string) + "\n");
 	ret();
+}
+function Terminal_Hotkey_Eval(key)
+{
+	for (var x = 0; x < terminal_commands.length; x++)
+	{
+		if (terminal_commands[x].hotkey == key)
+		{
+			printf(terminal_commands[x].cmd + "\n\r");
+			Terminal_Eval(terminal_commands[x].cmd);
+			return;
+		}
+	}
 }
 function Terminal_Eval(cmd_buffer)
 {
@@ -187,7 +223,7 @@ function Terminal_Init()
 	//Terminal.toggleFullScreen(true);
 	$("#terminal").css({'opacity': 0.7}).css({'position': 'absolute'}).css({'width': "100%"}).css({'z-index': 100});
 	Terminal.fit();
-	Terminal.resize(80, 7);
+	Terminal.resize(120, 7);
   Terminal.write(PS1);
 	TerminalLineBuffer = "";
 	Terminal.on('key', (key, ev) => {
@@ -197,12 +233,22 @@ function Terminal_Init()
 					if (key.charCodeAt(0) == 13)
 					{
 						Terminal.write('\n\r');
-						Terminal_Eval(TerminalLineBuffer);
-						TerminalLineBuffer = "";
+						if (getline_active == false)
+						{
+							Terminal_Eval(TerminalLineBuffer);
+							TerminalLineBuffer = "";
+						}
+						else
+						{
+							getline_active = false;
+							getline_callback(JSON.parse(JSON.stringify(TerminalLineBuffer)));
+							if (getline_unfocus_on_finish == true) Terminal_UnFocus();
+							TerminalLineBuffer = "";
+						}
 					}
 					else if (key.charCodeAt(0) == 27) //escape
 					{
-						Terminal_Hide();
+						Terminal_UnFocus();
 					}
 					else if (key.charCodeAt(0) == 127)
 					{
@@ -220,7 +266,15 @@ function Terminal_Init()
 					}
 					else if (key.charCodeAt(0) == 9) //tab
 					{
-						Terminal_Eval("tab-complete");
+						if (on_tab_key != null)
+						{
+							if (on_tab_key() == true) on_tab_key = false;
+							return;
+						}
+						else
+						{
+							Terminal_Eval("tab-complete");
+						}
 					}
 					else if (key.charCodeAt(0) == 27 && key.includes("A")) //up arrow
 					{
@@ -248,30 +302,44 @@ function Terminal_Init()
 				{
 					if (key == "s")
 					{
-						Terminal_Show();
+						Terminal_Focus();
 					}
 					else if (key.charCodeAt(0) == 27) //escape
 					{
 						UnSelectAll();
 						hideSnapPointer();
 						render.cancelAllEntityCallbacks();
+						printf("\r\nCanceled!\n\r");
+						ret();
+					}
+					else if (key.charCodeAt(0) == 9)
+					{
+						if (on_tab_key != null)
+						{
+							if (on_tab_key() == true) on_tab_key = false;
+							return;
+						}
+					}
+					else
+					{
+							Terminal_Hotkey_Eval(key);
 					}
 				}
 	});
 	Terminal.focus();
-	//$("#terminal").hide();
-	Terminal.isFocused = false;
+	Terminal_UnFocus();
 }
-function Terminal_Show()
+function Terminal_Focus()
 {
-	//$("#terminal").show();
-	//render.renderer.domElement.hidden = true;
-	Terminal.focus();
 	Terminal.isFocused = true;
+	Terminal.setOption('theme', {
+	    background: '#000000'
+	});
 }
-function Terminal_Hide()
+function Terminal_UnFocus()
 {
-	//$("#terminal").hide();
-	//render.renderer.domElement.hidden = false;
 	Terminal.isFocused = false;
+	Terminal.setOption('theme', {
+	    background: '#2a0a2e'
+	});
 }
