@@ -15,10 +15,11 @@ var terminal_commands = [
 	{ description: "List Parts in Model", cmd: "list_parts", run: function(args){ list_parts(args); } },
 	{ description: "Set View", cmd: "view", run: function(args){ view(args); } },
 	{ description: "Display this menu", cmd: "help", run: function(args){ help(); } },
+	{ description: "History", cmd: "history", run: function(args){ history(); } },
 	{ special: true, cmd: "control-c", run: function(args){ printf("Terminating!\n"); } },
 	{ special: true, cmd: "tab-complete", run: function(args){ tab_complete(args); } },
 	{ special: true, cmd: "up-arrowkey", run: function(args){ UpArrow(); } },
-	{ special: true, cmd: "down-arrowkey", run: function(args){ DownArrow(); ret();} },
+	{ special: true, cmd: "down-arrowkey", run: function(args){ DownArrow(); } },
 ];
 var command_history = [];
 var command_history_counter = 0;
@@ -41,6 +42,7 @@ function RightArrow()
 }
 function UpArrow()
 {
+	console.log("Up arrow!");
 	if (command_history_counter == 0) command_before_arrow = TerminalLineBuffer;
 	command_history_counter++;
 	if (command_history_counter > command_history.length) command_history_counter = command_history.length;
@@ -54,6 +56,7 @@ function UpArrow()
 }
 function DownArrow()
 {
+	console.log("Down arrow!");
 	command_history_counter--;
 	if (command_history_counter < 0) command_history_counter = 0;
 	//console.log("command_history_counter: " + command_history_counter);
@@ -245,6 +248,12 @@ function Terminal_Init()
 					if (key == "s")
 					{
 						Terminal_Show();
+					}
+					else if (key.charCodeAt(0) == 27) //escape
+					{
+						UnSelectAll();
+						hideSnapPointer();
+						render.cancelAllEntityCallbacks();
 					}
 				}
 	});
