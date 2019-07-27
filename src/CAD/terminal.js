@@ -21,6 +21,7 @@ var terminal_commands = [
 	{ description: "Display this menu", cmd: "help", run: function(args){ help(); } },
 	{ description: "History", cmd: "history", run: function(args){ history(); } },
 	{ description: "Draw a line", hotkey: "l", cmd: "line", run: function(args){ DrawLine(); } },
+	{ description: "Delete selected entites", hotkey: "delete", cmd: "delete", run: function(args){ DeleteSelected(); } },
 	{ special: true, cmd: "control-c", run: function(args){ printf("Terminating!\n"); } },
 	{ special: true, cmd: "tab-complete", run: function(args){ tab_complete(args); } },
 	{ special: true, cmd: "up-arrowkey", run: function(args){ UpArrow(); } },
@@ -227,7 +228,7 @@ function Terminal_Init()
   Terminal.write(PS1);
 	TerminalLineBuffer = "";
 	Terminal.on('key', (key, ev) => {
-        //console.log("Keycode: " + key.charCodeAt(0) + " Key: " + key);
+        console.log("Keycode: " + key.charCodeAt(0) + " Key: " + key);
 				if (Terminal.isFocused== true)
 				{
 					if (key.charCodeAt(0) == 13)
@@ -320,6 +321,14 @@ function Terminal_Init()
 							return;
 						}
 					}
+					else if (key.charCodeAt(0) == 127)
+					{
+						Terminal_Hotkey_Eval("delete");
+					}
+					else if (key.charCodeAt(0) == 4)
+					{
+						Terminal_Hotkey_Eval("delete");
+					}
 					else
 					{
 							Terminal_Hotkey_Eval(key);
@@ -328,6 +337,15 @@ function Terminal_Init()
 	});
 	Terminal.focus();
 	Terminal_UnFocus();
+}
+function return_terminal_focus()
+{
+	if (Terminal.wasFocused == false) Terminal_UnFocus();
+}
+function save_terminal_focus()
+{
+	Terminal.wasFocused = false;
+	if (Terminal.isFocused == true) Terminal.wasFocused = true;
 }
 function Terminal_Focus()
 {

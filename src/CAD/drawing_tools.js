@@ -1,5 +1,28 @@
 var snap_pointer;
 var active_part = "test"
+function DeleteSelected()
+{
+	printf("Deleting selected entities!\n\r");
+	var new_stack = [];
+	for (var x = 0; x < render.Stack.length; x++)
+	{
+		var part = render.copy_obj(render.Stack[x]);
+		var entity_stack = [];
+		for (var i = 0; i < part.entities.length; i++)
+		{
+			var entity = part.entities[i];
+			if (entity.meta.selected == false)
+			{
+				entity_stack.push(entity);
+			}
+		}
+		part.entities = entity_stack;
+		part.updateRender = true;
+		new_stack.push(render.copy_obj(part));
+	}
+	render.Stack = new_stack;
+	ret();
+}
 function UnSelectAll()
 {
 	for (var x = 0; x < render.Stack.length; x++)
@@ -66,11 +89,11 @@ function DrawLine()
 	e.meta.on_mouse_click = function(e){
 		printf("-> Click end point of line!\n\r");
 		on_tab_key = function(){
+			save_terminal_focus();
 			hideSnapPointer(); //Hide snap pointer because we are using manual input
 			e.meta.on_mouse_motion = null; //cancel mouse motion callback so not to overide manual input
-			printf("\nLength? ");
+			printf("\r\nLength? ");
 			getline(function(length){
-				//console.log("Line Length: " + length);
 				e.tool = {}; //Create a tmp varariable in the entity to store "global" data for this tool
 				e.tool.length  = parseFloat(length);
 				printf("Angle? ");
@@ -83,6 +106,7 @@ function DrawLine()
 					render.addEntityToPart(active_part, line);
 					printf("Created Line -> origin: [" + line.origin[0].toFixed(4) + ", " + line.origin[1].toFixed(4) + "] end: [" + line.end[0].toFixed(4) + ", " + line.end[1].toFixed(4) + "]\n\r");
 					ret();
+					return_terminal_focus();
 					on_tab_key = null;
 				});
 			});
