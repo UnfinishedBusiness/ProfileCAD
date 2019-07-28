@@ -188,3 +188,35 @@ function DrawCircle()
   part.entities.push(e);
   render.Stack.push(part);
 }
+function ChainSelect()
+{
+	var chain_stack = [];
+	var chain_entity = render.geometry.getSelected()[render.geometry.getSelected().length - 1];
+	chain_stack.push(chain_entity); //Push first entity of the chain to the stack
+	var get_next_chain_entity = function()
+	{
+			var entities = render.geometry.getUnSelected();
+			for (var x = 0; x < entities.length; x++)
+			{
+				if (entities[x].type == "line")
+				{
+					if (render.geometry.distance({x: chain_entity.origin[0],y: chain_entity.origin[1]}, {x: entities[x].origin[0],y: entities[x].origin[1]}) < 0.005 ||
+					    render.geometry.distance({x: chain_entity.origin[0],y: chain_entity.origin[1]}, {x: entities[x].end[0],y: entities[x].end[1]}) < 0.005)
+					{
+						entities[x].meta.selected = true;
+						return entities[x];
+					}
+				}
+			}
+			return false;
+	}
+	var next_entity = true;
+	while(next_entity == true)
+	{
+		next_entity = get_next_chain_entity();
+		chain_stack.push(next_entity);
+	}
+	
+	console.log(chain_stack);
+	ret();
+}
