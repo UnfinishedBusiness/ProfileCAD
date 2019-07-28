@@ -21,7 +21,9 @@ var terminal_commands = [
 	{ description: "Display this menu", cmd: "help", run: function(args){ help(); } },
 	{ description: "History", cmd: "history", run: function(args){ history(); } },
 	{ description: "Draw a line", hotkey: "l", cmd: "line", run: function(args){ DrawLine(); } },
+	{ description: "Draw a circle", hotkey: "c", cmd: "circle", run: function(args){ DrawCircle(); } },
 	{ description: "Delete selected entites", hotkey: "delete", cmd: "delete", run: function(args){ DeleteSelected(); } },
+	{ description: "Chain Select", hotkey: "space", cmd: "chain_select", run: function(args){ ChainSelect(); } },
 	{ special: true, cmd: "control-c", run: function(args){ printf("Terminating!\n"); } },
 	{ special: true, cmd: "tab-complete", run: function(args){ tab_complete(args); } },
 	{ special: true, cmd: "up-arrowkey", run: function(args){ UpArrow(); } },
@@ -328,6 +330,10 @@ function Terminal_Init()
 					else if (key.charCodeAt(0) == 4)
 					{
 						Terminal_Hotkey_Eval("delete");
+					}
+					else if (key.charCodeAt(0) == 32)
+					{
+						Terminal_Hotkey_Eval("space");
 					}
 					else
 					{

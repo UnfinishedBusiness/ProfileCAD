@@ -134,3 +134,57 @@ function DrawLine()
   part.entities.push(e);
   render.Stack.push(part);
 }
+function DrawCircle()
+{
+	printf("Drawing circle!\n\r-> Click origin point of circle!\n\r");
+	showSnapPointer();
+  var part = render.newLivePart("circle_tool");
+  var e = {
+    type: "circle",
+    origin: [0, 0],
+    radius: 0,
+    meta: render.copy_obj(render._liveMeta)
+  }
+	showSnapPointer();
+	e.meta.on_mouse_click = function(e){
+		printf("-> Click endpoint to create circle or tab for manual radius input\n\r");
+		on_tab_key = function(){
+			save_terminal_focus();
+			hideSnapPointer(); //Hide snap pointer because we are using manual input
+			e.meta.on_mouse_motion = null; //cancel mouse motion callback so not to overide manual input
+			printf("\r\nRadius? ");
+			getline(function(radius){
+				e.radius = parseFloat(radius);
+				var new_entity = render.copy_obj(e);
+				render.removePartFromStack("circle_tool");
+				hideSnapPointer();
+				render.addEntityToPart(active_part, new_entity);
+				printf("Created Circle -> origin: [" + e.origin[0].toFixed(4) + ", " + e.origin[1].toFixed(4) + "] radius: " + e.radius + "\n\r");
+				ret();
+				return_terminal_focus();
+				on_tab_key = null;
+			});
+		};
+		e.origin = [render.snapPosition.x, render.snapPosition.y];
+		e.radius = 0;
+		e.meta.on_mouse_motion = function(e){
+			var radius = render.geometry.distance({x: e.origin[0], y: e.origin[1]}, {x: render.snapPosition.x, y: render.snapPosition.y});
+			printf("\r-> [" + e.origin[0].toFixed(4) + ", " + e.origin[1].toFixed(4) + "] @ radius: " + e.radius + "\r");
+	  };
+	  e.meta.on_mouse_click = function(e){
+	    e.meta.on_mouse_motion = null;
+	    var new_entity = render.copy_obj(e);
+			new_entity.meta.color = "white";
+	    //console.log("Creating line: " + JSON.stringify(new_entity));
+	    render.removePartFromStack("circle_tool");
+			hideSnapPointer();
+			render.addEntityToPart(active_part, new_entity);
+			printf("Created Circle -> origin: [" + new_entity.origin[0].toFixed(4) + ", " + new_entity.origin[1].toFixed(4) + "] radius: " + e.radius + "\n\r");
+			ret(); //Return terminal stack
+	    return true; //true - Delete the callback after it returns
+	  };
+    return false; //true - Delete the callback after it returns
+  };
+  part.entities.push(e);
+  render.Stack.push(part);
+}
