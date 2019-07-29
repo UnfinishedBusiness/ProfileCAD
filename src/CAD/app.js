@@ -6,6 +6,8 @@ let DxfWriter = require('dxf-writer');
 const Workbench = "CAD";
 var CurrentFile = null;
 
+var motion = new MotionPlanner();
+
 var render = new ProfileRender();
 
 function ParseDXF(data, part_name)
@@ -116,6 +118,7 @@ function CreateMenu()
 function animate()
 {
   //render.controls.update();
+  motion.motion_tick();
   requestAnimationFrame ( animate );
   render.renderer.render (render.scene, render.camera);
 }
@@ -126,6 +129,18 @@ function main()
 	render.init();
   Terminal_Init();
   animate();
+
+  motion.Callbacks.Step_X = function(dir){
+    render.Stack[0].offset[0] = motion.CurrentPosition.x;
+    render.Stack[0].offset[1] = motion.CurrentPosition.y;
+    render.Stack[0].updateRender = true;
+  };
+  motion.Callbacks.Step_Y = function(dir){
+    render.Stack[0].offset[0] = motion.CurrentPosition.x;
+    render.Stack[0].offset[1] = motion.CurrentPosition.y;
+    render.Stack[0].updateRender = true;
+  };
+
 
   //Autoload a file, just to make initial development cycle faster
   var item = "test/dxf/test.dxf";
