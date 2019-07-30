@@ -131,13 +131,13 @@ function main()
   animate();
 
   motion.Callbacks.Step_X = function(dir){
-    render.Stack[0].offset[0] = motion.CurrentPosition.x;
-    render.Stack[0].offset[1] = motion.CurrentPosition.y;
+    render.Stack[0].offset[0] = motion.get_current_position().x;
+    render.Stack[0].offset[1] = motion.get_current_position().y;
     render.Stack[0].updateRender = true;
   };
   motion.Callbacks.Step_Y = function(dir){
-    render.Stack[0].offset[0] = motion.CurrentPosition.x;
-    render.Stack[0].offset[1] = motion.CurrentPosition.y;
+    render.Stack[0].offset[0] = motion.get_current_position().x;
+    render.Stack[0].offset[1] = motion.get_current_position().y;
     render.Stack[0].updateRender = true;
   };
 
