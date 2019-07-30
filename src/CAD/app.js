@@ -122,6 +122,13 @@ function animate()
   requestAnimationFrame ( animate );
   render.renderer.render (render.scene, render.camera);
 }
+function test()
+{
+  motion.push_target({x: 4, y: 8, f: 60});
+  motion.push_target({x: 4, y: 4, f: 60});
+  motion.push_target({x: 0, y: 0, f: 60});
+  motion.plan_moves_on_stack_and_run();
+}
 function main()
 {
 	CreateMenu();
