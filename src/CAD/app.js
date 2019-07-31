@@ -124,9 +124,9 @@ function animate()
 }
 function test()
 {
-  motion.push_target({x: 4, y: 4, f: 30});
-  motion.push_target({x: 5, y: 15, f: 30});
-  motion.push_target({x: 0, y: 0, f: 30});
+  motion.push_target({x: 12.1554, y: 1.2514, f: 75});
+  motion.push_target({x: 5.6991, y: 3.8114, f: 30});
+  motion.push_target({x: 0, y: 0, f: 50});
   motion.plan_moves_on_stack_and_run();
 }
 function main()
